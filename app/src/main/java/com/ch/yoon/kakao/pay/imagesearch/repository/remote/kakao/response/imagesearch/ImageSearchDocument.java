@@ -1,4 +1,4 @@
-package com.ch.yoon.kakao.pay.imagesearch.remote.response.imagesearch;
+package com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch;
 
 import androidx.annotation.Nullable;
 
