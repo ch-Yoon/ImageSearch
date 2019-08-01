@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.ch.yoon.kakao.pay.imagesearch"
-        minSdkVersion 19
+        minSdkVersion 23
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -12,12 +12,12 @@ android {
     }
     buildTypes {
         debug {
-            buildConfigField("String", "KAKAO_API_KEY", "KakaoAK c47fae008be608fc3b4151356df631ba")
+            buildConfigField("String", "KAKAO_API_KEY", "\"KakaoAK c47fae008be608fc3b4151356df631ba\"")
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         release {
-            buildConfigField("String", "KAKAO_API_KEY", "KakaoAK c47fae008be608fc3b4151356df631ba")
+            buildConfigField("String", "KAKAO_API_KEY", "\"KakaoAK c47fae008be608fc3b4151356df631ba\"")
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -53,5 +53,5 @@ dependencies {
     annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
 
     // lifecycle
-    implementation "androidx.lifecycle:lifecycle-extensions:2.0.0"
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
 }
