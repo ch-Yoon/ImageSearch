@@ -37,7 +37,7 @@ public class ImageListViewModel extends BaseViewModel {
         return imageUrls;
     }
 
-    public void reqeustImageList(@NonNull String keyword) {
+    public void requestImageList(@NonNull String keyword) {
         registerDisposable(
             imageRepository.requestImageList(new ImageListRequest(keyword, ImageSortType.ACCURACY, 1, 80))
                 .observeOn(AndroidSchedulers.mainThread())

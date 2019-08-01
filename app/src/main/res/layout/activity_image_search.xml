@@ -49,7 +49,8 @@
                 android:id="@+id/searchButton"
                 android:layout_width="@dimen/image_search_box_icon_size"
                 android:layout_height="@dimen/image_search_box_icon_size"
-                android:background="@drawable/ic_action_search" />
+                android:background="@drawable/ic_action_search"
+                android:onClick="@{() -> searchViewModel.requestImageList(keywordEditText.getText().toString())}"/>
 
         </LinearLayout>
 
