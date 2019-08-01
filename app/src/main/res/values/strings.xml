@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">ImageSearch</string>
     <string name="image_search_screen_title">윤찬혁</string>
+    <string name="image_search_edit_text_hint">검색어를 입력해주세요</string>
 </resources>
