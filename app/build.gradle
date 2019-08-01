@@ -11,7 +11,13 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        debug {
+            buildConfigField("String", "KAKAO_API_KEY", "KakaoAK c47fae008be608fc3b4151356df631ba")
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
         release {
+            buildConfigField("String", "KAKAO_API_KEY", "KakaoAK c47fae008be608fc3b4151356df631ba")
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
