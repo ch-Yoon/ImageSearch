@@ -1,7 +1,9 @@
-package com.ch.yoon.kakao.pay.imagesearch;
+package com.ch.yoon.kakao.pay.imagesearch.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.ch.yoon.kakao.pay.imagesearch.R;
 
 public class MainActivity extends AppCompatActivity {
 
