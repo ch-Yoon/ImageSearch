@@ -1,62 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.imagesearch.ImageSearchActivity">
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="searchViewModel"
+            type="com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.ImageListViewModel" />
+
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:background="@drawable/search_box_border"
-        android:padding="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        tools:context=".ui.imagesearch.ImageSearchActivity">
 
-        <ImageView
-            android:id="@+id/button4"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/ic_action_backspace"
-            app:layout_constraintBottom_toBottomOf="@+id/button3"
-            app:layout_constraintEnd_toStartOf="@+id/button3"
-            app:layout_constraintTop_toTopOf="@+id/button3" />
-
-        <ImageView
-            android:id="@+id/button3"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@drawable/ic_action_search"
+        <LinearLayout
+            android:id="@+id/imageSearchBoxLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/image_search_box_side_margin"
+            android:background="@drawable/search_box_border"
+            android:orientation="horizontal"
+            android:padding="@dimen/image_search_box_padding"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <EditText
-            android:id="@+id/editText2"
+            <EditText
+                android:id="@+id/keywordEditText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:hint="@string/image_search_edit_text_hint"
+                android:background="@null"/>
+
+            <ImageView
+                android:id="@+id/backspaceButton"
+                android:layout_width="@dimen/image_search_box_icon_size"
+                android:layout_height="@dimen/image_search_box_icon_size"
+                android:layout_marginStart="@dimen/image_search_box_side_margin"
+                android:layout_marginEnd="@dimen/image_search_box_side_margin"
+                android:background="@drawable/ic_action_backspace"/>
+
+            <ImageView
+                android:id="@+id/searchButton"
+                android:layout_width="@dimen/image_search_box_icon_size"
+                android:layout_height="@dimen/image_search_box_icon_size"
+                android:background="@drawable/ic_action_search" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/ImageRecyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@null"
-            android:inputType="textPersonName"
+            android:layout_marginTop="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button4"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/imageSearchBoxLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
