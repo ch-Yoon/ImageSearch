@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
  * Creator : ch-yoon
  * Date : 2019-08-01.
  */
-public class ImageSearchMeta {
+public final class ImageSearchMeta {
 
     @SerializedName("total_count")
     private final int totalCount;

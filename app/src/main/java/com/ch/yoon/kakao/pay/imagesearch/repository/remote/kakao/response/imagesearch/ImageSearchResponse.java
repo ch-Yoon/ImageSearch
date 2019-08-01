@@ -5,20 +5,24 @@ import androidx.annotation.Nullable;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Creator : ch-yoon
  * Date : 2019-08-01.
  */
-public class ImageSearchResponse {
+public final class ImageSearchResponse {
 
+    @Nullable
     @SerializedName("meta")
-    private ImageSearchMeta meta;
+    private final ImageSearchMeta meta;
 
-    @SerializedName("imageSearchDocuments")
-    private ArrayList<ImageSearchDocument> imageSearchDocuments;
+    @Nullable
+    @SerializedName("documents")
+    private final List<ImageSearchDocument> imageSearchDocuments;
 
-    public ImageSearchResponse(ImageSearchMeta meta, ArrayList<ImageSearchDocument> imageSearchDocuments) {
+    public ImageSearchResponse(@Nullable ImageSearchMeta meta,
+                               @Nullable List<ImageSearchDocument> imageSearchDocuments) {
         this.meta = meta;
         this.imageSearchDocuments = imageSearchDocuments;
     }
@@ -29,7 +33,7 @@ public class ImageSearchResponse {
     }
 
     @Nullable
-    public ArrayList<ImageSearchDocument> getImageSearchDocuments() {
+    public List<ImageSearchDocument> getImageSearchDocuments() {
         return imageSearchDocuments;
     }
 
