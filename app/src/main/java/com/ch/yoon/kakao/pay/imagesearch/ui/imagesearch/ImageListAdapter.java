@@ -20,7 +20,7 @@ import java.util.Objects;
  */
 public class ImageListAdapter extends ListAdapter<ImageInfo, ImageListViewHolder> {
 
-    protected ImageListAdapter() {
+    public ImageListAdapter() {
         super(DiffCallback);
     }
 

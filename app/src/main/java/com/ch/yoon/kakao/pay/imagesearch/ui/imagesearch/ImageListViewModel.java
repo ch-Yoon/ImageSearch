@@ -12,6 +12,7 @@ import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.images
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageSearchResponse;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -26,7 +27,7 @@ public class ImageListViewModel extends BaseViewModel {
     private final ImageRepository imageRepository;
 
     private boolean remainingMoreData;
-    private final MutableLiveData<List<ImageInfo>> imageInfoList = new MutableLiveData<>();
+    private final MutableLiveData<List<ImageInfo>> imageInfoListLiveData = new MutableLiveData<>();
 
     public ImageListViewModel(@NonNull ImageRepository imageRepository) {
         this.imageRepository = imageRepository;
@@ -34,11 +35,11 @@ public class ImageListViewModel extends BaseViewModel {
 
     @NonNull
     public LiveData<List<ImageInfo>> observeImageInfoList() {
-        return imageInfoList;
+        return imageInfoListLiveData;
     }
 
     public void requestImageList(@NonNull String keyword) {
-        imageInfoList.setValue(null);
+        imageInfoListLiveData.setValue(null);
 
         registerDisposable(
             imageRepository.requestImageList(new ImageListRequest(keyword, ImageSortType.ACCURACY, 1, 80))
@@ -55,7 +56,8 @@ public class ImageListViewModel extends BaseViewModel {
             remainingMoreData = false;
         }
 
-        imageInfoList.setValue(imageSearchResponse.getImageInfoList());
+        List<ImageInfo> imageInfoList = imageSearchResponse.getImageInfoList();
+        imageInfoListLiveData.setValue(imageInfoList == null ? null : new ArrayList<>(imageInfoList));
     }
 
 }

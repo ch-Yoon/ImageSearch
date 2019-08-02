@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageInfo;
 import com.ch.yoon.kakao.pay.imagesearch.utils.GlideUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,7 +23,7 @@ public class ImageListBindingAdapter {
                                 @Nullable List<ImageInfo> imageInfoList) {
         ImageListAdapter adapter = ((ImageListAdapter)recyclerView.getAdapter());
         if(adapter != null) {
-            adapter.submitList(imageInfoList == null ? null : new ArrayList<>(imageInfoList));
+            adapter.submitList(imageInfoList);
         }
     }
 
