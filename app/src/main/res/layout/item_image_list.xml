@@ -6,9 +6,8 @@
     <data>
 
         <variable
-            name="imageUri"
-            type="String" />
-
+            name="imageInfo"
+            type="com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageInfo" />
 
     </data>
 

@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ItemImageListBinding;
+import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageInfo;
 
 /**
  * Creator : ch-yoon
@@ -21,8 +22,8 @@ public class ImageListViewHolder extends RecyclerView.ViewHolder {
         binding = DataBindingUtil.bind(itemView);
     }
 
-    public void setItem(@NonNull String imageUri) {
-        binding.setImageUri(imageUri);
+    public void setItem(@NonNull ImageInfo imageInfo) {
+        binding.setImageInfo(imageInfo);
     }
 
 }

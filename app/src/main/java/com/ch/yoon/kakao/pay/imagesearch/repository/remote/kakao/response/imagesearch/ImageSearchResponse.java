@@ -18,12 +18,12 @@ public final class ImageSearchResponse {
 
     @Nullable
     @SerializedName("documents")
-    private final List<ImageSearchDocument> imageSearchDocuments;
+    private final List<ImageInfo> imageInfoList;
 
     public ImageSearchResponse(@Nullable ImageSearchMeta meta,
-                               @Nullable List<ImageSearchDocument> imageSearchDocuments) {
+                               @Nullable List<ImageInfo> imageInfoList) {
         this.meta = meta;
-        this.imageSearchDocuments = imageSearchDocuments;
+        this.imageInfoList = imageInfoList;
     }
 
     @Nullable
@@ -32,8 +32,8 @@ public final class ImageSearchResponse {
     }
 
     @Nullable
-    public List<ImageSearchDocument> getImageSearchDocuments() {
-        return imageSearchDocuments;
+    public List<ImageInfo> getImageInfoList() {
+        return imageInfoList;
     }
 
 }

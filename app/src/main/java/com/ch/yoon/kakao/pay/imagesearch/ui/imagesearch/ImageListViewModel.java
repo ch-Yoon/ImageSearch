@@ -1,15 +1,15 @@
 package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepository;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.ImageSearchResult;
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.model.ImageSortType;
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.request.ImageListRequest;
+import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageInfo;
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageSearchMeta;
+import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageSearchResponse;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel;
 
 import java.util.List;
@@ -26,15 +26,15 @@ public class ImageListViewModel extends BaseViewModel {
     private final ImageRepository imageRepository;
 
     private boolean remainingMoreData;
-    private final MutableLiveData<List<String>> imageUrls = new MutableLiveData<>();
+    private final MutableLiveData<List<ImageInfo>> imageInfoList = new MutableLiveData<>();
 
     public ImageListViewModel(@NonNull ImageRepository imageRepository) {
         this.imageRepository = imageRepository;
     }
 
     @NonNull
-    public LiveData<List<String>> observeImageUrls() {
-        return imageUrls;
+    public LiveData<List<ImageInfo>> observeImageInfoList() {
+        return imageInfoList;
     }
 
     public void requestImageList(@NonNull String keyword) {
@@ -45,9 +45,15 @@ public class ImageListViewModel extends BaseViewModel {
         );
     }
 
-    private void updateImageList(ImageSearchResult imageSearchResult) {
-        remainingMoreData = imageSearchResult.isEnd();
-        imageUrls.setValue(imageSearchResult.getImageUrls());
+    private void updateImageList(ImageSearchResponse imageSearchResponse) {
+        ImageSearchMeta meta = imageSearchResponse.getMeta();
+        if(meta != null) {
+            remainingMoreData = meta.isEnd();
+        } else {
+            remainingMoreData = false;
+        }
+
+        imageInfoList.setValue(imageSearchResponse.getImageInfoList());
     }
 
 }
