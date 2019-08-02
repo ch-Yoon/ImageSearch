@@ -3,6 +3,8 @@ package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch;
 import android.os.Bundle;
 
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ActivityImageSearchBinding;
@@ -22,6 +24,7 @@ public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding
         binding = binding(R.layout.activity_image_search);
 
         initViewModel();
+        initRecyclerView();
     }
 
     private void initViewModel() {
@@ -29,6 +32,11 @@ public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding
         ImageRepository imageRepository = ImageRepositoryImpl.getInstance(remoteDataSource);
         ImageListViewModelFactory factory = new ImageListViewModelFactory(imageRepository);
         binding.setSearchViewModel(ViewModelProviders.of(this, factory).get(ImageListViewModel.class));
+    }
+
+    private void initRecyclerView() {
+        binding.imageRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        binding.imageRecyclerView.setAdapter(new ImageListAdapter());
     }
 
 }

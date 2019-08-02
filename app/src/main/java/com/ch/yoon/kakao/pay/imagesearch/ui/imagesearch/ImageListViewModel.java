@@ -38,6 +38,8 @@ public class ImageListViewModel extends BaseViewModel {
     }
 
     public void requestImageList(@NonNull String keyword) {
+        imageInfoList.setValue(null);
+
         registerDisposable(
             imageRepository.requestImageList(new ImageListRequest(keyword, ImageSortType.ACCURACY, 1, 80))
                 .observeOn(AndroidSchedulers.mainThread())
