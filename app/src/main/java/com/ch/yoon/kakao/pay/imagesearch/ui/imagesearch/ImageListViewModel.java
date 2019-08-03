@@ -60,6 +60,10 @@ public class ImageListViewModel extends BaseViewModel {
         return imageInfoListLiveData;
     }
 
+    public void changeCountOfItemInLine(int countOfItemInLine) {
+        countOfItemInLineLiveData.setValue(countOfItemInLine);
+    }
+
     public void requestImageList(@NonNull String keyword) {
         imageInfoListLiveData.setValue(null);
         imageSearchInspector.submitFirstImageSearchRequest(
