@@ -27,4 +27,8 @@ public class GlideUtil {
             .into(imageView);
     }
 
+    public static void cancel(@NonNull ImageView imageView) {
+        Glide.with(imageView.getContext()).clear(imageView);
+    }
+
 }

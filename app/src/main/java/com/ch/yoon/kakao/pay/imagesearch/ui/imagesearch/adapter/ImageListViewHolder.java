@@ -1,4 +1,4 @@
-package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch;
+package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.adapter;
 
 import android.view.View;
 
@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ItemImageListBinding;
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageInfo;
+import com.ch.yoon.kakao.pay.imagesearch.utils.GlideUtil;
 
 /**
  * Creator : ch-yoon
@@ -24,6 +25,10 @@ public class ImageListViewHolder extends RecyclerView.ViewHolder {
 
     public void setItem(@NonNull ImageInfo imageInfo) {
         binding.setImageInfo(imageInfo);
+    }
+
+    public void clear() {
+        GlideUtil.cancel(binding.imageView);
     }
 
 }

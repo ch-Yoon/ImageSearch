@@ -9,9 +9,9 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
+import com.bumptech.glide.Glide;
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageInfo;
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.ImageListViewHolder;
 
 import java.util.Objects;
 
@@ -45,6 +45,12 @@ public class ImageListAdapter extends ListAdapter<ImageInfo, ImageListViewHolder
         if(onBindPositionListener != null) {
             onBindPositionListener.onBindPosition(position);
         }
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull ImageListViewHolder holder) {
+        holder.clear();
+        super.onViewRecycled(holder);
     }
 
     public void setOnBindPositionListener(@Nullable OnBindPositionListener onBindPositionListener) {
