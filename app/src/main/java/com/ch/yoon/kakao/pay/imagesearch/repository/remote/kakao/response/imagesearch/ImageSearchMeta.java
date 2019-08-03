@@ -1,5 +1,7 @@
 package com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -19,4 +21,9 @@ public final class ImageSearchMeta {
         return isEnd;
     }
 
+    @NonNull
+    @Override
+    public String toString() {
+        return "ImageSearchMeta {isEnd=" + isEnd + "}";
+    }
 }

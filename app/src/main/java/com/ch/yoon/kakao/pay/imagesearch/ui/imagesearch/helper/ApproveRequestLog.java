@@ -37,5 +37,13 @@ final class ApproveRequestLog {
     void setPageNumber(int pageNumber) {
         this.pageNumber = pageNumber;
     }
-    
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "ApproveRequestLog {keyword=" + keyword +
+            ", dataTotalSize=" + dataTotalSize +
+            ", pageNumber= " + pageNumber + "}";
+    }
+
 }

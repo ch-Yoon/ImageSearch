@@ -55,7 +55,6 @@ public final class ImageInfo {
         return height;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if(o == null || !getClass().getName().equals(o.getClass().getName())) {
@@ -72,8 +71,10 @@ public final class ImageInfo {
     @NonNull
     @Override
     public String toString() {
-        return "ImageInfo {thumbnailUrl=" + thumbnailUrl + ", imageUrl=" + imageUrl +
-            ", width=" + width + ", height=" + height;
+        return "ImageInfo {thumbnailUrl=" + thumbnailUrl +
+            ", imageUrl=" + imageUrl +
+            ", width=" + width +
+            ", height=" + height + "}";
     }
 
     @Override

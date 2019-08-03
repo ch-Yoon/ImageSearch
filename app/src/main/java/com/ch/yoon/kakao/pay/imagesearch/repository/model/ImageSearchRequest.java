@@ -46,4 +46,13 @@ public final class ImageSearchRequest {
         return requiredSize;
     }
 
+    @NonNull
+    @Override
+    public String toString() {
+        return "ImageSearchRequest {keyword=" + keyword +
+            ", imageSortType=" + imageSortType +
+            ", pageNumber=" + pageNumber +
+            ", requiredSize=" + requiredSize + "}";
+    }
+
 }
