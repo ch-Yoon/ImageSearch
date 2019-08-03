@@ -1,15 +1,17 @@
-package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch;
+package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageInfo;
+import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.ImageListViewHolder;
 
 import java.util.Objects;
 
@@ -19,6 +21,9 @@ import java.util.Objects;
  * Date : 2019-08-02.
  */
 public class ImageListAdapter extends ListAdapter<ImageInfo, ImageListViewHolder> {
+
+    @Nullable
+    private OnBindPositionListener onBindPositionListener;
 
     public ImageListAdapter() {
         super(DiffCallback);
@@ -36,6 +41,14 @@ public class ImageListAdapter extends ListAdapter<ImageInfo, ImageListViewHolder
     @Override
     public void onBindViewHolder(@NonNull ImageListViewHolder holder, int position) {
         holder.setItem(getItem(position));
+
+        if(onBindPositionListener != null) {
+            onBindPositionListener.onBindPosition(position);
+        }
+    }
+
+    public void setOnBindPositionListener(@Nullable OnBindPositionListener onBindPositionListener) {
+        this.onBindPositionListener = onBindPositionListener;
     }
 
     private static final DiffUtil.ItemCallback<ImageInfo> DiffCallback = new DiffUtil.ItemCallback<ImageInfo>() {

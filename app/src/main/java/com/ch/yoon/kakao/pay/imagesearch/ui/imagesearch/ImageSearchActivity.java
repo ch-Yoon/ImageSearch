@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ActivityImageSearchBinding;
@@ -13,6 +12,7 @@ import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepository;
 import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepositoryImpl;
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.ImageRemoteDataSource;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseActivity;
+import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.adapter.ImageListAdapter;
 
 public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding> {
 
@@ -35,8 +35,12 @@ public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding
     }
 
     private void initRecyclerView() {
-        binding.imageRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
-        binding.imageRecyclerView.setAdapter(new ImageListAdapter());
+        ImageListAdapter imageListAdapter = new ImageListAdapter();
+        imageListAdapter.setOnBindPositionListener(position ->
+            binding.getSearchViewModel().requestMoreImageIfPossible(position)
+        );
+
+        binding.imageRecyclerView.setAdapter(imageListAdapter);
     }
 
 }

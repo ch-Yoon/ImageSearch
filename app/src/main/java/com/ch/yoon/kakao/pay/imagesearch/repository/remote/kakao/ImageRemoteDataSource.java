@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.ch.yoon.kakao.pay.imagesearch.BuildConfig;
 import com.ch.yoon.kakao.pay.imagesearch.repository.ImageDataSource;
-import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.request.ImageListRequest;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.ImageSearchRequest;
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageSearchResponse;
 
 import io.reactivex.Single;
@@ -61,11 +61,11 @@ public class ImageRemoteDataSource implements ImageDataSource {
     }
 
     @Override
-    public Single<ImageSearchResponse> requestImageList(@NonNull ImageListRequest imageListRequest) {
-        final String keyword = imageListRequest.getKeyword();
-        final String sortType = imageListRequest.getImageSortType().getType();
-        final int pageNumber = imageListRequest.getPageNumber();
-        final int requiredSize = imageListRequest.getRequiredSize();
+    public Single<ImageSearchResponse> requestImageList(@NonNull ImageSearchRequest imageSearchRequest) {
+        final String keyword = imageSearchRequest.getKeyword();
+        final String sortType = imageSearchRequest.getImageSortType().getType();
+        final int pageNumber = imageSearchRequest.getPageNumber();
+        final int requiredSize = imageSearchRequest.getRequiredSize();
 
         return retrofit.create(SearchApi.class).searchImageList(keyword, sortType, pageNumber, requiredSize);
     }
