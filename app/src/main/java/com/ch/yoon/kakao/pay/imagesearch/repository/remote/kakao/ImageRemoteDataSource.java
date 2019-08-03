@@ -67,7 +67,7 @@ public class ImageRemoteDataSource implements ImageDataSource {
         final int pageNumber = imageSearchRequest.getPageNumber();
         final int requiredSize = imageSearchRequest.getRequiredSize();
 
-        return retrofit.create(SearchApi.class).searchImageList(keyword, sortType, pageNumber, requiredSize);
+        return retrofit.create(SearchApi.class).searchImageList(keyword, sortType, 80, requiredSize);
     }
 
 }
