@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
+import com.ch.yoon.kakao.pay.imagesearch.R;
 
 /**
  * Creator : ch-yoon
@@ -23,7 +24,10 @@ public class GlideUtil {
             .load(imageUrl)
             .thumbnail(THUMBNAIL_VALUE)
             .transition(DrawableTransitionOptions.withCrossFade())
-            .apply(new RequestOptions().transform(new CenterCrop()))
+            .apply(new RequestOptions()
+                .transform(new CenterCrop())
+                .error(R.drawable.image_load_fail)
+            )
             .into(imageView);
     }
 

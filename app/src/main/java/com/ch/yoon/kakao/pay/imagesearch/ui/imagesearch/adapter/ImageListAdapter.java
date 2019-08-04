@@ -8,9 +8,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageInfo;
+import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.adapter.viewholder.RetryFooterViewHolder;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.adapter.viewholder.ImageListViewHolder;
 
 import java.util.Objects;
@@ -20,10 +22,19 @@ import java.util.Objects;
  * Creator : ch-yoon
  * Date : 2019-08-02.
  */
-public class ImageListAdapter extends ListAdapter<ImageInfo, ImageListViewHolder> {
+public class ImageListAdapter extends ListAdapter<ImageInfo, RecyclerView.ViewHolder> {
+
+    private static final int TYPE_ITEM = 1;
+    private static final int TYPE_FOOTER = 2;
 
     @Nullable
     private OnBindPositionListener onBindPositionListener;
+    @Nullable
+    private OnListItemClickListener onListItemClickListener;
+    @Nullable
+    private OnFooterItemClickListener onFooterItemClickListener;
+
+    private boolean retryFooterViewVisibility = false;
 
     public ImageListAdapter() {
         super(DiffCallback);
@@ -31,30 +42,81 @@ public class ImageListAdapter extends ListAdapter<ImageInfo, ImageListViewHolder
 
     @NonNull
     @Override
-    public ImageListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        final View itemView = LayoutInflater.from(parent.getContext())
-            .inflate(R.layout.item_image_list, parent, false);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-        return new ImageListViewHolder(itemView);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull ImageListViewHolder holder, int position) {
-        holder.setItem(getItem(position));
-
-        if(onBindPositionListener != null) {
-            onBindPositionListener.onBindPosition(position);
+        if(viewType == TYPE_ITEM) {
+            final View itemView = inflater.inflate(R.layout.item_image_list, parent, false);
+            final ImageListViewHolder itemViewHolder = new ImageListViewHolder(itemView);
+            itemViewHolder.setOnListItemClickListener(onListItemClickListener);
+            return itemViewHolder;
+        } else {
+            final View footerView = inflater.inflate(R.layout.item_retry_footer, parent, false);
+            final RetryFooterViewHolder retryFooterViewHolder = new RetryFooterViewHolder(footerView);
+            retryFooterViewHolder.setOnFooterItemClickListener(onFooterItemClickListener);
+            return retryFooterViewHolder;
         }
     }
 
     @Override
-    public void onViewRecycled(@NonNull ImageListViewHolder holder) {
-        holder.clear();
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if(holder instanceof ImageListViewHolder) {
+            ((ImageListViewHolder) holder).setItem(getItem(position));
+
+            if (onBindPositionListener != null) {
+                onBindPositionListener.onBindPosition(position);
+            }
+        } else {
+            ((RetryFooterViewHolder) holder).setRetryVisibility(retryFooterViewVisibility);
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if(isFooterViewPosition(position)) {
+            return TYPE_FOOTER;
+        } else {
+            return TYPE_ITEM;
+        }
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
+        if(holder instanceof ImageListViewHolder) {
+            ((ImageListViewHolder) holder).clear();
+        }
+
         super.onViewRecycled(holder);
     }
 
-    public void setOnBindPositionListener(@Nullable OnBindPositionListener onBindPositionListener) {
+    @Override
+    public int getItemCount() {
+        int itemCount = super.getItemCount();
+        if(itemCount == 0) {
+            return itemCount;
+        } else {
+            return itemCount + 1;
+        }
+    }
+
+    public boolean isFooterViewPosition(int position) {
+        return position == super.getItemCount();
+    }
+
+    public void changeFooterViewVisibility(boolean retryFooterViewVisibility) {
+        this.retryFooterViewVisibility = retryFooterViewVisibility;
+    }
+
+    public void setOnBindPositionListener(@NonNull OnBindPositionListener onBindPositionListener) {
         this.onBindPositionListener = onBindPositionListener;
+    }
+
+    public void setOnListItemClickListener(@NonNull OnListItemClickListener onListItemClickListener) {
+        this.onListItemClickListener = onListItemClickListener;
+    }
+
+    public void setOnFooterItemClickListener(@NonNull OnFooterItemClickListener onFooterItemClickListener) {
+        this.onFooterItemClickListener = onFooterItemClickListener;
     }
 
     private static final DiffUtil.ItemCallback<ImageInfo> DiffCallback = new DiffUtil.ItemCallback<ImageInfo>() {

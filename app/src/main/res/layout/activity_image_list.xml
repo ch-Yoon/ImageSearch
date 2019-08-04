@@ -38,12 +38,12 @@
                 android:background="@null"/>
 
             <ImageView
-                android:id="@+id/backspaceButton"
+                android:id="@+id/clearButton"
                 android:layout_width="@dimen/image_search_box_icon_size"
                 android:layout_height="@dimen/image_search_box_icon_size"
                 android:layout_marginStart="@dimen/image_search_box_side_margin"
                 android:layout_marginEnd="@dimen/image_search_box_side_margin"
-                android:background="@drawable/ic_action_backspace"
+                android:background="@drawable/ic_action_clear"
                 android:visibility="gone" />
 
             <ImageView
@@ -60,13 +60,15 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
+            android:scrollbars="vertical"
             app:countOfItemInLine="@{imageListViewModel.observeCountOfItemInLine()}"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fourImageInLineButton"
-            app:searchImageInfoList="@{imageListViewModel.observeImageInfoList()}" />
+            app:searchImageInfoList="@{imageListViewModel.observeImageInfoList()}"
+            app:imageSearchState="@{imageListViewModel.observeImageSearchState()}"/>
 
         <ImageView
             android:id="@+id/fourImageInLineButton"

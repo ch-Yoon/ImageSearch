@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageInfo;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.adapter.ImageListAdapter;
+import com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil;
 import com.ch.yoon.kakao.pay.imagesearch.utils.GlideUtil;
 
 import java.util.List;
@@ -22,11 +23,10 @@ public class ImageListBindingAdapter {
 
     @BindingAdapter("countOfItemInLine")
     public static void setSpanCount(@NonNull RecyclerView recyclerView,
-                                    @Nullable Integer countOfItemInLine) {
+                                    @NonNull Integer countOfItemInLine) {
         final GridLayoutManager gridLayoutManager = (GridLayoutManager)recyclerView.getLayoutManager();
         if(gridLayoutManager != null) {
-            final int spanCount = countOfItemInLine == null ? 3 : countOfItemInLine;
-            gridLayoutManager.setSpanCount(spanCount);
+            gridLayoutManager.setSpanCount(countOfItemInLine);
         }
     }
 
@@ -36,6 +36,27 @@ public class ImageListBindingAdapter {
         final ImageListAdapter adapter = ((ImageListAdapter)recyclerView.getAdapter());
         if(adapter != null) {
             adapter.submitList(imageInfoList);
+
+            if(CollectionUtil.isEmpty(imageInfoList)) {
+                adapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+    @BindingAdapter("imageSearchState")
+    public static void setImageSearchState(@NonNull RecyclerView recyclerView,
+                                           @NonNull ImageSearchState imageSearchState) {
+        final ImageListAdapter adapter = ((ImageListAdapter)recyclerView.getAdapter());
+        if(adapter != null) {
+            switch (imageSearchState) {
+                case NONE:
+                case SUCCESS:
+                    adapter.changeFooterViewVisibility(false);
+                    break;
+                case FAIL:
+                    adapter.changeFooterViewVisibility(true);
+                    break;
+            }
         }
     }
 

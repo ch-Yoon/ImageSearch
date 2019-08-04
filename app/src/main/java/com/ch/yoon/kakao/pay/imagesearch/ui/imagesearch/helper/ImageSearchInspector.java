@@ -36,8 +36,8 @@ public class ImageSearchInspector {
         PRELOAD_ALLOW_LINE_COUNT = preloadAllowLineCount;
     }
 
-    public void observeImageSearchApprove(@Nullable OnImageSearchApproveListener listener) {
-        onImageSearchApproveListener = listener;
+    public void observeImageSearchApprove(@Nullable OnImageSearchApproveListener approveListener) {
+        onImageSearchApproveListener = approveListener;
     }
 
     public void submitFirstImageSearchRequest(@NonNull String keyword,
@@ -51,10 +51,14 @@ public class ImageSearchInspector {
                                      @NonNull ImageSortType imageSortType,
                                      int countOfItemInLine) {
         if(isPreloadPossible(displayPosition, dataTotalSize, countOfItemInLine)) {
-            if(isNotMaxPage()) {
-                approvePreload(imageSortType, dataTotalSize, countOfItemInLine);
-            }
+            approvePreload(imageSortType, dataTotalSize, countOfItemInLine);
         }
+    }
+
+    public void submitRetryRequest(int countOfItemInLine,
+                                   @NonNull ImageSortType imageSortType) {
+        int previousDataTotalSize = approveRequestLog.getDataTotalSize();
+        approvePreload(imageSortType, previousDataTotalSize, countOfItemInLine);
     }
 
     private void approveFirstImageSearch(String keyword,
@@ -80,14 +84,20 @@ public class ImageSearchInspector {
     private boolean isPreloadPossible(int displayPosition,
                                       int dataTotalSize,
                                       int countOfItemInLine) {
-        final int preloadAllowLimit = dataTotalSize - (countOfItemInLine * PRELOAD_ALLOW_LINE_COUNT);
-        final int previousDataTotalSize = approveRequestLog.getDataTotalSize();
-
-        return dataTotalSize > previousDataTotalSize && displayPosition > preloadAllowLimit;
+        return isNotMaxPage() && isAllowPreloadRange(displayPosition, dataTotalSize, countOfItemInLine);
     }
 
     private boolean isNotMaxPage() {
         return approveRequestLog.getPageNumber() < MAX_PAGE_NUMBER;
+    }
+
+    private boolean isAllowPreloadRange(int displayPosition,
+                                        int dataTotalSize,
+                                        int countOfItemInLine) {
+        final int preloadAllowLimit = dataTotalSize - (countOfItemInLine * PRELOAD_ALLOW_LINE_COUNT);
+        final int previousDataTotalSize = approveRequestLog.getDataTotalSize();
+
+        return dataTotalSize > previousDataTotalSize && displayPosition > preloadAllowLimit;
     }
 
     private void approveImageSearch(String keyword,
