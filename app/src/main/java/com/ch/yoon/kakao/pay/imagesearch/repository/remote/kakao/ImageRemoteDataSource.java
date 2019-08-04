@@ -5,11 +5,18 @@ import androidx.annotation.NonNull;
 import com.ch.yoon.kakao.pay.imagesearch.BuildConfig;
 import com.ch.yoon.kakao.pay.imagesearch.repository.ImageDataSource;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.ImageSearchRequest;
+import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.error.ImageSearchError;
+import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.error.ImageSearchException;
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageSearchResponse;
 
+import java.net.UnknownHostException;
+
 import io.reactivex.Single;
+import io.reactivex.SingleSource;
+import io.reactivex.functions.Function;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.HttpException;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -68,7 +75,27 @@ public class ImageRemoteDataSource implements ImageDataSource {
         final int pageNumber = imageSearchRequest.getPageNumber();
         final int requiredSize = imageSearchRequest.getRequiredSize();
 
-        return retrofit.create(SearchApi.class).searchImageList(keyword, sortType, pageNumber, requiredSize);
+        return retrofit.create(SearchApi.class)
+            .searchImageList(keyword, sortType, pageNumber, requiredSize)
+            .onErrorResumeNext(throwable -> {
+                final String errorMessage;
+                final ImageSearchError imageSearchError;
+
+                if(throwable instanceof HttpException) {
+                    final HttpException exception = (HttpException) throwable;
+                    errorMessage = exception.message();
+                    imageSearchError = ImageSearchError.convertToImageSearchError(exception.code());
+                } else if(throwable instanceof UnknownHostException) {
+                    final UnknownHostException exception = (UnknownHostException) throwable;
+                    errorMessage = exception.getMessage();
+                    imageSearchError = ImageSearchError.NETWORK_NOT_CONNECTING_ERROR;
+                } else {
+                    errorMessage = throwable.getMessage();
+                    imageSearchError = ImageSearchError.UNKNOWN_ERROR;
+                }
+
+                return Single.error(new ImageSearchException(errorMessage, imageSearchError));
+            });
     }
 
 }
