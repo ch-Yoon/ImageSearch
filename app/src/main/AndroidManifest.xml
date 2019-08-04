@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.imagesearch.ImageSearchActivity"
+            android:name=".ui.imagesearch.ImageListActivity"
             android:label="@string/image_search_screen_title"
             android:theme="@style/AppTheme">
             <intent-filter>

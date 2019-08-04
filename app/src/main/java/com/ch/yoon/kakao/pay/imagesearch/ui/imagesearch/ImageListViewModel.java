@@ -1,13 +1,17 @@
 package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch;
 
+import android.app.Application;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.ch.yoon.kakao.pay.imagesearch.extentions.SingleLiveEvent;
 import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepository;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.ImageSearchRequest;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.ImageSortType;
+import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.error.ImageSearchException;
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageInfo;
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageSearchMeta;
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageSearchResponse;
@@ -25,23 +29,31 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
  */
 public class ImageListViewModel extends BaseViewModel {
 
+    private static final String TAG = ImageListViewModel.class.getName();
     private static final ImageSortType DEFAULT_IMAGE_SORT_TYPE = ImageSortType.ACCURACY;
-    private static int DEFAULT_COUNT_OF_ITEM_IN_LINE = 3;
+    private static final int DEFAULT_COUNT_OF_ITEM_IN_LINE = 3;
 
     @NonNull
     private final ImageRepository imageRepository;
     @NonNull
-    private final ImageSearchInspector imageSearchInspector = new ImageSearchInspector();
+    private final ImageSearchInspector imageSearchInspector;
 
     @NonNull
     private final MutableLiveData<Integer> countOfItemInLineLiveData = new MutableLiveData<>();
     @NonNull
     private final MutableLiveData<List<ImageInfo>> imageInfoListLiveData = new MutableLiveData<>();
+    @NonNull
+    private final SingleLiveEvent<String> errorMessageLiveData = new SingleLiveEvent<>();
 
     private boolean remainingDataOnRepository = true;
 
-    public ImageListViewModel(@NonNull ImageRepository imageRepository) {
+    public ImageListViewModel(@NonNull Application application,
+                              @NonNull ImageRepository imageRepository,
+                              @NonNull ImageSearchInspector imageSearchInspector) {
+        super(application);
         this.imageRepository = imageRepository;
+        this.imageSearchInspector = imageSearchInspector;
+
         init();
     }
 
@@ -60,32 +72,49 @@ public class ImageListViewModel extends BaseViewModel {
         return imageInfoListLiveData;
     }
 
+    @NonNull
+    public SingleLiveEvent<String> observeErrorMessage() {
+        return errorMessageLiveData;
+    }
+
     public void changeCountOfItemInLine(int countOfItemInLine) {
         countOfItemInLineLiveData.setValue(countOfItemInLine);
     }
 
-    public void requestImageList(@NonNull String keyword) {
-        imageInfoListLiveData.setValue(null);
+    public void loadImageList(@NonNull String keyword) {
+        final int countOfItemInLine = getCountOfItemInLine();
+
         imageSearchInspector.submitFirstImageSearchRequest(
             keyword,
-            DEFAULT_IMAGE_SORT_TYPE, DEFAULT_COUNT_OF_ITEM_IN_LINE
+            DEFAULT_IMAGE_SORT_TYPE,
+            countOfItemInLine
         );
     }
 
-    public void requestMoreImageIfPossible(int displayPosition) {
+    public void loadMoreImageListIfPossible(int displayPosition) {
         if(remainingDataOnRepository) {
-            List<ImageInfo> imageInfoList = imageInfoListLiveData.getValue();
+            final List<ImageInfo> imageInfoList = imageInfoListLiveData.getValue();
             if (imageInfoList != null) {
-                int dataTotalSize = imageInfoList.size();
+                final int dataTotalSize = imageInfoList.size();
+                final int countOfItemInLine = getCountOfItemInLine();
 
                 imageSearchInspector.submitPreloadRequest(
                     displayPosition,
                     dataTotalSize,
-                    DEFAULT_COUNT_OF_ITEM_IN_LINE,
-                    DEFAULT_IMAGE_SORT_TYPE
+                    DEFAULT_IMAGE_SORT_TYPE,
+                    countOfItemInLine
                 );
             }
         }
+    }
+
+    private int getCountOfItemInLine() {
+        Integer countOfItemInLine = countOfItemInLineLiveData.getValue();
+        if(countOfItemInLine == null) {
+            countOfItemInLine = DEFAULT_COUNT_OF_ITEM_IN_LINE;
+        }
+
+        return countOfItemInLine;
     }
 
     private void observeImageSearchApprove() {
@@ -96,15 +125,15 @@ public class ImageListViewModel extends BaseViewModel {
         registerDisposable(
             imageRepository.requestImageList(imageSearchRequest)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::applyReceivedResponse, throwable -> { })
+                .subscribe(this::handlingReceivedResponse, this::handlingError)
         );
     }
 
-    private void applyReceivedResponse(ImageSearchResponse imageSearchResponse) {
-        ImageSearchMeta meta = imageSearchResponse.getMeta();
+    private void handlingReceivedResponse(ImageSearchResponse imageSearchResponse) {
+        final ImageSearchMeta meta = imageSearchResponse.getMeta();
         updateMetaInfo(meta);
 
-        List<ImageInfo> imageInfoList = imageSearchResponse.getImageInfoList();
+        final List<ImageInfo> imageInfoList = imageSearchResponse.getImageInfoList();
         updateImageInfoList(imageInfoList);
     }
 
@@ -118,19 +147,27 @@ public class ImageListViewModel extends BaseViewModel {
 
     private void updateImageInfoList(List<ImageInfo> imageInfoList) {
         if(imageInfoList != null) {
-            List<ImageInfo> newImageInfoList;
-            List<ImageInfo> previousImageInfoList = imageInfoListLiveData.getValue();
+            final List<ImageInfo> previousImageInfoList = imageInfoListLiveData.getValue();
 
+            List<ImageInfo> newImageInfoList;
             if(previousImageInfoList == null) {
                 newImageInfoList = new ArrayList<>();
             } else {
                 newImageInfoList = new ArrayList<>(previousImageInfoList);
             }
-
             newImageInfoList.addAll(imageInfoList);
 
             imageInfoListLiveData.setValue(newImageInfoList);
         }
+    }
+
+    private void handlingError(Throwable throwable) {
+        if(throwable instanceof ImageSearchException) {
+            final int messageResourceId = ((ImageSearchException) throwable).getErrorMessageResourceId();
+            errorMessageLiveData.setValue(getString(messageResourceId));
+        }
+
+        Log.d(TAG, throwable.getMessage());
     }
 
 }

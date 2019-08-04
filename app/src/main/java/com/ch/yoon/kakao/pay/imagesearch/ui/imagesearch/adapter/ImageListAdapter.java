@@ -32,7 +32,7 @@ public class ImageListAdapter extends ListAdapter<ImageInfo, ImageListViewHolder
     @NonNull
     @Override
     public ImageListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
+        final View itemView = LayoutInflater.from(parent.getContext())
             .inflate(R.layout.item_image_list, parent, false);
 
         return new ImageListViewHolder(itemView);

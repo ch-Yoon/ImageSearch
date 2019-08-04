@@ -60,6 +60,7 @@ public class ImageRemoteDataSource implements ImageDataSource {
         retrofit = retrofitBuilder.build();
     }
 
+    @NonNull
     @Override
     public Single<ImageSearchResponse> requestImageList(@NonNull ImageSearchRequest imageSearchRequest) {
         final String keyword = imageSearchRequest.getKeyword();
@@ -67,7 +68,7 @@ public class ImageRemoteDataSource implements ImageDataSource {
         final int pageNumber = imageSearchRequest.getPageNumber();
         final int requiredSize = imageSearchRequest.getRequiredSize();
 
-        return retrofit.create(SearchApi.class).searchImageList(keyword, sortType, 80, requiredSize);
+        return retrofit.create(SearchApi.class).searchImageList(keyword, sortType, pageNumber, requiredSize);
     }
 
 }

@@ -13,6 +13,7 @@ import io.reactivex.Single;
  */
 public interface ImageDataSource {
 
+    @NonNull
     Single<ImageSearchResponse> requestImageList(@NonNull ImageSearchRequest imageSearchRequest);
 
 }

@@ -7,7 +7,7 @@
     <data>
 
         <variable
-            name="searchViewModel"
+            name="imageListViewModel"
             type="com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.ImageListViewModel" />
 
     </data>
@@ -15,7 +15,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.imagesearch.ImageSearchActivity">
+        tools:context=".ui.imagesearch.ImageListActivity">
 
         <LinearLayout
             android:id="@+id/imageSearchBoxLayout"
@@ -51,7 +51,7 @@
                 android:layout_width="@dimen/image_search_box_icon_size"
                 android:layout_height="@dimen/image_search_box_icon_size"
                 android:background="@drawable/ic_action_search"
-                android:onClick="@{() -> searchViewModel.requestImageList(keywordEditText.getText().toString())}"/>
+                android:onClick="@{() -> imageListViewModel.loadImageList(keywordEditText.getText().toString())}"/>
 
         </LinearLayout>
 
@@ -60,13 +60,13 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
-            app:countOfItemInLine="@{searchViewModel.observeCountOfItemInLine()}"
+            app:countOfItemInLine="@{imageListViewModel.observeCountOfItemInLine()}"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fourImageInLineButton"
-            app:searchImageInfoList="@{searchViewModel.observeImageInfoList()}" />
+            app:searchImageInfoList="@{imageListViewModel.observeImageInfoList()}" />
 
         <ImageView
             android:id="@+id/fourImageInLineButton"
@@ -74,7 +74,7 @@
             android:layout_height="40dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:onClick="@{() -> searchViewModel.changeCountOfItemInLine(4)}"
+            android:onClick="@{() -> imageListViewModel.changeCountOfItemInLine(4)}"
             app:layout_constraintEnd_toEndOf="@+id/imageSearchBoxLayout"
             app:layout_constraintTop_toBottomOf="@+id/imageSearchBoxLayout"
             app:srcCompat="@drawable/ic_four_image_in_line" />
@@ -84,7 +84,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginEnd="8dp"
-            android:onClick="@{() -> searchViewModel.changeCountOfItemInLine(3)}"
+            android:onClick="@{() -> imageListViewModel.changeCountOfItemInLine(3)}"
             app:layout_constraintBottom_toBottomOf="@+id/fourImageInLineButton"
             app:layout_constraintEnd_toStartOf="@+id/fourImageInLineButton"
             app:layout_constraintTop_toTopOf="@+id/fourImageInLineButton"
@@ -95,7 +95,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginEnd="8dp"
-            android:onClick="@{() -> searchViewModel.changeCountOfItemInLine(2)}"
+            android:onClick="@{() -> imageListViewModel.changeCountOfItemInLine(2)}"
             app:layout_constraintBottom_toBottomOf="@+id/threeImageInLineButton"
             app:layout_constraintEnd_toStartOf="@+id/threeImageInLineButton"
             app:layout_constraintTop_toTopOf="@+id/threeImageInLineButton"

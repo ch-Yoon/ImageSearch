@@ -12,16 +12,29 @@ import com.ch.yoon.kakao.pay.imagesearch.repository.model.ImageSortType;
  */
 public class ImageSearchInspector {
 
-    private static final int MAX_PAGE_NUMBER = 50;
-    private static final int MAX_REQUIRE_DATA_SIZE = 80;
+    private final int START_PAGE_NUMBER;
+    private final int MAX_PAGE_NUMBER;
+    private final int MAX_REQUIRED_DATA_SIZE;
+    private final int REQUIRED_DATA_SIZE_MULTIPLE;
+    private final int PRELOAD_ALLOW_LINE_COUNT;
 
-    private static final int REQUIRED_DATA_SIZE_MULTIPLE = 20;
-    private static final int PRELOAD_ALLOW_MULTIPLE = 10;
-
+    @NonNull
     private final ApproveRequestLog approveRequestLog = new ApproveRequestLog();
 
     @Nullable
     private OnImageSearchApproveListener onImageSearchApproveListener;
+
+    public ImageSearchInspector(int startPageNumber,
+                                int maxPageNumber,
+                                int maxRequiredDataSize,
+                                int requiredDataSizeMultiple,
+                                int preloadAllowLineCount) {
+        START_PAGE_NUMBER = startPageNumber;
+        MAX_PAGE_NUMBER = maxPageNumber;
+        MAX_REQUIRED_DATA_SIZE = maxRequiredDataSize;
+        REQUIRED_DATA_SIZE_MULTIPLE = requiredDataSizeMultiple;
+        PRELOAD_ALLOW_LINE_COUNT = preloadAllowLineCount;
+    }
 
     public void observeImageSearchApprove(@Nullable OnImageSearchApproveListener listener) {
         onImageSearchApproveListener = listener;
@@ -35,8 +48,8 @@ public class ImageSearchInspector {
 
     public void submitPreloadRequest(int displayPosition,
                                      int dataTotalSize,
-                                     int countOfItemInLine,
-                                     @NonNull ImageSortType imageSortType) {
+                                     @NonNull ImageSortType imageSortType,
+                                     int countOfItemInLine) {
         if(isPreloadPossible(displayPosition, dataTotalSize, countOfItemInLine)) {
             if(isNotMaxPage()) {
                 approvePreload(imageSortType, dataTotalSize, countOfItemInLine);
@@ -54,21 +67,21 @@ public class ImageSearchInspector {
     private void initApproveRequestLog() {
         approveRequestLog.setKeyword("");
         approveRequestLog.setDataTotalSize(0);
-        approveRequestLog.setPageNumber(0);
+        approveRequestLog.setPageNumber(START_PAGE_NUMBER - 1);
     }
 
     private void approvePreload(ImageSortType imageSortType,
                                 int dataTotalSize,
                                 int countOfItemInLine) {
-        String keyword = approveRequestLog.getKeyword();
+        final String keyword = approveRequestLog.getKeyword();
         approveImageSearch(keyword, imageSortType, dataTotalSize, countOfItemInLine);
     }
 
     private boolean isPreloadPossible(int displayPosition,
                                       int dataTotalSize,
                                       int countOfItemInLine) {
-        int preloadAllowLimit = dataTotalSize - (countOfItemInLine * PRELOAD_ALLOW_MULTIPLE);
-        int previousDataTotalSize = approveRequestLog.getDataTotalSize();
+        final int preloadAllowLimit = dataTotalSize - (countOfItemInLine * PRELOAD_ALLOW_LINE_COUNT);
+        final int previousDataTotalSize = approveRequestLog.getDataTotalSize();
 
         return dataTotalSize > previousDataTotalSize && displayPosition > preloadAllowLimit;
     }
@@ -81,8 +94,8 @@ public class ImageSearchInspector {
                                     ImageSortType imageSortType,
                                     int dataTotalSize,
                                     int countOfItemInLine) {
-        int requestPageNumber = approveRequestLog.getPageNumber() + 1;
-        int requiredDataSize = calculateRequiredDataSize(countOfItemInLine);
+        final int requestPageNumber = approveRequestLog.getPageNumber() + 1;
+        final int requiredDataSize = calculateRequiredDataSize(countOfItemInLine);
 
         recordApproveRequest(keyword, dataTotalSize, requestPageNumber);
 
@@ -106,8 +119,8 @@ public class ImageSearchInspector {
 
     private int calculateRequiredDataSize(int countOfItemInLine) {
         int requiredDataSize = countOfItemInLine * REQUIRED_DATA_SIZE_MULTIPLE;
-        if(requiredDataSize > MAX_REQUIRE_DATA_SIZE) {
-            requiredDataSize = MAX_REQUIRE_DATA_SIZE;
+        if(requiredDataSize > MAX_REQUIRED_DATA_SIZE) {
+            requiredDataSize = MAX_REQUIRED_DATA_SIZE;
         }
 
         return requiredDataSize;

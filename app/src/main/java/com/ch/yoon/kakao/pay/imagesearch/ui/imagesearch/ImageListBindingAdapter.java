@@ -23,7 +23,7 @@ public class ImageListBindingAdapter {
     @BindingAdapter("countOfItemInLine")
     public static void setSpanCount(@NonNull RecyclerView recyclerView,
                                     @Nullable Integer countOfItemInLine) {
-        GridLayoutManager gridLayoutManager = (GridLayoutManager)recyclerView.getLayoutManager();
+        final GridLayoutManager gridLayoutManager = (GridLayoutManager)recyclerView.getLayoutManager();
         if(gridLayoutManager != null) {
             final int spanCount = countOfItemInLine == null ? 3 : countOfItemInLine;
             gridLayoutManager.setSpanCount(spanCount);
@@ -33,7 +33,7 @@ public class ImageListBindingAdapter {
     @BindingAdapter("searchImageInfoList")
     public static void setItems(@NonNull RecyclerView recyclerView,
                                 @Nullable List<ImageInfo> imageInfoList) {
-        ImageListAdapter adapter = ((ImageListAdapter)recyclerView.getAdapter());
+        final ImageListAdapter adapter = ((ImageListAdapter)recyclerView.getAdapter());
         if(adapter != null) {
             adapter.submitList(imageInfoList);
         }
@@ -42,7 +42,7 @@ public class ImageListBindingAdapter {
     @BindingAdapter("loadImage")
     public static void loadImage(@NonNull ImageView imageView, @Nullable ImageInfo imageInfo) {
         if(imageInfo != null) {
-            String thumbnailUrl = imageInfo.getThumbnailUrl();
+            final String thumbnailUrl = imageInfo.getThumbnailUrl();
             GlideUtil.load(imageView, thumbnailUrl);
         }
     }

@@ -31,6 +31,7 @@ public class ImageRepositoryImpl implements ImageRepository {
         this.imageDataSource = imageDataSource;
     }
 
+    @NonNull
     public Single<ImageSearchResponse> requestImageList(ImageSearchRequest imageSearchRequest) {
         return imageDataSource.requestImageList(imageSearchRequest)
             .subscribeOn(Schedulers.io());
