@@ -22,7 +22,7 @@ public abstract class BaseActivity<B extends ViewDataBinding> extends AppCompatA
     }
 
     protected void showToast(@NonNull String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 
 }
