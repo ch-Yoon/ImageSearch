@@ -2,11 +2,9 @@ package com.ch.yoon.kakao.pay.imagesearch.repository;
 
 import androidx.annotation.NonNull;
 
-import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.ImageRemoteDataSource;
-import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.request.ImageListRequest;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.ImageSearchRequest;
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageSearchResponse;
 
-import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
@@ -33,8 +31,11 @@ public class ImageRepositoryImpl implements ImageRepository {
         this.imageDataSource = imageDataSource;
     }
 
-    public Single<ImageSearchResponse> requestImageList(ImageListRequest imageListRequest) {
-        return imageDataSource.requestImageList(imageListRequest)
+    @NonNull
+    public Single<ImageSearchResponse> requestImageList(ImageSearchRequest imageSearchRequest) {
+        return imageDataSource.requestImageList(imageSearchRequest)
             .subscribeOn(Schedulers.io());
     }
+
 }
+

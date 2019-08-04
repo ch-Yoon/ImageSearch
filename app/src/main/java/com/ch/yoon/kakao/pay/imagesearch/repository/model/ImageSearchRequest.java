@@ -1,14 +1,13 @@
-package com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.request;
+package com.ch.yoon.kakao.pay.imagesearch.repository.model;
 
 import androidx.annotation.NonNull;
 
-import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.model.ImageSortType;
 
 /**
  * Creator : ch-yoon
  * Date : 2019-08-01.
  */
-public final class ImageListRequest {
+public final class ImageSearchRequest {
 
     @NonNull
     private final String keyword;
@@ -19,10 +18,10 @@ public final class ImageListRequest {
     private final int pageNumber;
     private final int requiredSize;
 
-    public ImageListRequest(@NonNull String keyword,
-                            @NonNull ImageSortType imageSortType,
-                            int pageNumber,
-                            int requiredSize) {
+    public ImageSearchRequest(@NonNull String keyword,
+                              @NonNull ImageSortType imageSortType,
+                              int pageNumber,
+                              int requiredSize) {
         this.keyword = keyword;
         this.imageSortType = imageSortType;
         this.pageNumber = pageNumber;
@@ -45,6 +44,15 @@ public final class ImageListRequest {
 
     public int getRequiredSize() {
         return requiredSize;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "ImageSearchRequest {keyword=" + keyword +
+            ", imageSortType=" + imageSortType +
+            ", pageNumber=" + pageNumber +
+            ", requiredSize=" + requiredSize + "}";
     }
 
 }

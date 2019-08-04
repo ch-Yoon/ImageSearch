@@ -1,5 +1,7 @@
 package com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -8,31 +10,20 @@ import com.google.gson.annotations.SerializedName;
  */
 public final class ImageSearchMeta {
 
-    @SerializedName("total_count")
-    private final int totalCount;
-
-    @SerializedName("pageable_count")
-    private final int pageableCount;
-
     @SerializedName("is_end")
     private final boolean isEnd;
 
-    public ImageSearchMeta(int totalCount, int pageableCount, boolean isEnd) {
-        this.totalCount = totalCount;
-        this.pageableCount = pageableCount;
+    public ImageSearchMeta(boolean isEnd) {
         this.isEnd = isEnd;
-    }
-
-    public int getTotalCount() {
-        return totalCount;
-    }
-
-    public int getPageableCount() {
-        return pageableCount;
     }
 
     public boolean isEnd() {
         return isEnd;
     }
 
+    @NonNull
+    @Override
+    public String toString() {
+        return "ImageSearchMeta {isEnd=" + isEnd + "}";
+    }
 }

@@ -1,4 +1,4 @@
-package com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.model;
+package com.ch.yoon.kakao.pay.imagesearch.repository.model;
 
 import androidx.annotation.NonNull;
 

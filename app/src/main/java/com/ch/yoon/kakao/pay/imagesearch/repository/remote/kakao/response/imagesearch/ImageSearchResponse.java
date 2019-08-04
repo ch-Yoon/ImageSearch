@@ -1,10 +1,10 @@
 package com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,12 +19,12 @@ public final class ImageSearchResponse {
 
     @Nullable
     @SerializedName("documents")
-    private final List<ImageSearchDocument> imageSearchDocuments;
+    private final List<ImageInfo> imageInfoList;
 
     public ImageSearchResponse(@Nullable ImageSearchMeta meta,
-                               @Nullable List<ImageSearchDocument> imageSearchDocuments) {
+                               @Nullable List<ImageInfo> imageInfoList) {
         this.meta = meta;
-        this.imageSearchDocuments = imageSearchDocuments;
+        this.imageInfoList = imageInfoList;
     }
 
     @Nullable
@@ -33,8 +33,14 @@ public final class ImageSearchResponse {
     }
 
     @Nullable
-    public List<ImageSearchDocument> getImageSearchDocuments() {
-        return imageSearchDocuments;
+    public List<ImageInfo> getImageInfoList() {
+        return imageInfoList;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "ImageSearchResponse { " + meta + ", " + imageInfoList + "}";
     }
 
 }
