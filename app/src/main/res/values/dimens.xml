@@ -4,5 +4,7 @@
     <dimen name="image_search_box_padding">10dp</dimen>
     <dimen name="image_search_box_icon_size">30dp</dimen>
 
+    <dimen name="count_in_line_icon_size">30dp</dimen>
+    <dimen name="count_in_line_icon_side_margin">10dp</dimen>
     <dimen name="image_search_retry_button_padding">10dp</dimen>
 </resources>

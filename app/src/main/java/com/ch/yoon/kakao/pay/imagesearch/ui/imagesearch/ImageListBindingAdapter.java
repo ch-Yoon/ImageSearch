@@ -68,4 +68,10 @@ public class ImageListBindingAdapter {
         }
     }
 
+    @BindingAdapter("applySelectedState")
+    public static void applySelectedState(@NonNull ImageView imageView,
+                                          boolean isSelected) {
+        imageView.setSelected(isSelected);
+    }
+
 }

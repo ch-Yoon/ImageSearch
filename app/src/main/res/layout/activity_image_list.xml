@@ -6,6 +6,9 @@
 
     <data>
 
+        <import type="android.view.View" />
+        <import type="com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil" />
+
         <variable
             name="imageListViewModel"
             type="com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.ImageListViewModel" />
@@ -38,15 +41,6 @@
                 android:background="@null"/>
 
             <ImageView
-                android:id="@+id/clearButton"
-                android:layout_width="@dimen/image_search_box_icon_size"
-                android:layout_height="@dimen/image_search_box_icon_size"
-                android:layout_marginStart="@dimen/image_search_box_side_margin"
-                android:layout_marginEnd="@dimen/image_search_box_side_margin"
-                android:background="@drawable/ic_action_clear"
-                android:visibility="gone" />
-
-            <ImageView
                 android:id="@+id/searchButton"
                 android:layout_width="@dimen/image_search_box_icon_size"
                 android:layout_height="@dimen/image_search_box_icon_size"
@@ -61,6 +55,7 @@
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
             android:scrollbars="vertical"
+            android:visibility="@{CollectionUtil.isEmpty(imageListViewModel.observeImageInfoList()) ? View.INVISIBLE : View.VISIBLE}"
             app:countOfItemInLine="@{imageListViewModel.observeCountOfItemInLine()}"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -72,36 +67,42 @@
 
         <ImageView
             android:id="@+id/fourImageInLineButton"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_width="@dimen/count_in_line_icon_size"
+            android:layout_height="@dimen/count_in_line_icon_size"
+            android:layout_marginTop="@dimen/count_in_line_icon_side_margin"
+            android:layout_marginEnd="@dimen/count_in_line_icon_side_margin"
             android:onClick="@{() -> imageListViewModel.changeCountOfItemInLine(4)}"
+            android:visibility="@{CollectionUtil.isEmpty(imageListViewModel.observeImageInfoList()) ? View.INVISIBLE : View.VISIBLE}"
             app:layout_constraintEnd_toEndOf="@+id/imageSearchBoxLayout"
             app:layout_constraintTop_toBottomOf="@+id/imageSearchBoxLayout"
-            app:srcCompat="@drawable/ic_four_image_in_line" />
+            app:srcCompat="@drawable/ic_four_image_in_line_selector"
+            app:applySelectedState="@{imageListViewModel.observeCountOfItemInLine() == 4}"/>
 
         <ImageView
             android:id="@+id/threeImageInLineButton"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="8dp"
+            android:layout_width="@dimen/count_in_line_icon_size"
+            android:layout_height="@dimen/count_in_line_icon_size"
+            android:layout_marginEnd="@dimen/count_in_line_icon_side_margin"
             android:onClick="@{() -> imageListViewModel.changeCountOfItemInLine(3)}"
+            android:visibility="@{CollectionUtil.isEmpty(imageListViewModel.observeImageInfoList()) ? View.INVISIBLE : View.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="@+id/fourImageInLineButton"
             app:layout_constraintEnd_toStartOf="@+id/fourImageInLineButton"
             app:layout_constraintTop_toTopOf="@+id/fourImageInLineButton"
-            app:srcCompat="@drawable/ic_three_image_in_line" />
+            app:srcCompat="@drawable/ic_three_image_in_line_selector"
+            app:applySelectedState="@{imageListViewModel.observeCountOfItemInLine() == 3}"/>
 
         <ImageView
             android:id="@+id/twoImageInLineButton"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="8dp"
+            android:layout_width="@dimen/count_in_line_icon_size"
+            android:layout_height="@dimen/count_in_line_icon_size"
+            android:layout_marginEnd="@dimen/count_in_line_icon_side_margin"
             android:onClick="@{() -> imageListViewModel.changeCountOfItemInLine(2)}"
+            android:visibility="@{CollectionUtil.isEmpty(imageListViewModel.observeImageInfoList()) ? View.INVISIBLE : View.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="@+id/threeImageInLineButton"
             app:layout_constraintEnd_toStartOf="@+id/threeImageInLineButton"
             app:layout_constraintTop_toTopOf="@+id/threeImageInLineButton"
-            app:srcCompat="@drawable/ic_two_image_in_line" />
+            app:srcCompat="@drawable/ic_two_image_in_line_selector"
+            app:applySelectedState="@{imageListViewModel.observeCountOfItemInLine() == 2}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
