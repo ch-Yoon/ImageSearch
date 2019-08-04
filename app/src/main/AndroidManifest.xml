@@ -15,6 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".ui.imagedetail.ImageDetailActivity"></activity>
         <activity
             android:name=".ui.imagesearch.ImageListActivity"
             android:label="@string/image_search_screen_title"

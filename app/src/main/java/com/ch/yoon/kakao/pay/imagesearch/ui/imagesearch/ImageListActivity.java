@@ -30,7 +30,7 @@ public class ImageListActivity extends BaseActivity<ActivityImageListBinding> {
         final ImageListViewModel viewModel = ViewModelProviders.of(this, new ImageListViewModelFactory(
             getApplication(),
             ImageRepositoryImpl.getInstance(ImageRemoteDataSource.getInstance()),
-            new ImageSearchInspector(1, 50, 80, 20, 10)
+            new ImageSearchInspector(1, 50, 80, 20)
         )).get(ImageListViewModel.class);
 
         viewModel.observeMessage().observe(this, this::showToast);
@@ -46,7 +46,6 @@ public class ImageListActivity extends BaseActivity<ActivityImageListBinding> {
         );
 
         imageListAdapter.setOnListItemClickListener(position -> {
-
         });
 
         imageListAdapter.setOnFooterItemClickListener(() -> {

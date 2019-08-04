@@ -18,16 +18,16 @@ import com.ch.yoon.kakao.pay.imagesearch.R;
 public class GlideUtil {
 
     private static final float THUMBNAIL_VALUE = 0.1f;
+    private static final RequestOptions CENTER_CROP_REQUEST_OPTIONS = new RequestOptions()
+        .transform(new CenterCrop())
+        .error(R.drawable.image_load_fail);
 
     public static void load(@NonNull ImageView imageView, @Nullable String imageUrl) {
         Glide.with(imageView.getContext())
             .load(imageUrl)
             .thumbnail(THUMBNAIL_VALUE)
             .transition(DrawableTransitionOptions.withCrossFade())
-            .apply(new RequestOptions()
-                .transform(new CenterCrop())
-                .error(R.drawable.image_load_fail)
-            )
+            .apply(CENTER_CROP_REQUEST_OPTIONS)
             .into(imageView);
     }
 
