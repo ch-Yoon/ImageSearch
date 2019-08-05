@@ -25,7 +25,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:loadImageWithCenterInside="@{imageDetailViewModel.observeImageUrl()}"/>
+            app:loadImageWithCenterInside="@{imageDetailViewModel.observeImageUrl()}"
+            app:loadingProgressBar="@{progressBar}"/>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/bottomBarGuideLine"
+            app:layout_constraintEnd_toEndOf="@+id/photoView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/photoView" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/bottomBarGuideLine"

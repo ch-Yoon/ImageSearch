@@ -1,5 +1,7 @@
 package com.ch.yoon.kakao.pay.imagesearch.ui.imagedetail;
 
+import android.widget.ProgressBar;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.BindingAdapter;
@@ -13,10 +15,11 @@ import com.github.chrisbanes.photoview.PhotoView;
  */
 public class ImageDetailBindingAdapter {
 
-    @BindingAdapter("loadImageWithCenterInside")
+    @BindingAdapter({"loadImageWithCenterInside", "loadingProgressBar"})
     public static void loadImageWithCenterInside(@NonNull PhotoView photoView,
-                                                 @Nullable String imageUrl) {
-        GlideUtil.loadWithCenterInside(photoView, imageUrl);
+                                                 @Nullable String imageUrl,
+                                                 @NonNull ProgressBar progressBar) {
+        GlideUtil.loadWithCenterInside(photoView, imageUrl, progressBar);
     }
 
 }

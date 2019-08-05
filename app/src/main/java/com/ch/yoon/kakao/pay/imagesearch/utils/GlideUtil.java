@@ -1,6 +1,9 @@
 package com.ch.yoon.kakao.pay.imagesearch.utils;
 
+import android.graphics.drawable.Drawable;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,11 +11,15 @@ import androidx.annotation.Nullable;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.CenterInside;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageInfo;
 
@@ -36,21 +43,45 @@ public class GlideUtil {
     }
 
     public static void loadWithCenterCrop(@NonNull ImageView imageView, @Nullable String imageUrl) {
-        load(imageView, imageUrl, CENTER_CROP_REQUEST_OPTIONS);
+        load(imageView, imageUrl, CENTER_CROP_REQUEST_OPTIONS, null);
     }
 
-    public static void loadWithCenterInside(@NonNull ImageView imageView, @Nullable String imageUrl) {
-        load(imageView, imageUrl, CENTER_INSIDE_REQUEST_OPTIONS);
+    public static void loadWithCenterInside(@NonNull ImageView imageView,
+                                            @Nullable String imageUrl,
+                                            @NonNull ProgressBar progressBar) {
+        load(imageView, imageUrl, CENTER_INSIDE_REQUEST_OPTIONS, progressBar);
     }
 
     private static void load(@NonNull ImageView imageView,
                              @Nullable String imageUrl,
-                             @NonNull RequestOptions requestOptions) {
+                             @NonNull RequestOptions requestOptions,
+                             @Nullable ProgressBar progressBar) {
+        if(progressBar != null) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
         Glide.with(imageView.getContext())
             .load(imageUrl)
             .thumbnail(THUMBNAIL_VALUE)
             .transition(DrawableTransitionOptions.withCrossFade())
             .apply(requestOptions)
+            .listener(new RequestListener<Drawable>() {
+                @Override
+                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                    if(progressBar != null) {
+                        progressBar.setVisibility(View.GONE);
+                    }
+                    return false;
+                }
+
+                @Override
+                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                    if(progressBar != null) {
+                        progressBar.setVisibility(View.GONE);
+                    }
+                    return false;
+                }
+            })
             .into(imageView);
     }
 
