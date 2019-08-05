@@ -32,7 +32,8 @@ public class ImageListViewHolder extends RecyclerView.ViewHolder {
     public void setOnListItemClickListener(@Nullable OnListItemClickListener onListItemClickListener) {
         binding.imageView.setOnClickListener(v -> {
             if(onListItemClickListener != null) {
-                onListItemClickListener.onClick(getAdapterPosition());
+                int position = getAdapterPosition();
+                onListItemClickListener.onClick(binding.getImageInfo(), position);
             }
         });
     }
