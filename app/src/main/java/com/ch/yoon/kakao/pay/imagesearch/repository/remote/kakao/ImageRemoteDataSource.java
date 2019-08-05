@@ -4,16 +4,14 @@ import androidx.annotation.NonNull;
 
 import com.ch.yoon.kakao.pay.imagesearch.BuildConfig;
 import com.ch.yoon.kakao.pay.imagesearch.repository.ImageDataSource;
+import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageSearchResponse;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.ImageSearchRequest;
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.error.ImageSearchError;
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.error.ImageSearchException;
-import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageSearchResponse;
 
 import java.net.UnknownHostException;
 
 import io.reactivex.Single;
-import io.reactivex.SingleSource;
-import io.reactivex.functions.Function;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.HttpException;

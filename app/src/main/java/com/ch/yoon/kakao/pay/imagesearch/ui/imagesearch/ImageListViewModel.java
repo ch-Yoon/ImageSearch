@@ -93,12 +93,7 @@ public class ImageListViewModel extends BaseViewModel {
 
     public void loadImageList(@NonNull String keyword) {
         imageInfoListLiveData.setValue(null);
-
-        imageSearchInspector.submitFirstImageSearchRequest(
-            keyword,
-            DEFAULT_IMAGE_SORT_TYPE,
-            getCountOfItemInLine()
-        );
+        imageSearchInspector.submitFirstImageSearchRequest(keyword, DEFAULT_IMAGE_SORT_TYPE);
     }
 
     public void loadMoreImageListIfPossible(int displayPosition) {
@@ -116,10 +111,7 @@ public class ImageListViewModel extends BaseViewModel {
     }
 
     public void retryLoadMoreImageList() {
-        imageSearchInspector.submitRetryRequest(
-            getCountOfItemInLine(),
-            DEFAULT_IMAGE_SORT_TYPE
-        );
+        imageSearchInspector.submitRetryRequest(DEFAULT_IMAGE_SORT_TYPE);
     }
 
     private int getCountOfItemInLine() {

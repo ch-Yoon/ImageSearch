@@ -14,9 +14,8 @@ public class ImageSearchInspector {
 
     private final int START_PAGE_NUMBER;
     private final int MAX_PAGE_NUMBER;
-    private final int MAX_REQUIRED_DATA_SIZE;
-    private final int REQUIRED_DATA_SIZE_MULTIPLE;
-    private final int PRELOAD_ALLOW_LINE_COUNT;
+    private final int REQUIRED_DATA_SIZE;
+    private final int PRELOAD_ALLOW_LINE_MULTIPLE;
 
     @NonNull
     private final ApproveRequestLog approveRequestLog = new ApproveRequestLog();
@@ -26,14 +25,12 @@ public class ImageSearchInspector {
 
     public ImageSearchInspector(int startPageNumber,
                                 int maxPageNumber,
-                                int maxRequiredDataSize,
-                                int requiredDataSizeMultiple,
-                                int preloadAllowLineCount) {
+                                int requiredDataSize,
+                                int preloadAllowLineMultiple) {
         START_PAGE_NUMBER = startPageNumber;
         MAX_PAGE_NUMBER = maxPageNumber;
-        MAX_REQUIRED_DATA_SIZE = maxRequiredDataSize;
-        REQUIRED_DATA_SIZE_MULTIPLE = requiredDataSizeMultiple;
-        PRELOAD_ALLOW_LINE_COUNT = preloadAllowLineCount;
+        REQUIRED_DATA_SIZE = requiredDataSize;
+        PRELOAD_ALLOW_LINE_MULTIPLE = preloadAllowLineMultiple;
     }
 
     public void observeImageSearchApprove(@Nullable OnImageSearchApproveListener approveListener) {
@@ -41,9 +38,8 @@ public class ImageSearchInspector {
     }
 
     public void submitFirstImageSearchRequest(@NonNull String keyword,
-                                              @NonNull ImageSortType imageSortType,
-                                              int countOfItemInLine) {
-        approveFirstImageSearch(keyword, imageSortType, countOfItemInLine);
+                                              @NonNull ImageSortType imageSortType) {
+        approveFirstImageSearch(keyword, imageSortType);
     }
 
     public void submitPreloadRequest(int displayPosition,
@@ -51,21 +47,19 @@ public class ImageSearchInspector {
                                      @NonNull ImageSortType imageSortType,
                                      int countOfItemInLine) {
         if(isPreloadPossible(displayPosition, dataTotalSize, countOfItemInLine)) {
-            approvePreload(imageSortType, dataTotalSize, countOfItemInLine);
+            approvePreload(imageSortType, dataTotalSize);
         }
     }
 
-    public void submitRetryRequest(int countOfItemInLine,
-                                   @NonNull ImageSortType imageSortType) {
+    public void submitRetryRequest(@NonNull ImageSortType imageSortType) {
         int previousDataTotalSize = approveRequestLog.getDataTotalSize();
-        approvePreload(imageSortType, previousDataTotalSize, countOfItemInLine);
+        approvePreload(imageSortType, previousDataTotalSize);
     }
 
     private void approveFirstImageSearch(String keyword,
-                                         ImageSortType imageSortType,
-                                         int countOfItemInLine) {
+                                         ImageSortType imageSortType) {
         initApproveRequestLog();
-        approveImageSearch(keyword, imageSortType, 0, countOfItemInLine);
+        approveImageSearch(keyword, imageSortType, 0);
     }
 
     private void initApproveRequestLog() {
@@ -75,16 +69,16 @@ public class ImageSearchInspector {
     }
 
     private void approvePreload(ImageSortType imageSortType,
-                                int dataTotalSize,
-                                int countOfItemInLine) {
+                                int dataTotalSize) {
         final String keyword = approveRequestLog.getKeyword();
-        approveImageSearch(keyword, imageSortType, dataTotalSize, countOfItemInLine);
+        approveImageSearch(keyword, imageSortType, dataTotalSize);
     }
 
     private boolean isPreloadPossible(int displayPosition,
                                       int dataTotalSize,
                                       int countOfItemInLine) {
-        return isNotMaxPage() && isAllowPreloadRange(displayPosition, dataTotalSize, countOfItemInLine);
+        return isNotMaxPage() &&
+            isAllowPreloadRange(displayPosition, dataTotalSize, countOfItemInLine);
     }
 
     private boolean isNotMaxPage() {
@@ -94,7 +88,7 @@ public class ImageSearchInspector {
     private boolean isAllowPreloadRange(int displayPosition,
                                         int dataTotalSize,
                                         int countOfItemInLine) {
-        final int preloadAllowLimit = dataTotalSize - (countOfItemInLine * PRELOAD_ALLOW_LINE_COUNT);
+        final int preloadAllowLimit = dataTotalSize - (countOfItemInLine * PRELOAD_ALLOW_LINE_MULTIPLE);
         final int previousDataTotalSize = approveRequestLog.getDataTotalSize();
 
         return dataTotalSize > previousDataTotalSize && displayPosition > preloadAllowLimit;
@@ -102,10 +96,8 @@ public class ImageSearchInspector {
 
     private void approveImageSearch(String keyword,
                                     ImageSortType imageSortType,
-                                    int dataTotalSize,
-                                    int countOfItemInLine) {
+                                    int dataTotalSize) {
         final int requestPageNumber = approveRequestLog.getPageNumber() + 1;
-        final int requiredDataSize = calculateRequiredDataSize(countOfItemInLine);
 
         recordApproveRequest(keyword, dataTotalSize, requestPageNumber);
 
@@ -115,7 +107,7 @@ public class ImageSearchInspector {
                     keyword,
                     imageSortType,
                     requestPageNumber,
-                    requiredDataSize
+                    REQUIRED_DATA_SIZE
                 )
             );
         }
@@ -125,15 +117,6 @@ public class ImageSearchInspector {
         approveRequestLog.setKeyword(keyword);
         approveRequestLog.setDataTotalSize(dataTotalSize);
         approveRequestLog.setPageNumber(pageNumber);
-    }
-
-    private int calculateRequiredDataSize(int countOfItemInLine) {
-        int requiredDataSize = countOfItemInLine * REQUIRED_DATA_SIZE_MULTIPLE;
-        if(requiredDataSize > MAX_REQUIRED_DATA_SIZE) {
-            requiredDataSize = MAX_REQUIRED_DATA_SIZE;
-        }
-
-        return requiredDataSize;
     }
 
 }

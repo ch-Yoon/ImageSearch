@@ -1,5 +1,6 @@
 package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.lifecycle.ViewModelProviders;
@@ -10,6 +11,7 @@ import com.ch.yoon.kakao.pay.imagesearch.databinding.ActivityImageListBinding;
 import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepositoryImpl;
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.ImageRemoteDataSource;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseActivity;
+import com.ch.yoon.kakao.pay.imagesearch.ui.imagedetail.ImageDetailActivity;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.adapter.ImageListAdapter;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.helper.ImageSearchInspector;
 
@@ -30,7 +32,7 @@ public class ImageListActivity extends BaseActivity<ActivityImageListBinding> {
         final ImageListViewModel viewModel = ViewModelProviders.of(this, new ImageListViewModelFactory(
             getApplication(),
             ImageRepositoryImpl.getInstance(ImageRemoteDataSource.getInstance()),
-            new ImageSearchInspector(1, 50, 80, 20, 10)
+            new ImageSearchInspector(1, 50, 80, 20)
         )).get(ImageListViewModel.class);
 
         viewModel.observeMessage().observe(this, this::showToast);
@@ -45,8 +47,9 @@ public class ImageListActivity extends BaseActivity<ActivityImageListBinding> {
             binding.getImageListViewModel().loadMoreImageListIfPossible(position)
         );
 
-        imageListAdapter.setOnListItemClickListener(position -> {
-
+        imageListAdapter.setOnListItemClickListener((imageInfo, position) -> {
+            Intent imageDetailIntent = ImageDetailActivity.getImageDetailActivityIntent(this, imageInfo);
+            startActivity(imageDetailIntent);
         });
 
         imageListAdapter.setOnFooterItemClickListener(() -> {

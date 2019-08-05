@@ -60,12 +60,10 @@ public class ImageListBindingAdapter {
         }
     }
 
-    @BindingAdapter("loadImage")
-    public static void loadImage(@NonNull ImageView imageView, @Nullable ImageInfo imageInfo) {
-        if(imageInfo != null) {
-            final String thumbnailUrl = imageInfo.getThumbnailUrl();
-            GlideUtil.load(imageView, thumbnailUrl);
-        }
+    @BindingAdapter("loadImageWithCenterCrop")
+    public static void loadImageWithCenterCrop(@NonNull ImageView imageView,
+                                               @Nullable String imageUrl) {
+        GlideUtil.loadWithCenterCrop(imageView, imageUrl);
     }
 
     @BindingAdapter("applySelectedState")
