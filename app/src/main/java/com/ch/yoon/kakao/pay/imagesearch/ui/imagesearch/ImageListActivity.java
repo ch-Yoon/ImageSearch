@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ActivityImageListBinding;
 import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepositoryImpl;
+import com.ch.yoon.kakao.pay.imagesearch.repository.local.ImageDatabase;
+import com.ch.yoon.kakao.pay.imagesearch.repository.local.ImageLocalDataSource;
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.ImageRemoteDataSource;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseActivity;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagedetail.ImageDetailActivity;
@@ -31,7 +33,11 @@ public class ImageListActivity extends BaseActivity<ActivityImageListBinding> {
     private void initViewModel() {
         final ImageListViewModel viewModel = ViewModelProviders.of(this, new ImageListViewModelFactory(
             getApplication(),
-            ImageRepositoryImpl.getInstance(ImageRemoteDataSource.getInstance()),
+            ImageRepositoryImpl.getInstance(
+                ImageLocalDataSource.getInstance(
+                    ImageDatabase.getInstance(getApplicationContext()).imageDocumentDao()
+                ),
+                ImageRemoteDataSource.getInstance()),
             new ImageSearchInspector(1, 50, 80, 20)
         )).get(ImageListViewModel.class);
 

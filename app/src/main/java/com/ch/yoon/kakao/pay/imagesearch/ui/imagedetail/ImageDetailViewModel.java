@@ -8,7 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.ch.yoon.kakao.pay.imagesearch.extentions.SingleLiveEvent;
-import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageInfo;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.Document;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel;
 
 /**
@@ -18,7 +18,7 @@ import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel;
 public class ImageDetailViewModel extends BaseViewModel {
 
     @Nullable
-    private ImageInfo imageInfo;
+    private Document document;
     @NonNull
     private final MutableLiveData<String> imageUrlLiveData = new MutableLiveData<>();
     @NonNull
@@ -38,16 +38,16 @@ public class ImageDetailViewModel extends BaseViewModel {
         return docUrlSingleLiveData;
     }
 
-    public void setImageInfo(@Nullable ImageInfo imageInfo) {
-        this.imageInfo = imageInfo;
-        if(imageInfo != null) {
-            imageUrlLiveData.setValue(imageInfo.getImageUrl());
+    public void setDocument(@Nullable Document document) {
+        this.document = document;
+        if(document != null) {
+            imageUrlLiveData.setValue(document.getImageUrl());
         }
     }
 
     public void onClickWebButton() {
-        if(imageInfo != null) {
-            final String docUrl = imageInfo.getDocUrl();
+        if(document != null) {
+            final String docUrl = document.getDocUrl();
             docUrlSingleLiveData.setValue(docUrl);
         }
     }

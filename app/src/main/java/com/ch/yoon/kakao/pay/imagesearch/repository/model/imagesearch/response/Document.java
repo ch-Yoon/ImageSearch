@@ -1,4 +1,4 @@
-package com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch;
+package com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -14,7 +14,7 @@ import java.util.Objects;
  * Creator : ch-yoon
  * Date : 2019-08-01.
  */
-public final class ImageInfo implements Parcelable {
+public final class Document implements Parcelable {
 
     @Nullable
     @SerializedName("collection")
@@ -46,14 +46,14 @@ public final class ImageInfo implements Parcelable {
     @SerializedName("dateTime")
     private final String dateTime;
 
-    public ImageInfo(@NonNull String collection,
-                     @NonNull String thumbnailUrl,
-                     @NonNull String imageUrl,
-                     int width,
-                     int height,
-                     @NonNull String displaySiteName,
-                     @NonNull String docUrl,
-                     @NonNull String dateTime) {
+    public Document(@NonNull String collection,
+                    @NonNull String thumbnailUrl,
+                    @NonNull String imageUrl,
+                    int width,
+                    int height,
+                    @NonNull String displaySiteName,
+                    @NonNull String docUrl,
+                    @NonNull String dateTime) {
         this.collection = collection;
         this.thumbnailUrl = thumbnailUrl;
         this.imageUrl = imageUrl;
@@ -104,7 +104,7 @@ public final class ImageInfo implements Parcelable {
 
     @Override
     public String toString() {
-        return "ImageInfo{" +
+        return "Document{" +
             "collection='" + collection + '\'' +
             ", thumbnailUrl='" + thumbnailUrl + '\'' +
             ", imageUrl='" + imageUrl + '\'' +
@@ -120,15 +120,15 @@ public final class ImageInfo implements Parcelable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ImageInfo imageInfo = (ImageInfo) o;
-        return width == imageInfo.width &&
-            height == imageInfo.height &&
-            Objects.equals(collection, imageInfo.collection) &&
-            Objects.equals(thumbnailUrl, imageInfo.thumbnailUrl) &&
-            Objects.equals(imageUrl, imageInfo.imageUrl) &&
-            Objects.equals(displaySiteName, imageInfo.displaySiteName) &&
-            Objects.equals(docUrl, imageInfo.docUrl) &&
-            Objects.equals(dateTime, imageInfo.dateTime);
+        Document document = (Document) o;
+        return width == document.width &&
+            height == document.height &&
+            Objects.equals(collection, document.collection) &&
+            Objects.equals(thumbnailUrl, document.thumbnailUrl) &&
+            Objects.equals(imageUrl, document.imageUrl) &&
+            Objects.equals(displaySiteName, document.displaySiteName) &&
+            Objects.equals(docUrl, document.docUrl) &&
+            Objects.equals(dateTime, document.dateTime);
     }
 
     @Override
@@ -153,7 +153,7 @@ public final class ImageInfo implements Parcelable {
         dest.writeString(this.dateTime);
     }
 
-    protected ImageInfo(Parcel in) {
+    protected Document(Parcel in) {
         this.collection = in.readString();
         this.thumbnailUrl = in.readString();
         this.imageUrl = in.readString();
@@ -164,15 +164,15 @@ public final class ImageInfo implements Parcelable {
         this.dateTime = in.readString();
     }
 
-    public static final Creator<ImageInfo> CREATOR = new Creator<ImageInfo>() {
+    public static final Creator<Document> CREATOR = new Creator<Document>() {
         @Override
-        public ImageInfo createFromParcel(Parcel source) {
-            return new ImageInfo(source);
+        public Document createFromParcel(Parcel source) {
+            return new Document(source);
         }
 
         @Override
-        public ImageInfo[] newArray(int size) {
-            return new ImageInfo[size];
+        public Document[] newArray(int size) {
+            return new Document[size];
         }
     };
 

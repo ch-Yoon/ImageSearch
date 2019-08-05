@@ -1,4 +1,4 @@
-package com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.error;
+package com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.error;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

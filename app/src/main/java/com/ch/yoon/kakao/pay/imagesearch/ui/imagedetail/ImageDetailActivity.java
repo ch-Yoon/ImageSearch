@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ActivityImageDetailBinding;
-import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageInfo;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.Document;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseActivity;
 
 public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding> {
@@ -22,9 +22,9 @@ public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding
     private ActivityImageDetailBinding binding;
 
     public static Intent getImageDetailActivityIntent(@NonNull Context context,
-                                                      @NonNull ImageInfo imageInfo) {
+                                                      @NonNull Document document) {
         Intent imageDetailIntent = new Intent(context, ImageDetailActivity.class);
-        imageDetailIntent.putExtra(ImageDetailActivity.EXTRA_IMAGE_DETAIL_INFO_KEY, imageInfo);
+        imageDetailIntent.putExtra(ImageDetailActivity.EXTRA_IMAGE_DETAIL_INFO_KEY, document);
         return imageDetailIntent;
     }
 
@@ -49,8 +49,8 @@ public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding
             getApplication()
         )).get(ImageDetailViewModel.class);
 
-        ImageInfo imageInfo = getIntent().getParcelableExtra(EXTRA_IMAGE_DETAIL_INFO_KEY);
-        viewModel.setImageInfo(imageInfo);
+        Document document = getIntent().getParcelableExtra(EXTRA_IMAGE_DETAIL_INFO_KEY);
+        viewModel.setDocument(document);
 
         viewModel.observeMoveWebEvent().observe(this, url -> {
             Uri movieWebUri = Uri.parse(url);

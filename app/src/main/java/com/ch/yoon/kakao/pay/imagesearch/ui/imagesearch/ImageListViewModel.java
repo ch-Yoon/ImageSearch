@@ -11,12 +11,12 @@ import androidx.lifecycle.MutableLiveData;
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.extentions.SingleLiveEvent;
 import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepository;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.ImageSearchRequest;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.ImageSortType;
-import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.error.ImageSearchException;
-import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageInfo;
-import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageSearchMeta;
-import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageSearchResponse;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.ImageSearchRequest;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.ImageSortType;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.Document;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.error.ImageSearchException;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.Meta;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageSearchResponse;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.helper.ImageSearchInspector;
 import com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil;
@@ -43,7 +43,7 @@ public class ImageListViewModel extends BaseViewModel {
     @NonNull
     private final MutableLiveData<Integer> countOfItemInLineLiveData = new MutableLiveData<>();
     @NonNull
-    private final MutableLiveData<List<ImageInfo>> imageInfoListLiveData = new MutableLiveData<>();
+    private final MutableLiveData<List<Document>> imageInfoListLiveData = new MutableLiveData<>();
     @NonNull
     private final SingleLiveEvent<String> messageLiveData = new SingleLiveEvent<>();
     @NonNull
@@ -73,7 +73,7 @@ public class ImageListViewModel extends BaseViewModel {
     }
 
     @NonNull
-    public LiveData<List<ImageInfo>> observeImageInfoList() {
+    public LiveData<List<Document>> observeImageInfoList() {
         return imageInfoListLiveData;
     }
 
@@ -98,11 +98,11 @@ public class ImageListViewModel extends BaseViewModel {
 
     public void loadMoreImageListIfPossible(int displayPosition) {
         if(remainingDataOnRepository) {
-            final List<ImageInfo> imageInfoList = imageInfoListLiveData.getValue();
-            if (imageInfoList != null) {
+            final List<Document> documentList = imageInfoListLiveData.getValue();
+            if (documentList != null) {
                 imageSearchInspector.submitPreloadRequest(
                     displayPosition,
-                    imageInfoList.size(),
+                    documentList.size(),
                     DEFAULT_IMAGE_SORT_TYPE,
                     getCountOfItemInLine()
                 );
@@ -139,10 +139,10 @@ public class ImageListViewModel extends BaseViewModel {
         changeImageSearchState(ImageSearchState.SUCCESS);
 
         updateMetaInfo(imageSearchResponse.getMeta());
-        updateImageInfoList(imageSearchResponse.getImageInfoList());
+        updateImageInfoList(imageSearchResponse.getDocumentList());
     }
 
-    private void updateMetaInfo(ImageSearchMeta meta) {
+    private void updateMetaInfo(Meta meta) {
         if(meta != null) {
             remainingDataOnRepository = !meta.isEnd();
         } else {
@@ -150,25 +150,25 @@ public class ImageListViewModel extends BaseViewModel {
         }
     }
 
-    private void updateImageInfoList(List<ImageInfo> receivedImageInfoList) {
-        final List<ImageInfo> previousImageInfoList = imageInfoListLiveData.getValue();
+    private void updateImageInfoList(List<Document> receivedDocumentList) {
+        final List<Document> previousDocumentList = imageInfoListLiveData.getValue();
 
-        if(CollectionUtil.isEmpty(receivedImageInfoList)) {
-            if(CollectionUtil.isEmpty(previousImageInfoList)) {
+        if(CollectionUtil.isEmpty(receivedDocumentList)) {
+            if(CollectionUtil.isEmpty(previousDocumentList)) {
                 updateMessage(R.string.success_image_search_no_result);
             } else {
                 updateMessage(R.string.success_image_search_last_data);
             }
         } else {
-            List<ImageInfo> newImageInfoList;
-            if(CollectionUtil.isEmpty(previousImageInfoList)) {
-                newImageInfoList = receivedImageInfoList;
+            List<Document> newDocumentList;
+            if(CollectionUtil.isEmpty(previousDocumentList)) {
+                newDocumentList = receivedDocumentList;
             } else {
-                newImageInfoList = new ArrayList<>(previousImageInfoList);
-                newImageInfoList.addAll(receivedImageInfoList);
+                newDocumentList = new ArrayList<>(previousDocumentList);
+                newDocumentList.addAll(receivedDocumentList);
             }
 
-            imageInfoListLiveData.setValue(newImageInfoList);
+            imageInfoListLiveData.setValue(newDocumentList);
         }
     }
 

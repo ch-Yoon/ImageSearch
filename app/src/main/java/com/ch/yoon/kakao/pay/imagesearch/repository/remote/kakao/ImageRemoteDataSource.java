@@ -3,11 +3,10 @@ package com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao;
 import androidx.annotation.NonNull;
 
 import com.ch.yoon.kakao.pay.imagesearch.BuildConfig;
-import com.ch.yoon.kakao.pay.imagesearch.repository.ImageDataSource;
-import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageSearchResponse;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.ImageSearchRequest;
-import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.error.ImageSearchError;
-import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.error.ImageSearchException;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.ImageSearchRequest;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageSearchResponse;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.error.ImageSearchError;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.error.ImageSearchException;
 
 import java.net.UnknownHostException;
 
@@ -23,16 +22,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Creator : ch-yoon
  * Date : 2019-08-01.
  */
-public class ImageRemoteDataSource implements ImageDataSource {
+public class ImageRemoteDataSource {
 
     private static final String BASE_URL = "https://dapi.kakao.com/v2/";
     private static final String KAKAO_API_KEY = BuildConfig.KAKAO_API_KEY;
 
-    private static ImageDataSource INSTANCE;
+    private static ImageRemoteDataSource INSTANCE;
 
     private final Retrofit retrofit;
 
-    public static synchronized ImageDataSource getInstance() {
+    public static synchronized ImageRemoteDataSource getInstance() {
         if(INSTANCE == null) {
             INSTANCE = new ImageRemoteDataSource();
         }
@@ -66,7 +65,6 @@ public class ImageRemoteDataSource implements ImageDataSource {
     }
 
     @NonNull
-    @Override
     public Single<ImageSearchResponse> requestImageList(@NonNull ImageSearchRequest imageSearchRequest) {
         final String keyword = imageSearchRequest.getKeyword();
         final String sortType = imageSearchRequest.getImageSortType().getType();

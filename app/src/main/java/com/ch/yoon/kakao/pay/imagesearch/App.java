@@ -3,6 +3,8 @@ package com.ch.yoon.kakao.pay.imagesearch;
 import android.app.Application;
 import android.content.Context;
 
+import com.ch.yoon.kakao.pay.imagesearch.repository.local.ImageDatabase;
+
 public class App extends Application {
 
     private static volatile App instance = null;

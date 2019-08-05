@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="imageInfo"
-            type="com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageInfo" />
+            name="document"
+            type="com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.Document" />
 
     </data>
 
@@ -26,7 +26,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:loadImageWithCenterCrop="@{imageInfo.getThumbnailUrl()}"/>
+            app:loadImageWithCenterCrop="@{document.getThumbnailUrl()}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

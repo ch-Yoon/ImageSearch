@@ -1,7 +1,6 @@
-package com.ch.yoon.kakao.pay.imagesearch.repository.model;
+package com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request;
 
 import androidx.annotation.NonNull;
-
 
 /**
  * Creator : ch-yoon
