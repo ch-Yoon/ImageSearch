@@ -1,5 +1,7 @@
 package com.ch.yoon.kakao.pay.imagesearch.utils;
 
+import androidx.annotation.Nullable;
+
 import java.util.Collection;
 
 /**
@@ -8,12 +10,8 @@ import java.util.Collection;
  */
 public class CollectionUtil {
 
-    public static boolean isEmpty(Collection collection) {
+    public static boolean isEmpty(@Nullable Collection collection) {
         return collection == null || collection.size() == 0;
-    }
-
-    public static boolean isNotEmpty(Collection collection) {
-        return !isEmpty(collection);
     }
 
 }

@@ -13,11 +13,15 @@ import java.util.Objects;
  */
 public final class ImageInfo {
 
-    @Nullable
+    @NonNull
+    @SerializedName("collection")
+    private final String collection;
+
+    @NonNull
     @SerializedName("thumbnail_url")
     private final String thumbnailUrl;
 
-    @Nullable
+    @NonNull
     @SerializedName("image_url")
     private final String imageUrl;
 
@@ -27,22 +31,47 @@ public final class ImageInfo {
     @SerializedName("height")
     private final int height;
 
-    public ImageInfo(@Nullable String thumbnailUrl,
-                     @Nullable String imageUrl,
+    @NonNull
+    @SerializedName("display_sitename")
+    private final String displaySiteName;
+
+    @NonNull
+    @SerializedName("doc_url")
+    private final String docUrl;
+
+    @NonNull
+    @SerializedName("dateTime")
+    private final String dateTime;
+
+    public ImageInfo(@NonNull String collection,
+                     @NonNull String thumbnailUrl,
+                     @NonNull String imageUrl,
                      int width,
-                     int height) {
+                     int height,
+                     @NonNull String displaySiteName,
+                     @NonNull String docUrl,
+                     @NonNull String dateTime) {
+        this.collection = collection;
         this.thumbnailUrl = thumbnailUrl;
         this.imageUrl = imageUrl;
         this.width = width;
         this.height = height;
+        this.displaySiteName = displaySiteName;
+        this.docUrl = docUrl;
+        this.dateTime = dateTime;
     }
 
-    @Nullable
+    @NonNull
+    public String getCollection() {
+        return collection;
+    }
+
+    @NonNull
     public String getThumbnailUrl() {
         return thumbnailUrl;
     }
 
-    @Nullable
+    @NonNull
     public String getImageUrl() {
         return imageUrl;
     }
@@ -55,31 +84,53 @@ public final class ImageInfo {
         return height;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if(o == null || !getClass().getName().equals(o.getClass().getName())) {
-            return false;
-        } else {
-            ImageInfo target = (ImageInfo) o;
-            return Objects.equals(thumbnailUrl, target.thumbnailUrl) &&
-                Objects.equals(imageUrl, target.imageUrl) &&
-                width == target.width &&
-                height == target.height;
-        }
+    @NonNull
+    public String getDisplaySiteName() {
+        return displaySiteName;
     }
 
     @NonNull
+    public String getDocUrl() {
+        return docUrl;
+    }
+
+    @NonNull
+    public String getDateTime() {
+        return dateTime;
+    }
+
     @Override
     public String toString() {
-        return "ImageInfo {thumbnailUrl=" + thumbnailUrl +
-            ", imageUrl=" + imageUrl +
+        return "ImageInfo{" +
+            "collection='" + collection + '\'' +
+            ", thumbnailUrl='" + thumbnailUrl + '\'' +
+            ", imageUrl='" + imageUrl + '\'' +
             ", width=" + width +
-            ", height=" + height + "}";
+            ", height=" + height +
+            ", displaySiteName='" + displaySiteName + '\'' +
+            ", docUrl='" + docUrl + '\'' +
+            ", dateTime='" + dateTime + '\'' +
+            '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ImageInfo imageInfo = (ImageInfo) o;
+        return width == imageInfo.width &&
+            height == imageInfo.height &&
+            collection.equals(imageInfo.collection) &&
+            thumbnailUrl.equals(imageInfo.thumbnailUrl) &&
+            imageUrl.equals(imageInfo.imageUrl) &&
+            displaySiteName.equals(imageInfo.displaySiteName) &&
+            docUrl.equals(imageInfo.docUrl) &&
+            dateTime.equals(imageInfo.dateTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(thumbnailUrl, imageUrl, width, height);
+        return Objects.hash(collection, thumbnailUrl, imageUrl, width, height, displaySiteName, docUrl, dateTime);
     }
 
 }
