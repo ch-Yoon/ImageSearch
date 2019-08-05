@@ -21,26 +21,28 @@
             android:id="@+id/photoView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/guideline3"
+            app:layout_constraintBottom_toTopOf="@+id/bottomBarGuideLine"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:loadImageWithCenterInside="@{imageDetailViewModel.observeImageUrl()}"/>
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline3"
+            android:id="@+id/bottomBarGuideLine"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_end="?android:attr/actionBarSize" />
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/moveToWebButton"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:onClick="@{() -> imageDetailViewModel.onClickWebButton()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline3"
+            app:layout_constraintTop_toTopOf="@+id/bottomBarGuideLine"
             app:srcCompat="@drawable/ic_action_web" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

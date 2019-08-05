@@ -2,22 +2,18 @@ package com.ch.yoon.kakao.pay.imagesearch.ui.imagedetail;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ActivityImageDetailBinding;
-import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepositoryImpl;
-import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.ImageRemoteDataSource;
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageInfo;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseActivity;
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.ImageListViewModel;
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.ImageListViewModelFactory;
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.helper.ImageSearchInspector;
-import com.ch.yoon.kakao.pay.imagesearch.utils.GlideUtil;
-import com.github.chrisbanes.photoview.PhotoView;
 
 public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding> {
 
@@ -37,7 +33,15 @@ public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding
         super.onCreate(savedInstanceState);
         binding = binding(R.layout.activity_image_detail);
 
+        initBackArrow();
         initViewModel();
+    }
+
+    private void initBackArrow() {
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     private void initViewModel() {
@@ -45,11 +49,27 @@ public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding
             getApplication()
         )).get(ImageDetailViewModel.class);
 
+        ImageInfo imageInfo = getIntent().getParcelableExtra(EXTRA_IMAGE_DETAIL_INFO_KEY);
+        viewModel.setImageInfo(imageInfo);
+
+        viewModel.observeMoveWebEvent().observe(this, url -> {
+            Uri movieWebUri = Uri.parse(url);
+            Intent movieWebIntent = new Intent(Intent.ACTION_VIEW, movieWebUri);
+            startActivity(movieWebIntent);
+        });
+
         binding.setImageDetailViewModel(viewModel);
     }
 
-    private void handlingReceivedIntent() {
-        ImageInfo imageInfo = getIntent().getParcelableExtra(EXTRA_IMAGE_DETAIL_INFO_KEY);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        if(itemId == android.R.id.home) {
+            onBackPressed();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 
 }
