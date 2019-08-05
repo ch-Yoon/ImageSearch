@@ -9,19 +9,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestBuilder;
-import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
-import com.bumptech.glide.load.resource.bitmap.CenterInside;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.ch.yoon.kakao.pay.imagesearch.R;
-import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageInfo;
 
 /**
  * Creator : ch-yoon
@@ -30,6 +25,7 @@ import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.images
 public class GlideUtil {
 
     private static final float THUMBNAIL_VALUE = 0.1f;
+
     private static final RequestOptions CENTER_CROP_REQUEST_OPTIONS = new RequestOptions()
         .diskCacheStrategy(DiskCacheStrategy.ALL)
         .error(R.drawable.image_load_fail);
@@ -84,7 +80,5 @@ public class GlideUtil {
             })
             .into(imageView);
     }
-
-
 
 }

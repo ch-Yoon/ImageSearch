@@ -16,17 +16,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.imagedetail.ImageDetailActivity"></activity>
         <activity
             android:name=".ui.imagesearch.ImageListActivity"
-            android:label="@string/image_search_screen_title"
-            android:theme="@style/AppTheme">
+            android:label="@string/screen_title">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.imagedetail.ImageDetailActivity"
+            android:label="@string/screen_title"/>
     </application>
 
 </manifest>
