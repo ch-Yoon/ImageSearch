@@ -4,6 +4,7 @@ import android.widget.Toast;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
@@ -19,6 +20,10 @@ public abstract class BaseActivity<B extends ViewDataBinding> extends AppCompatA
         dataBinding.setLifecycleOwner(this);
 
         return dataBinding;
+    }
+
+    protected void showToast(@StringRes int stringResourceId) {
+        showToast(getString(stringResourceId));
     }
 
     protected void showToast(@NonNull String message) {

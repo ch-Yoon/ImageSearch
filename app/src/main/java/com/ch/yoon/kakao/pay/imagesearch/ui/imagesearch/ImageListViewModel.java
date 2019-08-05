@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -13,10 +14,11 @@ import com.ch.yoon.kakao.pay.imagesearch.extentions.SingleLiveEvent;
 import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepository;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.ImageSearchRequest;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.ImageSortType;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.Document;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageSearchResult;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageInfo;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.RequestMeta;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.error.ImageSearchError;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.error.ImageSearchException;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.Meta;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageSearchResponse;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.helper.ImageSearchInspector;
 import com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil;
@@ -43,13 +45,14 @@ public class ImageListViewModel extends BaseViewModel {
     @NonNull
     private final MutableLiveData<Integer> countOfItemInLineLiveData = new MutableLiveData<>();
     @NonNull
-    private final MutableLiveData<List<Document>> imageInfoListLiveData = new MutableLiveData<>();
+    private final MutableLiveData<List<ImageInfo>> imageInfoListLiveData = new MutableLiveData<>();
     @NonNull
     private final SingleLiveEvent<String> messageLiveData = new SingleLiveEvent<>();
     @NonNull
     private final SingleLiveEvent<ImageSearchState> imageSearchStateLiveEvent = new SingleLiveEvent<>();
 
-    private boolean remainingDataOnRepository = true;
+    @Nullable
+    private RequestMeta requestMeta;
 
     public ImageListViewModel(@NonNull Application application,
                               @NonNull ImageRepository imageRepository,
@@ -73,7 +76,7 @@ public class ImageListViewModel extends BaseViewModel {
     }
 
     @NonNull
-    public LiveData<List<Document>> observeImageInfoList() {
+    public LiveData<List<ImageInfo>> observeImageInfoList() {
         return imageInfoListLiveData;
     }
 
@@ -97,12 +100,12 @@ public class ImageListViewModel extends BaseViewModel {
     }
 
     public void loadMoreImageListIfPossible(int displayPosition) {
-        if(remainingDataOnRepository) {
-            final List<Document> documentList = imageInfoListLiveData.getValue();
-            if (documentList != null) {
+        if(remainingMoreData()) {
+            final List<ImageInfo> imageDocumentList = imageInfoListLiveData.getValue();
+            if (imageDocumentList != null) {
                 imageSearchInspector.submitPreloadRequest(
                     displayPosition,
-                    documentList.size(),
+                    imageDocumentList.size(),
                     DEFAULT_IMAGE_SORT_TYPE,
                     getCountOfItemInLine()
                 );
@@ -135,49 +138,45 @@ public class ImageListViewModel extends BaseViewModel {
         );
     }
 
-    private void handlingReceivedResponse(ImageSearchResponse imageSearchResponse) {
+    private void handlingReceivedResponse(ImageSearchResult imageSearchResult) {
         changeImageSearchState(ImageSearchState.SUCCESS);
 
-        updateMetaInfo(imageSearchResponse.getMeta());
-        updateImageInfoList(imageSearchResponse.getDocumentList());
+        updateMetaInfo(imageSearchResult.getRequestMeta());
+        updateImageInfoList(imageSearchResult.getImageInfoList());
     }
 
-    private void updateMetaInfo(Meta meta) {
-        if(meta != null) {
-            remainingDataOnRepository = !meta.isEnd();
-        } else {
-            remainingDataOnRepository = false;
-        }
+    private void updateMetaInfo(RequestMeta requestMeta) {
+        this.requestMeta = requestMeta;
     }
 
-    private void updateImageInfoList(List<Document> receivedDocumentList) {
-        final List<Document> previousDocumentList = imageInfoListLiveData.getValue();
+    private void updateImageInfoList(List<ImageInfo> imageInfoList) {
+        final List<ImageInfo> previousImageDocumentList = imageInfoListLiveData.getValue();
 
-        if(CollectionUtil.isEmpty(receivedDocumentList)) {
-            if(CollectionUtil.isEmpty(previousDocumentList)) {
-                updateMessage(R.string.success_image_search_no_result);
-            } else {
-                updateMessage(R.string.success_image_search_last_data);
-            }
+        final List<ImageInfo> newImageDocumentList;
+        if(CollectionUtil.isEmpty(previousImageDocumentList)) {
+            newImageDocumentList = imageInfoList;
         } else {
-            List<Document> newDocumentList;
-            if(CollectionUtil.isEmpty(previousDocumentList)) {
-                newDocumentList = receivedDocumentList;
-            } else {
-                newDocumentList = new ArrayList<>(previousDocumentList);
-                newDocumentList.addAll(receivedDocumentList);
-            }
-
-            imageInfoListLiveData.setValue(newDocumentList);
+            newImageDocumentList = new ArrayList<>(previousImageDocumentList);
+            newImageDocumentList.addAll(imageInfoList);
         }
+
+        imageInfoListLiveData.setValue(newImageDocumentList);
     }
 
     private void handlingError(Throwable throwable) {
-        changeImageSearchState(ImageSearchState.FAIL);
-
         if(throwable instanceof ImageSearchException) {
-            final int messageResourceId = ((ImageSearchException) throwable).getErrorMessageResourceId();
-            updateMessage(messageResourceId);
+            ImageSearchError error = ((ImageSearchException)throwable).getImageSearchError();
+            if(error == ImageSearchError.NO_RESULT_ERROR) {
+                final List<ImageInfo> previousImageDocumentList = imageInfoListLiveData.getValue();
+                if(CollectionUtil.isEmpty(previousImageDocumentList)) {
+                    updateMessage(R.string.success_image_search_no_result);
+                } else {
+                    updateMessage(R.string.success_image_search_last_data);
+                }
+            } else {
+                changeImageSearchState(ImageSearchState.FAIL);
+                updateMessage(error.getErrorMessageResourceId());
+            }
         }
 
         Log.d(TAG, throwable.getMessage());
@@ -186,6 +185,10 @@ public class ImageListViewModel extends BaseViewModel {
     private void updateMessage(@StringRes int stringResourceId) {
         final String message = getString(stringResourceId);
         messageLiveData.setValue(message);
+    }
+
+    private boolean remainingMoreData() {
+        return requestMeta == null || !requestMeta.isLastData();
     }
 
     private void changeImageSearchState(ImageSearchState imageSearchState) {

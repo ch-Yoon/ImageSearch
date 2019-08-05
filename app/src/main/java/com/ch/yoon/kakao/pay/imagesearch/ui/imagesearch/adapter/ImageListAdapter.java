@@ -11,7 +11,8 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.Document;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageInfo;
+import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.model.ImageDocument;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.adapter.viewholder.RetryFooterViewHolder;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.adapter.viewholder.ImageListViewHolder;
 
@@ -22,7 +23,7 @@ import java.util.Objects;
  * Creator : ch-yoon
  * Date : 2019-08-02.
  */
-public class ImageListAdapter extends ListAdapter<Document, RecyclerView.ViewHolder> {
+public class ImageListAdapter extends ListAdapter<ImageInfo, RecyclerView.ViewHolder> {
 
     private static final int TYPE_ITEM = 1;
     private static final int TYPE_FOOTER = 2;
@@ -119,16 +120,15 @@ public class ImageListAdapter extends ListAdapter<Document, RecyclerView.ViewHol
         this.onFooterItemClickListener = onFooterItemClickListener;
     }
 
-    private static final DiffUtil.ItemCallback<Document> DiffCallback = new DiffUtil.ItemCallback<Document>() {
+    private static final DiffUtil.ItemCallback<ImageInfo> DiffCallback = new DiffUtil.ItemCallback<ImageInfo>() {
 
         @Override
-        public boolean areItemsTheSame(@NonNull Document oldItem, @NonNull Document newItem) {
-            return Objects.equals(oldItem.getImageUrl(), newItem.getImageUrl()) &&
-                Objects.equals(oldItem.getThumbnailUrl(), newItem.getThumbnailUrl());
+        public boolean areItemsTheSame(@NonNull ImageInfo oldItem, @NonNull ImageInfo newItem) {
+            return Objects.equals(oldItem, newItem);
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull Document oldItem, @NonNull Document newItem) {
+        public boolean areContentsTheSame(@NonNull ImageInfo oldItem, @NonNull ImageInfo newItem) {
             return oldItem.equals(newItem);
         }
 

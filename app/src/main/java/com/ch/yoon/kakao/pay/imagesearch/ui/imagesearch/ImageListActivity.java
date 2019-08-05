@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ActivityImageListBinding;
 import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepositoryImpl;
-import com.ch.yoon.kakao.pay.imagesearch.repository.local.ImageDatabase;
-import com.ch.yoon.kakao.pay.imagesearch.repository.local.ImageLocalDataSource;
+import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.ImageDatabase;
+import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.ImageLocalDataSource;
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.ImageRemoteDataSource;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseActivity;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagedetail.ImageDetailActivity;
@@ -54,13 +54,13 @@ public class ImageListActivity extends BaseActivity<ActivityImageListBinding> {
         );
 
         imageListAdapter.setOnListItemClickListener((imageInfo, position) -> {
-            Intent imageDetailIntent = ImageDetailActivity.getImageDetailActivityIntent(this, imageInfo);
+            Intent imageDetailIntent = ImageDetailActivity.getImageDetailActivityIntent(this, imageInfo.getUniqueInfo());
             startActivity(imageDetailIntent);
         });
 
-        imageListAdapter.setOnFooterItemClickListener(() -> {
-            binding.getImageListViewModel().retryLoadMoreImageList();
-        });
+        imageListAdapter.setOnFooterItemClickListener(() ->
+            binding.getImageListViewModel().retryLoadMoreImageList()
+        );
 
         GridLayoutManager gridLayoutManager = (GridLayoutManager)binding.imageRecyclerView.getLayoutManager();
         if(gridLayoutManager != null) {

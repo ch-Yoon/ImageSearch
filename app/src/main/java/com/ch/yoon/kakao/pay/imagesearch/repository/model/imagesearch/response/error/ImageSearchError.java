@@ -11,7 +11,7 @@ import com.ch.yoon.kakao.pay.imagesearch.R;
  */
 public enum ImageSearchError {
 
-    WRONG_REQUEST_ERROR(400, R.string.error_image_search_wrong_request),
+    NO_RESULT_ERROR(400, R.string.error_image_search_wrong_request),
     AUTHENTICATION_ERROR(401, R.string.error_image_search_authentication_error),
     PERMISSION_ERROR(403, R.string.error_image_search_permission_error),
     SYSTEM_ERROR_1(500, R.string.error_image_search_kakao_server_error),

@@ -8,8 +8,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.ch.yoon.kakao.pay.imagesearch.extentions.SingleLiveEvent;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.Document;
+import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepository;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageDetailInfo;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Creator : ch-yoon
@@ -17,15 +21,21 @@ import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel;
  */
 public class ImageDetailViewModel extends BaseViewModel {
 
-    @Nullable
-    private Document document;
+    @NonNull
+    private final ImageRepository imageRepository;
+
     @NonNull
     private final MutableLiveData<String> imageUrlLiveData = new MutableLiveData<>();
     @NonNull
     private final SingleLiveEvent<String> docUrlSingleLiveData = new SingleLiveEvent<>();
 
-    public ImageDetailViewModel(@NonNull Application application) {
+    @Nullable
+    private ImageDetailInfo imageDetailInfo;
+
+    public ImageDetailViewModel(@NonNull Application application,
+                                @NonNull ImageRepository imageRepository) {
         super(application);
+        this.imageRepository = imageRepository;
     }
 
     @NonNull
@@ -38,16 +48,22 @@ public class ImageDetailViewModel extends BaseViewModel {
         return docUrlSingleLiveData;
     }
 
-    public void setDocument(@Nullable Document document) {
-        this.document = document;
-        if(document != null) {
-            imageUrlLiveData.setValue(document.getImageUrl());
-        }
+    public void loadImage(@NonNull String uniqueImageInfo) {
+        registerDisposable(
+            imageRepository.requestImageDetailInfo(uniqueImageInfo)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::updateImageDetailInfo, throwable -> {})
+        );
+    }
+
+    private void updateImageDetailInfo(ImageDetailInfo imageDetailInfo) {
+        this.imageDetailInfo = imageDetailInfo;
+        imageUrlLiveData.setValue(imageDetailInfo.getImageUrl());
     }
 
     public void onClickWebButton() {
-        if(document != null) {
-            final String docUrl = document.getDocUrl();
+        if(imageDetailInfo != null) {
+            final String docUrl = imageDetailInfo.getDocUrl();
             docUrlSingleLiveData.setValue(docUrl);
         }
     }

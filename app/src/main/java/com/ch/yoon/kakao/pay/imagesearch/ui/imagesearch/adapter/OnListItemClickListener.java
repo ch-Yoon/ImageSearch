@@ -2,7 +2,7 @@ package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.adapter;
 
 import androidx.annotation.NonNull;
 
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.Document;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageInfo;
 
 /**
  * Creator : ch-yoon
@@ -10,6 +10,6 @@ import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.D
  */
 public interface OnListItemClickListener {
 
-    void onClick(@NonNull Document document, int position);
+    void onClick(@NonNull ImageInfo imageInfo, int position);
 
 }

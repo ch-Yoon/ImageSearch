@@ -1,21 +1,26 @@
 package com.ch.yoon.kakao.pay.imagesearch.repository;
 
+
 import androidx.annotation.NonNull;
 
-import com.ch.yoon.kakao.pay.imagesearch.repository.local.ImageLocalDataSource;
-import com.ch.yoon.kakao.pay.imagesearch.repository.local.entity.LocalImageDocument;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.ImageDocumentConverter;
+import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.ImageLocalDataSource;
+import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.LocalImageDocument;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.ImageInfoConverter;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.ImageSearchRequest;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.Document;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageSearchResponse;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.Meta;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageDetailInfo;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageSearchResult;
+import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.model.ImageDocument;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.error.ImageSearchError;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.error.ImageSearchException;
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.ImageRemoteDataSource;
+import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.model.SearchMetaInfo;
 import com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil;
 
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
+import io.reactivex.Flowable;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
@@ -48,54 +53,46 @@ public class ImageRepositoryImpl implements ImageRepository {
     }
 
     @NonNull
-    public Single<ImageSearchResponse> requestImageList(@NonNull ImageSearchRequest imageSearchRequest) {
+    public Single<ImageSearchResult> requestImageList(@NonNull ImageSearchRequest imageSearchRequest) {
         return Single.concat(
             imageLocalDataSource
-                .getLocalImageDocumentList(imageSearchRequest)
-                .map(localImageDocumentList -> convertToImageSearchResponse(imageSearchRequest, localImageDocumentList))
+                .getImageSearchList(imageSearchRequest)
                 .subscribeOn(Schedulers.io()),
-            imageRemoteDataSource.requestImageList(imageSearchRequest)
-                .doOnSuccess(imageSearchResponse -> saveReceivedResponse(imageSearchResponse, imageSearchRequest))
+            imageRemoteDataSource
+                .requestImageList(imageSearchRequest)
+                .filter(response -> CollectionUtil.isNotEmpty(response.getImageDocumentList()))
+                .map(response -> {
+                    final List<ImageDocument> documentList = response.getImageDocumentList();
+                    final List<LocalImageDocument> localDocumentList = ImageInfoConverter.
+                        toLocalImageDocumentList(imageSearchRequest, documentList);
+
+                    imageLocalDataSource.saveLocalImageDocumentList(localDocumentList);
+
+                    final SearchMetaInfo metaInfo = response.getSearchMetaInfo();
+                    return ImageInfoConverter.toImageSearchResult(imageSearchRequest, metaInfo, localDocumentList);
+                })
                 .subscribeOn(Schedulers.io())
-        ).filter(imageSearchResponse ->
-            CollectionUtil.isNotEmpty(imageSearchResponse.getDocumentList())
-        ).firstElement().subscribeOn(Schedulers.io())
+                .toSingle()
+            )
+            .filter(imageSearchResult -> CollectionUtil.isNotEmpty(imageSearchResult.getImageInfoList()))
+            .onErrorResumeNext(throwable -> {
+                if(throwable instanceof NoSuchElementException) {
+                    String errorMessage = throwable.getMessage();
+                    ImageSearchError imageSearchError = ImageSearchError.NO_RESULT_ERROR;
+                    return Flowable.error(new ImageSearchException(errorMessage, imageSearchError));
+                }
+                return Flowable.error(throwable);
+            })
+            .firstElement()
+            .subscribeOn(Schedulers.io())
             .toSingle();
     }
 
-    private ImageSearchResponse convertToImageSearchResponse(ImageSearchRequest imageSearchRequest,
-                                                             List<LocalImageDocument> localImageDocumentList) {
-        final int requiredDataSize = imageSearchRequest.getRequiredSize();
-
-        Meta meta = new Meta(false);
-        List<Document> documentList;
-        if(CollectionUtil.isEmpty(localImageDocumentList) || localImageDocumentList.size() < requiredDataSize) {
-            documentList = new ArrayList<>();
-        } else {
-            documentList = ImageDocumentConverter.convertToDocumentList(localImageDocumentList);
-        }
-        return new ImageSearchResponse(meta, documentList);
-    }
-
-    private void saveReceivedResponse(ImageSearchResponse imageSearchResponse,
-                                      ImageSearchRequest imageSearchRequest) {
-        final List<Document> documentList = imageSearchResponse.getDocumentList();
-        if(documentList != null) {
-            final String keyword = imageSearchRequest.getKeyword();final int pageNumber = imageSearchRequest.getPageNumber();
-            final int requiredDataSize = imageSearchRequest.getRequiredSize();
-            final String imageSortType = imageSearchRequest.getImageSortType().getType();
-
-            final int startDocumentNumber = (pageNumber - 1) * requiredDataSize;
-
-            final List<LocalImageDocument> localImageDocumentList = ImageDocumentConverter.convertToLocalImageDocuments(
-                keyword,
-                startDocumentNumber,
-                imageSortType,
-                documentList
-            );
-
-            imageLocalDataSource.saveLocalImageDocumentList(localImageDocumentList);
-        }
+    @NonNull
+    @Override
+    public Single<ImageDetailInfo> requestImageDetailInfo(@NonNull String id) {
+        return imageLocalDataSource.getImageDetailInfo(id)
+            .subscribeOn(Schedulers.io());
     }
 
 }

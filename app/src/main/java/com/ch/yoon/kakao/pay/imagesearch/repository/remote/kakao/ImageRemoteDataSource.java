@@ -4,9 +4,10 @@ import androidx.annotation.NonNull;
 
 import com.ch.yoon.kakao.pay.imagesearch.BuildConfig;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.ImageSearchRequest;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageSearchResponse;
+import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.model.ImageSearchResponse;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.error.ImageSearchError;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.error.ImageSearchException;
+import com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil;
 
 import java.net.UnknownHostException;
 
@@ -82,8 +83,7 @@ public class ImageRemoteDataSource {
                     errorMessage = exception.message();
                     imageSearchError = ImageSearchError.convertToImageSearchError(exception.code());
                 } else if(throwable instanceof UnknownHostException) {
-                    final UnknownHostException exception = (UnknownHostException) throwable;
-                    errorMessage = exception.getMessage();
+                    errorMessage = throwable.getMessage();
                     imageSearchError = ImageSearchError.NETWORK_NOT_CONNECTING_ERROR;
                 } else {
                     errorMessage = throwable.getMessage();
@@ -91,7 +91,10 @@ public class ImageRemoteDataSource {
                 }
 
                 return Single.error(new ImageSearchException(errorMessage, imageSearchError));
-            });
+            })
+            .filter(imageSearchResponse ->
+                CollectionUtil.isNotEmpty(imageSearchResponse.getImageDocumentList())
+            ).toSingle();
     }
 
 }

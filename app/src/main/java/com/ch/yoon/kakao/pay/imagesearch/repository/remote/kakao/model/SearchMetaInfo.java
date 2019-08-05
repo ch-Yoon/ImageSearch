@@ -1,4 +1,4 @@
-package com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response;
+package com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.model;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -6,12 +6,12 @@ import com.google.gson.annotations.SerializedName;
  * Creator : ch-yoon
  * Date : 2019-08-01.
  */
-public final class Meta {
+public final class SearchMetaInfo {
 
     @SerializedName("is_end")
     private final boolean isEnd;
 
-    public Meta(boolean isEnd) {
+    public SearchMetaInfo(boolean isEnd) {
         this.isEnd = isEnd;
     }
 
@@ -21,7 +21,7 @@ public final class Meta {
 
     @Override
     public String toString() {
-        return "Meta{, isEnd=" + isEnd + '}';
+        return "SearchMetaInfo{, isEnd=" + isEnd + '}';
     }
 
 }

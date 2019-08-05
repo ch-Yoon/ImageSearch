@@ -19,8 +19,13 @@ public class ImageDetailViewModelFactory implements ViewModelProvider.Factory {
     @NonNull
     private final Application application;
 
-    ImageDetailViewModelFactory(@NonNull Application application) {
+    @NonNull
+    private final ImageRepository imageRepository;
+
+    ImageDetailViewModelFactory(@NonNull Application application,
+                                @NonNull ImageRepository imageRepository) {
         this.application = application;
+        this.imageRepository = imageRepository;
     }
 
     @SuppressWarnings("unchecked")
@@ -28,7 +33,7 @@ public class ImageDetailViewModelFactory implements ViewModelProvider.Factory {
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(ImageDetailViewModel.class)) {
-            return (T) new ImageDetailViewModel(application);
+            return (T) new ImageDetailViewModel(application, imageRepository);
         }
         throw new IllegalArgumentException("Unknown ViewModel class: " + modelClass.getName());
     }
