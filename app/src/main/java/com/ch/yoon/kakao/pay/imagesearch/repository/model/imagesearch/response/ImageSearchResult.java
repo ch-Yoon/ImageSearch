@@ -14,12 +14,12 @@ public class ImageSearchResult {
     private final RequestMeta requestMeta;
 
     @NonNull
-    private final List<ImageInfo> imageInfoList;
+    private final List<SimpleImageInfo> simpleImageInfoList;
 
     public ImageSearchResult(@NonNull RequestMeta requestMeta,
-                             @NonNull List<ImageInfo> imageInfoList) {
+                             @NonNull List<SimpleImageInfo> simpleImageInfoList) {
         this.requestMeta = requestMeta;
-        this.imageInfoList = imageInfoList;
+        this.simpleImageInfoList = simpleImageInfoList;
     }
 
     @NonNull
@@ -28,7 +28,17 @@ public class ImageSearchResult {
     }
 
     @NonNull
-    public List<ImageInfo> getImageInfoList() {
-        return imageInfoList;
+    public List<SimpleImageInfo> getSimpleImageInfoList() {
+        return simpleImageInfoList;
     }
+
+
+    @Override
+    public String toString() {
+        return "ImageSearchResult{" +
+            "requestMeta=" + requestMeta +
+            ", simpleImageInfoList=" + simpleImageInfoList +
+            '}';
+    }
+
 }

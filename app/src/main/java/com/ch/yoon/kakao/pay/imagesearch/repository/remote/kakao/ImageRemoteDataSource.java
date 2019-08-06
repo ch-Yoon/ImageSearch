@@ -7,7 +7,6 @@ import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.Im
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.model.ImageSearchResponse;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.error.ImageSearchError;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.error.ImageSearchException;
-import com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil;
 
 import java.net.UnknownHostException;
 

@@ -3,6 +3,8 @@ package com.ch.yoon.kakao.pay.imagesearch;
 import android.app.Application;
 import android.content.Context;
 
+import com.squareup.leakcanary.LeakCanary;
+
 public class App extends Application {
 
     private static volatile App instance = null;
@@ -21,6 +23,15 @@ public class App extends Application {
         super.onCreate();
 
         instance = this;
+
+        initLeakCanary();
+    }
+
+    private void initLeakCanary() {
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return;
+        }
+        LeakCanary.install(this);
     }
 
     @Override

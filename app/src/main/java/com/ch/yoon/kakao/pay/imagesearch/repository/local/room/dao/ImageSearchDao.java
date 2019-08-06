@@ -4,12 +4,11 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import androidx.room.Transaction;
 
 import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.LocalImageDocument;
 import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.SearchLog;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageDetailInfo;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageInfo;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.DetailImageInfo;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.SimpleImageInfo;
 
 import java.util.List;
 
@@ -35,14 +34,14 @@ public interface ImageSearchDao {
         "itemNumber >= :startNumber AND " +
         "itemNumber <= :endNumber AND " +
         "imageSortType == :imageSortType")
-    Single<List<ImageInfo>> selectThumbnailInfoList(String keyword,
-                                                    int startNumber,
-                                                    int endNumber,
-                                                    String imageSortType);
+    Single<List<SimpleImageInfo>> selectSimpleImageInfoList(String keyword,
+                                                            int startNumber,
+                                                            int endNumber,
+                                                            String imageSortType);
 
     @Query("SELECT imageUrl, displaySiteName, docUrl, dateTime, width, height " +
             "FROM documents WHERE id = :id")
-    Single<ImageDetailInfo> selectImageDetailInfo(String id);
+    Single<DetailImageInfo> selectDetailImageInfo(String id);
 
     @Query("SELECT * FROM searchLogs")
     Single<List<SearchLog>> selectAllSearchLog();
@@ -51,6 +50,6 @@ public interface ImageSearchDao {
     Completable deleteSearchLog(String keyword);
 
     @Query("DELETE FROM documents WHERE keyword = :keyword")
-    Completable deleteAll(String keyword);
+    Completable deleteAllDocument(String keyword);
 
 }

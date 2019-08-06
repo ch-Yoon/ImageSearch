@@ -3,15 +3,16 @@
     <dimen name="image_search_box_side_margin">10dp</dimen>
     <dimen name="image_search_box_padding">10dp</dimen>
     <dimen name="image_search_box_icon_size">24dp</dimen>
-    <dimen name="image_search_box_sub_title_text_size">8dp</dimen>
+    <dimen name="image_search_box_sub_title_text_size">9dp</dimen>
 
     <dimen name="count_in_line_icon_size">30dp</dimen>
     <dimen name="count_in_line_icon_side_margin">10dp</dimen>
     <dimen name="image_search_retry_button_padding">10dp</dimen>
 
-    <dimen name="detail_image_screen_title_text_size">18dp</dimen>
-
     <dimen name="recently_search_history_side_margin">10dp</dimen>
     <dimen name="recently_search_history_side_padding">10dp</dimen>
     <dimen name="recently_search_history_icon_size">44dp</dimen>
+
+    <dimen name="detail_image_screen_title_text_size">18dp</dimen>
+    <dimen name="detail_image_icon_size">24dp</dimen>
 </resources>

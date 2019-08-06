@@ -5,7 +5,6 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.ViewModel;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -24,9 +23,8 @@ public class BaseViewModel extends AndroidViewModel {
 
     @Override
     protected void onCleared() {
-        super.onCleared();
-
         compositeDisposable.clear();
+        super.onCleared();
     }
 
     protected void registerDisposable(Disposable disposable) {

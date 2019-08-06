@@ -8,7 +8,7 @@ import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageInfo;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.SimpleImageInfo;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.adapter.ImageListAdapter;
 import com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil;
 import com.ch.yoon.kakao.pay.imagesearch.utils.GlideUtil;
@@ -33,12 +33,12 @@ public class ImageListBindingAdapter {
 
     @BindingAdapter("searchImageInfoList")
     public static void setItems(@NonNull RecyclerView recyclerView,
-                                @Nullable List<ImageInfo> imageInfoList) {
+                                @Nullable List<SimpleImageInfo> simpleImageInfoList) {
         final ImageListAdapter adapter = ((ImageListAdapter)recyclerView.getAdapter());
         if(adapter != null) {
-            adapter.submitList(imageInfoList == null ? null : new ArrayList<>(imageInfoList));
+            adapter.submitList(simpleImageInfoList == null ? null : new ArrayList<>(simpleImageInfoList));
 
-            if(CollectionUtil.isEmpty(imageInfoList)) {
+            if(CollectionUtil.isEmpty(simpleImageInfoList)) {
                 adapter.notifyDataSetChanged();
             }
         }

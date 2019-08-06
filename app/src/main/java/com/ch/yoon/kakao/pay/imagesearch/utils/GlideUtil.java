@@ -41,7 +41,8 @@ public class GlideUtil {
         Glide.with(imageView.getContext()).clear(imageView);
     }
 
-    public static void loadWithCenterCrop(@NonNull ImageView imageView, @Nullable String imageUrl) {
+    public static void loadWithCenterCrop(@NonNull ImageView imageView,
+                                          @Nullable String imageUrl) {
         load(imageView, imageUrl, CENTER_CROP_REQUEST_OPTIONS, null);
     }
 
@@ -66,7 +67,10 @@ public class GlideUtil {
             .apply(requestOptions)
             .listener(new RequestListener<Drawable>() {
                 @Override
-                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                public boolean onLoadFailed(@Nullable GlideException e,
+                                            Object model,
+                                            Target<Drawable> target,
+                                            boolean isFirstResource) {
                     if(progressBar != null) {
                         progressBar.setVisibility(View.GONE);
                     }
@@ -74,7 +78,11 @@ public class GlideUtil {
                 }
 
                 @Override
-                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                public boolean onResourceReady(Drawable resource,
+                                               Object model,
+                                               Target<Drawable> target,
+                                               DataSource dataSource,
+                                               boolean isFirstResource) {
                     if(progressBar != null) {
                         progressBar.setVisibility(View.GONE);
                     }
