@@ -138,10 +138,10 @@ public class SearchBoxViewModel extends BaseViewModel {
                         throwable -> Log.d(TAG, throwable.getMessage())
                     )
             );
-        } else {
-            if(isSearchBoxNotFocus()) {
-                searchBoxFocusData.setValue(true);
-            }
+        }
+
+        if(isSearchBoxNotFocus()) {
+            searchBoxFocusData.setValue(true);
         }
     }
 
