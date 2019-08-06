@@ -91,10 +91,7 @@ public class ImageRemoteDataSource {
                 }
 
                 return Single.error(new ImageSearchException(errorMessage, imageSearchError));
-            })
-            .filter(imageSearchResponse ->
-                CollectionUtil.isNotEmpty(imageSearchResponse.getImageDocumentList())
-            ).toSingle();
+            });
     }
 
 }

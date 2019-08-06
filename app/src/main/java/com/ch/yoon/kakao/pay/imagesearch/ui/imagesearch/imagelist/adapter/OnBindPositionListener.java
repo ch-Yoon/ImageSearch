@@ -1,4 +1,4 @@
-package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.adapter;
+package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.adapter;
 
 /**
  * Creator : ch-yoon

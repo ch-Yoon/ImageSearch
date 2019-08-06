@@ -17,6 +17,9 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".ui.setting.SettingActivity"
+            android:theme="@style/ImageSearchAppTheme"/>
+        <activity
             android:name=".ui.imagesearch.ImageListActivity"
             android:theme="@style/ImageSearchAppTheme">
             <intent-filter>
@@ -27,7 +30,7 @@
         </activity>
         <activity
             android:name=".ui.imagedetail.ImageDetailActivity"
-            android:theme="@style/ImageSearchAppTheme"/>
+            android:theme="@style/ImageSearchAppTheme" />
     </application>
 
 </manifest>

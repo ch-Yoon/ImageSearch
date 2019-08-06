@@ -1,19 +1,17 @@
 package com.ch.yoon.kakao.pay.imagesearch.repository.local.room;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
-import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.dao.ImageDocumentDao;
+import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.dao.ImageSearchDao;
 import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.LocalImageDocument;
+import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.SearchLog;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.ImageSearchRequest;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.ImageSortType;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageDetailInfo;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageSearchResult;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.RequestMeta;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageInfo;
 
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
 
 /**
@@ -22,47 +20,57 @@ import io.reactivex.Single;
  */
 public class ImageLocalDataSource {
 
-    private final ImageDocumentDao imageDocumentDao;
+    private final ImageSearchDao imageSearchDao;
 
     private static ImageLocalDataSource INSTANCE;
 
-    public static synchronized ImageLocalDataSource getInstance(@NonNull ImageDocumentDao imageDocumentDao) {
+    public static synchronized ImageLocalDataSource getInstance(@NonNull ImageSearchDao imageSearchDao) {
         if(INSTANCE == null) {
-            INSTANCE = new ImageLocalDataSource(imageDocumentDao);
+            INSTANCE = new ImageLocalDataSource(imageSearchDao);
         }
 
         return INSTANCE;
     }
 
-    private ImageLocalDataSource(@NonNull ImageDocumentDao imageDocumentDao) {
-        this.imageDocumentDao = imageDocumentDao;
+    private ImageLocalDataSource(@NonNull ImageSearchDao imageSearchDao) {
+        this.imageSearchDao = imageSearchDao;
     }
 
     public void saveLocalImageDocumentList(@NonNull List<LocalImageDocument> localImageDocumentList) {
-        imageDocumentDao.insertAll(localImageDocumentList);
+        imageSearchDao.insertAll(localImageDocumentList);
     }
 
-    public Single<ImageSearchResult> getImageSearchList(@NonNull ImageSearchRequest imageSearchRequest) {
+    public Single<List<ImageInfo>> getImageSearchList(@NonNull ImageSearchRequest imageSearchRequest) {
         final int requiredSize = imageSearchRequest.getRequiredSize();
         final int pageNumber = imageSearchRequest.getPageNumber();
 
         final String keyword = imageSearchRequest.getKeyword();
         final int startNumber = (requiredSize * (pageNumber - 1)) + 1;
         final int endNumber = startNumber + imageSearchRequest.getRequiredSize() - 1;
-        final ImageSortType imageSortType = imageSearchRequest.getImageSortType();
-        final String imageSortTypeStr = imageSortType.getType();
-        final boolean isLastData = false;
+        final String imageSortType = imageSearchRequest.getImageSortType().getType();
 
-        final RequestMeta requestMeta = new RequestMeta(isLastData, keyword, imageSortType);
-
-        return imageDocumentDao
-            .selectThumbnailInfoList(keyword, startNumber, endNumber, imageSortTypeStr)
-            .map(thumbnailInfoList ->
-                new ImageSearchResult(requestMeta, thumbnailInfoList)
-            );
+        return imageSearchDao.selectThumbnailInfoList(keyword, startNumber, endNumber, imageSortType);
     }
 
     public Single<ImageDetailInfo> getImageDetailInfo(@NonNull String id) {
-        return imageDocumentDao.selectImageDetailInfo(id);
+        return imageSearchDao.selectImageDetailInfo(id);
     }
+
+    public Completable deleteAllByKeyword(@NonNull String keyword) {
+        return imageSearchDao.deleteSearchLog(keyword)
+            .onErrorComplete()
+            .andThen(imageSearchDao.deleteAll(keyword));
+    }
+
+    public Single<SearchLog> updateSearchHistory(@NonNull String keyword) {
+        final long time = System.currentTimeMillis();
+        SearchLog newSearchLog = new SearchLog(keyword, time);
+        return imageSearchDao.update(newSearchLog)
+            .toSingle(() -> newSearchLog);
+    }
+
+    public Single<List<SearchLog>> getSearchHistory() {
+        return imageSearchDao.selectAllSearchLog();
+    }
+
 }

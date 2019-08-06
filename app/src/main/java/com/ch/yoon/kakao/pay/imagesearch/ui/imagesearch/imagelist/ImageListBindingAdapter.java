@@ -1,4 +1,4 @@
-package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch;
+package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist;
 
 import android.widget.ImageView;
 
@@ -9,11 +9,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageInfo;
-import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.model.ImageDocument;
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.adapter.ImageListAdapter;
+import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.adapter.ImageListAdapter;
 import com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil;
 import com.ch.yoon.kakao.pay.imagesearch.utils.GlideUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,7 +36,7 @@ public class ImageListBindingAdapter {
                                 @Nullable List<ImageInfo> imageInfoList) {
         final ImageListAdapter adapter = ((ImageListAdapter)recyclerView.getAdapter());
         if(adapter != null) {
-            adapter.submitList(imageInfoList);
+            adapter.submitList(imageInfoList == null ? null : new ArrayList<>(imageInfoList));
 
             if(CollectionUtil.isEmpty(imageInfoList)) {
                 adapter.notifyDataSetChanged();
