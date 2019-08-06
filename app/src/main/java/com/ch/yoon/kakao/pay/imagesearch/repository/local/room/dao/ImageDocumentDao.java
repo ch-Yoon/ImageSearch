@@ -24,7 +24,7 @@ public interface ImageDocumentDao {
     void insertAll(List<LocalImageDocument> documents);
 
     @Query(
-        "SELECT itemNumber, thumbnailUrl " +
+        "SELECT id, thumbnailUrl " +
             "FROM documents " +
             "WHERE keyword == :keyword AND " +
              "itemNumber >= :startNumber AND " +

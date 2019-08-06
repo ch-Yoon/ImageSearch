@@ -1,7 +1,6 @@
 package com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response;
 
 import androidx.annotation.Nullable;
-import androidx.room.ColumnInfo;
 
 /**
  * Creator : ch-yoon

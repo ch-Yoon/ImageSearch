@@ -31,9 +31,9 @@ public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding
     private ActivityImageDetailBinding binding;
 
     public static Intent getImageDetailActivityIntent(@NonNull Context context,
-                                                      @Nullable String imageUniqueInfo) {
+                                                      @Nullable String id) {
         Intent imageDetailIntent = new Intent(context, ImageDetailActivity.class);
-        imageDetailIntent.putExtra(ImageDetailActivity.EXTRA_IMAGE_UNIQUE_INFO_KEY, imageUniqueInfo);
+        imageDetailIntent.putExtra(ImageDetailActivity.EXTRA_IMAGE_UNIQUE_INFO_KEY, id);
         return imageDetailIntent;
     }
 

@@ -11,13 +11,13 @@ import java.util.Objects;
 public class ImageInfo {
 
     @Nullable
-    private final String uniqueInfo;
+    private final String id;
 
     @Nullable
     private final String thumbnailUrl;
 
-    public ImageInfo(@Nullable String uniqueInfo, @Nullable String thumbnailUrl) {
-        this.uniqueInfo = uniqueInfo;
+    public ImageInfo(@Nullable String id, @Nullable String thumbnailUrl) {
+        this.id = id;
         this.thumbnailUrl = thumbnailUrl;
     }
 
@@ -26,18 +26,18 @@ public class ImageInfo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ImageInfo imageInfo = (ImageInfo) o;
-        return Objects.equals(uniqueInfo, imageInfo.uniqueInfo) &&
+        return Objects.equals(id, imageInfo.id) &&
             Objects.equals(thumbnailUrl, imageInfo.thumbnailUrl);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uniqueInfo, thumbnailUrl);
+        return Objects.hash(id, thumbnailUrl);
     }
 
     @Nullable
-    public String getUniqueInfo() {
-        return uniqueInfo;
+    public String getId() {
+        return id;
     }
 
     @Nullable

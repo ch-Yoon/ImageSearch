@@ -54,7 +54,7 @@ public class ImageListActivity extends BaseActivity<ActivityImageListBinding> {
         );
 
         imageListAdapter.setOnListItemClickListener((imageInfo, position) -> {
-            Intent imageDetailIntent = ImageDetailActivity.getImageDetailActivityIntent(this, imageInfo.getUniqueInfo());
+            Intent imageDetailIntent = ImageDetailActivity.getImageDetailActivityIntent(this, imageInfo.getId());
             startActivity(imageDetailIntent);
         });
 

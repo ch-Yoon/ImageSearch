@@ -50,14 +50,6 @@
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/imageSearchBoxLayout"
-            app:layout_constraintStart_toStartOf="@+id/imageSearchBoxLayout"
-            app:layout_constraintTop_toBottomOf="@+id/imageSearchBoxLayout" />
-
-        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/imageRecyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
