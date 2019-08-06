@@ -15,7 +15,7 @@ import java.util.List;
 public final class ImageSearchResponse {
 
     @Nullable
-    @SerializedName("searchMetaInfo")
+    @SerializedName("meta")
     private final SearchMetaInfo searchMetaInfo;
 
     @Nullable

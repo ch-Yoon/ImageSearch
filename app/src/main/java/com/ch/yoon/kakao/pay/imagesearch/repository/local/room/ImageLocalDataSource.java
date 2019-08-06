@@ -1,5 +1,7 @@
 package com.ch.yoon.kakao.pay.imagesearch.repository.local.room;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.dao.ImageDocumentDao;

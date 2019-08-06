@@ -13,7 +13,6 @@ import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.I
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Creator : ch-yoon
@@ -65,6 +64,8 @@ public class ImageDetailViewModel extends BaseViewModel {
         if(imageDetailInfo != null) {
             final String docUrl = imageDetailInfo.getDocUrl();
             docUrlSingleLiveData.setValue(docUrl);
+        } else {
+            docUrlSingleLiveData.setValue("");
         }
     }
 

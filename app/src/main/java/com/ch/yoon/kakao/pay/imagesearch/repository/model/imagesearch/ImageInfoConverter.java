@@ -1,5 +1,7 @@
 package com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
