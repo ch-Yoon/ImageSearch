@@ -68,8 +68,4 @@ dependencies {
 
     // photo view
     implementation "com.github.chrisbanes:PhotoView:$photo_view_version"
-
-    // leakcanary
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.1'
-    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.1'
 }
