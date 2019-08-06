@@ -1,7 +1,9 @@
 package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -51,9 +53,10 @@ public class ImageListActivity extends BaseActivity<ActivityImageListBinding> {
             )
         ).get(SearchBoxViewModel.class);
 
-        viewModel.observeSearchKeywordEvent().observe(this, keyword ->
-            binding.getImageListViewModel().loadImageList(keyword)
-        );
+        viewModel.observeSearchKeywordEvent().observe(this, keyword -> {
+            binding.getImageListViewModel().loadImageList(keyword);
+            binding.keywordEditText.setText(keyword);
+        });
 
         viewModel.observeSearchBoxFinishEvent().observe(this, voidEvent ->
             finish()

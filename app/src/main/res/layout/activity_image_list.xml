@@ -80,7 +80,8 @@
                     app:layout_constraintBottom_toBottomOf="@+id/view"
                     app:layout_constraintEnd_toStartOf="@+id/searchButton"
                     app:layout_constraintStart_toStartOf="@+id/view"
-                    app:layout_constraintTop_toTopOf="@+id/view" />
+                    app:layout_constraintTop_toTopOf="@+id/view"
+                    app:hideKeyboard="@{searchBoxViewModel.observeSearchBoxFocus()}"/>
 
                 <ImageView
                     android:id="@+id/searchButton"
@@ -157,7 +158,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@color/colorDarkGrayTransparent"
-            android:visibility="@{searchBoxViewModel.observeSearchViewVisible() ? View.VISIBLE : View.INVISIBLE}"
+            android:visibility="@{searchBoxViewModel.observeSearchBoxFocus() ? View.VISIBLE : View.INVISIBLE}"
             android:onClick="@{() -> searchBoxViewModel.clickBackground()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -172,7 +173,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:background="@color/colorLightGray"
-            android:visibility="@{searchBoxViewModel.observeSearchViewVisible() ? View.VISIBLE : View.INVISIBLE}"
+            android:visibility="@{searchBoxViewModel.observeSearchBoxFocus() ? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintBottom_toBottomOf="@+id/searchHistoryBackground"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_default="wrap"

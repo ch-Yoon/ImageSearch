@@ -5,10 +5,10 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.ch.yoon.kakao.pay.imagesearch.App;
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.extentions.SingleLiveEvent;
 import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepository;
@@ -21,7 +21,6 @@ import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Creator : ch-yoon
@@ -35,7 +34,7 @@ public class SearchBoxViewModel extends BaseViewModel {
     @NonNull
     private MutableLiveData<List<SearchLog>> searchLogHistoryLiveData = new MutableLiveData<>();
     @NonNull
-    private MutableLiveData<Boolean> searchHistoryViewVisibleLiveData = new MutableLiveData<>();
+    private MutableLiveData<Boolean> searchBoxFocusEvent = new MutableLiveData<>();
     @NonNull
     private SingleLiveEvent<String> searchKeywordLiveEvent = new SingleLiveEvent<>();
     @NonNull
@@ -54,8 +53,8 @@ public class SearchBoxViewModel extends BaseViewModel {
     }
 
     @NonNull
-    public LiveData<Boolean> observeSearchViewVisible() {
-        return searchHistoryViewVisibleLiveData;
+    public LiveData<Boolean> observeSearchBoxFocus() {
+        return searchBoxFocusEvent;
     }
 
     @NonNull
@@ -77,7 +76,7 @@ public class SearchBoxViewModel extends BaseViewModel {
     }
 
     private void init() {
-        searchHistoryViewVisibleLiveData.setValue(false);
+        searchBoxFocusEvent.setValue(false);
     }
 
     public void clickKeywordDeleteButton(@NonNull String keyword) {
@@ -96,12 +95,12 @@ public class SearchBoxViewModel extends BaseViewModel {
     }
 
     public void clickBackground() {
-        searchHistoryViewVisibleLiveData.setValue(false);
+        searchBoxFocusEvent.setValue(false);
     }
 
     public void clickBackPress() {
         if(isSearchHistoryViewVisible()) {
-            searchHistoryViewVisibleLiveData.setValue(false);
+            searchBoxFocusEvent.setValue(false);
         } else {
             searchBoxFinishEvent.call();
         }
@@ -114,7 +113,7 @@ public class SearchBoxViewModel extends BaseViewModel {
         } else {
             searchKeywordLiveEvent.setValue(keyword);
             if(isSearchHistoryViewVisible()) {
-                searchHistoryViewVisibleLiveData.setValue(false);
+                searchBoxFocusEvent.setValue(false);
             }
 
             registerDisposable(
@@ -140,7 +139,7 @@ public class SearchBoxViewModel extends BaseViewModel {
             );
         } else {
             if(isSearchHistoryViewInvisible()) {
-                searchHistoryViewVisibleLiveData.setValue(true);
+                searchBoxFocusEvent.setValue(true);
             }
         }
     }
@@ -161,7 +160,7 @@ public class SearchBoxViewModel extends BaseViewModel {
             Collections.sort(searchLogList);
             searchLogHistoryLiveData.setValue(searchLogList);
             if(isSearchHistoryViewInvisible()) {
-                searchHistoryViewVisibleLiveData.setValue(true);
+                searchBoxFocusEvent.setValue(true);
             }
         }
     }
@@ -207,7 +206,7 @@ public class SearchBoxViewModel extends BaseViewModel {
     }
 
     private boolean isSearchHistoryViewVisible() {
-        Boolean viewVisible = searchHistoryViewVisibleLiveData.getValue();
+        Boolean viewVisible = searchBoxFocusEvent.getValue();
         return viewVisible != null && viewVisible;
     }
 
