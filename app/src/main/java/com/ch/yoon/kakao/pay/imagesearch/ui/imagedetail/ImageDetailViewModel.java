@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.extentions.SingleLiveEvent;
 import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepository;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageDetailInfo;
@@ -27,6 +28,8 @@ public class ImageDetailViewModel extends BaseViewModel {
     private final MutableLiveData<String> imageUrlLiveData = new MutableLiveData<>();
     @NonNull
     private final SingleLiveEvent<String> docUrlSingleLiveData = new SingleLiveEvent<>();
+    @NonNull
+    private final SingleLiveEvent<String> messageLiveData = new SingleLiveEvent<>();
 
     @Nullable
     private ImageDetailInfo imageDetailInfo;
@@ -47,6 +50,11 @@ public class ImageDetailViewModel extends BaseViewModel {
         return docUrlSingleLiveData;
     }
 
+    @NonNull
+    public LiveData<String> observeErrorMessage() {
+        return messageLiveData;
+    }
+
     public void loadImage(@NonNull String uniqueImageInfo) {
         registerDisposable(
             imageRepository.requestImageDetailInfo(uniqueImageInfo)
@@ -65,7 +73,7 @@ public class ImageDetailViewModel extends BaseViewModel {
             final String docUrl = imageDetailInfo.getDocUrl();
             docUrlSingleLiveData.setValue(docUrl);
         } else {
-            docUrlSingleLiveData.setValue("");
+            docUrlSingleLiveData.setValue(getString(R.string.error_unknown_error));
         }
     }
 

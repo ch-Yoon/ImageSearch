@@ -1,9 +1,11 @@
 package com.ch.yoon.kakao.pay.imagesearch.ui.base;
 
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -26,8 +28,10 @@ public abstract class BaseActivity<B extends ViewDataBinding> extends AppCompatA
         showToast(getString(stringResourceId));
     }
 
-    protected void showToast(@NonNull String message) {
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    protected void showToast(@Nullable String message) {
+        if(!TextUtils.isEmpty(message)) {
+            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

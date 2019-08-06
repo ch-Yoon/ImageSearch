@@ -27,9 +27,9 @@ public interface ImageDocumentDao {
         "SELECT itemNumber, thumbnailUrl " +
             "FROM documents " +
             "WHERE keyword == :keyword AND " +
-            "itemNumber >= :startNumber AND " +
-            "itemNumber <= :endNumber AND " +
-            "imageSortType == :imageSortType"
+             "itemNumber >= :startNumber AND " +
+             "itemNumber <= :endNumber AND " +
+             "imageSortType == :imageSortType"
     )
     Single<List<ImageInfo>> selectThumbnailInfoList(String keyword,
                                                     int startNumber,
@@ -38,12 +38,8 @@ public interface ImageDocumentDao {
 
     @Query(
         "SELECT imageUrl, displaySiteName, docUrl, dateTime, width, height " +
-            "FROM documents " +
-            "WHERE id = :id"
+            "FROM documents WHERE id = :id"
     )
     Single<ImageDetailInfo> selectImageDetailInfo(String id);
-
-    @Query("DELETE FROM documents WHERE keyword = :keyword")
-    void deleteByKeyword(String keyword);
-
+    
 }

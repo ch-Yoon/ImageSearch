@@ -76,6 +76,10 @@ public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding
 
         viewModel.loadImage(uniqueImageInfo);
 
+        viewModel.observeErrorMessage().observe(this, errorMessage ->
+            showToast(errorMessage)
+        );
+
         viewModel.observeMoveWebEvent().observe(this, url -> {
             Uri movieWebUri = Uri.parse(url);
             Intent movieWebIntent = new Intent(Intent.ACTION_VIEW, movieWebUri);
