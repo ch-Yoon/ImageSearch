@@ -7,9 +7,13 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.extentions.SingleLiveEvent;
-import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageInfo;
+import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepository;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageDetailInfo;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 /**
  * Creator : ch-yoon
@@ -17,15 +21,23 @@ import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel;
  */
 public class ImageDetailViewModel extends BaseViewModel {
 
-    @Nullable
-    private ImageInfo imageInfo;
+    @NonNull
+    private final ImageRepository imageRepository;
+
     @NonNull
     private final MutableLiveData<String> imageUrlLiveData = new MutableLiveData<>();
     @NonNull
     private final SingleLiveEvent<String> docUrlSingleLiveData = new SingleLiveEvent<>();
+    @NonNull
+    private final SingleLiveEvent<String> messageLiveData = new SingleLiveEvent<>();
 
-    public ImageDetailViewModel(@NonNull Application application) {
+    @Nullable
+    private ImageDetailInfo imageDetailInfo;
+
+    public ImageDetailViewModel(@NonNull Application application,
+                                @NonNull ImageRepository imageRepository) {
         super(application);
+        this.imageRepository = imageRepository;
     }
 
     @NonNull
@@ -38,17 +50,30 @@ public class ImageDetailViewModel extends BaseViewModel {
         return docUrlSingleLiveData;
     }
 
-    public void setImageInfo(@Nullable ImageInfo imageInfo) {
-        this.imageInfo = imageInfo;
-        if(imageInfo != null) {
-            imageUrlLiveData.setValue(imageInfo.getImageUrl());
-        }
+    @NonNull
+    public LiveData<String> observeErrorMessage() {
+        return messageLiveData;
+    }
+
+    public void loadImage(@NonNull String uniqueImageInfo) {
+        registerDisposable(
+            imageRepository.requestImageDetailInfo(uniqueImageInfo)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::updateImageDetailInfo, throwable -> {})
+        );
+    }
+
+    private void updateImageDetailInfo(ImageDetailInfo imageDetailInfo) {
+        this.imageDetailInfo = imageDetailInfo;
+        imageUrlLiveData.setValue(imageDetailInfo.getImageUrl());
     }
 
     public void onClickWebButton() {
-        if(imageInfo != null) {
-            final String docUrl = imageInfo.getDocUrl();
+        if(imageDetailInfo != null) {
+            final String docUrl = imageDetailInfo.getDocUrl();
             docUrlSingleLiveData.setValue(docUrl);
+        } else {
+            docUrlSingleLiveData.setValue(getString(R.string.error_unknown_error));
         }
     }
 

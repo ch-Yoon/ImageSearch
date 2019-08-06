@@ -14,4 +14,8 @@ public class CollectionUtil {
         return collection == null || collection.size() == 0;
     }
 
+    public static boolean isNotEmpty(@Nullable Collection collection) {
+        return !isEmpty(collection);
+    }
+
 }

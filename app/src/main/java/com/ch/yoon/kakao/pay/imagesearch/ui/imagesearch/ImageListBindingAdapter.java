@@ -8,7 +8,8 @@ import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageInfo;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageInfo;
+import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.model.ImageDocument;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.adapter.ImageListAdapter;
 import com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil;
 import com.ch.yoon.kakao.pay.imagesearch.utils.GlideUtil;

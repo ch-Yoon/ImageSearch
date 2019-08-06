@@ -11,7 +11,8 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
-import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageInfo;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageInfo;
+import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.model.ImageDocument;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.adapter.viewholder.RetryFooterViewHolder;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.adapter.viewholder.ImageListViewHolder;
 
@@ -123,8 +124,7 @@ public class ImageListAdapter extends ListAdapter<ImageInfo, RecyclerView.ViewHo
 
         @Override
         public boolean areItemsTheSame(@NonNull ImageInfo oldItem, @NonNull ImageInfo newItem) {
-            return Objects.equals(oldItem.getImageUrl(), newItem.getImageUrl()) &&
-                Objects.equals(oldItem.getThumbnailUrl(), newItem.getThumbnailUrl());
+            return Objects.equals(oldItem, newItem);
         }
 
         @Override

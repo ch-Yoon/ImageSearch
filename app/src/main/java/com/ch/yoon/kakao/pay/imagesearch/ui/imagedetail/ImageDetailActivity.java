@@ -7,24 +7,33 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ActivityImageDetailBinding;
-import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.response.imagesearch.ImageInfo;
+import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepositoryImpl;
+import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.ImageDatabase;
+import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.ImageLocalDataSource;
+import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.ImageRemoteDataSource;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseActivity;
+import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.ImageListViewModel;
+import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.ImageListViewModelFactory;
+import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.helper.ImageSearchInspector;
+
+import static com.google.gson.reflect.TypeToken.get;
 
 public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding> {
 
-    public static final String EXTRA_IMAGE_DETAIL_INFO_KEY = "EXTRA_IMAGE_DETAIL_INFO_KEY";
+    public static final String EXTRA_IMAGE_UNIQUE_INFO_KEY = "EXTRA_IMAGE_UNIQUE_INFO_KEY";
 
     private ActivityImageDetailBinding binding;
 
     public static Intent getImageDetailActivityIntent(@NonNull Context context,
-                                                      @NonNull ImageInfo imageInfo) {
+                                                      @Nullable String imageUniqueInfo) {
         Intent imageDetailIntent = new Intent(context, ImageDetailActivity.class);
-        imageDetailIntent.putExtra(ImageDetailActivity.EXTRA_IMAGE_DETAIL_INFO_KEY, imageInfo);
+        imageDetailIntent.putExtra(ImageDetailActivity.EXTRA_IMAGE_UNIQUE_INFO_KEY, imageUniqueInfo);
         return imageDetailIntent;
     }
 
@@ -33,8 +42,18 @@ public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding
         super.onCreate(savedInstanceState);
         binding = binding(R.layout.activity_image_detail);
 
+        String uniqueImageInfo = getIntent().getStringExtra(EXTRA_IMAGE_UNIQUE_INFO_KEY);
+        checkPassedInfo(uniqueImageInfo);
+
         initBackArrow();
-        initViewModel();
+        initViewModel(uniqueImageInfo);
+    }
+
+    private void checkPassedInfo(String uniqueImageInfo) {
+        if(uniqueImageInfo == null) {
+            showToast(R.string.error_unknown_error);
+            finish();
+        }
     }
 
     private void initBackArrow() {
@@ -44,13 +63,22 @@ public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding
         }
     }
 
-    private void initViewModel() {
+    private void initViewModel(String uniqueImageInfo) {
         final ImageDetailViewModel viewModel = ViewModelProviders.of(this, new ImageDetailViewModelFactory(
-            getApplication()
-        )).get(ImageDetailViewModel.class);
+            getApplication(),
+            ImageRepositoryImpl.getInstance(
+                ImageLocalDataSource.getInstance(
+                    ImageDatabase.getInstance(getApplicationContext()).imageDocumentDao()
+                ),
+                ImageRemoteDataSource.getInstance())
+            )
+        ).get(ImageDetailViewModel.class);
 
-        ImageInfo imageInfo = getIntent().getParcelableExtra(EXTRA_IMAGE_DETAIL_INFO_KEY);
-        viewModel.setImageInfo(imageInfo);
+        viewModel.loadImage(uniqueImageInfo);
+
+        viewModel.observeErrorMessage().observe(this, errorMessage ->
+            showToast(errorMessage)
+        );
 
         viewModel.observeMoveWebEvent().observe(this, url -> {
             Uri movieWebUri = Uri.parse(url);
@@ -65,7 +93,7 @@ public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         if(itemId == android.R.id.home) {
-            onBackPressed();
+            finish();
             return true;
         } else {
             return super.onOptionsItemSelected(item);

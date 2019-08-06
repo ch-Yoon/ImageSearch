@@ -3,8 +3,8 @@ package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.helper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.ImageSearchRequest;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.ImageSortType;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.ImageSearchRequest;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.ImageSortType;
 
 /**
  * Creator : ch-yoon
