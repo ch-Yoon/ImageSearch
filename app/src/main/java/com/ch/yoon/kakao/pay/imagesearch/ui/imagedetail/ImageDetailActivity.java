@@ -13,9 +13,11 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ActivityImageDetailBinding;
+import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepository;
 import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepositoryImpl;
 import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.ImageDatabase;
 import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.ImageLocalDataSource;
+import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.dao.ImageSearchDao;
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.ImageRemoteDataSource;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseActivity;
 
@@ -43,7 +45,19 @@ public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding
         checkPassedInfo(uniqueImageInfo);
 
         initBackArrow();
-        initViewModel(uniqueImageInfo);
+        initImageDetailViewModel(uniqueImageInfo);
+        observeImageDetailViewModel();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        if(itemId == android.R.id.home) {
+            onBackPressed();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 
     private void checkPassedInfo(String uniqueImageInfo) {
@@ -61,39 +75,33 @@ public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding
         }
     }
 
-    private void initViewModel(String uniqueImageInfo) {
+    private void initImageDetailViewModel(String uniqueImageInfo) {
+        final ImageSearchDao imageSearchDao = ImageDatabase.getInstance(getApplicationContext()).imageDocumentDao();
+        final ImageLocalDataSource localDataSource = ImageLocalDataSource.getInstance(imageSearchDao);
+        final ImageRemoteDataSource remoteDataSource = ImageRemoteDataSource.getInstance();
+        final ImageRepository repository = ImageRepositoryImpl.getInstance(localDataSource, remoteDataSource);
+
         final ImageDetailViewModel viewModel = ViewModelProviders.of(this, new ImageDetailViewModelFactory(
-            getApplication(),
-            ImageRepositoryImpl.getInstance(
-                ImageLocalDataSource.getInstance(
-                    ImageDatabase.getInstance(getApplicationContext()).imageDocumentDao()
-                ),
-                ImageRemoteDataSource.getInstance())
-            )
-        ).get(ImageDetailViewModel.class);
+            getApplication(), repository
+        )).get(ImageDetailViewModel.class);
 
         viewModel.loadImage(uniqueImageInfo);
-
-        viewModel.observeErrorMessage().observe(this, this::showToast);
-
-        viewModel.observeMoveWebEvent().observe(this, url -> {
-            Uri webUri = Uri.parse(url);
-            Intent movieWebIntent = new Intent(Intent.ACTION_VIEW, webUri);
-            startActivity(movieWebIntent);
-        });
 
         binding.setImageDetailViewModel(viewModel);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
-        if(itemId == android.R.id.home) {
-            onBackPressed();
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
-        }
+    private void observeImageDetailViewModel() {
+        binding.getImageDetailViewModel()
+            .observeErrorMessage()
+            .observe(this, this::showToast);
+
+        binding.getImageDetailViewModel()
+            .observeMoveWebEvent()
+            .observe(this, url -> {
+                Uri webUri = Uri.parse(url);
+                Intent movieWebIntent = new Intent(Intent.ACTION_VIEW, webUri);
+                startActivity(movieWebIntent);
+            });
     }
 
 }

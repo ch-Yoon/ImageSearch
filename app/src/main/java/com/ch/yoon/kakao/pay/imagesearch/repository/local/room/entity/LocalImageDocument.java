@@ -6,7 +6,6 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-
 /**
  * Creator : ch-yoon
  * Date : 2019-08-05.

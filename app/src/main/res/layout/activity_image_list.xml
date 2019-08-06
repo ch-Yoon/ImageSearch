@@ -44,7 +44,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="3dp"
                     android:text="@string/my_name"
                     android:textSize="@dimen/image_search_box_sub_title_text_size"
                     app:layout_constraintStart_toStartOf="@+id/view"
@@ -77,6 +77,7 @@
                     android:singleLine="true"
                     android:textSize="14dp"
                     android:onClick="@{() -> searchBoxViewModel.clickSearchBox()}"
+                    android:imeOptions="flagNoExtractUi"
                     app:layout_constraintBottom_toBottomOf="@+id/view"
                     app:layout_constraintEnd_toStartOf="@+id/searchButton"
                     app:layout_constraintStart_toStartOf="@+id/view"
@@ -105,7 +106,6 @@
             android:id="@+id/imageRecyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="8dp"
             android:scrollbars="vertical"
             android:visibility="@{CollectionUtil.isEmpty(imageListViewModel.observeImageInfoList()) ? View.INVISIBLE : View.VISIBLE}"
             app:countOfItemInLine="@{imageListViewModel.observeCountOfItemInLine()}"
@@ -166,12 +166,11 @@
             app:layout_constraintTop_toBottomOf="@+id/mainToolbar" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/searchHistoryRecyclerView"
+            android:id="@+id/searchLogRecyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginStart="@dimen/image_search_box_side_margin"
+            android:layout_marginEnd="@dimen/image_search_box_side_margin"
             android:background="@color/colorLightGray"
             android:visibility="@{searchBoxViewModel.observeSearchBoxFocus() ? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintBottom_toBottomOf="@+id/searchHistoryBackground"
@@ -181,7 +180,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/searchHistoryBackground"
             app:layout_constraintVertical_bias="0.0"
-            app:searchLogList="@{searchBoxViewModel.observeSearchLogHistory()}"/>
+            app:searchLogList="@{searchBoxViewModel.observeSearchLogList()}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

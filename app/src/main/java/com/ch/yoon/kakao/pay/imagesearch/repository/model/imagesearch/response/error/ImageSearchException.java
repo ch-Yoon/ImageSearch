@@ -35,4 +35,11 @@ public final class ImageSearchException extends RuntimeException {
         return imageSearchError.getErrorMessageResourceId();
     }
 
+    @Override
+    public String toString() {
+        return "ImageSearchException{" +
+            "imageSearchError=" + imageSearchError +
+            '}';
+    }
+
 }

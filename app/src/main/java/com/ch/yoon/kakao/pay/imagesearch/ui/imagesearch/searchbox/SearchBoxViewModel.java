@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -14,6 +13,7 @@ import com.ch.yoon.kakao.pay.imagesearch.extentions.SingleLiveEvent;
 import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepository;
 import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.SearchLog;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel;
+import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.ImageListViewModel;
 import com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil;
 
 import java.util.ArrayList;
@@ -28,13 +28,16 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
  */
 public class SearchBoxViewModel extends BaseViewModel {
 
+    private static final String TAG = SearchBoxViewModel.class.getName();
+
     @NonNull
     private final ImageRepository imageRepository;
 
     @NonNull
-    private MutableLiveData<List<SearchLog>> searchLogHistoryLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<SearchLog>> searchLogListLiveData = new MutableLiveData<>();
     @NonNull
-    private MutableLiveData<Boolean> searchBoxFocusEvent = new MutableLiveData<>();
+    private MutableLiveData<Boolean> searchBoxFocusData = new MutableLiveData<>();
+
     @NonNull
     private SingleLiveEvent<String> searchKeywordLiveEvent = new SingleLiveEvent<>();
     @NonNull
@@ -42,33 +45,8 @@ public class SearchBoxViewModel extends BaseViewModel {
     @NonNull
     private SingleLiveEvent<String> showMessageLiveEvent = new SingleLiveEvent<>();
 
-    @NonNull
-    public LiveData<String> observeSearchKeywordEvent() {
-        return searchKeywordLiveEvent;
-    }
-
-    @NonNull
-    public LiveData<List<SearchLog>> observeSearchLogHistory() {
-        return searchLogHistoryLiveData;
-    }
-
-    @NonNull
-    public LiveData<Boolean> observeSearchBoxFocus() {
-        return searchBoxFocusEvent;
-    }
-
-    @NonNull
-    public LiveData<Void> observeSearchBoxFinishEvent() {
-        return searchBoxFinishEvent;
-    }
-
-    @NonNull
-    public LiveData<String> observeShowMessage() {
-        return showMessageLiveEvent;
-    }
-
-    public SearchBoxViewModel(@NonNull Application application,
-                              @NonNull ImageRepository imageRepository) {
+    SearchBoxViewModel(@NonNull Application application,
+                       @NonNull ImageRepository imageRepository) {
         super(application);
         this.imageRepository = imageRepository;
 
@@ -76,7 +54,32 @@ public class SearchBoxViewModel extends BaseViewModel {
     }
 
     private void init() {
-        searchBoxFocusEvent.setValue(false);
+        searchBoxFocusData.setValue(false);
+    }
+
+    @NonNull
+    public LiveData<List<SearchLog>> observeSearchLogList() {
+        return searchLogListLiveData;
+    }
+
+    @NonNull
+    public LiveData<Boolean> observeSearchBoxFocus() {
+        return searchBoxFocusData;
+    }
+
+    @NonNull
+    public LiveData<String> observeSearchKeyword() {
+        return searchKeywordLiveEvent;
+    }
+
+    @NonNull
+    public LiveData<Void> observeSearchBoxFinish() {
+        return searchBoxFinishEvent;
+    }
+
+    @NonNull
+    public LiveData<String> observeShowMessage() {
+        return showMessageLiveEvent;
     }
 
     public void clickKeywordDeleteButton(@NonNull String keyword) {
@@ -89,18 +92,18 @@ public class SearchBoxViewModel extends BaseViewModel {
                         final String successMessage = getString(R.string.success_all_image_info_delete_by_keyword);
                         showMessageLiveEvent.setValue(successMessage);
                     },
-                    throwable -> Log.d("ch-yoon", throwable.getMessage())
+                    throwable -> Log.d(TAG, throwable.getMessage())
                 )
         );
     }
 
     public void clickBackground() {
-        searchBoxFocusEvent.setValue(false);
+        searchBoxFocusData.setValue(false);
     }
 
     public void clickBackPress() {
-        if(isSearchHistoryViewVisible()) {
-            searchBoxFocusEvent.setValue(false);
+        if(isSearchBoxFocus()) {
+            searchBoxFocusData.setValue(false);
         } else {
             searchBoxFinishEvent.call();
         }
@@ -112,101 +115,99 @@ public class SearchBoxViewModel extends BaseViewModel {
             showMessageLiveEvent.setValue(emptyKeywordMessage);
         } else {
             searchKeywordLiveEvent.setValue(keyword);
-            if(isSearchHistoryViewVisible()) {
-                searchBoxFocusEvent.setValue(false);
+            if(isSearchBoxFocus()) {
+                searchBoxFocusData.setValue(false);
             }
 
             registerDisposable(
-                imageRepository.updateSearchHistory(keyword)
+                imageRepository.updateSearchLog(keyword)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                         this::applyRequestedKeyword,
-                        throwable -> Log.d("ch-yoon", throwable.getMessage())
+                        throwable -> Log.d(TAG, throwable.getMessage())
                     )
             );
         }
     }
 
     public void clickSearchBox() {
-        if(notHasSearchHistory()) {
+        if(notHasSearchLogList()) {
             registerDisposable(
-                imageRepository.requestSearchHistory()
+                imageRepository.requestSearchLogList()
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
-                        this::updateSearchHistory,
-                        throwable -> Log.d("ch-yoon", throwable.getMessage())
+                        this::updateSearchLogList,
+                        throwable -> Log.d(TAG, throwable.getMessage())
                     )
             );
         } else {
-            if(isSearchHistoryViewInvisible()) {
-                searchBoxFocusEvent.setValue(true);
+            if(isSearchBoxNotFocus()) {
+                searchBoxFocusData.setValue(true);
+            }
+        }
+    }
+
+    private void updateSearchLogList(List<SearchLog> searchLogList) {
+        if(CollectionUtil.isNotEmpty(searchLogList)) {
+            Collections.sort(searchLogList);
+            searchLogListLiveData.setValue(searchLogList);
+            if(isSearchBoxNotFocus()) {
+                searchBoxFocusData.setValue(true);
             }
         }
     }
 
     private void deleteKeywordFromList(String keyword) {
-        List<SearchLog> searchLogList = searchLogHistoryLiveData.getValue();
+        List<SearchLog> searchLogList = searchLogListLiveData.getValue();
         if(searchLogList != null) {
-            int position = findPosition(keyword, searchLogList);
-            if(position != -1) {
-                searchLogList.remove(position);
-                searchLogHistoryLiveData.setValue(searchLogList);
-            }
-        }
-    }
-
-    private void updateSearchHistory(List<SearchLog> searchLogList) {
-        if(CollectionUtil.isNotEmpty(searchLogList)) {
-            Collections.sort(searchLogList);
-            searchLogHistoryLiveData.setValue(searchLogList);
-            if(isSearchHistoryViewInvisible()) {
-                searchBoxFocusEvent.setValue(true);
+            if(removeIfExistKeyword(keyword, searchLogList)) {
+                searchLogListLiveData.setValue(searchLogList);
             }
         }
     }
 
     private void applyRequestedKeyword(SearchLog newSearchLog) {
         final String keyword = newSearchLog.getKeyword();
-        List<SearchLog> searchLogList = searchLogHistoryLiveData.getValue();
+
+        List<SearchLog> searchLogList = searchLogListLiveData.getValue();
         if(searchLogList != null) {
-            int position = findPosition(keyword, searchLogList);
-            if(position != -1) {
-                searchLogList.remove(position);
-            }
+            removeIfExistKeyword(keyword, searchLogList);
             searchLogList.add(0, newSearchLog);
         } else {
             searchLogList = new ArrayList<>();
             searchLogList.add(newSearchLog);
         }
-        searchLogHistoryLiveData.setValue(searchLogList);
+
+        searchLogListLiveData.setValue(searchLogList);
     }
 
-    private int findPosition(String keyword, List<SearchLog> searchLogList) {
+    private boolean removeIfExistKeyword(String keyword, List<SearchLog> searchLogList) {
         for(int i=0; i<searchLogList.size(); i++) {
             SearchLog oldLog = searchLogList.get(i);
             if(oldLog.getKeyword().equals(keyword)) {
-                return i;
+                searchLogList.remove(i);
+                return true;
             }
         }
 
-        return -1;
+        return false;
     }
 
-    private boolean hasSearchHistory() {
-        List<SearchLog> searchLogList = searchLogHistoryLiveData.getValue();
+    private boolean hasSearchLogList() {
+        List<SearchLog> searchLogList = searchLogListLiveData.getValue();
         return CollectionUtil.isNotEmpty(searchLogList);
     }
 
-    private boolean notHasSearchHistory() {
-        return !hasSearchHistory();
+    private boolean notHasSearchLogList() {
+        return !hasSearchLogList();
     }
 
-    private boolean isSearchHistoryViewInvisible() {
-        return !isSearchHistoryViewVisible();
+    private boolean isSearchBoxNotFocus() {
+        return !isSearchBoxFocus();
     }
 
-    private boolean isSearchHistoryViewVisible() {
-        Boolean viewVisible = searchBoxFocusEvent.getValue();
+    private boolean isSearchBoxFocus() {
+        Boolean viewVisible = searchBoxFocusData.getValue();
         return viewVisible != null && viewVisible;
     }
 

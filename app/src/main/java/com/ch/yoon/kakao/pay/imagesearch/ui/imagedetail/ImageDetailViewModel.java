@@ -1,6 +1,7 @@
 package com.ch.yoon.kakao.pay.imagesearch.ui.imagedetail;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -10,7 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.extentions.SingleLiveEvent;
 import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepository;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageDetailInfo;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.DetailImageInfo;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -21,20 +22,22 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
  */
 public class ImageDetailViewModel extends BaseViewModel {
 
+    private static final String TAG = ImageDetailViewModel.class.getName();
+
     @NonNull
     private final ImageRepository imageRepository;
 
     @NonNull
     private final MutableLiveData<String> imageUrlLiveData = new MutableLiveData<>();
     @NonNull
-    private final SingleLiveEvent<String> docUrlSingleLiveData = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> docUrlSingleLiveEvent = new SingleLiveEvent<>();
     @NonNull
-    private final SingleLiveEvent<String> messageLiveData = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> messageLiveEvent = new SingleLiveEvent<>();
 
     @Nullable
-    private ImageDetailInfo imageDetailInfo;
+    private DetailImageInfo detailImageInfo;
 
-    public ImageDetailViewModel(@NonNull Application application,
+    ImageDetailViewModel(@NonNull Application application,
                                 @NonNull ImageRepository imageRepository) {
         super(application);
         this.imageRepository = imageRepository;
@@ -47,33 +50,36 @@ public class ImageDetailViewModel extends BaseViewModel {
 
     @NonNull
     public LiveData<String> observeMoveWebEvent() {
-        return docUrlSingleLiveData;
+        return docUrlSingleLiveEvent;
     }
 
     @NonNull
     public LiveData<String> observeErrorMessage() {
-        return messageLiveData;
+        return messageLiveEvent;
     }
 
     public void loadImage(@NonNull String uniqueImageInfo) {
         registerDisposable(
             imageRepository.requestImageDetailInfo(uniqueImageInfo)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::updateImageDetailInfo, throwable -> {})
+                .subscribe(
+                    this::updateImageDetailInfo,
+                    throwable -> Log.d(TAG, throwable.getMessage())
+                )
         );
     }
 
-    private void updateImageDetailInfo(ImageDetailInfo imageDetailInfo) {
-        this.imageDetailInfo = imageDetailInfo;
-        imageUrlLiveData.setValue(imageDetailInfo.getImageUrl());
+    private void updateImageDetailInfo(DetailImageInfo detailImageInfo) {
+        this.detailImageInfo = detailImageInfo;
+        imageUrlLiveData.setValue(detailImageInfo.getImageUrl());
     }
 
     public void onClickWebButton() {
-        if(imageDetailInfo != null) {
-            final String docUrl = imageDetailInfo.getDocUrl();
-            docUrlSingleLiveData.setValue(docUrl);
+        if(detailImageInfo != null) {
+            final String docUrl = detailImageInfo.getDocUrl();
+            docUrlSingleLiveEvent.setValue(docUrl);
         } else {
-            docUrlSingleLiveData.setValue(getString(R.string.error_unknown_error));
+            docUrlSingleLiveEvent.setValue(getString(R.string.error_unknown_error));
         }
     }
 

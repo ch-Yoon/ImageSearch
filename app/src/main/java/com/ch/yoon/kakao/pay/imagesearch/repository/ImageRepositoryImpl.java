@@ -8,17 +8,14 @@ import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.LocalImage
 import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.SearchLog;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.ImageInfoConverter;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.ImageSearchRequest;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.ImageSortType;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageDetailInfo;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.DetailImageInfo;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageSearchResult;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.RequestMeta;
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.model.ImageDocument;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.error.ImageSearchError;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.error.ImageSearchException;
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.ImageRemoteDataSource;
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.model.SearchMetaInfo;
 import com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil;
-
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -56,15 +53,15 @@ public class ImageRepositoryImpl implements ImageRepository {
         this.imageRemoteDataSource = imageRemoteDataSource;
     }
 
-    public Single<SearchLog> updateSearchHistory(@NonNull String keyword) {
-        return imageLocalDataSource.updateSearchHistory(keyword)
+    public Single<SearchLog> updateSearchLog(@NonNull String keyword) {
+        return imageLocalDataSource.updateSearchLog(keyword)
             .subscribeOn(Schedulers.io());
     }
 
     @NonNull
     @Override
-    public Single<List<SearchLog>> requestSearchHistory() {
-        return imageLocalDataSource.getSearchHistory()
+    public Single<List<SearchLog>> requestSearchLogList() {
+        return imageLocalDataSource.getSearchLogList()
             .subscribeOn(Schedulers.io());
     }
 
@@ -89,7 +86,7 @@ public class ImageRepositoryImpl implements ImageRepository {
                 .subscribeOn(Schedulers.io())
                 .toSingle()
             )
-            .filter(imageSearchResult -> CollectionUtil.isNotEmpty(imageSearchResult.getImageInfoList()))
+            .filter(imageSearchResult -> CollectionUtil.isNotEmpty(imageSearchResult.getSimpleImageInfoList()))
             .onErrorResumeNext(throwable -> {
                 if(throwable instanceof NoSuchElementException) {
                     String errorMessage = throwable.getMessage();
@@ -105,7 +102,7 @@ public class ImageRepositoryImpl implements ImageRepository {
 
     @NonNull
     @Override
-    public Single<ImageDetailInfo> requestImageDetailInfo(@NonNull String id) {
+    public Single<DetailImageInfo> requestImageDetailInfo(@NonNull String id) {
         return imageLocalDataSource.getImageDetailInfo(id)
             .subscribeOn(Schedulers.io());
     }

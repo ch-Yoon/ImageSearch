@@ -22,7 +22,7 @@
             android:id="@+id/retryButton"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:background="@color/colorLightGray"
+            android:background="@color/colorBasicGray"
             android:padding="@dimen/image_search_retry_button_padding"
             android:visibility="@{retryButtonVisibility ? View.VISIBLE : View.GONE}"
             app:srcCompat="@drawable/ic_action_retry" />

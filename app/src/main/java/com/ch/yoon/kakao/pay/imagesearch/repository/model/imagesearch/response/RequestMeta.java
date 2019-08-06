@@ -40,4 +40,13 @@ public class RequestMeta {
         return imageSortType;
     }
 
+    @Override
+    public String toString() {
+        return "RequestMeta{" +
+            "isLastData=" + isLastData +
+            ", keyword='" + keyword + '\'' +
+            ", imageSortType=" + imageSortType +
+            '}';
+    }
+
 }

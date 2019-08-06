@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageInfo;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.SimpleImageInfo;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.adapter.viewholder.RetryFooterViewHolder;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.adapter.viewholder.ImageListViewHolder;
 
@@ -22,7 +22,7 @@ import java.util.Objects;
  * Creator : ch-yoon
  * Date : 2019-08-02.
  */
-public class ImageListAdapter extends ListAdapter<ImageInfo, RecyclerView.ViewHolder> {
+public class ImageListAdapter extends ListAdapter<SimpleImageInfo, RecyclerView.ViewHolder> {
 
     private static final int TYPE_ITEM = 1;
     private static final int TYPE_FOOTER = 2;
@@ -43,7 +43,7 @@ public class ImageListAdapter extends ListAdapter<ImageInfo, RecyclerView.ViewHo
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        final LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
         if(viewType == TYPE_ITEM) {
             final View itemView = inflater.inflate(R.layout.item_image_list, parent, false);
@@ -119,15 +119,15 @@ public class ImageListAdapter extends ListAdapter<ImageInfo, RecyclerView.ViewHo
         this.onRetryItemClickListener = onRetryItemClickListener;
     }
 
-    private static final DiffUtil.ItemCallback<ImageInfo> DiffCallback = new DiffUtil.ItemCallback<ImageInfo>() {
+    private static final DiffUtil.ItemCallback<SimpleImageInfo> DiffCallback = new DiffUtil.ItemCallback<SimpleImageInfo>() {
 
         @Override
-        public boolean areItemsTheSame(@NonNull ImageInfo oldItem, @NonNull ImageInfo newItem) {
+        public boolean areItemsTheSame(@NonNull SimpleImageInfo oldItem, @NonNull SimpleImageInfo newItem) {
             return Objects.equals(oldItem, newItem);
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull ImageInfo oldItem, @NonNull ImageInfo newItem) {
+        public boolean areContentsTheSame(@NonNull SimpleImageInfo oldItem, @NonNull SimpleImageInfo newItem) {
             return oldItem.equals(newItem);
         }
 
