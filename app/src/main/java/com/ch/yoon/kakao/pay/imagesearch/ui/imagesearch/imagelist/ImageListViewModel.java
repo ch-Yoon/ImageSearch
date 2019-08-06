@@ -1,4 +1,4 @@
-package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch;
+package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist;
 
 import android.app.Application;
 import android.util.Log;
@@ -20,10 +20,9 @@ import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.R
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.error.ImageSearchError;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.error.ImageSearchException;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel;
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.helper.ImageSearchInspector;
+import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.helper.ImageSearchInspector;
 import com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
@@ -99,6 +98,11 @@ public class ImageListViewModel extends BaseViewModel {
         imageSearchInspector.submitFirstImageSearchRequest(keyword, DEFAULT_IMAGE_SORT_TYPE);
     }
 
+
+    public void retryLoadMoreImageList() {
+        imageSearchInspector.submitRetryRequest(DEFAULT_IMAGE_SORT_TYPE);
+    }
+
     public void loadMoreImageListIfPossible(int displayPosition) {
         if(remainingMoreData()) {
             final List<ImageInfo> imageDocumentList = imageInfoListLiveData.getValue();
@@ -111,10 +115,6 @@ public class ImageListViewModel extends BaseViewModel {
                 );
             }
         }
-    }
-
-    public void retryLoadMoreImageList() {
-        imageSearchInspector.submitRetryRequest(DEFAULT_IMAGE_SORT_TYPE);
     }
 
     private int getCountOfItemInLine() {
@@ -149,18 +149,15 @@ public class ImageListViewModel extends BaseViewModel {
         this.requestMeta = requestMeta;
     }
 
-    private void updateImageInfoList(List<ImageInfo> imageInfoList) {
-        final List<ImageInfo> previousImageDocumentList = imageInfoListLiveData.getValue();
-
-        final List<ImageInfo> newImageDocumentList;
-        if(CollectionUtil.isEmpty(previousImageDocumentList)) {
-            newImageDocumentList = imageInfoList;
+    private void updateImageInfoList(List<ImageInfo> newImageInfoList) {
+        List<ImageInfo> imageInfoList = imageInfoListLiveData.getValue();
+        if(imageInfoList != null) {
+            imageInfoList.addAll(newImageInfoList);
         } else {
-            newImageDocumentList = new ArrayList<>(previousImageDocumentList);
-            newImageDocumentList.addAll(imageInfoList);
+            imageInfoList = newImageInfoList;
         }
 
-        imageInfoListLiveData.setValue(newImageDocumentList);
+        imageInfoListLiveData.setValue(imageInfoList);
     }
 
     private void handlingError(Throwable throwable) {
@@ -169,7 +166,7 @@ public class ImageListViewModel extends BaseViewModel {
             if(error == ImageSearchError.NO_RESULT_ERROR) {
                 final List<ImageInfo> previousImageDocumentList = imageInfoListLiveData.getValue();
                 if(CollectionUtil.isEmpty(previousImageDocumentList)) {
-                    updateMessage(R.string.success_image_search_no_result);
+                    updateMessage(R.string.error_image_search_wrong_request);
                 } else {
                     updateMessage(R.string.success_image_search_last_data);
                 }

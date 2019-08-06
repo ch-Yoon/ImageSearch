@@ -10,8 +10,12 @@
         <import type="com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil" />
 
         <variable
+            name="searchBoxViewModel"
+            type="com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewModel" />
+
+        <variable
             name="imageListViewModel"
-            type="com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.ImageListViewModel" />
+            type="com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.ImageListViewModel" />
 
     </data>
 
@@ -48,7 +52,7 @@
 
                 <View
                     android:id="@+id/view"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginStart="@dimen/image_search_box_side_margin"
                     android:layout_marginTop="5dp"
@@ -70,11 +74,14 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:hint="@string/image_search_edit_text_hint"
+                    android:singleLine="true"
                     android:textSize="14dp"
+                    android:onClick="@{() -> searchBoxViewModel.clickSearchBox()}"
                     app:layout_constraintBottom_toBottomOf="@+id/view"
                     app:layout_constraintEnd_toStartOf="@+id/searchButton"
                     app:layout_constraintStart_toStartOf="@+id/view"
-                    app:layout_constraintTop_toTopOf="@+id/view" />
+                    app:layout_constraintTop_toTopOf="@+id/view"
+                    app:hideKeyboard="@{searchBoxViewModel.observeSearchBoxFocus()}"/>
 
                 <ImageView
                     android:id="@+id/searchButton"
@@ -83,13 +90,12 @@
                     android:layout_gravity="center"
                     android:layout_marginEnd="@dimen/image_search_box_side_margin"
                     android:background="@drawable/ic_action_search"
-                    android:onClick="@{() -> imageListViewModel.loadImageList(keywordEditText.getText().toString())}"
+                    android:onClick="@{() -> searchBoxViewModel.clickSearchButton(keywordEditText.getText().toString())}"
                     android:padding="5dp"
                     app:layout_constraintBottom_toBottomOf="@+id/view"
                     app:layout_constraintDimensionRatio="1:1"
                     app:layout_constraintEnd_toEndOf="@+id/view"
                     app:layout_constraintTop_toTopOf="@+id/view" />
-
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -118,7 +124,6 @@
             android:layout_marginTop="@dimen/count_in_line_icon_side_margin"
             android:layout_marginEnd="@dimen/count_in_line_icon_side_margin"
             android:onClick="@{() -> imageListViewModel.changeCountOfItemInLine(4)}"
-            android:visibility="@{CollectionUtil.isEmpty(imageListViewModel.observeImageInfoList()) ? View.INVISIBLE : View.VISIBLE}"
             app:applySelectedState="@{imageListViewModel.observeCountOfItemInLine() == 4}"
             app:layout_constraintEnd_toEndOf="@+id/mainToolbar"
             app:layout_constraintTop_toBottomOf="@+id/mainToolbar"
@@ -130,7 +135,6 @@
             android:layout_height="@dimen/count_in_line_icon_size"
             android:layout_marginEnd="@dimen/count_in_line_icon_side_margin"
             android:onClick="@{() -> imageListViewModel.changeCountOfItemInLine(3)}"
-            android:visibility="@{CollectionUtil.isEmpty(imageListViewModel.observeImageInfoList()) ? View.INVISIBLE : View.VISIBLE}"
             app:applySelectedState="@{imageListViewModel.observeCountOfItemInLine() == 3}"
             app:layout_constraintBottom_toBottomOf="@+id/fourImageInLineButton"
             app:layout_constraintEnd_toStartOf="@+id/fourImageInLineButton"
@@ -143,12 +147,41 @@
             android:layout_height="@dimen/count_in_line_icon_size"
             android:layout_marginEnd="@dimen/count_in_line_icon_side_margin"
             android:onClick="@{() -> imageListViewModel.changeCountOfItemInLine(2)}"
-            android:visibility="@{CollectionUtil.isEmpty(imageListViewModel.observeImageInfoList()) ? View.INVISIBLE : View.VISIBLE}"
             app:applySelectedState="@{imageListViewModel.observeCountOfItemInLine() == 2}"
             app:layout_constraintBottom_toBottomOf="@+id/threeImageInLineButton"
             app:layout_constraintEnd_toStartOf="@+id/threeImageInLineButton"
             app:layout_constraintTop_toTopOf="@+id/threeImageInLineButton"
             app:srcCompat="@drawable/ic_two_image_in_line_selector" />
+
+        <View
+            android:id="@+id/searchHistoryBackground"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorDarkGrayTransparent"
+            android:visibility="@{searchBoxViewModel.observeSearchBoxFocus() ? View.VISIBLE : View.INVISIBLE}"
+            android:onClick="@{() -> searchBoxViewModel.clickBackground()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mainToolbar" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/searchHistoryRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/colorLightGray"
+            android:visibility="@{searchBoxViewModel.observeSearchBoxFocus() ? View.VISIBLE : View.INVISIBLE}"
+            app:layout_constraintBottom_toBottomOf="@+id/searchHistoryBackground"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_default="wrap"
+            app:layout_constraintHeight_max="300dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/searchHistoryBackground"
+            app:layout_constraintVertical_bias="0.0"
+            app:searchLogList="@{searchBoxViewModel.observeSearchLogHistory()}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

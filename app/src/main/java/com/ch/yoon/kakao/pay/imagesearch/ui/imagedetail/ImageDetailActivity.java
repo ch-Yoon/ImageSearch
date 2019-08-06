@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
@@ -19,9 +18,6 @@ import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.ImageDatabase;
 import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.ImageLocalDataSource;
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.ImageRemoteDataSource;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseActivity;
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.ImageListViewModel;
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.ImageListViewModelFactory;
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.helper.ImageSearchInspector;
 
 import static com.google.gson.reflect.TypeToken.get;
 
@@ -93,7 +89,7 @@ public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         if(itemId == android.R.id.home) {
-            finish();
+            onBackPressed();
             return true;
         } else {
             return super.onOptionsItemSelected(item);

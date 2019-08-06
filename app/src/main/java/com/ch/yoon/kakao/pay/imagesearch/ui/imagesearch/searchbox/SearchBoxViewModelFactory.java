@@ -1,4 +1,4 @@
-package com.ch.yoon.kakao.pay.imagesearch.ui.imagedetail;
+package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox;
 
 import android.app.Application;
 
@@ -12,7 +12,7 @@ import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepository;
  * Creator : ch-yoon
  * Date : 2019-08-02.
  */
-public class ImageDetailViewModelFactory implements ViewModelProvider.Factory {
+public class SearchBoxViewModelFactory implements ViewModelProvider.Factory {
 
     @NonNull
     private final Application application;
@@ -20,8 +20,8 @@ public class ImageDetailViewModelFactory implements ViewModelProvider.Factory {
     @NonNull
     private final ImageRepository imageRepository;
 
-    ImageDetailViewModelFactory(@NonNull Application application,
-                                @NonNull ImageRepository imageRepository) {
+    public SearchBoxViewModelFactory(@NonNull Application application,
+                              @NonNull ImageRepository imageRepository) {
         this.application = application;
         this.imageRepository = imageRepository;
     }
@@ -30,8 +30,8 @@ public class ImageDetailViewModelFactory implements ViewModelProvider.Factory {
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        if (modelClass.isAssignableFrom(ImageDetailViewModel.class)) {
-            return (T) new ImageDetailViewModel(application, imageRepository);
+        if (modelClass.isAssignableFrom(SearchBoxViewModel.class)) {
+            return (T) new SearchBoxViewModel(application, imageRepository);
         }
         throw new IllegalArgumentException("Unknown ViewModel class: " + modelClass.getName());
     }

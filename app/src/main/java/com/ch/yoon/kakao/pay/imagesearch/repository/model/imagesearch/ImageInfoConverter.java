@@ -1,7 +1,5 @@
 package com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -72,6 +70,16 @@ public class ImageInfoConverter {
 
             imageInfoList.add(new ImageInfo(uniqueInfo, thumbnailUrl));
         }
+
+        return new ImageSearchResult(requestMeta, imageInfoList);
+    }
+
+    public static ImageSearchResult toImageSearchResult(@NonNull ImageSearchRequest imageSearchRequest,
+                                                 @NonNull List<ImageInfo> imageInfoList) {
+        final String keyword = imageSearchRequest.getKeyword();
+        final ImageSortType imageSortType = imageSearchRequest.getImageSortType();
+        final boolean isLastData = false;
+        final RequestMeta requestMeta = new RequestMeta(isLastData, keyword, imageSortType);
 
         return new ImageSearchResult(requestMeta, imageInfoList);
     }

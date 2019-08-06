@@ -1,4 +1,4 @@
-package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.adapter;
+package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageInfo;
-import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.model.ImageDocument;
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.adapter.viewholder.RetryFooterViewHolder;
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.adapter.viewholder.ImageListViewHolder;
+import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.adapter.viewholder.RetryFooterViewHolder;
+import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.adapter.viewholder.ImageListViewHolder;
 
 import java.util.Objects;
 
@@ -33,7 +32,7 @@ public class ImageListAdapter extends ListAdapter<ImageInfo, RecyclerView.ViewHo
     @Nullable
     private OnListItemClickListener onListItemClickListener;
     @Nullable
-    private OnFooterItemClickListener onFooterItemClickListener;
+    private OnRetryItemClickListener onRetryItemClickListener;
 
     private boolean retryFooterViewVisibility = false;
 
@@ -54,7 +53,7 @@ public class ImageListAdapter extends ListAdapter<ImageInfo, RecyclerView.ViewHo
         } else {
             final View footerView = inflater.inflate(R.layout.item_retry_footer, parent, false);
             final RetryFooterViewHolder retryFooterViewHolder = new RetryFooterViewHolder(footerView);
-            retryFooterViewHolder.setOnFooterItemClickListener(onFooterItemClickListener);
+            retryFooterViewHolder.setOnFooterItemClickListener(onRetryItemClickListener);
             return retryFooterViewHolder;
         }
     }
@@ -116,8 +115,8 @@ public class ImageListAdapter extends ListAdapter<ImageInfo, RecyclerView.ViewHo
         this.onListItemClickListener = onListItemClickListener;
     }
 
-    public void setOnFooterItemClickListener(@NonNull OnFooterItemClickListener onFooterItemClickListener) {
-        this.onFooterItemClickListener = onFooterItemClickListener;
+    public void setOnFooterItemClickListener(@NonNull OnRetryItemClickListener onRetryItemClickListener) {
+        this.onRetryItemClickListener = onRetryItemClickListener;
     }
 
     private static final DiffUtil.ItemCallback<ImageInfo> DiffCallback = new DiffUtil.ItemCallback<ImageInfo>() {

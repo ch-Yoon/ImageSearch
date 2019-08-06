@@ -1,4 +1,4 @@
-package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.adapter.viewholder;
+package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.adapter.viewholder;
 
 import android.view.View;
 
@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ItemImageListBinding;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageInfo;
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.adapter.OnListItemClickListener;
+import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.adapter.OnListItemClickListener;
 import com.ch.yoon.kakao.pay.imagesearch.utils.GlideUtil;
 
 /**

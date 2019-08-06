@@ -1,4 +1,4 @@
-package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch;
+package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist;
 
 import android.app.Application;
 
@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepository;
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.helper.ImageSearchInspector;
+import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.helper.ImageSearchInspector;
 
 /**
  * Creator : ch-yoon
@@ -22,7 +22,7 @@ public class ImageListViewModelFactory implements ViewModelProvider.Factory {
     @NonNull
     private final ImageSearchInspector imageSearchInspector;
 
-    ImageListViewModelFactory(@NonNull Application application,
+    public ImageListViewModelFactory(@NonNull Application application,
                               @NonNull ImageRepository imageRepository,
                               @NonNull ImageSearchInspector imageSearchInspector) {
         this.application = application;

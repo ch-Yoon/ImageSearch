@@ -14,7 +14,8 @@
     <string name="error_unknown_error">알 수 없는 에러가 발생했습니다</string>
 
     <!-- guide message -->
-    <string name="success_image_search_no_result">검색 결과가 없습니다</string>
     <string name="success_image_search_last_data">마지막 검색 페이지입니다</string>
+    <string name="empty_keyword_guide">검색어를 입력해주세요</string>
+    <string name="success_all_image_info_delete_by_keyword">삭제 완료</string>
 
 </resources>

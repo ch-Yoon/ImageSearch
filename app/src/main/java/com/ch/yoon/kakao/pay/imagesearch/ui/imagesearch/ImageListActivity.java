@@ -1,10 +1,14 @@
 package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ActivityImageListBinding;
@@ -14,8 +18,13 @@ import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.ImageLocalDataSou
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.ImageRemoteDataSource;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseActivity;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagedetail.ImageDetailActivity;
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.adapter.ImageListAdapter;
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.helper.ImageSearchInspector;
+import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.ImageListViewModel;
+import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.ImageListViewModelFactory;
+import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.adapter.ImageListAdapter;
+import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.adapter.SearchHistoryAdapter;
+import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.helper.ImageSearchInspector;
+import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewModel;
+import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewModelFactory;
 
 public class ImageListActivity extends BaseActivity<ActivityImageListBinding> {
 
@@ -26,11 +35,55 @@ public class ImageListActivity extends BaseActivity<ActivityImageListBinding> {
         super.onCreate(savedInstanceState);
         binding = binding(R.layout.activity_image_list);
 
-        initViewModel();
-        initRecyclerView();
+        initSearchBoxViewModel();
+        initImageListModel();
+
+        initHistoryRecyclerView();
+        initImageListRecyclerView();
     }
 
-    private void initViewModel() {
+    private void initSearchBoxViewModel() {
+        final SearchBoxViewModel viewModel = ViewModelProviders.of(this, new SearchBoxViewModelFactory(
+                getApplication(),
+                ImageRepositoryImpl.getInstance(
+                    ImageLocalDataSource.getInstance(
+                        ImageDatabase.getInstance(getApplicationContext()).imageDocumentDao()
+                    ),
+                    ImageRemoteDataSource.getInstance())
+            )
+        ).get(SearchBoxViewModel.class);
+
+        viewModel.observeSearchKeywordEvent().observe(this, keyword -> {
+            binding.getImageListViewModel().loadImageList(keyword);
+            binding.keywordEditText.setText(keyword);
+        });
+
+        viewModel.observeSearchBoxFinishEvent().observe(this, voidEvent ->
+            finish()
+        );
+
+        viewModel.observeShowMessage().observe(this, this::showToast);
+
+        binding.setSearchBoxViewModel(viewModel);
+    }
+
+    private void initHistoryRecyclerView() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
+        binding.searchHistoryRecyclerView.setLayoutManager(linearLayoutManager);
+
+        SearchHistoryAdapter adapter = new SearchHistoryAdapter();
+        adapter.setOnSearchLogClickListener((searchLog, position) ->
+            binding.getSearchBoxViewModel().clickSearchButton(searchLog.getKeyword())
+        );
+
+        adapter.setOnLogDeleteClickListener((searchLog, position) ->
+            binding.getSearchBoxViewModel().clickKeywordDeleteButton(searchLog.getKeyword())
+        );
+
+        binding.searchHistoryRecyclerView.setAdapter(adapter);
+    }
+
+    private void initImageListModel() {
         final ImageListViewModel viewModel = ViewModelProviders.of(this, new ImageListViewModelFactory(
             getApplication(),
             ImageRepositoryImpl.getInstance(
@@ -46,7 +99,7 @@ public class ImageListActivity extends BaseActivity<ActivityImageListBinding> {
         binding.setImageListViewModel(viewModel);
     }
 
-    private void initRecyclerView() {
+    private void initImageListRecyclerView() {
         final ImageListAdapter imageListAdapter = new ImageListAdapter();
 
         imageListAdapter.setOnBindPositionListener(position ->
@@ -78,6 +131,11 @@ public class ImageListActivity extends BaseActivity<ActivityImageListBinding> {
 
         binding.imageRecyclerView.setLayoutManager(gridLayoutManager);
         binding.imageRecyclerView.setAdapter(imageListAdapter);
+    }
+
+    @Override
+    public void onBackPressed() {
+        binding.getSearchBoxViewModel().clickBackPress();
     }
 
 }

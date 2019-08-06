@@ -1,4 +1,4 @@
-package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.helper;
+package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.helper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
