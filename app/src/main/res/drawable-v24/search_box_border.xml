@@ -9,6 +9,8 @@
                 android:color="@color/colorLightGray"/>
             <corners
                 android:radius="3dp"/>
+            <solid
+                android:color="@color/colorLightGray"/>
         </shape>
     </item>
 

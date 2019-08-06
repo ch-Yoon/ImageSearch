@@ -18,36 +18,82 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorWhite"
         tools:context=".ui.imagesearch.ImageListActivity">
 
-        <LinearLayout
-            android:id="@+id/imageSearchBoxLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/image_search_box_side_margin"
-            android:background="@drawable/search_box_border"
-            android:orientation="horizontal"
-            android:padding="@dimen/image_search_box_padding"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/mainToolbar"
+            android:layout_width="0dp"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorWhite"
+            app:contentInsetStart="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <EditText
-                android:id="@+id/keywordEditText"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:hint="@string/image_search_edit_text_hint"
-                android:background="@null"/>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/searchButton"
-                android:layout_width="@dimen/image_search_box_icon_size"
-                android:layout_height="@dimen/image_search_box_icon_size"
-                android:background="@drawable/ic_action_search"
-                android:onClick="@{() -> imageListViewModel.loadImageList(keywordEditText.getText().toString())}"/>
+                <TextView
+                    android:id="@+id/toolbarSubTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/my_name"
+                    android:textSize="@dimen/image_search_box_sub_title_text_size"
+                    app:layout_constraintStart_toStartOf="@+id/view"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        </LinearLayout>
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="@dimen/image_search_box_side_margin"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="@dimen/image_search_box_side_margin"
+                    android:background="@drawable/search_box_border"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/toolbarSubTitle">
+
+                </View>
+
+                <EditText
+                    android:id="@+id/keywordEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/image_search_box_side_margin"
+                    android:layout_marginEnd="@dimen/image_search_box_side_margin"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="@string/image_search_edit_text_hint"
+                    android:textSize="14dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/view"
+                    app:layout_constraintEnd_toStartOf="@+id/searchButton"
+                    app:layout_constraintStart_toStartOf="@+id/view"
+                    app:layout_constraintTop_toTopOf="@+id/view" />
+
+                <ImageView
+                    android:id="@+id/searchButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/image_search_box_side_margin"
+                    android:background="@drawable/ic_action_search"
+                    android:onClick="@{() -> imageListViewModel.loadImageList(keywordEditText.getText().toString())}"
+                    android:padding="5dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/view"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintEnd_toEndOf="@+id/view"
+                    app:layout_constraintTop_toTopOf="@+id/view" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.appcompat.widget.Toolbar>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/imageRecyclerView"
@@ -57,13 +103,13 @@
             android:scrollbars="vertical"
             android:visibility="@{CollectionUtil.isEmpty(imageListViewModel.observeImageInfoList()) ? View.INVISIBLE : View.VISIBLE}"
             app:countOfItemInLine="@{imageListViewModel.observeCountOfItemInLine()}"
+            app:imageSearchState="@{imageListViewModel.observeImageSearchState()}"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fourImageInLineButton"
-            app:searchImageInfoList="@{imageListViewModel.observeImageInfoList()}"
-            app:imageSearchState="@{imageListViewModel.observeImageSearchState()}"/>
+            app:searchImageInfoList="@{imageListViewModel.observeImageInfoList()}" />
 
         <ImageView
             android:id="@+id/fourImageInLineButton"
@@ -73,10 +119,10 @@
             android:layout_marginEnd="@dimen/count_in_line_icon_side_margin"
             android:onClick="@{() -> imageListViewModel.changeCountOfItemInLine(4)}"
             android:visibility="@{CollectionUtil.isEmpty(imageListViewModel.observeImageInfoList()) ? View.INVISIBLE : View.VISIBLE}"
-            app:layout_constraintEnd_toEndOf="@+id/imageSearchBoxLayout"
-            app:layout_constraintTop_toBottomOf="@+id/imageSearchBoxLayout"
-            app:srcCompat="@drawable/ic_four_image_in_line_selector"
-            app:applySelectedState="@{imageListViewModel.observeCountOfItemInLine() == 4}"/>
+            app:applySelectedState="@{imageListViewModel.observeCountOfItemInLine() == 4}"
+            app:layout_constraintEnd_toEndOf="@+id/mainToolbar"
+            app:layout_constraintTop_toBottomOf="@+id/mainToolbar"
+            app:srcCompat="@drawable/ic_four_image_in_line_selector" />
 
         <ImageView
             android:id="@+id/threeImageInLineButton"
@@ -85,11 +131,11 @@
             android:layout_marginEnd="@dimen/count_in_line_icon_side_margin"
             android:onClick="@{() -> imageListViewModel.changeCountOfItemInLine(3)}"
             android:visibility="@{CollectionUtil.isEmpty(imageListViewModel.observeImageInfoList()) ? View.INVISIBLE : View.VISIBLE}"
+            app:applySelectedState="@{imageListViewModel.observeCountOfItemInLine() == 3}"
             app:layout_constraintBottom_toBottomOf="@+id/fourImageInLineButton"
             app:layout_constraintEnd_toStartOf="@+id/fourImageInLineButton"
             app:layout_constraintTop_toTopOf="@+id/fourImageInLineButton"
-            app:srcCompat="@drawable/ic_three_image_in_line_selector"
-            app:applySelectedState="@{imageListViewModel.observeCountOfItemInLine() == 3}"/>
+            app:srcCompat="@drawable/ic_three_image_in_line_selector" />
 
         <ImageView
             android:id="@+id/twoImageInLineButton"
@@ -98,11 +144,11 @@
             android:layout_marginEnd="@dimen/count_in_line_icon_side_margin"
             android:onClick="@{() -> imageListViewModel.changeCountOfItemInLine(2)}"
             android:visibility="@{CollectionUtil.isEmpty(imageListViewModel.observeImageInfoList()) ? View.INVISIBLE : View.VISIBLE}"
+            app:applySelectedState="@{imageListViewModel.observeCountOfItemInLine() == 2}"
             app:layout_constraintBottom_toBottomOf="@+id/threeImageInLineButton"
             app:layout_constraintEnd_toStartOf="@+id/threeImageInLineButton"
             app:layout_constraintTop_toTopOf="@+id/threeImageInLineButton"
-            app:srcCompat="@drawable/ic_two_image_in_line_selector"
-            app:applySelectedState="@{imageListViewModel.observeCountOfItemInLine() == 2}"/>
+            app:srcCompat="@drawable/ic_two_image_in_line_selector" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
