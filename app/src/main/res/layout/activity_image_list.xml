@@ -106,6 +106,7 @@
             android:id="@+id/imageRecyclerView"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginTop="@dimen/count_in_line_icon_side_margin"
             android:scrollbars="vertical"
             android:visibility="@{CollectionUtil.isEmpty(imageListViewModel.observeImageInfoList()) ? View.INVISIBLE : View.VISIBLE}"
             app:countOfItemInLine="@{imageListViewModel.observeCountOfItemInLine()}"

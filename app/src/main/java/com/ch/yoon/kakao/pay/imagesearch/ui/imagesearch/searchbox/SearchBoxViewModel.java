@@ -115,9 +115,7 @@ public class SearchBoxViewModel extends BaseViewModel {
             showMessageLiveEvent.setValue(emptyKeywordMessage);
         } else {
             searchKeywordLiveEvent.setValue(keyword);
-            if(isSearchBoxFocus()) {
-                searchBoxFocusData.setValue(false);
-            }
+            searchBoxFocusData.setValue(false);
 
             registerDisposable(
                 imageRepository.updateSearchLog(keyword)
