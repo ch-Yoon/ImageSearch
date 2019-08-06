@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
@@ -57,6 +58,7 @@ public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding
     }
 
     private void initBackArrow() {
+        setSupportActionBar(binding.mainToolbar);
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -76,13 +78,11 @@ public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding
 
         viewModel.loadImage(uniqueImageInfo);
 
-        viewModel.observeErrorMessage().observe(this, errorMessage ->
-            showToast(errorMessage)
-        );
+        viewModel.observeErrorMessage().observe(this, this::showToast);
 
         viewModel.observeMoveWebEvent().observe(this, url -> {
-            Uri movieWebUri = Uri.parse(url);
-            Intent movieWebIntent = new Intent(Intent.ACTION_VIEW, movieWebUri);
+            Uri webUri = Uri.parse(url);
+            Intent movieWebIntent = new Intent(Intent.ACTION_VIEW, webUri);
             startActivity(movieWebIntent);
         });
 

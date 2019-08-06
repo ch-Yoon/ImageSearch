@@ -18,7 +18,7 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".ui.imagesearch.ImageListActivity"
-            android:label="@string/screen_title">
+            android:theme="@style/ImageSearchAppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,7 +27,7 @@
         </activity>
         <activity
             android:name=".ui.imagedetail.ImageDetailActivity"
-            android:label="@string/screen_title"/>
+            android:theme="@style/ImageSearchAppTheme"/>
     </application>
 
 </manifest>
