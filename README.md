@@ -6,6 +6,10 @@
 ## apk file
 - 다운로드 링크 -> [구글 드라이브](https://drive.google.com/drive/folders/1vkTsG283bOHdHUEd9cduHyEvTtt9Tydu?usp=sharing)
 
+## 만약 설치가 안된다면?
+
+![not_install_guide](https://user-images.githubusercontent.com/20294749/62586404-71abde80-b8f8-11e9-85d7-288e84418646.png)
+
 ## 개요
 - 사용 언어 : Java
 - 사용 패턴 및 기술 : MVVM + DataBinding + Retrofit2 + Room + RxJava2
