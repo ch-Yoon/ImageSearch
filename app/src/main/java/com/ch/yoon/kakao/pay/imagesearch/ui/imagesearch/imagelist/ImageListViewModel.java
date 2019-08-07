@@ -141,30 +141,22 @@ public class ImageListViewModel extends BaseViewModel {
     private void handlingReceivedResponse(ImageSearchResult imageSearchResult) {
         changeImageSearchState(ImageSearchState.SUCCESS);
 
-        updateMetaInfo(imageSearchResult.getRequestMeta());
-        updateImageInfoList(imageSearchResult.getSimpleImageInfoList());
-    }
+        List<SimpleImageInfo> oldList = imageInfoListLiveData.getValue();
+        List<SimpleImageInfo> newList = imageSearchResult.getSimpleImageInfoList();
+        if(CollectionUtil.isEmpty(oldList)) {
+            oldList = newList;
+        } else {
+            oldList.addAll(newList);
+        }
 
-    private void updateMetaInfo(RequestMeta requestMeta) {
-        this.requestMeta = requestMeta;
-        if(requestMeta.isLastData()) {
+        requestMeta = imageSearchResult.getRequestMeta();
+        if(CollectionUtil.isEmpty(oldList)) {
+            updateMessage(R.string.success_image_search_no_result);
+        } else if(requestMeta.isLastData()){
             updateMessage(R.string.success_image_search_last_data);
         }
-    }
 
-    private void updateImageInfoList(List<SimpleImageInfo> newSimpleImageInfoList) {
-        List<SimpleImageInfo> simpleImageInfoList = imageInfoListLiveData.getValue();
-        if(CollectionUtil.isEmpty(simpleImageInfoList)) {
-            if(CollectionUtil.isEmpty(newSimpleImageInfoList)) {
-                updateMessage(R.string.success_image_search_no_result);
-            } else {
-                simpleImageInfoList = newSimpleImageInfoList;
-            }
-        } else {
-            simpleImageInfoList.addAll(newSimpleImageInfoList);
-        }
-
-        imageInfoListLiveData.setValue(simpleImageInfoList);
+        imageInfoListLiveData.setValue(oldList);
     }
 
     private void handlingError(Throwable throwable) {
