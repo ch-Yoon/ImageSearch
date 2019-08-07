@@ -27,7 +27,7 @@
 - Preload 구현
 - Disk Cache 구현    
 - 최근 검색 기록 구현
-- Network 장애 시, FooterView를 통한 재시도 요청 구현
+- Network 장애 시, RecyclerView 하단에 존재하는 FooterView를 통해 재시도 요청 구현
 
 ## 시연
 ### 검색 기능
