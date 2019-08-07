@@ -40,6 +40,7 @@ public class ImageLocalDataSource {
         imageSearchDao.insertAll(localImageDocumentList);
     }
 
+    @NonNull
     public Single<List<SimpleImageInfo>> getImageSearchList(@NonNull ImageSearchRequest imageSearchRequest) {
         final int requiredSize = imageSearchRequest.getRequiredSize();
         final int pageNumber = imageSearchRequest.getPageNumber();
@@ -52,16 +53,19 @@ public class ImageLocalDataSource {
         return imageSearchDao.selectSimpleImageInfoList(keyword, startNumber, endNumber, imageSortType);
     }
 
+    @NonNull
     public Single<DetailImageInfo> getImageDetailInfo(@NonNull String id) {
         return imageSearchDao.selectDetailImageInfo(id);
     }
 
+    @NonNull
     public Completable deleteAllByKeyword(@NonNull String keyword) {
         return imageSearchDao.deleteSearchLog(keyword)
             .onErrorComplete()
             .andThen(imageSearchDao.deleteAllDocument(keyword));
     }
 
+    @NonNull
     public Single<SearchLog> updateSearchLog(@NonNull String keyword) {
         final long time = System.currentTimeMillis();
         SearchLog newSearchLog = new SearchLog(keyword, time);
@@ -69,6 +73,7 @@ public class ImageLocalDataSource {
             .toSingle(() -> newSearchLog);
     }
 
+    @NonNull
     public Single<List<SearchLog>> getSearchLogList() {
         return imageSearchDao.selectAllSearchLog();
     }

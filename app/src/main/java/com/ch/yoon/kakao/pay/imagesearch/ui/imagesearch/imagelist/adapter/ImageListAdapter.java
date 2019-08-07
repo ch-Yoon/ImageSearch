@@ -105,6 +105,7 @@ public class ImageListAdapter extends ListAdapter<SimpleImageInfo, RecyclerView.
 
     public void changeFooterViewVisibility(boolean retryFooterViewVisibility) {
         this.retryFooterViewVisibility = retryFooterViewVisibility;
+        notifyItemChanged(super.getItemCount());
     }
 
     public void setOnBindPositionListener(@NonNull OnBindPositionListener onBindPositionListener) {

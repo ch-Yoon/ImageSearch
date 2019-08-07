@@ -147,14 +147,21 @@ public class ImageListViewModel extends BaseViewModel {
 
     private void updateMetaInfo(RequestMeta requestMeta) {
         this.requestMeta = requestMeta;
+        if(requestMeta.isLastData()) {
+            updateMessage(R.string.success_image_search_last_data);
+        }
     }
 
     private void updateImageInfoList(List<SimpleImageInfo> newSimpleImageInfoList) {
         List<SimpleImageInfo> simpleImageInfoList = imageInfoListLiveData.getValue();
-        if(simpleImageInfoList != null) {
-            simpleImageInfoList.addAll(newSimpleImageInfoList);
+        if(CollectionUtil.isEmpty(simpleImageInfoList)) {
+            if(CollectionUtil.isEmpty(newSimpleImageInfoList)) {
+                updateMessage(R.string.success_image_search_no_result);
+            } else {
+                simpleImageInfoList = newSimpleImageInfoList;
+            }
         } else {
-            simpleImageInfoList = newSimpleImageInfoList;
+            simpleImageInfoList.addAll(newSimpleImageInfoList);
         }
 
         imageInfoListLiveData.setValue(simpleImageInfoList);
@@ -163,17 +170,8 @@ public class ImageListViewModel extends BaseViewModel {
     private void handlingError(Throwable throwable) {
         if(throwable instanceof ImageSearchException) {
             final ImageSearchError error = ((ImageSearchException)throwable).getImageSearchError();
-            if(error == ImageSearchError.NO_RESULT_ERROR) {
-                final List<SimpleImageInfo> previousImageDocumentList = imageInfoListLiveData.getValue();
-                if(CollectionUtil.isEmpty(previousImageDocumentList)) {
-                    updateMessage(R.string.error_image_search_wrong_request);
-                } else {
-                    updateMessage(R.string.success_image_search_last_data);
-                }
-            } else {
-                changeImageSearchState(ImageSearchState.FAIL);
-                updateMessage(error.getErrorMessageResourceId());
-            }
+            changeImageSearchState(ImageSearchState.FAIL);
+            updateMessage(error.getErrorMessageResourceId());
         }
 
         Log.d(TAG, throwable.getMessage());

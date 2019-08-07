@@ -11,6 +11,7 @@ import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.e
 import java.net.UnknownHostException;
 
 import io.reactivex.Single;
+import io.reactivex.functions.Function;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.HttpException;
