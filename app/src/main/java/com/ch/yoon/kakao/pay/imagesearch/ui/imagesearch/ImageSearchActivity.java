@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
-import com.ch.yoon.kakao.pay.imagesearch.databinding.ActivityImageListBinding;
+import com.ch.yoon.kakao.pay.imagesearch.databinding.ActivityImageSearchBinding;
 import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepository;
 import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepositoryImpl;
 import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.ImageDatabase;
@@ -26,14 +26,14 @@ import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.helper.ImageSe
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewModel;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewModelFactory;
 
-public class ImageListActivity extends BaseActivity<ActivityImageListBinding> {
+public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding> {
 
-    private ActivityImageListBinding binding;
+    private ActivityImageSearchBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = binding(R.layout.activity_image_list);
+        binding = binding(R.layout.activity_image_search);
 
         initSearchBoxViewModel();
         observeSearchBoxViewModel();
