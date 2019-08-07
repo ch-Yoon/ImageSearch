@@ -8,7 +8,7 @@
 
 ## 개요
 - 사용 언어 : Java
-- 사용 패턴 및 기술 : MVVM + DataBinding + Retrofit2 + Room
+- 사용 패턴 및 기술 : MVVM + DataBinding + Retrofit2 + Room + RxJava2
 
 ## 구현 기능
 ### 기본 요구사항 구현
