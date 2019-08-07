@@ -16,12 +16,11 @@ import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.e
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.ImageRemoteDataSource;
 import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.model.SearchMetaInfo;
 import com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil;
+import com.ch.yoon.kakao.pay.imagesearch.utils.NetworkUtil;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import io.reactivex.Completable;
-import io.reactivex.Flowable;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
@@ -53,6 +52,7 @@ public class ImageRepositoryImpl implements ImageRepository {
         this.imageRemoteDataSource = imageRemoteDataSource;
     }
 
+    @NonNull
     public Single<SearchLog> updateSearchLog(@NonNull String keyword) {
         return imageLocalDataSource.updateSearchLog(keyword)
             .subscribeOn(Schedulers.io());
@@ -67,12 +67,9 @@ public class ImageRepositoryImpl implements ImageRepository {
 
     @NonNull
     public Single<ImageSearchResult> requestImageList(@NonNull final ImageSearchRequest request) {
-        return Single.concat(
-            imageLocalDataSource.getImageSearchList(request)
-                .map(imageInfoList -> ImageInfoConverter.toImageSearchResult(request, imageInfoList))
-                .subscribeOn(Schedulers.io()),
-            imageRemoteDataSource.requestImageList(request)
-                .filter(response -> CollectionUtil.isNotEmpty(response.getImageDocumentList()))
+        if(NetworkUtil.isNetworkConnecting()) {
+            return imageRemoteDataSource
+                .requestImageList(request)
                 .map(response -> {
                     final List<ImageDocument> documentList = response.getImageDocumentList();
                     final List<LocalImageDocument> localDocumentList = ImageInfoConverter.
@@ -83,21 +80,30 @@ public class ImageRepositoryImpl implements ImageRepository {
                     final SearchMetaInfo metaInfo = response.getSearchMetaInfo();
                     return ImageInfoConverter.toImageSearchResult(request, metaInfo, localDocumentList);
                 })
-                .subscribeOn(Schedulers.io())
-                .toSingle()
-            )
-            .filter(imageSearchResult -> CollectionUtil.isNotEmpty(imageSearchResult.getSimpleImageInfoList()))
-            .onErrorResumeNext(throwable -> {
-                if(throwable instanceof NoSuchElementException) {
-                    String errorMessage = throwable.getMessage();
-                    ImageSearchError imageSearchError = ImageSearchError.NO_RESULT_ERROR;
-                    return Flowable.error(new ImageSearchException(errorMessage, imageSearchError));
-                }
-                return Flowable.error(throwable);
-            })
-            .firstElement()
-            .subscribeOn(Schedulers.io())
-            .toSingle();
+                .subscribeOn(Schedulers.io());
+        } else {
+            return imageLocalDataSource
+                .getImageSearchList(request)
+                .map(simpleImageInfoList -> {
+                    if(CollectionUtil.isEmpty(simpleImageInfoList)) {
+                        return null;
+                    } else {
+                        return ImageInfoConverter.toImageSearchResult(request, simpleImageInfoList);
+                    }
+                })
+                .onErrorResumeNext(throwable -> {
+                    if(throwable instanceof NullPointerException) {
+                        ImageSearchError imageSearchError = ImageSearchError.NETWORK_NOT_CONNECTING_ERROR;
+                        String errorMessage = imageSearchError.toString();
+                        return Single.error(new ImageSearchException(errorMessage, imageSearchError));
+                    } else {
+                        String errorMessage = throwable.getMessage();
+                        ImageSearchError imageSearchError = ImageSearchError.UNKNOWN_ERROR;
+                        return Single.error(new ImageSearchException(errorMessage, imageSearchError));
+                    }
+                })
+                .subscribeOn(Schedulers.io());
+        }
     }
 
     @NonNull

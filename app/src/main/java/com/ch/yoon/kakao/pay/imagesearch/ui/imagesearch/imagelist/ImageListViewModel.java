@@ -141,39 +141,29 @@ public class ImageListViewModel extends BaseViewModel {
     private void handlingReceivedResponse(ImageSearchResult imageSearchResult) {
         changeImageSearchState(ImageSearchState.SUCCESS);
 
-        updateMetaInfo(imageSearchResult.getRequestMeta());
-        updateImageInfoList(imageSearchResult.getSimpleImageInfoList());
-    }
-
-    private void updateMetaInfo(RequestMeta requestMeta) {
-        this.requestMeta = requestMeta;
-    }
-
-    private void updateImageInfoList(List<SimpleImageInfo> newSimpleImageInfoList) {
-        List<SimpleImageInfo> simpleImageInfoList = imageInfoListLiveData.getValue();
-        if(simpleImageInfoList != null) {
-            simpleImageInfoList.addAll(newSimpleImageInfoList);
+        List<SimpleImageInfo> oldList = imageInfoListLiveData.getValue();
+        List<SimpleImageInfo> newList = imageSearchResult.getSimpleImageInfoList();
+        if(CollectionUtil.isEmpty(oldList)) {
+            oldList = newList;
         } else {
-            simpleImageInfoList = newSimpleImageInfoList;
+            oldList.addAll(newList);
         }
 
-        imageInfoListLiveData.setValue(simpleImageInfoList);
+        requestMeta = imageSearchResult.getRequestMeta();
+        if(CollectionUtil.isEmpty(oldList)) {
+            updateMessage(R.string.success_image_search_no_result);
+        } else if(requestMeta.isLastData()){
+            updateMessage(R.string.success_image_search_last_data);
+        }
+
+        imageInfoListLiveData.setValue(oldList);
     }
 
     private void handlingError(Throwable throwable) {
         if(throwable instanceof ImageSearchException) {
             final ImageSearchError error = ((ImageSearchException)throwable).getImageSearchError();
-            if(error == ImageSearchError.NO_RESULT_ERROR) {
-                final List<SimpleImageInfo> previousImageDocumentList = imageInfoListLiveData.getValue();
-                if(CollectionUtil.isEmpty(previousImageDocumentList)) {
-                    updateMessage(R.string.error_image_search_wrong_request);
-                } else {
-                    updateMessage(R.string.success_image_search_last_data);
-                }
-            } else {
-                changeImageSearchState(ImageSearchState.FAIL);
-                updateMessage(error.getErrorMessageResourceId());
-            }
+            changeImageSearchState(ImageSearchState.FAIL);
+            updateMessage(error.getErrorMessageResourceId());
         }
 
         Log.d(TAG, throwable.getMessage());
