@@ -23,9 +23,9 @@
 - 개발언어는 Java나 Kotlin으로 선택 -> **(Java 선택)**
 
 ### 추가 기능 구현
-- Grid 사이즈 변경
+- Grid 사이즈 변경 가능하도록 구현
 - Preload 구현
-- Disk Cache 구현    
+- Disk Cache 구현
 - 최근 검색 기록 구현
 - Network 장애 시, RecyclerView 하단에 존재하는 FooterView를 통해 재시도 요청 구현
 
