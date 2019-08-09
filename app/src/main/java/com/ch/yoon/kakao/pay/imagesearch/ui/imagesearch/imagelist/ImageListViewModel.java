@@ -45,8 +45,9 @@ public class ImageListViewModel extends BaseViewModel {
     private final MutableLiveData<Integer> countOfItemInLineLiveData = new MutableLiveData<>();
     @NonNull
     private final MutableLiveData<List<SimpleImageInfo>> imageInfoListLiveData = new MutableLiveData<>();
+
     @NonNull
-    private final SingleLiveEvent<String> messageLiveEvent = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> showMessageLiveEvent = new SingleLiveEvent<>();
     @NonNull
     private final SingleLiveEvent<ImageSearchState> imageSearchStateLiveEvent = new SingleLiveEvent<>();
 
@@ -80,8 +81,8 @@ public class ImageListViewModel extends BaseViewModel {
     }
 
     @NonNull
-    public SingleLiveEvent<String> observeMessage() {
-        return messageLiveEvent;
+    public SingleLiveEvent<String> observeShowMessage() {
+        return showMessageLiveEvent;
     }
 
     @NonNull
@@ -171,7 +172,7 @@ public class ImageListViewModel extends BaseViewModel {
 
     private void updateMessage(@StringRes int stringResourceId) {
         final String message = getString(stringResourceId);
-        messageLiveEvent.setValue(message);
+        showMessageLiveEvent.setValue(message);
     }
 
     private boolean remainingMoreData() {

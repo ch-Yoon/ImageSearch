@@ -3,7 +3,6 @@ package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.widget.TextView;
 
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -125,7 +124,7 @@ public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding
 
     private void observeImageListViewModel() {
         binding.getImageListViewModel()
-            .observeMessage()
+            .observeShowMessage()
             .observe(this, this::showToast);
     }
 

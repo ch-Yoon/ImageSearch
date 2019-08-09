@@ -92,7 +92,7 @@ public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding
 
     private void observeImageDetailViewModel() {
         binding.getImageDetailViewModel()
-            .observeErrorMessage()
+            .observeShowMessage()
             .observe(this, this::showToast);
 
         binding.getImageDetailViewModel()

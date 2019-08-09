@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.SearchLog;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.adapter.SearchHistoryAdapter;
+import com.ch.yoon.kakao.pay.imagesearch.utils.BooleanUtil;
 import com.ch.yoon.kakao.pay.imagesearch.utils.KeyboardUtil;
 
 import java.util.ArrayList;
@@ -30,8 +31,8 @@ public class SearchBoxBindingAdapter {
     }
 
     @BindingAdapter("hideKeyboard")
-    public static void hideKeyboard(@NonNull EditText editText, boolean isFocus) {
-        if(!isFocus) {
+    public static void hideKeyboard(@NonNull EditText editText, @Nullable Boolean isFocus) {
+        if(BooleanUtil.isFalse(isFocus)) {
             KeyboardUtil.hideKeyboard(editText);
         }
     }

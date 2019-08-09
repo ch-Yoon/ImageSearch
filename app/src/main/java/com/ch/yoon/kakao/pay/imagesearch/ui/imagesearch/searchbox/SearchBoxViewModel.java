@@ -13,7 +13,6 @@ import com.ch.yoon.kakao.pay.imagesearch.extentions.SingleLiveEvent;
 import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepository;
 import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.SearchLog;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel;
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.ImageListViewModel;
 import com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil;
 
 import java.util.ArrayList;
@@ -36,7 +35,7 @@ public class SearchBoxViewModel extends BaseViewModel {
     @NonNull
     private MutableLiveData<List<SearchLog>> searchLogListLiveData = new MutableLiveData<>();
     @NonNull
-    private MutableLiveData<Boolean> searchBoxFocusData = new MutableLiveData<>();
+    private MutableLiveData<Boolean> searchBoxFocusLiveData = new MutableLiveData<>();
 
     @NonNull
     private SingleLiveEvent<String> searchKeywordLiveEvent = new SingleLiveEvent<>();
@@ -54,7 +53,7 @@ public class SearchBoxViewModel extends BaseViewModel {
     }
 
     private void init() {
-        searchBoxFocusData.setValue(false);
+        searchBoxFocusLiveData.setValue(false);
     }
 
     @NonNull
@@ -64,7 +63,7 @@ public class SearchBoxViewModel extends BaseViewModel {
 
     @NonNull
     public LiveData<Boolean> observeSearchBoxFocus() {
-        return searchBoxFocusData;
+        return searchBoxFocusLiveData;
     }
 
     @NonNull
@@ -98,12 +97,12 @@ public class SearchBoxViewModel extends BaseViewModel {
     }
 
     public void clickBackground() {
-        searchBoxFocusData.setValue(false);
+        searchBoxFocusLiveData.setValue(false);
     }
 
     public void clickBackPress() {
         if(isSearchBoxFocus()) {
-            searchBoxFocusData.setValue(false);
+            searchBoxFocusLiveData.setValue(false);
         } else {
             searchBoxFinishEvent.call();
         }
@@ -115,7 +114,7 @@ public class SearchBoxViewModel extends BaseViewModel {
             showMessageLiveEvent.setValue(emptyKeywordMessage);
         } else {
             searchKeywordLiveEvent.setValue(keyword);
-            searchBoxFocusData.setValue(false);
+            searchBoxFocusLiveData.setValue(false);
 
             registerDisposable(
                 imageRepository.updateSearchLog(keyword)
@@ -141,7 +140,7 @@ public class SearchBoxViewModel extends BaseViewModel {
         }
 
         if(isSearchBoxNotFocus()) {
-            searchBoxFocusData.setValue(true);
+            searchBoxFocusLiveData.setValue(true);
         }
     }
 
@@ -150,7 +149,7 @@ public class SearchBoxViewModel extends BaseViewModel {
             Collections.sort(searchLogList);
             searchLogListLiveData.setValue(searchLogList);
             if(isSearchBoxNotFocus()) {
-                searchBoxFocusData.setValue(true);
+                searchBoxFocusLiveData.setValue(true);
             }
         }
     }
@@ -205,7 +204,7 @@ public class SearchBoxViewModel extends BaseViewModel {
     }
 
     private boolean isSearchBoxFocus() {
-        Boolean viewVisible = searchBoxFocusData.getValue();
+        Boolean viewVisible = searchBoxFocusLiveData.getValue();
         return viewVisible != null && viewVisible;
     }
 

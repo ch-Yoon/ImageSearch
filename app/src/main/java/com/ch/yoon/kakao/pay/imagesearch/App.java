@@ -1,18 +1,17 @@
 package com.ch.yoon.kakao.pay.imagesearch;
 
 import android.app.Application;
-import android.content.Context;
 
 public class App extends Application {
 
-    private static volatile App instance = null;
+    private static volatile App INSTANCE = null;
 
     public static App getAppContext() {
-        if(instance == null) {
+        if(INSTANCE == null) {
             throw new IllegalStateException("this application does not extends Application.class");
         }
 
-        return instance;
+        return INSTANCE;
     }
 
 
@@ -20,19 +19,14 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
 
-        instance = this;
-    }
-
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
+        INSTANCE = this;
     }
 
     @Override
     public void onTerminate() {
         super.onTerminate();
 
-        instance = null;
+        INSTANCE = null;
     }
 
 }

@@ -32,7 +32,7 @@ public class ImageDetailViewModel extends BaseViewModel {
     @NonNull
     private final SingleLiveEvent<String> docUrlSingleLiveEvent = new SingleLiveEvent<>();
     @NonNull
-    private final SingleLiveEvent<String> messageLiveEvent = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> showMessageLiveEvent = new SingleLiveEvent<>();
 
     @Nullable
     private DetailImageInfo detailImageInfo;
@@ -54,8 +54,8 @@ public class ImageDetailViewModel extends BaseViewModel {
     }
 
     @NonNull
-    public LiveData<String> observeErrorMessage() {
-        return messageLiveEvent;
+    public LiveData<String> observeShowMessage() {
+        return showMessageLiveEvent;
     }
 
     public void loadImage(@NonNull String uniqueImageInfo) {
