@@ -45,11 +45,11 @@ public class ImageListViewModel extends BaseViewModel {
     private final MutableLiveData<Integer> countOfItemInLineLiveData = new MutableLiveData<>();
     @NonNull
     private final MutableLiveData<List<SimpleImageInfo>> imageInfoListLiveData = new MutableLiveData<>();
+    @NonNull
+    private final MutableLiveData<ImageSearchState> imageSearchStateLiveData = new MutableLiveData<>();
 
     @NonNull
     private final SingleLiveEvent<String> showMessageLiveEvent = new SingleLiveEvent<>();
-    @NonNull
-    private final SingleLiveEvent<ImageSearchState> imageSearchStateLiveEvent = new SingleLiveEvent<>();
 
     @Nullable
     private RequestMeta requestMeta;
@@ -66,7 +66,7 @@ public class ImageListViewModel extends BaseViewModel {
 
     private void init() {
         countOfItemInLineLiveData.setValue(DEFAULT_COUNT_OF_ITEM_IN_LINE);
-        imageSearchStateLiveEvent.setValue(ImageSearchState.NONE);
+        imageSearchStateLiveData.setValue(ImageSearchState.NONE);
         observeImageSearchApprove();
     }
 
@@ -81,13 +81,13 @@ public class ImageListViewModel extends BaseViewModel {
     }
 
     @NonNull
-    public SingleLiveEvent<String> observeShowMessage() {
+    public LiveData<String> observeShowMessage() {
         return showMessageLiveEvent;
     }
 
     @NonNull
-    public SingleLiveEvent<ImageSearchState> observeImageSearchState() {
-        return imageSearchStateLiveEvent;
+    public LiveData<ImageSearchState> observeImageSearchState() {
+        return imageSearchStateLiveData;
     }
 
     public void changeCountOfItemInLine(int countOfItemInLine) {
@@ -180,9 +180,9 @@ public class ImageListViewModel extends BaseViewModel {
     }
 
     private void changeImageSearchState(ImageSearchState imageSearchState) {
-        ImageSearchState previousImageSearchState = imageSearchStateLiveEvent.getValue();
+        ImageSearchState previousImageSearchState = imageSearchStateLiveData.getValue();
         if(previousImageSearchState != imageSearchState) {
-            imageSearchStateLiveEvent.setValue(imageSearchState);
+            imageSearchStateLiveData.setValue(imageSearchState);
         }
     }
 

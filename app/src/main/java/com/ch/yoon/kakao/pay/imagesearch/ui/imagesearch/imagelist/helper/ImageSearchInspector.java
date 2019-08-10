@@ -22,6 +22,8 @@ public class ImageSearchInspector {
 
     @Nullable
     private OnImageSearchApproveListener onImageSearchApproveListener;
+    @Nullable
+    private OnImageSearchRejectListener onImageSearchRejectListener;
 
     public ImageSearchInspector(int startPageNumber,
                                 int maxPageNumber,
@@ -37,6 +39,12 @@ public class ImageSearchInspector {
         onImageSearchApproveListener = approveListener;
     }
 
+    public void observeImageSearchApprove(@Nullable OnImageSearchApproveListener approveListener,
+                                          @Nullable OnImageSearchRejectListener rejectListener) {
+        onImageSearchApproveListener = approveListener;
+        onImageSearchRejectListener = rejectListener;
+    }
+
     public void submitFirstImageSearchRequest(@NonNull String keyword,
                                               @NonNull ImageSortType imageSortType) {
         approveFirstImageSearch(keyword, imageSortType);
@@ -48,6 +56,8 @@ public class ImageSearchInspector {
                                      int countOfItemInLine) {
         if(isPreloadPossible(displayPosition, dataTotalSize, countOfItemInLine)) {
             approvePreload(imageSortType, dataTotalSize);
+        } else {
+            rejectImageSearch();
         }
     }
 
@@ -110,6 +120,12 @@ public class ImageSearchInspector {
                     REQUIRED_DATA_SIZE
                 )
             );
+        }
+    }
+
+    private void rejectImageSearch() {
+        if(onImageSearchRejectListener != null) {
+            onImageSearchRejectListener.onReject();
         }
     }
 
