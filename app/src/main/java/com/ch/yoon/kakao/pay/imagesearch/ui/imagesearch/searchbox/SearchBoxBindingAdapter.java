@@ -8,7 +8,7 @@ import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.SearchLog;
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.adapter.SearchHistoryAdapter;
+import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.adapter.SearchLogAdapter;
 import com.ch.yoon.kakao.pay.imagesearch.utils.BooleanUtil;
 import com.ch.yoon.kakao.pay.imagesearch.utils.KeyboardUtil;
 
@@ -24,7 +24,7 @@ public class SearchBoxBindingAdapter {
     @BindingAdapter("searchLogList")
     public static void setItems(@NonNull RecyclerView recyclerView,
                                 @Nullable List<SearchLog> searchLogList) {
-        final SearchHistoryAdapter adapter = ((SearchHistoryAdapter)recyclerView.getAdapter());
+        final SearchLogAdapter adapter = ((SearchLogAdapter)recyclerView.getAdapter());
         if(adapter != null) {
             adapter.submitList(searchLogList == null ? null : new ArrayList<>(searchLogList));
         }

@@ -4,7 +4,7 @@ import android.app.Application;
 
 public class App extends Application {
 
-    private static volatile App INSTANCE = null;
+    private static App INSTANCE = null;
 
     public static App getAppContext() {
         if(INSTANCE == null) {
