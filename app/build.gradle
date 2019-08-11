@@ -41,6 +41,14 @@ dependencies {
     androidTestImplementation "androidx.test:runner:$runner_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"
 
+    // testing
+    testImplementation "android.arch.core:core-testing:1.1.1"
+    testImplementation "org.mockito:mockito-core:2.23.0"
+    testImplementation "org.powermock:powermock-module-junit4:2.0.2"
+    testImplementation "org.powermock:powermock-api-mockito2:2.0.2"
+
+//    androidTestCompile "org.mockito:mockito-android:$mockito_version"
+
     // recyclerView
     implementation "androidx.recyclerview:recyclerview:$recycler_view_version"
 
@@ -58,7 +66,7 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:$glide_version"
     annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
 
-    // viweModel and liveData
+    // viewModel and liveData
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
 
     // room
