@@ -72,7 +72,7 @@ public class ImageRepositoryImplTest {
     @After
     public void clear() {
         compositeDisposable.clear();
-        ImageRepositoryImpl.destoryInstanceForTesting();
+        ImageRepositoryImpl.destroyInstanceForTesting();
     }
 
     private void initImageRepository() {

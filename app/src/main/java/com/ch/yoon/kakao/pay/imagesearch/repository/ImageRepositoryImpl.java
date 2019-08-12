@@ -48,7 +48,7 @@ public class ImageRepositoryImpl implements ImageRepository {
     }
 
     @VisibleForTesting
-    static void destoryInstanceForTesting() {
+    static void destroyInstanceForTesting() {
         INSTANCE = null;
     }
 
