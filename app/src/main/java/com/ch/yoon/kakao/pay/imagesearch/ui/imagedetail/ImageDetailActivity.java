@@ -41,11 +41,10 @@ public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding
         super.onCreate(savedInstanceState);
         binding = binding(R.layout.activity_image_detail);
 
-        String uniqueImageInfo = getIntent().getStringExtra(EXTRA_IMAGE_UNIQUE_INFO_KEY);
-        checkPassedInfo(uniqueImageInfo);
+        String id = getIntent().getStringExtra(EXTRA_IMAGE_UNIQUE_INFO_KEY);
 
         initBackArrow();
-        initImageDetailViewModel(uniqueImageInfo);
+        initImageDetailViewModel(id);
         observeImageDetailViewModel();
     }
 
@@ -57,13 +56,6 @@ public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding
             return true;
         } else {
             return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void checkPassedInfo(String uniqueImageInfo) {
-        if(uniqueImageInfo == null) {
-            showToast(R.string.error_unknown_error);
-            finish();
         }
     }
 
@@ -92,7 +84,7 @@ public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding
 
     private void observeImageDetailViewModel() {
         binding.getImageDetailViewModel()
-            .observeErrorMessage()
+            .observeShowMessage()
             .observe(this, this::showToast);
 
         binding.getImageDetailViewModel()
@@ -102,6 +94,15 @@ public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding
                 Intent movieWebIntent = new Intent(Intent.ACTION_VIEW, webUri);
                 startActivity(movieWebIntent);
             });
+
+        binding.getImageDetailViewModel()
+            .observeFinishEvent()
+            .observe(this, aVoid -> finish());
+    }
+
+    @Override
+    public void onBackPressed() {
+        binding.getImageDetailViewModel().onClickBackPress();
     }
 
 }

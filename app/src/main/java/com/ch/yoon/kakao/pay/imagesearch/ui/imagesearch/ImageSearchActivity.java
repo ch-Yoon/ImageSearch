@@ -3,7 +3,6 @@ package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.widget.TextView;
 
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -23,7 +22,7 @@ import com.ch.yoon.kakao.pay.imagesearch.ui.imagedetail.ImageDetailActivity;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.ImageListViewModel;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.ImageListViewModelFactory;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.adapter.ImageListAdapter;
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.adapter.SearchHistoryAdapter;
+import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.adapter.SearchLogAdapter;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.helper.ImageSearchInspector;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewModel;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewModelFactory;
@@ -96,7 +95,7 @@ public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         binding.searchLogRecyclerView.setLayoutManager(linearLayoutManager);
 
-        final SearchHistoryAdapter adapter = new SearchHistoryAdapter();
+        final SearchLogAdapter adapter = new SearchLogAdapter();
         adapter.setOnSearchLogClickListener((searchLog, position) ->
             binding.getSearchBoxViewModel().clickSearchButton(searchLog.getKeyword())
         );
@@ -125,7 +124,7 @@ public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding
 
     private void observeImageListViewModel() {
         binding.getImageListViewModel()
-            .observeMessage()
+            .observeShowMessage()
             .observe(this, this::showToast);
     }
 

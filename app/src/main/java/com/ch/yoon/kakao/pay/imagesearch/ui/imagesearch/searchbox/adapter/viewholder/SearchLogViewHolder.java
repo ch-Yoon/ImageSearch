@@ -18,11 +18,11 @@ import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.adapter.OnSear
  * Creator : ch-yoon
  * Date : 2019-08-04.
  */
-public class SearchHistoryViewHolder extends RecyclerView.ViewHolder {
+public class SearchLogViewHolder extends RecyclerView.ViewHolder {
 
     private ItemSearchHistoryBinding binding;
 
-    public SearchHistoryViewHolder(@NonNull View itemView) {
+    public SearchLogViewHolder(@NonNull View itemView) {
         super(itemView);
         binding = DataBindingUtil.bind(itemView);
     }

@@ -29,16 +29,19 @@ public class ImageDetailViewModel extends BaseViewModel {
 
     @NonNull
     private final MutableLiveData<String> imageUrlLiveData = new MutableLiveData<>();
+
     @NonNull
-    private final SingleLiveEvent<String> docUrlSingleLiveEvent = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> docUrlLiveEvent = new SingleLiveEvent<>();
     @NonNull
-    private final SingleLiveEvent<String> messageLiveEvent = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> showMessageLiveEvent = new SingleLiveEvent<>();
+    @NonNull
+    private final SingleLiveEvent<Void> finishEvent = new SingleLiveEvent<>();
 
     @Nullable
     private DetailImageInfo detailImageInfo;
 
     ImageDetailViewModel(@NonNull Application application,
-                                @NonNull ImageRepository imageRepository) {
+                         @NonNull ImageRepository imageRepository) {
         super(application);
         this.imageRepository = imageRepository;
     }
@@ -50,23 +53,52 @@ public class ImageDetailViewModel extends BaseViewModel {
 
     @NonNull
     public LiveData<String> observeMoveWebEvent() {
-        return docUrlSingleLiveEvent;
+        return docUrlLiveEvent;
     }
 
     @NonNull
-    public LiveData<String> observeErrorMessage() {
-        return messageLiveEvent;
+    public LiveData<String> observeShowMessage() {
+        return showMessageLiveEvent;
     }
 
-    public void loadImage(@NonNull String uniqueImageInfo) {
-        registerDisposable(
-            imageRepository.requestImageDetailInfo(uniqueImageInfo)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    this::updateImageDetailInfo,
-                    throwable -> Log.d(TAG, throwable.getMessage())
-                )
-        );
+    @NonNull
+    public LiveData<Void> observeFinishEvent() {
+        return finishEvent;
+    }
+
+    public void loadImage(@Nullable String id) {
+        if(id != null) {
+            registerDisposable(
+                imageRepository.requestImageDetailInfo(id)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                        this::updateImageDetailInfo,
+                        throwable -> {
+                            handlingUnknownError();
+                            Log.d(TAG, throwable.getMessage());
+                        }
+                    )
+            );
+        } else {
+            handlingUnknownError();
+        }
+    }
+
+    public void onClickWebButton() {
+        if(detailImageInfo != null) {
+            final String docUrl = detailImageInfo.getDocUrl();
+            if(docUrl != null) {
+                docUrlLiveEvent.setValue(docUrl);
+            } else {
+                showMessageLiveEvent.setValue(getString(R.string.error_nonexistent_url));
+            }
+        } else {
+            handlingUnknownError();
+        }
+    }
+
+    public void onClickBackPress() {
+        finishEvent.call();
     }
 
     private void updateImageDetailInfo(DetailImageInfo detailImageInfo) {
@@ -74,13 +106,9 @@ public class ImageDetailViewModel extends BaseViewModel {
         imageUrlLiveData.setValue(detailImageInfo.getImageUrl());
     }
 
-    public void onClickWebButton() {
-        if(detailImageInfo != null) {
-            final String docUrl = detailImageInfo.getDocUrl();
-            docUrlSingleLiveEvent.setValue(docUrl);
-        } else {
-            docUrlSingleLiveEvent.setValue(getString(R.string.error_unknown_error));
-        }
+    private void handlingUnknownError() {
+        showMessageLiveEvent.setValue(getString(R.string.error_unknown_error));
+        finishEvent.call();
     }
 
 }

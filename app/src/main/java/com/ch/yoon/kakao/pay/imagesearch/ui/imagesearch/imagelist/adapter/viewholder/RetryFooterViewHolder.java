@@ -1,5 +1,6 @@
 package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.adapter.viewholder;
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -29,6 +30,7 @@ public class RetryFooterViewHolder extends RecyclerView.ViewHolder {
 
     public void setOnFooterItemClickListener(@Nullable OnRetryItemClickListener onRetryItemClickListener) {
         binding.retryButton.setOnClickListener(v -> {
+            binding.retryButton.setVisibility(View.INVISIBLE);
             if(onRetryItemClickListener != null) {
                 onRetryItemClickListener.onClick();
             }

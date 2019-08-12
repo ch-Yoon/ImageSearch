@@ -2,6 +2,8 @@ package com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request;
 
 import androidx.annotation.NonNull;
 
+import java.util.Objects;
+
 /**
  * Creator : ch-yoon
  * Date : 2019-08-01.
@@ -54,4 +56,19 @@ public final class ImageSearchRequest {
             ", requiredSize=" + requiredSize + "}";
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ImageSearchRequest that = (ImageSearchRequest) o;
+        return pageNumber == that.pageNumber &&
+                requiredSize == that.requiredSize &&
+                keyword.equals(that.keyword) &&
+                imageSortType == that.imageSortType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(keyword, imageSortType, pageNumber, requiredSize);
+    }
 }

@@ -1,6 +1,7 @@
 package com.ch.yoon.kakao.pay.imagesearch.repository.local.room;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 
 import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.dao.ImageSearchDao;
 import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.LocalImageDocument;
@@ -30,6 +31,11 @@ public class ImageLocalDataSource {
         }
 
         return INSTANCE;
+    }
+
+    @VisibleForTesting
+    static void destroyInstanceForTesting() {
+        INSTANCE = null;
     }
 
     private ImageLocalDataSource(@NonNull ImageSearchDao imageSearchDao) {

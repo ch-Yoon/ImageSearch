@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
  * Creator : ch-yoon
  * Date : 2019-08-03.
  */
-final class ApproveRequestLog {
+public final class ApproveRequestLog {
 
     @NonNull
     private String keyword = "";

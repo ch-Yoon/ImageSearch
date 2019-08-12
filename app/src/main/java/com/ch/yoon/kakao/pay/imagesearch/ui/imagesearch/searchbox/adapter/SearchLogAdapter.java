@@ -11,14 +11,14 @@ import androidx.recyclerview.widget.ListAdapter;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.SearchLog;
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.adapter.viewholder.SearchHistoryViewHolder;
+import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.adapter.viewholder.SearchLogViewHolder;
 
 
 /**
  * Creator : ch-yoon
  * Date : 2019-08-02.
  */
-public class SearchHistoryAdapter extends ListAdapter<SearchLog, SearchHistoryViewHolder> {
+public class SearchLogAdapter extends ListAdapter<SearchLog, SearchLogViewHolder> {
 
     @Nullable
     private OnSearchLogClickListener onSearchLogClickListener;
@@ -26,25 +26,25 @@ public class SearchHistoryAdapter extends ListAdapter<SearchLog, SearchHistoryVi
     @Nullable
     private OnLogDeleteClickListener onLogDeleteClickListener;
 
-    public SearchHistoryAdapter() {
+    public SearchLogAdapter() {
         super(DiffCallback);
     }
 
     @NonNull
     @Override
-    public SearchHistoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public SearchLogViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         final LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         final View itemView = inflater.inflate(R.layout.item_search_history, parent, false);
-        SearchHistoryViewHolder viewHolder = new SearchHistoryViewHolder(itemView);
+        SearchLogViewHolder viewHolder = new SearchLogViewHolder(itemView);
 
         viewHolder.setOnSearchLogClickListener(onSearchLogClickListener);
         viewHolder.setOnLogDeleteClickListener(onLogDeleteClickListener);
 
-        return new SearchHistoryViewHolder(itemView);
+        return new SearchLogViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SearchHistoryViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SearchLogViewHolder holder, int position) {
         holder.setSearchLog(getItem(position));
     }
 
@@ -65,7 +65,7 @@ public class SearchHistoryAdapter extends ListAdapter<SearchLog, SearchHistoryVi
 
         @Override
         public boolean areContentsTheSame(@NonNull SearchLog oldItem, @NonNull SearchLog newItem) {
-            return oldItem.getKeyword().equals(newItem.getKeyword());
+            return oldItem.equals(newItem);
         }
 
     };
