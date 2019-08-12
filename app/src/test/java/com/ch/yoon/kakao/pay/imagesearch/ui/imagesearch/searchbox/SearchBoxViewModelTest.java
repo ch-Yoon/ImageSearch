@@ -33,7 +33,6 @@ import io.reactivex.Single;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
@@ -254,13 +253,15 @@ public class SearchBoxViewModelTest {
     @Test
     public void 키워드_삭제_버튼_클릭시_레파지토리에_삭제_요청을_하는지_테스트() {
         // given
-        when(mockImageRepository.deleteAllByKeyword("테스트")).thenReturn(Completable.complete());
+        when(mockImageRepository.deleteAllByKeyword("테스트"))
+            .thenReturn(Completable.complete());
 
         // when
         searchBoxViewModel.clickKeywordDeleteButton("테스트");
 
         // then
-        verify(mockImageRepository, times(1)).deleteAllByKeyword("테스트");
+        verify(mockImageRepository, times(1))
+            .deleteAllByKeyword("테스트");
     }
 
     @Test
@@ -272,7 +273,9 @@ public class SearchBoxViewModelTest {
         expectedList.remove(0);
 
         when(mockImageRepository.requestSearchLogList()).thenReturn(Single.just(searchLogList));
-        when(mockImageRepository.deleteAllByKeyword(any(String.class))).thenReturn(Completable.complete());
+
+        when(mockImageRepository.deleteAllByKeyword(any(String.class)))
+            .thenReturn(Completable.complete());
 
         // when
         searchBoxViewModel.clickSearchBox();
@@ -285,8 +288,11 @@ public class SearchBoxViewModelTest {
     @Test
     public void 키워드_검색_버튼_클릭시_검색기록_가장_앞쪽에_삽입되는지_테스트() {
         // given
-        when(mockImageRepository.requestSearchLogList()).thenReturn(Single.just(createVirtualSearchLogList(3)));
-        when(mockImageRepository.updateSearchLog("테스트3")).thenReturn(Single.just(new SearchLog("테스트3", 3)));
+        when(mockImageRepository.requestSearchLogList())
+            .thenReturn(Single.just(createVirtualSearchLogList(3)));
+
+        when(mockImageRepository.updateSearchLog("테스트3"))
+            .thenReturn(Single.just(new SearchLog("테스트3", 3)));
 
         // when
         searchBoxViewModel.clickSearchBox();
@@ -308,8 +314,11 @@ public class SearchBoxViewModelTest {
     @Test
     public void 키워드_검색_버튼_클릭시_기존에_검색했던_키워드라면_목록의_가장_앞쪽으로_이동시키는지_테스트() {
         // given
-        when(mockImageRepository.requestSearchLogList()).thenReturn(Single.just(createVirtualSearchLogList(3)));
-        when(mockImageRepository.updateSearchLog("테스트0")).thenReturn(Single.just(new SearchLog("테스트0", 4)));
+        when(mockImageRepository.requestSearchLogList())
+            .thenReturn(Single.just(createVirtualSearchLogList(3)));
+
+        when(mockImageRepository.updateSearchLog("테스트0"))
+            .thenReturn(Single.just(new SearchLog("테스트0", 4)));
 
         // when
         searchBoxViewModel.clickSearchBox();
@@ -336,5 +345,5 @@ public class SearchBoxViewModelTest {
 
         return searchLogList;
     }
- 
+
 }

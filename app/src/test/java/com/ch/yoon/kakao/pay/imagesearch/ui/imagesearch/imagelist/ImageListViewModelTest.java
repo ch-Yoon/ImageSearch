@@ -99,11 +99,20 @@ public class ImageListViewModelTest {
     }
 
     private void initImageSearchInspector() {
-        imageSearchInspector = new ImageSearchInspector(START_PAGE_NUMBER, LAST_PAGE_NUMBER, REQUIRED_DATA_SIZE, PRELOAD_ALLOW_LINE_MUTLPLE);
+        imageSearchInspector = new ImageSearchInspector(
+            START_PAGE_NUMBER,
+            LAST_PAGE_NUMBER,
+            REQUIRED_DATA_SIZE,
+            PRELOAD_ALLOW_LINE_MUTLPLE
+        );
     }
 
     private void initImageListViewModel() {
-        imageListViewModel = new ImageListViewModel(mockApplication, mockImageRepository, imageSearchInspector);
+        imageListViewModel = new ImageListViewModel(
+            mockApplication,
+            mockImageRepository,
+            imageSearchInspector
+        );
     }
 
     private void initUtils() {
@@ -259,7 +268,8 @@ public class ImageListViewModelTest {
         imageListViewModel.loadMoreImageListIfPossible(dataSize - 3);
 
         // then
-        verify(mockImageRepository, times(1)).requestImageList(any(ImageSearchRequest.class));
+        verify(mockImageRepository, times(1))
+            .requestImageList(any(ImageSearchRequest.class));
     }
 
     @Test
@@ -277,7 +287,8 @@ public class ImageListViewModelTest {
         imageListViewModel.retryLoadMoreImageList();
 
         //then
-        verify(mockImageRepository, times(2)).requestImageList(any(ImageSearchRequest.class));
+        verify(mockImageRepository, times(2))
+            .requestImageList(any(ImageSearchRequest.class));
     }
 
     private ImageSearchResult createEmptyImageSearchResult(ImageSearchRequest imageSearchRequest) {
@@ -290,7 +301,8 @@ public class ImageListViewModelTest {
         return new ImageSearchResult(resultMeta, simpleImageInfoList);
     }
 
-    private ImageSearchResult createVirtualImageSearchResult(ImageSearchRequest imageSearchRequest, boolean isLastData) {
+    private ImageSearchResult createVirtualImageSearchResult(ImageSearchRequest imageSearchRequest,
+                                                             boolean isLastData) {
         String keyword = imageSearchRequest.getKeyword();
         ImageSortType imageSortType = imageSearchRequest.getImageSortType();
         int pageNumber = imageSearchRequest.getPageNumber();
