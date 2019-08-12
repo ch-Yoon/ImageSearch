@@ -16,7 +16,7 @@ import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.Im
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.ImageSortType;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageSearchResult;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.SimpleImageInfo;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.RequestMeta;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ResultMeta;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.error.ImageSearchError;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.error.ImageSearchException;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel;
@@ -52,7 +52,7 @@ public class ImageListViewModel extends BaseViewModel {
     private final SingleLiveEvent<String> showMessageLiveEvent = new SingleLiveEvent<>();
 
     @Nullable
-    private RequestMeta requestMeta;
+    private ResultMeta resultMeta;
 
     ImageListViewModel(@NonNull Application application,
                        @NonNull ImageRepository imageRepository,
@@ -99,7 +99,6 @@ public class ImageListViewModel extends BaseViewModel {
         imageSearchInspector.submitFirstImageSearchRequest(keyword, DEFAULT_IMAGE_SORT_TYPE);
     }
 
-
     public void retryLoadMoreImageList() {
         imageSearchInspector.submitRetryRequest(DEFAULT_IMAGE_SORT_TYPE);
     }
@@ -132,6 +131,8 @@ public class ImageListViewModel extends BaseViewModel {
     }
 
     private void requestImageSearchToRepository(ImageSearchRequest imageSearchRequest) {
+        changeImageSearchState(ImageSearchState.NONE);
+
         registerDisposable(
             imageRepository.requestImageList(imageSearchRequest)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -150,10 +151,10 @@ public class ImageListViewModel extends BaseViewModel {
             oldList.addAll(newList);
         }
 
-        requestMeta = imageSearchResult.getRequestMeta();
+        resultMeta = imageSearchResult.getResultMeta();
         if(CollectionUtil.isEmpty(oldList)) {
             updateMessage(R.string.success_image_search_no_result);
-        } else if(requestMeta.isLastData()){
+        } else if(resultMeta.isLastData()){
             updateMessage(R.string.success_image_search_last_data);
         }
 
@@ -161,9 +162,10 @@ public class ImageListViewModel extends BaseViewModel {
     }
 
     private void handlingError(Throwable throwable) {
+        changeImageSearchState(ImageSearchState.FAIL);
+
         if(throwable instanceof ImageSearchException) {
             final ImageSearchError error = ((ImageSearchException)throwable).getImageSearchError();
-            changeImageSearchState(ImageSearchState.FAIL);
             updateMessage(error.getErrorMessageResourceId());
         }
 
@@ -176,7 +178,7 @@ public class ImageListViewModel extends BaseViewModel {
     }
 
     private boolean remainingMoreData() {
-        return requestMeta == null || !requestMeta.isLastData();
+        return resultMeta == null || ! resultMeta.isLastData();
     }
 
     private void changeImageSearchState(ImageSearchState imageSearchState) {

@@ -8,7 +8,7 @@ import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.Im
  * Creator : ch-yoon
  * Date : 2019-08-06.
  */
-public class RequestMeta {
+public class ResultMeta {
 
     private final boolean isLastData;
 
@@ -18,9 +18,9 @@ public class RequestMeta {
     @NonNull
     private final ImageSortType imageSortType;
 
-    public RequestMeta(boolean isLastData,
-                       @NonNull String keyword,
-                       @NonNull ImageSortType imageSortType) {
+    public ResultMeta(boolean isLastData,
+                      @NonNull String keyword,
+                      @NonNull ImageSortType imageSortType) {
         this.isLastData = isLastData;
         this.keyword = keyword;
         this.imageSortType = imageSortType;
@@ -42,7 +42,7 @@ public class RequestMeta {
 
     @Override
     public String toString() {
-        return "RequestMeta{" +
+        return "ResultMeta{" +
             "isLastData=" + isLastData +
             ", keyword='" + keyword + '\'' +
             ", imageSortType=" + imageSortType +

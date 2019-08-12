@@ -11,20 +11,20 @@ import java.util.List;
 public class ImageSearchResult {
 
     @NonNull
-    private final RequestMeta requestMeta;
+    private final ResultMeta resultMeta;
 
     @NonNull
     private final List<SimpleImageInfo> simpleImageInfoList;
 
-    public ImageSearchResult(@NonNull RequestMeta requestMeta,
+    public ImageSearchResult(@NonNull ResultMeta resultMeta,
                              @NonNull List<SimpleImageInfo> simpleImageInfoList) {
-        this.requestMeta = requestMeta;
+        this.resultMeta = resultMeta;
         this.simpleImageInfoList = simpleImageInfoList;
     }
 
     @NonNull
-    public RequestMeta getRequestMeta() {
-        return requestMeta;
+    public ResultMeta getResultMeta() {
+        return resultMeta;
     }
 
     @NonNull
@@ -36,7 +36,7 @@ public class ImageSearchResult {
     @Override
     public String toString() {
         return "ImageSearchResult{" +
-            "requestMeta=" + requestMeta +
+            "resultMeta=" + resultMeta +
             ", simpleImageInfoList=" + simpleImageInfoList +
             '}';
     }

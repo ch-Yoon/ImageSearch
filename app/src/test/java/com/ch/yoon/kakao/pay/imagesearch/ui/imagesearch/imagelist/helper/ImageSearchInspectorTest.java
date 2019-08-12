@@ -12,7 +12,7 @@ import java.util.List;
 public class ImageSearchInspectorTest {
 
     @Test
-    public void 최초_이미지_검색_요청시_승인을_받아야함() {
+    public void 최초_이미지_검색_요청시_승인을_하는지_테스트() {
         // given
         ImageSearchInspector imageSearchInspector = new ImageSearchInspector(1, 10, 20, 10);
 
@@ -26,11 +26,11 @@ public class ImageSearchInspectorTest {
         ArrayList<ImageSearchRequest> expectedList = new ArrayList<>();
         expectedList.add(new ImageSearchRequest("테스트", ImageSortType.ACCURACY, 1, 20));
 
-        Assert.assertTrue(isSame(receivedList, expectedList));
+        Assert.assertEquals(receivedList, expectedList);
     }
 
     @Test
-    public void 프리로드_요청시_마지막_페이지보다_크다면_승인이_안되야함() {
+    public void 프리로드_요청시_마지막_페이지보다_크다면_승인을_안하는지_테스트() {
         // given
         ImageSearchInspector imageSearchInspector = new ImageSearchInspector(1, 1, 20, 10);
 
@@ -46,7 +46,7 @@ public class ImageSearchInspectorTest {
     }
 
     @Test
-    public void 프리로드_요청시_마지막_페이지보다_작고_프리로드_허용조건에_만족한다면_승인이_되야함() {
+    public void 프리로드_요청시_마지막_페이지보다_작고_프리로드_허용조건에_만족한다면_승인을_하는지_테스트() {
         // given
         ImageSearchInspector imageSearchInspector = new ImageSearchInspector(1, 10, 20, 10);
 
@@ -62,11 +62,11 @@ public class ImageSearchInspectorTest {
         expectedList.add(new ImageSearchRequest("테스트", ImageSortType.ACCURACY, 1, 20));
         expectedList.add(new ImageSearchRequest("테스트", ImageSortType.ACCURACY, 2, 20));
 
-        Assert.assertTrue(isSame(expectedList, receivedList));
+        Assert.assertEquals(expectedList, receivedList);
     }
 
     @Test
-    public void 프리로드_요청시_마지막_페이지보다_작아도_허용조건을_만족하지_못한다면_승인이_안되야함() {
+    public void 프리로드_요청시_마지막_페이지보다_작아도_허용조건을_만족하지_못한다면_승인을_안하는지_테스트() {
         // given
         ImageSearchInspector imageSearchInspector = new ImageSearchInspector(1, 10, 20, 2);
 
@@ -81,11 +81,11 @@ public class ImageSearchInspectorTest {
         ArrayList<ImageSearchRequest> expectedList = new ArrayList<>();
         expectedList.add(new ImageSearchRequest("테스트", ImageSortType.ACCURACY, 1, 20));
 
-        Assert.assertTrue(isSame(receivedList, expectedList));
+        Assert.assertEquals(receivedList, expectedList);
     }
 
     @Test
-    public void 프리로드_요청시_직전_요청의_데이터크기와_같다면_승인이_안되야함() {
+    public void 프리로드_요청시_직전_요청의_데이터크기와_같다면_승인을_안하는지_테스트() {
         // given
         ImageSearchInspector imageSearchInspector = new ImageSearchInspector(1, 10, 20, 2);
 
@@ -102,11 +102,11 @@ public class ImageSearchInspectorTest {
         expectedList.add(new ImageSearchRequest("테스트", ImageSortType.ACCURACY, 1, 20));
         expectedList.add(new ImageSearchRequest("테스트", ImageSortType.ACCURACY, 2, 20));
 
-        Assert.assertTrue(isSame(receivedList, expectedList));
+        Assert.assertEquals(receivedList, expectedList);
     }
 
     @Test
-    public void 이미지요청_재시도시_직전에_승인된_요청과_동일한_승인이_되야함() {
+    public void 이미지요청_재시도시_직전에_승인된_요청과_동일한_승인을_하는지_테스트() {
         // given
         ImageSearchInspector imageSearchInspector = new ImageSearchInspector(1, 10, 20, 2);
 
@@ -122,24 +122,6 @@ public class ImageSearchInspectorTest {
         int lastIndex = receivedList.size() - 1;
         int previousOfLastIndex = lastIndex - 1;
         Assert.assertEquals(receivedList.get(lastIndex), receivedList.get(previousOfLastIndex));
-    }
-
-    private boolean isSame(List<ImageSearchRequest> base, List<ImageSearchRequest> target) {
-        if(base == null || target == null) {
-            return false;
-        }
-
-        if(base.size() != target.size()) {
-            return false;
-        }
-
-        for(int i=0; i<base.size(); i++) {
-            if(!base.get(i).equals(target.get(i))) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
 }
