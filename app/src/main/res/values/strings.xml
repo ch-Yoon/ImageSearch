@@ -12,6 +12,7 @@
     <string name="error_image_search_kakao_server_error">카카오 서버에서 에러가 발생했습니다</string>
     <string name="error_network_not_connecting_error">인터넷 연결을 확인해주세요</string>
     <string name="error_unknown_error">알 수 없는 에러가 발생했습니다</string>
+    <string name="error_nonexistent_url">연결되는 사이트가 없습니다</string>
 
     <!-- guide message -->
     <string name="success_image_search_no_result">검색 결과가 없습니다</string>

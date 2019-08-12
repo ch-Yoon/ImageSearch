@@ -12,6 +12,7 @@ import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.S
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.adapter.ImageListAdapter;
 import com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil;
 import com.ch.yoon.kakao.pay.imagesearch.utils.GlideUtil;
+import com.ch.yoon.kakao.pay.imagesearch.utils.IntegerUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,9 +68,11 @@ public class ImageListBindingAdapter {
         GlideUtil.loadWithCenterCrop(imageView, imageUrl);
     }
 
-    @BindingAdapter("applySelectedState")
+    @BindingAdapter({"inputtedCountOfItemInLine", "expectedCountOfItemInLine"})
     public static void applySelectedState(@NonNull ImageView imageView,
-                                          boolean isSelected) {
+                                          @Nullable Integer inputtedCountOfItemInLine,
+                                          @Nullable Integer expectedCountOfItemInLine) {
+        boolean isSelected = IntegerUtil.isSame(inputtedCountOfItemInLine, expectedCountOfItemInLine);
         imageView.setSelected(isSelected);
     }
 

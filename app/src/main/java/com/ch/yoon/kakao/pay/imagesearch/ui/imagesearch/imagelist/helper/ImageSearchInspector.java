@@ -52,8 +52,7 @@ public class ImageSearchInspector {
     }
 
     public void submitRetryRequest(@NonNull ImageSortType imageSortType) {
-        int previousDataTotalSize = approveRequestLog.getDataTotalSize();
-        approvePreload(imageSortType, previousDataTotalSize);
+        approveImageSearchRetry(imageSortType);
     }
 
     private void approveFirstImageSearch(String keyword,
@@ -94,21 +93,30 @@ public class ImageSearchInspector {
         return dataTotalSize > previousDataTotalSize && displayPosition > preloadAllowLimit;
     }
 
+    private void approveImageSearchRetry(ImageSortType imageSortType) {
+        final String keyword = approveRequestLog.getKeyword();
+        final int pageNumber = approveRequestLog.getPageNumber();
+        sendApproveToListener(keyword, imageSortType, pageNumber);
+    }
+
     private void approveImageSearch(String keyword,
                                     ImageSortType imageSortType,
                                     int dataTotalSize) {
         final int requestPageNumber = approveRequestLog.getPageNumber() + 1;
 
         recordApproveRequest(keyword, dataTotalSize, requestPageNumber);
+        sendApproveToListener(keyword, imageSortType, requestPageNumber);
+    }
 
+    private void sendApproveToListener(String keyword, ImageSortType imageSortType, int pageNumber) {
         if(onImageSearchApproveListener != null) {
             onImageSearchApproveListener.onImageSearchApprove(
-                new ImageSearchRequest(
-                    keyword,
-                    imageSortType,
-                    requestPageNumber,
-                    REQUIRED_DATA_SIZE
-                )
+                    new ImageSearchRequest(
+                            keyword,
+                            imageSortType,
+                            pageNumber,
+                            REQUIRED_DATA_SIZE
+                    )
             );
         }
     }
