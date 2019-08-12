@@ -88,8 +88,6 @@ public class ImageListViewModelTest {
     }
 
     private void initApplication() {
-        mockApplication = mock(Application.class);
-        when(mockApplication.getApplicationContext()).thenReturn(mockApplication);
         when(mockApplication.getString(R.string.success_image_search_no_result)).thenReturn(SUCCESS_NO_RESULT);
         when(mockApplication.getString(R.string.success_image_search_last_data)).thenReturn(SUCCESS_LAST_DATA);
         when(mockApplication.getString(R.string.error_image_search_wrong_request)).thenReturn(ERROR_WRONG_REQUEST);
