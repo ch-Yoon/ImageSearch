@@ -2,6 +2,7 @@ package com.ch.yoon.kakao.pay.imagesearch.repository;
 
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 
 import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.ImageLocalDataSource;
 import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.LocalImageDocument;
@@ -44,6 +45,11 @@ public class ImageRepositoryImpl implements ImageRepository {
         }
 
         return INSTANCE;
+    }
+
+    @VisibleForTesting
+    static void destoryInstanceForTesting() {
+        INSTANCE = null;
     }
 
     private ImageRepositoryImpl(@NonNull ImageLocalDataSource imageLocalDataSource,

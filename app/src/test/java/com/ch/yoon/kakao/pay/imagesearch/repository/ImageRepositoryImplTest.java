@@ -71,7 +71,8 @@ public class ImageRepositoryImplTest {
 
     @After
     public void clear() {
-        compositeDisposable.dispose();
+        compositeDisposable.clear();
+        ImageRepositoryImpl.destoryInstanceForTesting();
     }
 
     private void initImageRepository() {
@@ -97,8 +98,7 @@ public class ImageRepositoryImplTest {
         imageRepository.updateSearchLog("테스트");
 
         // then
-        verify(mockImageLocalDataSource, times(1))
-            .updateSearchLog("테스트");
+        verify(mockImageLocalDataSource, times(1)).updateSearchLog("테스트");
     }
 
     @Test
@@ -124,8 +124,7 @@ public class ImageRepositoryImplTest {
         imageRepository.deleteAllByKeyword("테스트");
 
         // then
-        verify(mockImageLocalDataSource, times(1))
-            .deleteAllByKeyword("테스트");
+        verify(mockImageLocalDataSource, times(1)).deleteAllByKeyword("테스트");
     }
 
     @Test
@@ -138,8 +137,7 @@ public class ImageRepositoryImplTest {
         imageRepository.requestImageDetailInfo("id");
 
         // then
-        verify(mockImageLocalDataSource, times(1))
-            .getImageDetailInfo("id");
+        verify(mockImageLocalDataSource, times(1)).getImageDetailInfo("id");
     }
 
     @Test
@@ -154,8 +152,7 @@ public class ImageRepositoryImplTest {
         imageRepository.requestImageList(emptyImageSearchRequest());
 
         // then
-        verify(mockImageRemoteDataSource, times(1))
-            .requestImageList(any(ImageSearchRequest.class));
+        verify(mockImageRemoteDataSource, times(1)).requestImageList(any(ImageSearchRequest.class));
     }
 
     @Test
@@ -194,8 +191,7 @@ public class ImageRepositoryImplTest {
         imageRepository.requestImageList(emptyImageSearchRequest());
 
         // then
-        verify(mockImageLocalDataSource, times(1))
-            .getImageSearchList(any(ImageSearchRequest.class));
+        verify(mockImageLocalDataSource, times(1)).getImageSearchList(any(ImageSearchRequest.class));
     }
 
     @Test
