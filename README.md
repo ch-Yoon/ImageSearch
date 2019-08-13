@@ -88,20 +88,28 @@ buildscript {
     ext.lifecycle_version = '2.0.0'
     ext.photo_view_version = '2.0.0'
     ext.room_version = '2.2.0-alpha01'
+    ext.arch_core_version = '1.1.1'
+    ext.mockito_version = '2.23.0'
+    ext.power_mock_version = '2.0.2'
     
     ...
 }
 ```
-```gradle
-dependencies {
+```gradledependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+
+    // testing
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.test:runner:$runner_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"
+    testImplementation "android.arch.core:core-testing:$arch_core_version"
+    testImplementation "org.mockito:mockito-core:$mockito_version"
+    testImplementation "org.powermock:powermock-module-junit4:$power_mock_version"
+    testImplementation "org.powermock:powermock-api-mockito2:$power_mock_version"
 
     // recyclerView
     implementation "androidx.recyclerview:recyclerview:$recycler_view_version"
@@ -120,7 +128,7 @@ dependencies {
     implementation "com.github.bumptech.glide:glide:$glide_version"
     annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
 
-    // viweModel and liveData
+    // viewModel and liveData
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
 
     // room
