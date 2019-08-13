@@ -95,7 +95,8 @@ buildscript {
     ...
 }
 ```
-```gradledependencies {
+```gradle
+dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
