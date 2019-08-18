@@ -41,11 +41,6 @@ public class SimpleImageInfo {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, thumbnailUrl);
-    }
-
-    @Override
     public String toString() {
         return "SimpleImageInfo{" +
             "id='" + id + '\'' +
