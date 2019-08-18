@@ -1,5 +1,6 @@
 package com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.Objects;
@@ -10,18 +11,18 @@ import java.util.Objects;
  */
 public class SimpleImageInfo {
 
-    @Nullable
+    @NonNull
     private final String id;
 
     @Nullable
     private final String thumbnailUrl;
 
-    public SimpleImageInfo(@Nullable String id, @Nullable String thumbnailUrl) {
+    public SimpleImageInfo(@NonNull String id, @Nullable String thumbnailUrl) {
         this.id = id;
         this.thumbnailUrl = thumbnailUrl;
     }
 
-    @Nullable
+    @NonNull
     public String getId() {
         return id;
     }
