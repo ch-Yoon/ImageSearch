@@ -33,7 +33,6 @@ public class SimpleImageInfo {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SimpleImageInfo simpleImageInfo = (SimpleImageInfo) o;
         return Objects.equals(id, simpleImageInfo.id) &&
