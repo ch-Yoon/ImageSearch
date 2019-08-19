@@ -47,16 +47,10 @@ public class SearchLog implements Comparable<SearchLog> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SearchLog searchLog = (SearchLog) o;
-        return time == searchLog.time &&
-            keyword.equals(searchLog.keyword);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(keyword, time);
+        SearchLog target = (SearchLog) o;
+        return time == target.time &&
+            keyword.equals(target.keyword);
     }
 
     @Override

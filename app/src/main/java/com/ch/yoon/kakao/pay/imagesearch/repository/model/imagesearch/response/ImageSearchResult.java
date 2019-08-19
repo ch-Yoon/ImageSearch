@@ -32,7 +32,7 @@ public class ImageSearchResult {
         return simpleImageInfoList;
     }
 
-
+    @NonNull
     @Override
     public String toString() {
         return "ImageSearchResult{" +

@@ -40,6 +40,7 @@ public class ResultMeta {
         return imageSortType;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "ResultMeta{" +

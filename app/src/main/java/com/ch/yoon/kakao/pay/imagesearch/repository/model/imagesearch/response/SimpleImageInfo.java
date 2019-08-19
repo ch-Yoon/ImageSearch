@@ -35,11 +35,12 @@ public class SimpleImageInfo {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        SimpleImageInfo simpleImageInfo = (SimpleImageInfo) o;
-        return Objects.equals(id, simpleImageInfo.id) &&
-            Objects.equals(thumbnailUrl, simpleImageInfo.thumbnailUrl);
+        SimpleImageInfo target = (SimpleImageInfo) o;
+        return Objects.equals(id, target.id) &&
+            Objects.equals(thumbnailUrl, target.thumbnailUrl);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "SimpleImageInfo{" +
