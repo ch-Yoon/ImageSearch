@@ -1,5 +1,7 @@
 package com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.model;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -19,6 +21,7 @@ public final class SearchMetaInfo {
         return isEnd;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "SearchMetaInfo{, isEnd=" + isEnd + '}';

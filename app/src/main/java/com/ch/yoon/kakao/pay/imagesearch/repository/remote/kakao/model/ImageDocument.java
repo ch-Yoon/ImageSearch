@@ -1,5 +1,6 @@
 package com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.model;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.gson.annotations.SerializedName;
@@ -96,6 +97,7 @@ public final class ImageDocument {
         return dateTime;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "ImageDocument{" +

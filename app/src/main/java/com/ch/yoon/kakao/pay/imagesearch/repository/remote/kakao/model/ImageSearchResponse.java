@@ -38,6 +38,7 @@ public final class ImageSearchResponse {
         return imageDocumentList == null ? new ArrayList<>() : imageDocumentList;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "ImageSearchResponse{" +

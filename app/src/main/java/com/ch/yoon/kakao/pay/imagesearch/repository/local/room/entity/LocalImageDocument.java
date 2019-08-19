@@ -149,4 +149,23 @@ public class LocalImageDocument {
         return dateTime;
     }
 
+    @NonNull
+    @Override
+    public String toString() {
+        return "LocalImageDocument{" +
+            "id='" + id + '\'' +
+            ", keyword='" + keyword + '\'' +
+            ", itemNumber=" + itemNumber +
+            ", imageSortType='" + imageSortType + '\'' +
+            ", collection='" + collection + '\'' +
+            ", thumbnailUrl='" + thumbnailUrl + '\'' +
+            ", imageUrl='" + imageUrl + '\'' +
+            ", width=" + width +
+            ", height=" + height +
+            ", displaySiteName='" + displaySiteName + '\'' +
+            ", docUrl='" + docUrl + '\'' +
+            ", dateTime='" + dateTime + '\'' +
+            '}';
+    }
+
 }

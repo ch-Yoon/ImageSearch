@@ -1,5 +1,6 @@
 package com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.Objects;
@@ -10,18 +11,18 @@ import java.util.Objects;
  */
 public class SimpleImageInfo {
 
-    @Nullable
+    @NonNull
     private final String id;
 
     @Nullable
     private final String thumbnailUrl;
 
-    public SimpleImageInfo(@Nullable String id, @Nullable String thumbnailUrl) {
+    public SimpleImageInfo(@NonNull String id, @Nullable String thumbnailUrl) {
         this.id = id;
         this.thumbnailUrl = thumbnailUrl;
     }
 
-    @Nullable
+    @NonNull
     public String getId() {
         return id;
     }
@@ -33,18 +34,13 @@ public class SimpleImageInfo {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SimpleImageInfo simpleImageInfo = (SimpleImageInfo) o;
-        return Objects.equals(id, simpleImageInfo.id) &&
-            Objects.equals(thumbnailUrl, simpleImageInfo.thumbnailUrl);
+        SimpleImageInfo target = (SimpleImageInfo) o;
+        return Objects.equals(id, target.id) &&
+            Objects.equals(thumbnailUrl, target.thumbnailUrl);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, thumbnailUrl);
-    }
-
+    @NonNull
     @Override
     public String toString() {
         return "SimpleImageInfo{" +

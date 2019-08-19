@@ -58,17 +58,12 @@ public final class ImageSearchRequest {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ImageSearchRequest that = (ImageSearchRequest) o;
-        return pageNumber == that.pageNumber &&
-                requiredSize == that.requiredSize &&
-                keyword.equals(that.keyword) &&
-                imageSortType == that.imageSortType;
+        ImageSearchRequest target = (ImageSearchRequest) o;
+        return pageNumber == target.pageNumber &&
+                requiredSize == target.requiredSize &&
+                keyword.equals(target.keyword) &&
+                imageSortType == target.imageSortType;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(keyword, imageSortType, pageNumber, requiredSize);
-    }
 }
