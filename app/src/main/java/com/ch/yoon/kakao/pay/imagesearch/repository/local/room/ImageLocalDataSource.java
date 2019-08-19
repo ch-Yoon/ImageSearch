@@ -33,11 +33,6 @@ public class ImageLocalDataSource {
         return INSTANCE;
     }
 
-    @VisibleForTesting
-    static void destroyInstanceForTesting() {
-        INSTANCE = null;
-    }
-
     private ImageLocalDataSource(@NonNull ImageSearchDao imageSearchDao) {
         this.imageSearchDao = imageSearchDao;
     }

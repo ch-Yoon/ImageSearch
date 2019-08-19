@@ -1,5 +1,6 @@
 package com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 /**
@@ -65,6 +66,7 @@ public class DetailImageInfo {
         return height;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "DetailImageInfo{" +

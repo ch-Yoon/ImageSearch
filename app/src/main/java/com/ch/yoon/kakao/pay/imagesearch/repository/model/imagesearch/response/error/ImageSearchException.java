@@ -35,6 +35,7 @@ public final class ImageSearchException extends RuntimeException {
         return imageSearchError.getErrorMessageResourceId();
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "ImageSearchException{" +
