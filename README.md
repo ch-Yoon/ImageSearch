@@ -51,6 +51,7 @@
 
 ### Preload
 - 한 줄에 노출되는 아이템의 갯수에 따라 프리로드 시점 조절
+- ex) 한 줄에 4개 일때는 40개씩, 3개 일때는 30개씩, 2개 일때는 20
 
 ![preload](https://user-images.githubusercontent.com/20294749/62585018-ed565d00-b8f1-11e9-8b0c-f87e2740613b.gif)
 
