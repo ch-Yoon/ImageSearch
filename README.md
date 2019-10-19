@@ -11,8 +11,17 @@
 ![not_install_guide](https://user-images.githubusercontent.com/20294749/62586404-71abde80-b8f8-11e9-85d7-288e84418646.png)
 
 ## 개요
-- 사용 언어 : Java
-- 사용 패턴 및 기술 : MVVM + DataBinding + Retrofit2 + Room + RxJava2
+- 사용 언어
+  - Java
+  
+- 사용 기술
+  - MVVM 
+  - LiveData 
+  - DataBinding
+  - RxJava2
+  - Retrofit2
+  - Room
+  - Unit Test(Mockito, Powermock)
 
 ## 구현 기능
 ### 기본 요구사항 구현
@@ -62,84 +71,12 @@
 
 
 
-## 개발 환경 및 사용 의존성
-### 개발 환경
+## 개발 환경
 ```xml
 complieSdkVersion : 28
 minSdkVersion : 15
 targetSdkVersion : 28
 AndroidStudioVersion : 3.2.1
-```
-### 의존성
-
-```gradle
-buildscript {
-    ext.appcompat_version = '1.0.2'
-    ext.constraintlayout_version = '1.1.3'
-    ext.junit_version = '4.12'
-    ext.runner_version = '1.2.0'
-    ext.espresso_core_version = '3.2.0'
-    ext.recycler_view_version = '1.0.0'
-    ext.rxjava_version = '2.2.8'
-    ext.rxandroid_version = '2.1.1'
-    ext.retrofit_version = '2.4.0'
-    ext.okhttp_version = '3.11.0'
-    ext.glide_version = '4.9.0'
-    ext.lifecycle_version = '2.0.0'
-    ext.photo_view_version = '2.0.0'
-    ext.room_version = '2.2.0-alpha01'
-    ext.arch_core_version = '1.1.1'
-    ext.mockito_version = '2.23.0'
-    ext.power_mock_version = '2.0.2'
-    
-    ...
-}
-```
-```gradle
-dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "androidx.appcompat:appcompat:$appcompat_version"
-    implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-
-    // testing
-    testImplementation "junit:junit:$junit_version"
-    androidTestImplementation "androidx.test:runner:$runner_version"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"
-    testImplementation "android.arch.core:core-testing:$arch_core_version"
-    testImplementation "org.mockito:mockito-core:$mockito_version"
-    testImplementation "org.powermock:powermock-module-junit4:$power_mock_version"
-    testImplementation "org.powermock:powermock-api-mockito2:$power_mock_version"
-
-    // recyclerView
-    implementation "androidx.recyclerview:recyclerview:$recycler_view_version"
-
-    // retrofit2
-    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
-    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
-
-    // rxJava
-    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
-    implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
-
-    // glide
-    implementation "com.github.bumptech.glide:glide:$glide_version"
-    annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
-
-    // viewModel and liveData
-    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
-
-    // room
-    implementation "androidx.room:room-runtime:$room_version"
-    annotationProcessor "androidx.room:room-compiler:$room_version"
-    implementation "androidx.room:room-rxjava2:$room_version"
-
-    // photo view
-    implementation "com.github.chrisbanes:PhotoView:$photo_view_version"
-}
 ```
 
 
