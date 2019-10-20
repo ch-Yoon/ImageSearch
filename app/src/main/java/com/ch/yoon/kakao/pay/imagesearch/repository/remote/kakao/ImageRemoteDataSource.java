@@ -65,7 +65,7 @@ public class ImageRemoteDataSource {
     }
 
     @NonNull
-    public Single<ImageSearchResponse> requestImageList(@NonNull ImageSearchRequest imageSearchRequest) {
+    public Single<ImageSearchResponse> requestImageList(@NonNull final ImageSearchRequest imageSearchRequest) {
         final String keyword = imageSearchRequest.getKeyword();
         final String sortType = imageSearchRequest.getImageSortType().getType();
         final int pageNumber = imageSearchRequest.getPageNumber();

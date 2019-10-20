@@ -18,10 +18,7 @@ import io.reactivex.Single;
 public interface ImageRepository {
 
     @NonNull
-    Single<ImageSearchResponse> requestImageList(ImageSearchRequest imageSearchRequest);
-
-//    @NonNull
-//    Single<DetailImageInfo> requestImageDetailInfo(@NonNull String id);
+    Single<ImageSearchResponse> requestImageList(@NonNull ImageSearchRequest imageSearchRequest);
 
     @NonNull
     Completable deleteAllByKeyword(@NonNull String keyword);

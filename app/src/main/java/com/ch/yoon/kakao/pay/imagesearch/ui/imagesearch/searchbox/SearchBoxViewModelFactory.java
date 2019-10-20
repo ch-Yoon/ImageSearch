@@ -20,8 +20,8 @@ public class SearchBoxViewModelFactory implements ViewModelProvider.Factory {
     @NonNull
     private final ImageRepository imageRepository;
 
-    public SearchBoxViewModelFactory(@NonNull final Application application,
-                                     @NonNull final ImageRepository imageRepository) {
+    public SearchBoxViewModelFactory(@NonNull Application application,
+                                     @NonNull ImageRepository imageRepository) {
         this.application = application;
         this.imageRepository = imageRepository;
     }

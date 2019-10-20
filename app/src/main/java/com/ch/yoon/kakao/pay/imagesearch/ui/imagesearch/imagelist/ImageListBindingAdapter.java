@@ -24,8 +24,8 @@ import java.util.List;
 public class ImageListBindingAdapter {
 
     @BindingAdapter("countOfItemInLine")
-    public static void setSpanCount(@NonNull RecyclerView recyclerView,
-                                    @NonNull Integer countOfItemInLine) {
+    public static void setSpanCount(@NonNull final RecyclerView recyclerView,
+                                    @NonNull final Integer countOfItemInLine) {
         final GridLayoutManager gridLayoutManager = (GridLayoutManager)recyclerView.getLayoutManager();
         if(gridLayoutManager != null) {
             gridLayoutManager.setSpanCount(countOfItemInLine);
@@ -33,8 +33,8 @@ public class ImageListBindingAdapter {
     }
 
     @BindingAdapter("searchImageInfoList")
-    public static void setItems(@NonNull RecyclerView recyclerView,
-                                @Nullable List<ImageDocument> simpleImageInfoList) {
+    public static void setItems(@NonNull final RecyclerView recyclerView,
+                                @Nullable final List<ImageDocument> simpleImageInfoList) {
         final ImageListAdapter adapter = ((ImageListAdapter)recyclerView.getAdapter());
         if(adapter != null) {
             adapter.submitList(simpleImageInfoList == null ? null : new ArrayList<>(simpleImageInfoList));
@@ -46,8 +46,8 @@ public class ImageListBindingAdapter {
     }
 
     @BindingAdapter("imageSearchState")
-    public static void setImageSearchState(@NonNull RecyclerView recyclerView,
-                                           @NonNull ImageSearchState imageSearchState) {
+    public static void setImageSearchState(@NonNull final RecyclerView recyclerView,
+                                           @NonNull final ImageSearchState imageSearchState) {
         final ImageListAdapter adapter = ((ImageListAdapter)recyclerView.getAdapter());
         if(adapter != null) {
             switch (imageSearchState) {
@@ -63,15 +63,15 @@ public class ImageListBindingAdapter {
     }
 
     @BindingAdapter("loadImageWithCenterCrop")
-    public static void loadImageWithCenterCrop(@NonNull ImageView imageView,
-                                               @Nullable String imageUrl) {
+    public static void loadImageWithCenterCrop(@NonNull final ImageView imageView,
+                                               @Nullable final String imageUrl) {
         GlideUtil.loadWithCenterCrop(imageView, imageUrl);
     }
 
     @BindingAdapter({"inputtedCountOfItemInLine", "expectedCountOfItemInLine"})
-    public static void applySelectedState(@NonNull ImageView imageView,
-                                          @Nullable Integer inputtedCountOfItemInLine,
-                                          @Nullable Integer expectedCountOfItemInLine) {
+    public static void applySelectedState(@NonNull final ImageView imageView,
+                                          @Nullable final Integer inputtedCountOfItemInLine,
+                                          @Nullable final Integer expectedCountOfItemInLine) {
         final boolean isSelected = IntegerUtil.isSame(inputtedCountOfItemInLine, expectedCountOfItemInLine);
         imageView.setSelected(isSelected);
     }

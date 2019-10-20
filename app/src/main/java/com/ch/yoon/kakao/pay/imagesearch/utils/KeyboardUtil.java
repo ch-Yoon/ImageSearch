@@ -9,9 +9,9 @@ import androidx.annotation.NonNull;
 
 public class KeyboardUtil {
 
-    public static void hideKeyboard(@NonNull View view) {
+    public static void hideKeyboard(@NonNull final View view) {
         if(view.isFocusable()) {
-            InputMethodManager inputMethodManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            final InputMethodManager inputMethodManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             if (inputMethodManager != null) {
                 inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }

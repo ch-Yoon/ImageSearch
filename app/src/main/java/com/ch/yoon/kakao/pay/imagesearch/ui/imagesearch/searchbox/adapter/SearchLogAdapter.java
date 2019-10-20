@@ -44,27 +44,27 @@ public class SearchLogAdapter extends ListAdapter<SearchLog, SearchLogViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final SearchLogViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull SearchLogViewHolder holder, int position) {
         holder.setSearchLog(getItem(position));
     }
 
-    public void setOnSearchLogClickListener(@Nullable final OnSearchLogClickListener onSearchLogClickListener) {
+    public void setOnSearchLogClickListener(@Nullable OnSearchLogClickListener onSearchLogClickListener) {
         this.onSearchLogClickListener = onSearchLogClickListener;
     }
 
-    public void setOnLogDeleteClickListener(@Nullable final OnLogDeleteClickListener onLogDeleteClickListener) {
+    public void setOnLogDeleteClickListener(@Nullable OnLogDeleteClickListener onLogDeleteClickListener) {
         this.onLogDeleteClickListener = onLogDeleteClickListener;
     }
 
     private static final DiffUtil.ItemCallback<SearchLog> DiffCallback = new DiffUtil.ItemCallback<SearchLog>() {
 
         @Override
-        public boolean areItemsTheSame(@NonNull final SearchLog oldItem, @NonNull final SearchLog newItem) {
+        public boolean areItemsTheSame(@NonNull SearchLog oldItem, @NonNull SearchLog newItem) {
             return oldItem.getKeyword().equals(newItem.getKeyword());
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull final SearchLog oldItem, @NonNull final SearchLog newItem) {
+        public boolean areContentsTheSame(@NonNull SearchLog oldItem, @NonNull SearchLog newItem) {
             return oldItem.equals(newItem);
         }
 

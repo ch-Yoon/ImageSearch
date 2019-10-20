@@ -7,6 +7,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Creator : ch-yoon
@@ -35,7 +36,7 @@ public final class ImageSearchResponse {
 
     @NonNull
     public List<ImageDocument> getImageDocumentList() {
-        return imageDocumentList == null ? new ArrayList<>() : imageDocumentList;
+        return Optional.ofNullable(imageDocumentList).orElseGet(ArrayList::new);
     }
 
     @NonNull

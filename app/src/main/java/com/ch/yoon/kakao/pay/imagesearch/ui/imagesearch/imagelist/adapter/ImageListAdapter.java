@@ -91,7 +91,7 @@ public class ImageListAdapter extends ListAdapter<ImageDocument, RecyclerView.Vi
 
     @Override
     public int getItemCount() {
-        int itemCount = super.getItemCount();
+        final int itemCount = super.getItemCount();
         if(itemCount == 0) {
             return itemCount;
         } else {
@@ -99,11 +99,11 @@ public class ImageListAdapter extends ListAdapter<ImageDocument, RecyclerView.Vi
         }
     }
 
-    public boolean isFooterViewPosition(int position) {
+    public boolean isFooterViewPosition(final int position) {
         return position == super.getItemCount();
     }
 
-    public void changeFooterViewVisibility(boolean retryFooterViewVisibility) {
+    public void changeFooterViewVisibility(final boolean retryFooterViewVisibility) {
         this.retryFooterViewVisibility = retryFooterViewVisibility;
         notifyItemChanged(super.getItemCount());
     }

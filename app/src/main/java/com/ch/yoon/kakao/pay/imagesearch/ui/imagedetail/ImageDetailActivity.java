@@ -15,7 +15,7 @@ import com.ch.yoon.kakao.pay.imagesearch.databinding.ActivityImageDetailBinding;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageDocument;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseActivity;
 
-import static com.google.gson.reflect.TypeToken.get;
+import java.util.Optional;
 
 public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding> {
 
@@ -25,7 +25,7 @@ public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding
 
     public static Intent getImageDetailActivityIntent(@NonNull Context context,
                                                       @NonNull ImageDocument imageDocument) {
-        Intent imageDetailIntent = new Intent(context, ImageDetailActivity.class);
+        final Intent imageDetailIntent = new Intent(context, ImageDetailActivity.class);
         imageDetailIntent.putExtra(ImageDetailActivity.EXTRA_IMAGE_DOCUMENT_KEY, imageDocument);
         return imageDetailIntent;
     }
@@ -35,16 +35,16 @@ public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding
         super.onCreate(savedInstanceState);
         binding = binding(R.layout.activity_image_detail);
 
-        ImageDocument imageDocument = getIntent().getParcelableExtra(EXTRA_IMAGE_DOCUMENT_KEY);
+        final ImageDocument passedImageDocument = getIntent().getParcelableExtra(EXTRA_IMAGE_DOCUMENT_KEY);
 
         initBackArrow();
-        initImageDetailViewModel(imageDocument);
+        initImageDetailViewModel(passedImageDocument);
         observeImageDetailViewModel();
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        final int itemId = item.getItemId();
         if(itemId == android.R.id.home) {
             onBackPressed();
             return true;
@@ -55,10 +55,8 @@ public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding
 
     private void initBackArrow() {
         setSupportActionBar(binding.mainToolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        Optional.ofNullable(getSupportActionBar())
+            .ifPresent(actionBar -> actionBar.setDisplayHomeAsUpEnabled(true));
     }
 
     private void initImageDetailViewModel(ImageDocument imageDocument) {

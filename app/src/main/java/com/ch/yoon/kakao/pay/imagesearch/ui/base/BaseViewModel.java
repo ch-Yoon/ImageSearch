@@ -38,17 +38,17 @@ public class BaseViewModel extends AndroidViewModel {
         return showMessageLiveEvent;
     }
 
-    protected void updateMessage(@StringRes int stringResId) {
+    protected void updateMessage(@StringRes final int stringResId) {
         final String message = getApplication().getString(stringResId);
         showMessageLiveEvent.setValue(message);
     }
 
-    protected void registerDisposable(Disposable disposable) {
+    protected void registerDisposable(final Disposable disposable) {
         compositeDisposable.add(disposable);
     }
 
     @NonNull
-    protected String getString(@StringRes int stringResourceId) {
+    protected String getString(@StringRes final int stringResourceId) {
         return getApplication().getString(stringResourceId);
     }
 

@@ -5,8 +5,6 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import java.util.Objects;
-
 /**
  * Creator : ch-yoon
  * Date : 2019-08-06.
@@ -17,10 +15,10 @@ public class SearchLog implements Comparable<SearchLog> {
     @NonNull
     @PrimaryKey
     @ColumnInfo(name = "keyword")
-    private String keyword;
+    private final String keyword;
 
     @ColumnInfo(name = "time")
-    private long time;
+    private final long time;
 
     public SearchLog(@NonNull String keyword, long time) {
         this.keyword = keyword;

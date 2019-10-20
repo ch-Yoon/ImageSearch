@@ -26,10 +26,10 @@ public class ImageSearchInspector {
     @Nullable
     private OnImageSearchApproveListener onImageSearchApproveListener;
 
-    public ImageSearchInspector(final int startPageNumber,
-                                final int maxPageNumber,
-                                final int requiredDataSize,
-                                final int preloadAllowLineMultiple) {
+    public ImageSearchInspector(int startPageNumber,
+                                int maxPageNumber,
+                                int requiredDataSize,
+                                int preloadAllowLineMultiple) {
         START_PAGE_NUMBER = startPageNumber;
         MAX_PAGE_NUMBER = maxPageNumber;
         REQUIRED_DATA_SIZE = requiredDataSize;

@@ -16,9 +16,9 @@ import com.github.chrisbanes.photoview.PhotoView;
 public class ImageDetailBindingAdapter {
 
     @BindingAdapter({"loadImageWithCenterInside", "loadingProgressBar"})
-    public static void loadImageWithCenterInside(@NonNull PhotoView photoView,
-                                                 @Nullable String imageUrl,
-                                                 @NonNull ProgressBar progressBar) {
+    public static void loadImageWithCenterInside(@NonNull final PhotoView photoView,
+                                                 @Nullable final String imageUrl,
+                                                 @NonNull final ProgressBar progressBar) {
         GlideUtil.loadWithCenterInside(photoView, imageUrl, progressBar);
     }
 

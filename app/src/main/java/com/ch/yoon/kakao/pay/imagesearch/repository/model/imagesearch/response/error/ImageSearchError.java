@@ -39,9 +39,8 @@ public enum ImageSearchError {
     }
 
     @NonNull
-    public static ImageSearchError convertToImageSearchError(int errorCode) {
-        final ImageSearchError[] errors = values();
-        for(ImageSearchError error : errors) {
+    public static ImageSearchError convertToImageSearchError(final int errorCode) {
+        for(ImageSearchError error : values()) {
             if(error.getErrorCode() == errorCode) {
                 return error;
             }

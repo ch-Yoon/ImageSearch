@@ -50,8 +50,8 @@ public class ImageRepositoryImpl implements ImageRepository {
     }
 
     @NonNull
-    public Single<SearchLog> updateSearchLog(@NonNull String keyword) {
-        return imageLocalDataSource.updateSearchLog(keyword)
+    public Single<SearchLog> updateSearchLog(@NonNull final String keyword) {
+        return imageLocalDataSource.insertOrUpdate(keyword)
             .subscribeOn(Schedulers.io());
     }
 
@@ -62,64 +62,16 @@ public class ImageRepositoryImpl implements ImageRepository {
             .subscribeOn(Schedulers.io());
     }
 
-//    @NonNull
-//    public Single<ImageSearchResult> requestImageList(@NonNull final ImageSearchRequest request) {
-//        if(NetworkUtil.isNetworkConnecting()) {
-//            return imageRemoteDataSource
-//                .requestImageList(request)
-//                .map(response -> {
-//                    final List<ImageDocument> documentList = response.getImageDocumentList();
-//                    final List<LocalImageDocument> localDocumentList = ImageInfoConverter.
-//                        toLocalImageDocumentList(request, documentList);
-//
-//                    imageLocalDataSource.saveLocalImageDocumentList(localDocumentList);
-//
-//                    final SearchMetaInfo metaInfo = response.getSearchMetaInfo();
-//                    return ImageInfoConverter.toImageSearchResult(request, metaInfo, localDocumentList);
-//                })
-//                .subscribeOn(Schedulers.io());
-//        } else {
-//            return imageLocalDataSource
-//                .getImageSearchList(request)
-//                .map(simpleImageInfoList -> {
-//                    if(CollectionUtil.isEmpty(simpleImageInfoList)) {
-//                        return null;
-//                    } else {
-//                        return ImageInfoConverter.toImageSearchResult(request, simpleImageInfoList);
-//                    }
-//                })
-//                .onErrorResumeNext(throwable -> {
-//                    if(throwable instanceof NullPointerException) {
-//                        ImageSearchError imageSearchError = ImageSearchError.NETWORK_NOT_CONNECTING_ERROR;
-//                        String errorMessage = imageSearchError.toString();
-//                        return Single.error(new ImageSearchException(errorMessage, imageSearchError));
-//                    } else {
-//                        String errorMessage = throwable.getMessage();
-//                        ImageSearchError imageSearchError = ImageSearchError.UNKNOWN_ERROR;
-//                        return Single.error(new ImageSearchException(errorMessage, imageSearchError));
-//                    }
-//                })
-//                .subscribeOn(Schedulers.io());
-//        }
-//    }
-
     @NonNull
     public Single<ImageSearchResponse> requestImageList(@NonNull final ImageSearchRequest request) {
         return imageRemoteDataSource.requestImageList(request)
             .subscribeOn(Schedulers.io());
     }
 
-//    @NonNull
-//    @Override
-//    public Single<DetailImageInfo> requestImageDetailInfo(@NonNull String id) {
-//        return imageLocalDataSource.getImageDetailInfo(id)
-//            .subscribeOn(Schedulers.io());
-//    }
-
     @NonNull
     @Override
-    public Completable deleteAllByKeyword(@NonNull String keyword) {
-        return imageLocalDataSource.deleteAllByKeyword(keyword)
+    public Completable deleteAllByKeyword(@NonNull final String keyword) {
+        return imageLocalDataSource.deleteSearchLog(keyword)
             .subscribeOn(Schedulers.io());
     }
 

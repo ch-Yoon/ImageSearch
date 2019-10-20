@@ -18,7 +18,6 @@ import com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
@@ -43,8 +42,8 @@ public class SearchBoxViewModel extends BaseViewModel {
     @NonNull
     private final SingleLiveEvent<Void> searchBoxFinishEvent = new SingleLiveEvent<>();
 
-    SearchBoxViewModel(@NonNull final Application application,
-                       @NonNull final ImageRepository imageRepository) {
+    SearchBoxViewModel(@NonNull Application application,
+                       @NonNull ImageRepository imageRepository) {
         super(application);
         this.imageRepository = imageRepository;
 
@@ -149,37 +148,37 @@ public class SearchBoxViewModel extends BaseViewModel {
     }
 
     private void deleteKeywordFromList(final String keyword) {
-        Optional.ofNullable(searchLogListLiveData.getValue())
-            .ifPresent(searchLogList -> {
-                removeIfExistKeyword(keyword, searchLogList);
+        List<SearchLog> searchLogList = searchLogListLiveData.getValue();
+        if(searchLogList != null) {
+            if(removeIfExistKeyword(keyword, searchLogList)) {
                 searchLogListLiveData.setValue(searchLogList);
-            });
+            }
+        }
     }
 
     private void applyReceivedSearchLog(final SearchLog newSearchLog) {
-        List<SearchLog> searchLogList = Optional.ofNullable(searchLogListLiveData.getValue())
-            .map(beforeSearchLogList -> {
-                removeIfExistKeyword(newSearchLog.getKeyword(), beforeSearchLogList);
-                beforeSearchLogList.add(0, newSearchLog);
-                return beforeSearchLogList;
-            })
-            .orElseGet(() -> {
-                List<SearchLog> newSearchLogList = new ArrayList<>();
-                newSearchLogList.add(newSearchLog);
-                return newSearchLogList;
-            });
+        List<SearchLog> searchLogList = searchLogListLiveData.getValue();
+        if(searchLogList != null) {
+            removeIfExistKeyword(newSearchLog.getKeyword(), searchLogList);
+            searchLogList.add(0, newSearchLog);
+        } else {
+            searchLogList = new ArrayList<>();
+            searchLogList.add(newSearchLog);
+        }
 
         searchLogListLiveData.setValue(searchLogList);
     }
 
-    private void removeIfExistKeyword(final String keyword, final List<SearchLog> searchLogList) {
+    private boolean removeIfExistKeyword(final String keyword, final List<SearchLog> searchLogList) {
         for(int i=0; i<searchLogList.size(); i++) {
             SearchLog oldLog = searchLogList.get(i);
             if(oldLog.getKeyword().equals(keyword)) {
                 searchLogList.remove(i);
-                break;
+                return true;
             }
         }
+
+        return false;
     }
 
     private boolean notHasSearchLogList() {
@@ -196,7 +195,8 @@ public class SearchBoxViewModel extends BaseViewModel {
     }
 
     private boolean isSearchBoxFocus() {
-        return Optional.ofNullable(searchBoxFocusLiveData.getValue()).orElse(false);
+        Boolean viewVisible = searchBoxFocusLiveData.getValue();
+        return viewVisible != null && viewVisible;
     }
 
 }

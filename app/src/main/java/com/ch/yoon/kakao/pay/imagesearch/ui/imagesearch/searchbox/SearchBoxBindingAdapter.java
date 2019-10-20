@@ -32,7 +32,8 @@ public class SearchBoxBindingAdapter {
     }
 
     @BindingAdapter("hideKeyboard")
-    public static void hideKeyboard(@NonNull EditText editText, @Nullable Boolean isFocus) {
+    public static void hideKeyboard(@NonNull final EditText editText,
+                                    @Nullable final Boolean isFocus) {
         if(BooleanUtil.isFalse(isFocus)) {
             KeyboardUtil.hideKeyboard(editText);
         }

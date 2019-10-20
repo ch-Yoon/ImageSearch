@@ -59,7 +59,7 @@ public final class ImageSearchRequest {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        ImageSearchRequest target = (ImageSearchRequest) o;
+        final ImageSearchRequest target = (ImageSearchRequest) o;
         return pageNumber == target.pageNumber &&
                 requiredSize == target.requiredSize &&
                 keyword.equals(target.keyword) &&

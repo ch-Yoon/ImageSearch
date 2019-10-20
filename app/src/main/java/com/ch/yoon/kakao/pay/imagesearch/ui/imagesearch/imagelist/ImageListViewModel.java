@@ -23,7 +23,6 @@ import com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
@@ -52,9 +51,9 @@ public class ImageListViewModel extends BaseViewModel {
     @Nullable
     private SearchMetaInfo searchMetaInfo;
 
-    ImageListViewModel(@NonNull final Application application,
-                       @NonNull final ImageRepository imageRepository,
-                       @NonNull final ImageSearchInspector imageSearchInspector) {
+    ImageListViewModel(@NonNull Application application,
+                       @NonNull ImageRepository imageRepository,
+                       @NonNull ImageSearchInspector imageSearchInspector) {
         super(application);
         this.imageRepository = imageRepository;
         this.imageSearchInspector = imageSearchInspector;
@@ -98,20 +97,21 @@ public class ImageListViewModel extends BaseViewModel {
 
     public void loadMoreImageListIfPossible(final int displayPosition) {
         if(isRemainingMoreData()) {
-            Optional.ofNullable(imageInfoListLiveData.getValue())
-                .ifPresent(imageDocumentList ->
-                    imageSearchInspector.submitPreloadRequest(
-                        displayPosition,
-                        imageDocumentList.size(),
-                        DEFAULT_IMAGE_SORT_TYPE,
-                        getCountOfItemInLine()
-                    )
+            final List<ImageDocument> imageDocumentList = imageInfoListLiveData.getValue();
+            if (imageDocumentList != null) {
+                imageSearchInspector.submitPreloadRequest(
+                    displayPosition,
+                    imageDocumentList.size(),
+                    DEFAULT_IMAGE_SORT_TYPE,
+                    getCountOfItemInLine()
                 );
+            }
         }
     }
 
     private int getCountOfItemInLine() {
-        return Optional.ofNullable(countOfItemInLineLiveData.getValue()).orElse(DEFAULT_COUNT_OF_ITEM_IN_LINE);
+        Integer countOfItemInLine = countOfItemInLineLiveData.getValue();
+        return countOfItemInLine != null ? countOfItemInLine : DEFAULT_COUNT_OF_ITEM_IN_LINE;
     }
 
     private void observeImageSearchApprove() {
@@ -133,7 +133,8 @@ public class ImageListViewModel extends BaseViewModel {
 
         searchMetaInfo = imageSearchResponse.getSearchMetaInfo();
 
-        final List<ImageDocument> newList = Optional.ofNullable(imageInfoListLiveData.getValue()).orElseGet(ArrayList::new);
+        final List<ImageDocument> oldList = imageInfoListLiveData.getValue();
+        final List<ImageDocument> newList = new ArrayList<>(oldList == null ? new ArrayList<>() : oldList);
         newList.addAll(imageSearchResponse.getImageDocumentList());
 
         if(CollectionUtil.isEmpty(newList)) {

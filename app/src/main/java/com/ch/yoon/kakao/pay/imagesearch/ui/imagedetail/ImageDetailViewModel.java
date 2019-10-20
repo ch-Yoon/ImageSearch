@@ -11,10 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageDocument;
 import com.ch.yoon.kakao.pay.imagesearch.ui.common.livedata.SingleLiveEvent;
-import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepository;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
 
 /**
  * Creator : ch-yoon
@@ -61,7 +58,7 @@ public class ImageDetailViewModel extends BaseViewModel {
         return finishEvent;
     }
 
-    public void showImageDetailInfo(@Nullable ImageDocument imageDocument) {
+    public void showImageDetailInfo(@Nullable final ImageDocument imageDocument) {
         if(imageDocument != null) {
             this.imageDocument = imageDocument;
             imageUrlLiveData.setValue(imageDocument.getImageUrl());

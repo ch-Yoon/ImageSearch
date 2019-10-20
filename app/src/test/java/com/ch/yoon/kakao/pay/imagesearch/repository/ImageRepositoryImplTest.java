@@ -1,44 +1,14 @@
 package com.ch.yoon.kakao.pay.imagesearch.repository;
 
-import com.ch.yoon.kakao.pay.imagesearch.RxSchedulerRule;
-import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.ImageLocalDataSource;
-import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.LocalImageDocument;
-import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.SearchLog;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.ImageInfoConverter;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.ImageSearchRequest;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.ImageSortType;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.error.ImageSearchError;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.error.ImageSearchException;
-import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.ImageRemoteDataSource;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageDocument;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageSearchResponse;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.SearchMetaInfo;
-import com.ch.yoon.kakao.pay.imagesearch.utils.NetworkUtil;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import io.reactivex.Completable;
-import io.reactivex.Single;
-import io.reactivex.disposables.CompositeDisposable;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 @RunWith(PowerMockRunner.class)
@@ -87,14 +57,14 @@ public class ImageRepositoryImplTest {
 //    @Test
 //    public void 로컬_데이터소스에_키워드_업데이트_요청을_전달하는지_테스트() {
 //        // given
-//        when(mockImageLocalDataSource.updateSearchLog("테스트"))
+//        when(mockImageLocalDataSource.insertOrUpdate("테스트"))
 //            .thenReturn(Single.just(emptySearchLog()));
 //
 //        // when
-//        imageRepository.updateSearchLog("테스트");
+//        imageRepository.insertOrUpdate("테스트");
 //
 //        // then
-//        verify(mockImageLocalDataSource, times(1)).updateSearchLog("테스트");
+//        verify(mockImageLocalDataSource, times(1)).insertOrUpdate("테스트");
 //    }
 //
 //    @Test
@@ -113,14 +83,14 @@ public class ImageRepositoryImplTest {
 //    @Test
 //    public void 로컬_데이터소스에_키워드_데이터_삭제_요청을_전달하는지_테스트() {
 //        // given
-//        when(mockImageLocalDataSource.deleteAllByKeyword("테스트"))
+//        when(mockImageLocalDataSource.deleteSearchLog("테스트"))
 //            .thenReturn(Completable.complete());
 //
 //        // when
-//        imageRepository.deleteAllByKeyword("테스트");
+//        imageRepository.deleteSearchLog("테스트");
 //
 //        // then
-//        verify(mockImageLocalDataSource, times(1)).deleteAllByKeyword("테스트");
+//        verify(mockImageLocalDataSource, times(1)).deleteSearchLog("테스트");
 //    }
 //
 //    @Test
