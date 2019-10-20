@@ -35,7 +35,7 @@ public class SearchLogAdapter extends ListAdapter<SearchLog, SearchLogViewHolder
     public SearchLogViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         final LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         final View itemView = inflater.inflate(R.layout.item_search_history, parent, false);
-        SearchLogViewHolder viewHolder = new SearchLogViewHolder(itemView);
+        final SearchLogViewHolder viewHolder = new SearchLogViewHolder(itemView);
 
         viewHolder.setOnSearchLogClickListener(onSearchLogClickListener);
         viewHolder.setOnLogDeleteClickListener(onLogDeleteClickListener);

@@ -10,6 +10,6 @@ import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.SearchLog;
  */
 public interface OnLogDeleteClickListener {
 
-    void onClick(@NonNull SearchLog searchLog, int position);
+    void onClick(@NonNull final SearchLog searchLog, final int position);
 
 }

@@ -14,13 +14,15 @@ import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.SearchLog;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.adapter.OnLogDeleteClickListener;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.adapter.OnSearchLogClickListener;
 
+import java.util.Optional;
+
 /**
  * Creator : ch-yoon
  * Date : 2019-08-04.
  */
 public class SearchLogViewHolder extends RecyclerView.ViewHolder {
 
-    private ItemSearchHistoryBinding binding;
+    private final ItemSearchHistoryBinding binding;
 
     public SearchLogViewHolder(@NonNull View itemView) {
         super(itemView);

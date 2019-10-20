@@ -2,7 +2,9 @@ package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -26,6 +28,8 @@ import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.adapter.Search
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.helper.ImageSearchInspector;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewModel;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewModelFactory;
+
+import java.util.Optional;
 
 public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding> {
 
@@ -63,7 +67,7 @@ public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding
     private void initSearchKeywordEditText() {
         binding.keywordEditText.setOnEditorActionListener((v, actionId, event) -> {
             if(actionId == KeyEvent.KEYCODE_ENDCALL) {
-                String text = v.getText().toString();
+                final String text = v.getText().toString();
                 binding.getSearchBoxViewModel().clickSearchButton(text);
                 return true;
             }
@@ -135,31 +139,33 @@ public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding
             binding.getImageListViewModel().loadMoreImageListIfPossible(position)
         );
 
+        imageListAdapter.setOnFooterItemClickListener(() ->
+            binding.getImageListViewModel().retryLoadMoreImageList()
+        );
+
         imageListAdapter.setOnListItemClickListener((imageDocument, position) -> {
             Intent imageDetailIntent = ImageDetailActivity.getImageDetailActivityIntent(this, imageDocument);
             startActivity(imageDetailIntent);
         });
 
-        imageListAdapter.setOnFooterItemClickListener(() ->
-            binding.getImageListViewModel().retryLoadMoreImageList()
-        );
-
-        GridLayoutManager gridLayoutManager = (GridLayoutManager)binding.imageRecyclerView.getLayoutManager();
-        if(gridLayoutManager != null) {
-            gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-                @Override
-                public int getSpanSize(int position) {
-                    if(imageListAdapter.isFooterViewPosition(position)) {
-                        return gridLayoutManager.getSpanCount();
-                    } else {
-                        return 1;
-                    }
-                }
-            });
-        }
-
-        binding.imageRecyclerView.setLayoutManager(gridLayoutManager);
         binding.imageRecyclerView.setAdapter(imageListAdapter);
+
+        Optional.ofNullable(binding.imageRecyclerView.getLayoutManager())
+            .map(layoutManager -> (GridLayoutManager)layoutManager)
+            .ifPresent(gridLayoutManager -> {
+                gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                    @Override
+                    public int getSpanSize(int position) {
+                        if (imageListAdapter.isFooterViewPosition(position)) {
+                            return gridLayoutManager.getSpanCount();
+                        } else {
+                            return 1;
+                        }
+                    }
+                });
+
+                binding.imageRecyclerView.setLayoutManager(gridLayoutManager);
+            });
     }
 
     @Override

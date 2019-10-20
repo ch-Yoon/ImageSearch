@@ -20,8 +20,8 @@ public class SearchBoxViewModelFactory implements ViewModelProvider.Factory {
     @NonNull
     private final ImageRepository imageRepository;
 
-    public SearchBoxViewModelFactory(@NonNull Application application,
-                                     @NonNull ImageRepository imageRepository) {
+    public SearchBoxViewModelFactory(@NonNull final Application application,
+                                     @NonNull final ImageRepository imageRepository) {
         this.application = application;
         this.imageRepository = imageRepository;
     }
@@ -29,7 +29,7 @@ public class SearchBoxViewModelFactory implements ViewModelProvider.Factory {
     @SuppressWarnings("unchecked")
     @NonNull
     @Override
-    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+    public <T extends ViewModel> T create(@NonNull final Class<T> modelClass) {
         if (modelClass.isAssignableFrom(SearchBoxViewModel.class)) {
             return (T) new SearchBoxViewModel(application, imageRepository);
         }

@@ -14,6 +14,7 @@ import com.ch.yoon.kakao.pay.imagesearch.utils.KeyboardUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Creator : ch-yoon
@@ -22,8 +23,8 @@ import java.util.List;
 public class SearchBoxBindingAdapter {
 
     @BindingAdapter("searchLogList")
-    public static void setItems(@NonNull RecyclerView recyclerView,
-                                @Nullable List<SearchLog> searchLogList) {
+    public static void setItems(@NonNull final RecyclerView recyclerView,
+                                @Nullable final List<SearchLog> searchLogList) {
         final SearchLogAdapter adapter = ((SearchLogAdapter)recyclerView.getAdapter());
         if(adapter != null) {
             adapter.submitList(searchLogList == null ? null : new ArrayList<>(searchLogList));

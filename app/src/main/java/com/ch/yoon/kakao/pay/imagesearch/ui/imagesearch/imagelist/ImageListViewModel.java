@@ -5,7 +5,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -24,6 +23,8 @@ import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.helper.ImageSe
 import com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil;
 
 import java.util.List;
+import java.util.Optional;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
 /**
@@ -47,9 +48,6 @@ public class ImageListViewModel extends BaseViewModel {
     private final MutableLiveData<List<ImageDocument>> imageInfoListLiveData = new MutableLiveData<>();
     @NonNull
     private final MutableLiveData<ImageSearchState> imageSearchStateLiveData = new MutableLiveData<>();
-
-    @NonNull
-    private final SingleLiveEvent<String> showMessageLiveEvent = new SingleLiveEvent<>();
 
     @Nullable
     private SearchMetaInfo searchMetaInfo;
@@ -81,11 +79,6 @@ public class ImageListViewModel extends BaseViewModel {
     }
 
     @NonNull
-    public LiveData<String> observeShowMessage() {
-        return showMessageLiveEvent;
-    }
-
-    @NonNull
     public LiveData<ImageSearchState> observeImageSearchState() {
         return imageSearchStateLiveData;
     }
@@ -105,25 +98,21 @@ public class ImageListViewModel extends BaseViewModel {
 
     public void loadMoreImageListIfPossible(int displayPosition) {
         if(isRemainingMoreData()) {
-            final List<ImageDocument> imageDocumentList = imageInfoListLiveData.getValue();
-            if (imageDocumentList != null) {
-                imageSearchInspector.submitPreloadRequest(
-                    displayPosition,
-                    imageDocumentList.size(),
-                    DEFAULT_IMAGE_SORT_TYPE,
-                    getCountOfItemInLine()
+            Optional.ofNullable(imageInfoListLiveData.getValue())
+                .ifPresent(imageDocumentList ->
+                    imageSearchInspector.submitPreloadRequest(
+                        displayPosition,
+                        imageDocumentList.size(),
+                        DEFAULT_IMAGE_SORT_TYPE,
+                        getCountOfItemInLine()
+                    )
                 );
-            }
         }
     }
 
     private int getCountOfItemInLine() {
-        Integer countOfItemInLine = countOfItemInLineLiveData.getValue();
-        if(countOfItemInLine == null) {
-            countOfItemInLine = DEFAULT_COUNT_OF_ITEM_IN_LINE;
-        }
-
-        return countOfItemInLine;
+        return Optional.ofNullable(countOfItemInLineLiveData.getValue())
+            .orElse(DEFAULT_COUNT_OF_ITEM_IN_LINE);
     }
 
     private void observeImageSearchApprove() {
@@ -170,11 +159,6 @@ public class ImageListViewModel extends BaseViewModel {
         }
 
         Log.d(TAG, throwable.getMessage());
-    }
-
-    private void updateMessage(@StringRes int stringResourceId) {
-        final String message = getString(stringResourceId);
-        showMessageLiveEvent.setValue(message);
     }
 
     private boolean isNotRemainingMoreData() {
