@@ -6,11 +6,8 @@ import androidx.annotation.Nullable;
 import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.LocalImageDocument;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.ImageSearchRequest;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.ImageSortType;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageSearchResult;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ResultMeta;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.SimpleImageInfo;
-import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.model.ImageDocument;
-import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.model.SearchMetaInfo;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageDocument;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.SearchMetaInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,34 +52,34 @@ public class ImageInfoConverter {
         return localImageDocumentList;
     }
 
-    public static ImageSearchResult toImageSearchResult(@NonNull ImageSearchRequest imageSearchRequest,
-                                                        @Nullable SearchMetaInfo searchMetaInfo,
-                                                        @NonNull List<LocalImageDocument> localImageDocumentList) {
-        final boolean isEnd = searchMetaInfo == null || searchMetaInfo.isEnd();
-        final String keyword = imageSearchRequest.getKeyword();
-        final ImageSortType imageSortType = imageSearchRequest.getImageSortType();
-        final ResultMeta resultMeta = new ResultMeta(isEnd, keyword, imageSortType);
-
-        final List<SimpleImageInfo> simpleImageInfoList = new ArrayList<>();
-        for(LocalImageDocument document : localImageDocumentList) {
-            final String uniqueInfo = document.getId();
-            final String thumbnailUrl = document.getThumbnailUrl();
-
-            simpleImageInfoList.add(new SimpleImageInfo(uniqueInfo, thumbnailUrl));
-        }
-
-        return new ImageSearchResult(resultMeta, simpleImageInfoList);
-    }
-
-    public static ImageSearchResult toImageSearchResult(@NonNull ImageSearchRequest imageSearchRequest,
-                                                        @NonNull List<SimpleImageInfo> simpleImageInfoList) {
-        final String keyword = imageSearchRequest.getKeyword();
-        final ImageSortType imageSortType = imageSearchRequest.getImageSortType();
-        final boolean isLastData = simpleImageInfoList.size() < imageSearchRequest.getRequiredSize();
-
-        final ResultMeta resultMeta = new ResultMeta(isLastData, keyword, imageSortType);
-
-        return new ImageSearchResult(resultMeta, simpleImageInfoList);
-    }
+//    public static ImageSearchResult toImageSearchResult(@NonNull ImageSearchRequest imageSearchRequest,
+//                                                        @Nullable SearchMetaInfo searchMetaInfo,
+//                                                        @NonNull List<LocalImageDocument> localImageDocumentList) {
+//        final boolean isEnd = searchMetaInfo == null || searchMetaInfo.isEnd();
+//        final String keyword = imageSearchRequest.getKeyword();
+//        final ImageSortType imageSortType = imageSearchRequest.getImageSortType();
+//        final ResultMeta resultMeta = new ResultMeta(isEnd, keyword, imageSortType);
+//
+//        final List<SimpleImageInfo> simpleImageInfoList = new ArrayList<>();
+//        for(LocalImageDocument document : localImageDocumentList) {
+//            final String uniqueInfo = document.getId();
+//            final String thumbnailUrl = document.getThumbnailUrl();
+//
+//            simpleImageInfoList.add(new SimpleImageInfo(uniqueInfo, thumbnailUrl));
+//        }
+//
+//        return new ImageSearchResult(resultMeta, simpleImageInfoList);
+//    }
+//
+//    public static ImageSearchResult toImageSearchResult(@NonNull ImageSearchRequest imageSearchRequest,
+//                                                        @NonNull List<SimpleImageInfo> simpleImageInfoList) {
+//        final String keyword = imageSearchRequest.getKeyword();
+//        final ImageSortType imageSortType = imageSearchRequest.getImageSortType();
+//        final boolean isLastData = simpleImageInfoList.size() < imageSearchRequest.getRequiredSize();
+//
+//        final ResultMeta resultMeta = new ResultMeta(isLastData, keyword, imageSortType);
+//
+//        return new ImageSearchResult(resultMeta, simpleImageInfoList);
+//    }
 
 }

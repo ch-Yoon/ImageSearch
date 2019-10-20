@@ -9,7 +9,6 @@ import androidx.lifecycle.Observer;
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.RxSchedulerRule;
 import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepository;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.DetailImageInfo;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -81,7 +80,7 @@ public class ImageDetailViewModelTest {
     @Test
     public void id값이_null일때_에러메시지가_반영되는지_테스트() {
         // when
-        imageDetailViewModel.loadImage(null);
+        imageDetailViewModel.showImageDetailInfo(null);
 
         // then
         assertEquals(imageDetailViewModel.observeShowMessage().getValue(), UNKNOWN_ERROR_MESSAGE);
@@ -93,7 +92,7 @@ public class ImageDetailViewModelTest {
         imageDetailViewModel.observeFinishEvent().observeForever(mockVoidObserver);
 
         // when
-        imageDetailViewModel.loadImage(null);
+        imageDetailViewModel.showImageDetailInfo(null);
 
         // then
         verify(mockVoidObserver, times(1)).onChanged(any());
@@ -119,7 +118,7 @@ public class ImageDetailViewModelTest {
             thenReturn(Single.just(detailImageInfo));
 
         // when
-        imageDetailViewModel.loadImage("테스트");
+        imageDetailViewModel.showImageDetailInfo("테스트");
 
         // then
         verify(mockImageRepository, times(1)).requestImageDetailInfo("테스트");
@@ -132,7 +131,7 @@ public class ImageDetailViewModelTest {
             thenReturn(Single.error(new Throwable()));
 
         // when
-        imageDetailViewModel.loadImage("테스트");
+        imageDetailViewModel.showImageDetailInfo("테스트");
 
         // then
         assertEquals(imageDetailViewModel.observeShowMessage().getValue(), UNKNOWN_ERROR_MESSAGE);
@@ -147,7 +146,7 @@ public class ImageDetailViewModelTest {
         imageDetailViewModel.observeFinishEvent().observeForever(mockVoidObserver);
 
         // when
-        imageDetailViewModel.loadImage("테스트");
+        imageDetailViewModel.showImageDetailInfo("테스트");
 
         // then
         verify(mockVoidObserver, times(1)).onChanged(any());
@@ -161,7 +160,7 @@ public class ImageDetailViewModelTest {
             thenReturn(Single.just(detailImageInfo));
 
         // when
-        imageDetailViewModel.loadImage("테스트");
+        imageDetailViewModel.showImageDetailInfo("테스트");
 
         // then
         assertEquals(detailImageInfo.getImageUrl(), imageDetailViewModel.observeImageUrl().getValue());
@@ -177,7 +176,7 @@ public class ImageDetailViewModelTest {
         imageDetailViewModel.observeMoveWebEvent().observeForever(mockStringObserver);
 
         // when
-        imageDetailViewModel.loadImage("테스트");
+        imageDetailViewModel.showImageDetailInfo("테스트");
         imageDetailViewModel.onClickWebButton();
 
         // then
@@ -194,7 +193,7 @@ public class ImageDetailViewModelTest {
         imageDetailViewModel.observeShowMessage().observeForever(mockStringObserver);
 
         // when
-        imageDetailViewModel.loadImage("테스트");
+        imageDetailViewModel.showImageDetailInfo("테스트");
         imageDetailViewModel.onClickWebButton();
 
         // then
@@ -264,7 +263,7 @@ public class ImageDetailViewModelTest {
         return showMessageLiveEvent;
     }
 
-    public void loadImage(@NonNull String id) {
+    public void showImageDetailInfo(@NonNull String id) {
         registerDisposable(
             imageRepository.requestImageDetailInfo(id)
                 .observeOn(AndroidSchedulers.mainThread())

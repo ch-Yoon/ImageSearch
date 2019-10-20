@@ -1,14 +1,11 @@
 package com.ch.yoon.kakao.pay.imagesearch.repository.local.room;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.VisibleForTesting;
 
 import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.dao.ImageSearchDao;
 import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.LocalImageDocument;
 import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.SearchLog;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.ImageSearchRequest;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.DetailImageInfo;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.SimpleImageInfo;
 
 import java.util.List;
 
@@ -41,23 +38,23 @@ public class ImageLocalDataSource {
         imageSearchDao.insertAll(localImageDocumentList);
     }
 
-    @NonNull
-    public Single<List<SimpleImageInfo>> getImageSearchList(@NonNull ImageSearchRequest imageSearchRequest) {
-        final int requiredSize = imageSearchRequest.getRequiredSize();
-        final int pageNumber = imageSearchRequest.getPageNumber();
-
-        final String keyword = imageSearchRequest.getKeyword();
-        final int startNumber = (requiredSize * (pageNumber - 1)) + 1;
-        final int endNumber = startNumber + imageSearchRequest.getRequiredSize() - 1;
-        final String imageSortType = imageSearchRequest.getImageSortType().getType();
-
-        return imageSearchDao.selectSimpleImageInfoList(keyword, startNumber, endNumber, imageSortType);
-    }
-
-    @NonNull
-    public Single<DetailImageInfo> getImageDetailInfo(@NonNull String id) {
-        return imageSearchDao.selectDetailImageInfo(id);
-    }
+//    @NonNull
+//    public Single<List<SimpleImageInfo>> getImageSearchList(@NonNull ImageSearchRequest imageSearchRequest) {
+//        final int requiredSize = imageSearchRequest.getRequiredSize();
+//        final int pageNumber = imageSearchRequest.getPageNumber();
+//
+//        final String keyword = imageSearchRequest.getKeyword();
+//        final int startNumber = (requiredSize * (pageNumber - 1)) + 1;
+//        final int endNumber = startNumber + imageSearchRequest.getRequiredSize() - 1;
+//        final String imageSortType = imageSearchRequest.getImageSortType().getType();
+//
+//        return imageSearchDao.selectSimpleImageInfoList(keyword, startNumber, endNumber, imageSortType);
+//    }
+//
+//    @NonNull
+//    public Single<DetailImageInfo> getImageDetailInfo(@NonNull String id) {
+//        return imageSearchDao.selectDetailImageInfo(id);
+//    }
 
     @NonNull
     public Completable deleteAllByKeyword(@NonNull String keyword) {

@@ -1,6 +1,6 @@
 package com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao;
 
-import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.model.ImageSearchResponse;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageSearchResponse;
 
 import io.reactivex.Single;
 import retrofit2.http.GET;

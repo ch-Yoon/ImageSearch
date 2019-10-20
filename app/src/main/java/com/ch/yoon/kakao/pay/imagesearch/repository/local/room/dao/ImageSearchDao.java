@@ -7,8 +7,6 @@ import androidx.room.Query;
 
 import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.LocalImageDocument;
 import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.SearchLog;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.DetailImageInfo;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.SimpleImageInfo;
 
 import java.util.List;
 
@@ -28,20 +26,20 @@ public interface ImageSearchDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<LocalImageDocument> documents);
 
-    @Query("SELECT id, thumbnailUrl " +
-        "FROM documents " +
-        "WHERE keyword == :keyword AND " +
-        "itemNumber >= :startNumber AND " +
-        "itemNumber <= :endNumber AND " +
-        "imageSortType == :imageSortType")
-    Single<List<SimpleImageInfo>> selectSimpleImageInfoList(String keyword,
-                                                            int startNumber,
-                                                            int endNumber,
-                                                            String imageSortType);
-
-    @Query("SELECT imageUrl, displaySiteName, docUrl, dateTime, width, height " +
-            "FROM documents WHERE id = :id")
-    Single<DetailImageInfo> selectDetailImageInfo(String id);
+//    @Query("SELECT id, thumbnailUrl " +
+//        "FROM documents " +
+//        "WHERE keyword == :keyword AND " +
+//        "itemNumber >= :startNumber AND " +
+//        "itemNumber <= :endNumber AND " +
+//        "imageSortType == :imageSortType")
+//    Single<List<SimpleImageInfo>> selectSimpleImageInfoList(String keyword,
+//                                                            int startNumber,
+//                                                            int endNumber,
+//                                                            String imageSortType);
+//
+//    @Query("SELECT imageUrl, displaySiteName, docUrl, dateTime, width, height " +
+//            "FROM documents WHERE id = :id")
+//    Single<DetailImageInfo> selectDetailImageInfo(String id);
 
     @Query("SELECT * FROM searchLogs")
     Single<List<SearchLog>> selectAllSearchLog();

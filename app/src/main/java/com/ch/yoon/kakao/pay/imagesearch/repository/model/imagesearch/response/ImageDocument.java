@@ -1,4 +1,7 @@
-package com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.model;
+package com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response;
+
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,7 +12,7 @@ import com.google.gson.annotations.SerializedName;
  * Creator : ch-yoon
  * Date : 2019-08-01.
  */
-public final class ImageDocument {
+public final class ImageDocument implements Parcelable {
 
     @Nullable
     @SerializedName("collection")
@@ -111,5 +114,45 @@ public final class ImageDocument {
             ", dateTime='" + dateTime + '\'' +
             '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.collection);
+        dest.writeString(this.thumbnailUrl);
+        dest.writeString(this.imageUrl);
+        dest.writeInt(this.width);
+        dest.writeInt(this.height);
+        dest.writeString(this.displaySiteName);
+        dest.writeString(this.docUrl);
+        dest.writeString(this.dateTime);
+    }
+
+    protected ImageDocument(Parcel in) {
+        this.collection = in.readString();
+        this.thumbnailUrl = in.readString();
+        this.imageUrl = in.readString();
+        this.width = in.readInt();
+        this.height = in.readInt();
+        this.displaySiteName = in.readString();
+        this.docUrl = in.readString();
+        this.dateTime = in.readString();
+    }
+
+    public static final Creator<ImageDocument> CREATOR = new Creator<ImageDocument>() {
+        @Override
+        public ImageDocument createFromParcel(Parcel source) {
+            return new ImageDocument(source);
+        }
+
+        @Override
+        public ImageDocument[] newArray(int size) {
+            return new ImageDocument[size];
+        }
+    };
 
 }

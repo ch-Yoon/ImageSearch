@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.SimpleImageInfo;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageDocument;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.adapter.viewholder.RetryFooterViewHolder;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.adapter.viewholder.ImageListViewHolder;
 
@@ -22,7 +22,7 @@ import java.util.Objects;
  * Creator : ch-yoon
  * Date : 2019-08-02.
  */
-public class ImageListAdapter extends ListAdapter<SimpleImageInfo, RecyclerView.ViewHolder> {
+public class ImageListAdapter extends ListAdapter<ImageDocument, RecyclerView.ViewHolder> {
 
     private static final int TYPE_ITEM = 1;
     private static final int TYPE_FOOTER = 2;
@@ -120,16 +120,16 @@ public class ImageListAdapter extends ListAdapter<SimpleImageInfo, RecyclerView.
         this.onRetryItemClickListener = onRetryItemClickListener;
     }
 
-    private static final DiffUtil.ItemCallback<SimpleImageInfo> DiffCallback = new DiffUtil.ItemCallback<SimpleImageInfo>() {
+    private static final DiffUtil.ItemCallback<ImageDocument> DiffCallback = new DiffUtil.ItemCallback<ImageDocument>() {
 
         @Override
-        public boolean areItemsTheSame(@NonNull SimpleImageInfo oldItem, @NonNull SimpleImageInfo newItem) {
+        public boolean areItemsTheSame(@NonNull ImageDocument oldItem, @NonNull ImageDocument newItem) {
             return Objects.equals(oldItem, newItem);
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull SimpleImageInfo oldItem, @NonNull SimpleImageInfo newItem) {
-            return oldItem.equals(newItem);
+        public boolean areContentsTheSame(@NonNull ImageDocument oldItem, @NonNull ImageDocument newItem) {
+            return Objects.equals(oldItem, newItem);
         }
 
     };

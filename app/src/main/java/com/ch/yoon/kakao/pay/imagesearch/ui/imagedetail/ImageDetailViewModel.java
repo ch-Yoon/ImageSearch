@@ -9,9 +9,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageDocument;
 import com.ch.yoon.kakao.pay.imagesearch.ui.common.livedata.SingleLiveEvent;
 import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepository;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.DetailImageInfo;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -25,9 +25,6 @@ public class ImageDetailViewModel extends BaseViewModel {
     private static final String TAG = ImageDetailViewModel.class.getName();
 
     @NonNull
-    private final ImageRepository imageRepository;
-
-    @NonNull
     private final MutableLiveData<String> imageUrlLiveData = new MutableLiveData<>();
 
     @NonNull
@@ -38,12 +35,10 @@ public class ImageDetailViewModel extends BaseViewModel {
     private final SingleLiveEvent<Void> finishEvent = new SingleLiveEvent<>();
 
     @Nullable
-    private DetailImageInfo detailImageInfo;
+    private ImageDocument imageDocument;
 
-    ImageDetailViewModel(@NonNull Application application,
-                         @NonNull ImageRepository imageRepository) {
+    ImageDetailViewModel(@NonNull Application application) {
         super(application);
-        this.imageRepository = imageRepository;
     }
 
     @NonNull
@@ -66,27 +61,18 @@ public class ImageDetailViewModel extends BaseViewModel {
         return finishEvent;
     }
 
-    public void loadImage(@Nullable String id) {
-        if(id != null) {
-            registerDisposable(
-                imageRepository.requestImageDetailInfo(id)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                        this::updateImageDetailInfo,
-                        throwable -> {
-                            handlingUnknownError();
-                            Log.d(TAG, throwable.getMessage());
-                        }
-                    )
-            );
+    public void showImageDetailInfo(@Nullable ImageDocument imageDocument) {
+        if(imageDocument != null) {
+            this.imageDocument = imageDocument;
+            imageUrlLiveData.setValue(imageDocument.getImageUrl());
         } else {
             handlingUnknownError();
         }
     }
 
     public void onClickWebButton() {
-        if(detailImageInfo != null) {
-            final String docUrl = detailImageInfo.getDocUrl();
+        if(imageDocument != null) {
+            final String docUrl = imageDocument.getDocUrl();
             if(docUrl != null) {
                 docUrlLiveEvent.setValue(docUrl);
             } else {
@@ -101,14 +87,11 @@ public class ImageDetailViewModel extends BaseViewModel {
         finishEvent.call();
     }
 
-    private void updateImageDetailInfo(DetailImageInfo detailImageInfo) {
-        this.detailImageInfo = detailImageInfo;
-        imageUrlLiveData.setValue(detailImageInfo.getImageUrl());
-    }
-
     private void handlingUnknownError() {
         showMessageLiveEvent.setValue(getString(R.string.error_unknown_error));
         finishEvent.call();
+
+        Log.d(TAG, "image document is null");
     }
 
 }

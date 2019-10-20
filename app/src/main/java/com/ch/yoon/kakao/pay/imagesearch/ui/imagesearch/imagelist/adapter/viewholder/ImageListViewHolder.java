@@ -8,7 +8,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ItemImageListBinding;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.SimpleImageInfo;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageDocument;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.adapter.OnListItemClickListener;
 import com.ch.yoon.kakao.pay.imagesearch.utils.GlideUtil;
 
@@ -25,8 +25,8 @@ public class ImageListViewHolder extends RecyclerView.ViewHolder {
         binding = DataBindingUtil.bind(itemView);
     }
 
-    public void setItem(@NonNull SimpleImageInfo simpleImageInfo) {
-        binding.setImageInfo(simpleImageInfo);
+    public void setItem(@NonNull ImageDocument imageDocument) {
+        binding.setImageInfo(imageDocument);
     }
 
     public void setOnListItemClickListener(@Nullable OnListItemClickListener onListItemClickListener) {

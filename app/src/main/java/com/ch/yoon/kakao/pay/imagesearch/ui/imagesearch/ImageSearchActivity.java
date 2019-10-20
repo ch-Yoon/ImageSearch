@@ -135,8 +135,8 @@ public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding
             binding.getImageListViewModel().loadMoreImageListIfPossible(position)
         );
 
-        imageListAdapter.setOnListItemClickListener((imageInfo, position) -> {
-            Intent imageDetailIntent = ImageDetailActivity.getImageDetailActivityIntent(this, imageInfo.getId());
+        imageListAdapter.setOnListItemClickListener((imageDocument, position) -> {
+            Intent imageDetailIntent = ImageDetailActivity.getImageDetailActivityIntent(this, imageDocument);
             startActivity(imageDetailIntent);
         });
 
