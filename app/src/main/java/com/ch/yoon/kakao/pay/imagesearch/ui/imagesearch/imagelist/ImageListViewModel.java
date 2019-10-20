@@ -1,6 +1,7 @@
 package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist;
 
 import android.app.Application;
+import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -11,6 +12,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageDocument;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageSearchResponse;
+import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageSearchResult;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.SearchMetaInfo;
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepository;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSearchRequest;
@@ -42,9 +44,11 @@ public class ImageListViewModel extends BaseViewModel {
     private final ImageSearchInspector imageSearchInspector;
 
     @NonNull
+    private final MutableLiveData<ImageSortType> imageSortTypeLiveData = new MutableLiveData<>();
+    @NonNull
     private final MutableLiveData<Integer> countOfItemInLineLiveData = new MutableLiveData<>();
     @NonNull
-    private final MutableLiveData<List<ImageDocument>> imageInfoListLiveData = new MutableLiveData<>();
+    private final MutableLiveData<List<ImageDocument>> imageDocumentListLiveData = new MutableLiveData<>();
     @NonNull
     private final MutableLiveData<ImageSearchState> imageSearchStateLiveData = new MutableLiveData<>();
 
@@ -62,9 +66,15 @@ public class ImageListViewModel extends BaseViewModel {
     }
 
     private void init() {
+        imageSortTypeLiveData.setValue(DEFAULT_IMAGE_SORT_TYPE);
         countOfItemInLineLiveData.setValue(DEFAULT_COUNT_OF_ITEM_IN_LINE);
         imageSearchStateLiveData.setValue(ImageSearchState.NONE);
         observeImageSearchApprove();
+    }
+
+    @NonNull
+    public LiveData<ImageSortType> observeImageSortType() {
+        return imageSortTypeLiveData;
     }
 
     @NonNull
@@ -73,8 +83,8 @@ public class ImageListViewModel extends BaseViewModel {
     }
 
     @NonNull
-    public LiveData<List<ImageDocument>> observeImageInfoList() {
-        return imageInfoListLiveData;
+    public LiveData<List<ImageDocument>> observeImageDocumentList() {
+        return imageDocumentListLiveData;
     }
 
     @NonNull
@@ -82,13 +92,22 @@ public class ImageListViewModel extends BaseViewModel {
         return imageSearchStateLiveData;
     }
 
+    public void changeImageSortType(final ImageSortType imageSortType) {
+        imageSortTypeLiveData.setValue(imageSortType);
+
+        final String previousKeyword = imageSearchInspector.getPreviousRequestKeyword();
+        if(!TextUtils.isEmpty(previousKeyword)) {
+            imageSearchInspector.submitFirstImageSearchRequest(previousKeyword, getImageSortType());
+        }
+    }
+
     public void changeCountOfItemInLine(final int countOfItemInLine) {
         countOfItemInLineLiveData.setValue(countOfItemInLine);
     }
 
     public void loadImageList(@NonNull final String keyword) {
-        imageInfoListLiveData.setValue(null);
-        imageSearchInspector.submitFirstImageSearchRequest(keyword, DEFAULT_IMAGE_SORT_TYPE);
+        clearBeforeImageDocumentList();
+        imageSearchInspector.submitFirstImageSearchRequest(keyword, getImageSortType());
     }
 
     public void retryLoadMoreImageList() {
@@ -97,21 +116,16 @@ public class ImageListViewModel extends BaseViewModel {
 
     public void loadMoreImageListIfPossible(final int displayPosition) {
         if(isRemainingMoreData()) {
-            final List<ImageDocument> imageDocumentList = imageInfoListLiveData.getValue();
+            final List<ImageDocument> imageDocumentList = imageDocumentListLiveData.getValue();
             if (imageDocumentList != null) {
                 imageSearchInspector.submitPreloadRequest(
                     displayPosition,
                     imageDocumentList.size(),
-                    DEFAULT_IMAGE_SORT_TYPE,
+                    getImageSortType(),
                     getCountOfItemInLine()
                 );
             }
         }
-    }
-
-    private int getCountOfItemInLine() {
-        Integer countOfItemInLine = countOfItemInLineLiveData.getValue();
-        return countOfItemInLine != null ? countOfItemInLine : DEFAULT_COUNT_OF_ITEM_IN_LINE;
     }
 
     private void observeImageSearchApprove() {
@@ -128,14 +142,25 @@ public class ImageListViewModel extends BaseViewModel {
         );
     }
 
-    private void handlingReceivedResponse(final ImageSearchResponse imageSearchResponse) {
+    private void handlingReceivedResponse(final ImageSearchResult imageSearchResult) {
         changeImageSearchState(ImageSearchState.SUCCESS);
 
-        searchMetaInfo = imageSearchResponse.getSearchMetaInfo();
+        if(imageSearchResult.getImageSearchRequest().isFirstRequest()) {
+            clearBeforeImageDocumentList();
+        }
+        updateSearchMetaInfo(imageSearchResult.getSearchMetaInfo());
+        updateImageInfoList(imageSearchResult.getImageDocumentList());
+    }
 
-        final List<ImageDocument> oldList = imageInfoListLiveData.getValue();
+    private void updateSearchMetaInfo(final SearchMetaInfo searchMetaInfo) {
+        this.searchMetaInfo = searchMetaInfo;
+    }
+
+    private void updateImageInfoList(final List<ImageDocument> receivedImageDocumentList) {
+        final List<ImageDocument> oldList = imageDocumentListLiveData.getValue();
+
         final List<ImageDocument> newList = new ArrayList<>(oldList == null ? new ArrayList<>() : oldList);
-        newList.addAll(imageSearchResponse.getImageDocumentList());
+        newList.addAll(receivedImageDocumentList);
 
         if(CollectionUtil.isEmpty(newList)) {
             updateMessage(R.string.success_image_search_no_result);
@@ -143,18 +168,22 @@ public class ImageListViewModel extends BaseViewModel {
             updateMessage(R.string.success_image_search_last_data);
         }
 
-        imageInfoListLiveData.setValue(newList);
+        imageDocumentListLiveData.setValue(newList);
     }
 
-    private void handlingError(Throwable throwable) {
+    private void clearBeforeImageDocumentList() {
+        imageDocumentListLiveData.setValue(new ArrayList<>());
+    }
+
+    private void handlingError(final Throwable throwable) {
         changeImageSearchState(ImageSearchState.FAIL);
 
         if(throwable instanceof ImageSearchException) {
             final ImageSearchError error = ((ImageSearchException)throwable).getImageSearchError();
             updateMessage(error.getErrorMessageResourceId());
+        } else {
+            Log.d(TAG, throwable.getMessage());
         }
-
-        Log.d(TAG, throwable.getMessage());
     }
 
     private boolean isNotRemainingMoreData() {
@@ -170,6 +199,16 @@ public class ImageListViewModel extends BaseViewModel {
         if(previousImageSearchState != imageSearchState) {
             imageSearchStateLiveData.setValue(imageSearchState);
         }
+    }
+
+    private ImageSortType getImageSortType() {
+        ImageSortType imageSortType = imageSortTypeLiveData.getValue();
+        return imageSortType != null ? imageSortType : DEFAULT_IMAGE_SORT_TYPE;
+    }
+
+    private int getCountOfItemInLine() {
+        Integer countOfItemInLine = countOfItemInLineLiveData.getValue();
+        return countOfItemInLine != null ? countOfItemInLine : DEFAULT_COUNT_OF_ITEM_IN_LINE;
     }
 
 }

@@ -147,7 +147,7 @@ public class ImageListViewModelTest {
         imageListViewModel.loadImageList("테스트");
 
         // then
-        List<ImageDocument> targetList = imageListViewModel.observeImageInfoList().getValue();
+        List<ImageDocument> targetList = imageListViewModel.observeImageDocumentList().getValue();
         assertEquals(targetList, expectedList);
     }
 
@@ -161,7 +161,7 @@ public class ImageListViewModelTest {
         imageListViewModel.loadImageList("테스트");
 
         // then
-        List<ImageDocument> targetList = imageListViewModel.observeImageInfoList().getValue();
+        List<ImageDocument> targetList = imageListViewModel.observeImageDocumentList().getValue();
         assertEquals(targetList.size(), 0);
     }
 
@@ -227,11 +227,11 @@ public class ImageListViewModelTest {
 
         // when
         imageListViewModel.loadImageList("테스트");
-        int dataSize = imageListViewModel.observeImageInfoList().getValue().size();
+        int dataSize = imageListViewModel.observeImageDocumentList().getValue().size();
         imageListViewModel.loadMoreImageListIfPossible(dataSize - 3);
 
         // then
-        List<ImageDocument> targetList = imageListViewModel.observeImageInfoList().getValue();
+        List<ImageDocument> targetList = imageListViewModel.observeImageDocumentList().getValue();
         assertEquals(targetList, expectedList);
     }
 
@@ -248,7 +248,7 @@ public class ImageListViewModelTest {
         // when
         imageListViewModel.loadImageList("테스트");
 
-        int dataSize = imageListViewModel.observeImageInfoList().getValue().size();
+        int dataSize = imageListViewModel.observeImageDocumentList().getValue().size();
         imageListViewModel.loadMoreImageListIfPossible(dataSize - 1);
         imageListViewModel.loadMoreImageListIfPossible(dataSize - 1);
         imageListViewModel.loadMoreImageListIfPossible(dataSize - 1);

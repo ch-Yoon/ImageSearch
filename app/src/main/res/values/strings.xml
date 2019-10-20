@@ -2,8 +2,10 @@
     <string name="app_name">ImageSearch</string>
     <string name="my_name">윤찬혁</string>
 
-    <!-- imageDocumentList search activity -->
+    <!-- image search activity -->
     <string name="image_search_edit_text_hint">검색어를 입력해주세요</string>
+    <string name="image_sort_type_accuracy_text">정확도</string>
+    <string name="image_sort_type_recency_text">최신</string>
 
     <!-- error message -->
     <string name="error_image_search_wrong_request">잘못된 요청입니다</string>

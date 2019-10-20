@@ -36,7 +36,7 @@ public final class ImageSearchResponse {
 
     @NonNull
     public List<ImageDocument> getImageDocumentList() {
-        return Optional.ofNullable(imageDocumentList).orElseGet(ArrayList::new);
+        return imageDocumentList != null ? imageDocumentList : new ArrayList<>();
     }
 
     @NonNull
