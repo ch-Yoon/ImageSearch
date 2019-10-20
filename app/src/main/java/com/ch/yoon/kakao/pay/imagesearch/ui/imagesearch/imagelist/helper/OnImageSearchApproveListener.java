@@ -10,6 +10,6 @@ import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.Im
  */
 public interface OnImageSearchApproveListener {
 
-    void onImageSearchApprove(@NonNull ImageSearchRequest imageSearchRequest);
+    void onImageSearchApprove(@NonNull final ImageSearchRequest imageSearchRequest);
 
 }

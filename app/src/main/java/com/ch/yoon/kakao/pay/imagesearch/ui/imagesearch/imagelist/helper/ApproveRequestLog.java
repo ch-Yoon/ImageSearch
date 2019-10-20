@@ -18,7 +18,7 @@ public final class ApproveRequestLog {
         return keyword;
     }
 
-    void setKeyword(@NonNull String keyword) {
+    void setKeyword(@NonNull final String keyword) {
         this.keyword = keyword;
     }
 
@@ -26,7 +26,7 @@ public final class ApproveRequestLog {
         return dataTotalSize;
     }
 
-    void setDataTotalSize(int dataTotalSize) {
+    void setDataTotalSize(final int dataTotalSize) {
         this.dataTotalSize = dataTotalSize;
     }
 
@@ -34,7 +34,7 @@ public final class ApproveRequestLog {
         return pageNumber;
     }
 
-    void setPageNumber(int pageNumber) {
+    void setPageNumber(final int pageNumber) {
         this.pageNumber = pageNumber;
     }
 

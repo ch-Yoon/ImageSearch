@@ -72,7 +72,7 @@ public class ImageListBindingAdapter {
     public static void applySelectedState(@NonNull ImageView imageView,
                                           @Nullable Integer inputtedCountOfItemInLine,
                                           @Nullable Integer expectedCountOfItemInLine) {
-        boolean isSelected = IntegerUtil.isSame(inputtedCountOfItemInLine, expectedCountOfItemInLine);
+        final boolean isSelected = IntegerUtil.isSame(inputtedCountOfItemInLine, expectedCountOfItemInLine);
         imageView.setSelected(isSelected);
     }
 

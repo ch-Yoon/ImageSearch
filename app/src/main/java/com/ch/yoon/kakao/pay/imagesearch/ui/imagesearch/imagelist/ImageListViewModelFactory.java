@@ -22,9 +22,9 @@ public class ImageListViewModelFactory implements ViewModelProvider.Factory {
     @NonNull
     private final ImageSearchInspector imageSearchInspector;
 
-    public ImageListViewModelFactory(@NonNull Application application,
-                              @NonNull ImageRepository imageRepository,
-                              @NonNull ImageSearchInspector imageSearchInspector) {
+    public ImageListViewModelFactory(@NonNull final Application application,
+                                     @NonNull final ImageRepository imageRepository,
+                                     @NonNull final ImageSearchInspector imageSearchInspector) {
         this.application = application;
         this.imageRepository = imageRepository;
         this.imageSearchInspector = imageSearchInspector;
@@ -33,7 +33,7 @@ public class ImageListViewModelFactory implements ViewModelProvider.Factory {
     @SuppressWarnings("unchecked")
     @NonNull
     @Override
-    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+    public <T extends ViewModel> T create(@NonNull final Class<T> modelClass) {
         if (modelClass.isAssignableFrom(ImageListViewModel.class)) {
             return (T) new ImageListViewModel(application, imageRepository, imageSearchInspector);
         }
