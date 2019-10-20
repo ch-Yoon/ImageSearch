@@ -122,7 +122,7 @@ public class ImageRepositoryImplTest {
     }
 
     private ImageSearchRequest emptyImageSearchRequest() {
-        return new ImageSearchRequest("", ImageSortType.ACCURACY, 0, 0);
+        return new ImageSearchRequest("", ImageSortType.ACCURACY, 0, 0, true);
     }
 
     private List<SearchLog> emptySearchLogList() {
