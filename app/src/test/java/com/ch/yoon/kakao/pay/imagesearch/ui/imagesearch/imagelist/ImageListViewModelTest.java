@@ -12,6 +12,9 @@ import com.ch.yoon.kakao.pay.imagesearch.RxSchedulerRule;
 import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepository;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.ImageSearchRequest;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.ImageSortType;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageDocument;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageSearchResponse;
+import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.SearchMetaInfo;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.error.ImageSearchError;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.error.ImageSearchException;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.helper.ImageSearchInspector;
@@ -133,12 +136,12 @@ public class ImageListViewModelTest {
     @Test
     public void 최초_이미지_목록_요청시_수신한_이미지_목록이_반영되는지_테스트() {
         // given
-        ArrayList<SimpleImageInfo> expectedList = new ArrayList<>();
+        ArrayList<ImageDocument> expectedList = new ArrayList<>();
         when(mockImageRepository.requestImageList(any(ImageSearchRequest.class)))
-            .thenAnswer((Answer<Single<ImageSearchResult>>) invocation -> {
+            .thenAnswer((Answer<Single<ImageSearchResponse>>) invocation -> {
                 ImageSearchRequest request = invocation.getArgument(0);
-                ImageSearchResult result = createVirtualImageSearchResult(request, false);
-                expectedList.addAll(result.getSimpleImageInfoList());
+                ImageSearchResponse result = createVirtualImageSearchResult(request, false);
+                expectedList.addAll(result.getImageDocumentList());
                 return Single.fromCallable(() -> result);
             });
 
@@ -146,7 +149,7 @@ public class ImageListViewModelTest {
         imageListViewModel.loadImageList("테스트");
 
         // then
-        List<SimpleImageInfo> targetList = imageListViewModel.observeImageInfoList().getValue();
+        List<ImageDocument> targetList = imageListViewModel.observeImageInfoList().getValue();
         assertEquals(targetList, expectedList);
     }
 
@@ -154,9 +157,9 @@ public class ImageListViewModelTest {
     public void 최초_이미지_목록_요청시_수신한_리스트의_사이즈가_0이어도_반영되는지_테스트() {
         // given
         when(mockImageRepository.requestImageList(any(ImageSearchRequest.class)))
-            .thenAnswer((Answer<Single<ImageSearchResult>>) invocation -> {
+            .thenAnswer((Answer<Single<ImageSearchResponse>>) invocation -> {
                 ImageSearchRequest request = invocation.getArgument(0);
-                ImageSearchResult result = createEmptyImageSearchResult(request);
+                ImageSearchResponse result = createEmptyImageSearchResult(request);
                 return Single.fromCallable(() -> result);
             });
 
@@ -164,7 +167,7 @@ public class ImageListViewModelTest {
         imageListViewModel.loadImageList("테스트");
 
         // then
-        List<SimpleImageInfo> targetList = imageListViewModel.observeImageInfoList().getValue();
+        List<ImageDocument> targetList = imageListViewModel.observeImageInfoList().getValue();
         assertEquals(targetList.size(), 0);
     }
 
@@ -172,9 +175,9 @@ public class ImageListViewModelTest {
     public void 최초_이미지_목록_요청시_수신한_리스트의_사이즈가_0이라면_검색결과가_없다는_메시지가_반영되는지_테스트() {
         // given
         when(mockImageRepository.requestImageList(any(ImageSearchRequest.class)))
-            .thenAnswer((Answer<Single<ImageSearchResult>>) invocation -> {
+            .thenAnswer((Answer<Single<ImageSearchResponse>>) invocation -> {
                 ImageSearchRequest request = invocation.getArgument(0);
-                ImageSearchResult result = createEmptyImageSearchResult(request);
+                ImageSearchResponse result = createEmptyImageSearchResult(request);
                 return Single.fromCallable(() -> result);
             });
 
@@ -190,7 +193,7 @@ public class ImageListViewModelTest {
     public void 최초_이미지_목록_요청시_에러가_수신된다면_에러_메시지가_반영되는지_테스트() {
         // given
         when(mockImageRepository.requestImageList(any(ImageSearchRequest.class)))
-            .thenAnswer((Answer<Single<ImageSearchResult>>) invocation ->
+            .thenAnswer((Answer<Single<ImageSearchResponse>>) invocation ->
                 Single.create(emitter -> emitter.onError(new ImageSearchException("network error", ImageSearchError.NETWORK_NOT_CONNECTING_ERROR)))
             );
 
@@ -206,9 +209,9 @@ public class ImageListViewModelTest {
     public void 최초_이미지_목록_요청시_마지막_데이터라면_마지막을_뜻하는_메시지가_반영되는지_테스트() {
         // given
         when(mockImageRepository.requestImageList(any(ImageSearchRequest.class)))
-            .thenAnswer((Answer<Single<ImageSearchResult>>) invocation -> {
+            .thenAnswer((Answer<Single<ImageSearchResponse>>) invocation -> {
                 ImageSearchRequest request = invocation.getArgument(0);
-                ImageSearchResult result = createVirtualImageSearchResult(request, true);
+                ImageSearchResponse result = createVirtualImageSearchResult(request, true);
                 return Single.fromCallable(() -> result);
             });
 
@@ -223,12 +226,12 @@ public class ImageListViewModelTest {
     @Test
     public void 추가_이미지_목록_요청시_수신된_추가_이미지_목록이_반영되는지_테스트() {
         // given
-        ArrayList<SimpleImageInfo> expectedList = new ArrayList<>();
+        ArrayList<ImageDocument> expectedList = new ArrayList<>();
         when(mockImageRepository.requestImageList(any(ImageSearchRequest.class)))
-            .thenAnswer((Answer<Single<ImageSearchResult>>) invocation -> {
+            .thenAnswer((Answer<Single<ImageSearchResponse>>) invocation -> {
                 ImageSearchRequest request = invocation.getArgument(0);
-                ImageSearchResult result = createVirtualImageSearchResult(request, false);
-                expectedList.addAll(result.getSimpleImageInfoList());
+                ImageSearchResponse result = createVirtualImageSearchResult(request, false);
+                expectedList.addAll(result.getImageDocumentList());
                 return Single.fromCallable(() -> result);
             });
 
@@ -238,7 +241,7 @@ public class ImageListViewModelTest {
         imageListViewModel.loadMoreImageListIfPossible(dataSize - 3);
 
         // then
-        List<SimpleImageInfo> targetList = imageListViewModel.observeImageInfoList().getValue();
+        List<ImageDocument> targetList = imageListViewModel.observeImageInfoList().getValue();
         assertEquals(targetList, expectedList);
     }
 
@@ -246,9 +249,9 @@ public class ImageListViewModelTest {
     public void 추가_이미지_목록_요청시_마지막_데이터였다면_레파지토리에_요청을_안하는지_테스트() {
         // given
         when(mockImageRepository.requestImageList(any(ImageSearchRequest.class)))
-            .thenAnswer((Answer<Single<ImageSearchResult>>) invocation -> {
+            .thenAnswer((Answer<Single<ImageSearchResponse>>) invocation -> {
                 ImageSearchRequest request = invocation.getArgument(0);
-                ImageSearchResult result = createVirtualImageSearchResult(request, true);
+                ImageSearchResponse result = createVirtualImageSearchResult(request, true);
                 return Single.fromCallable(() -> result);
             });
 
@@ -256,13 +259,9 @@ public class ImageListViewModelTest {
         imageListViewModel.loadImageList("테스트");
 
         int dataSize = imageListViewModel.observeImageInfoList().getValue().size();
-        imageListViewModel.loadMoreImageListIfPossible(dataSize - 3);
-
-        dataSize = imageListViewModel.observeImageInfoList().getValue().size();
-        imageListViewModel.loadMoreImageListIfPossible(dataSize - 3);
-
-        dataSize = imageListViewModel.observeImageInfoList().getValue().size();
-        imageListViewModel.loadMoreImageListIfPossible(dataSize - 3);
+        imageListViewModel.loadMoreImageListIfPossible(dataSize - 1);
+        imageListViewModel.loadMoreImageListIfPossible(dataSize - 1);
+        imageListViewModel.loadMoreImageListIfPossible(dataSize - 1);
 
         // then
         verify(mockImageRepository, times(1))
@@ -273,9 +272,9 @@ public class ImageListViewModelTest {
     public void 재시도_요청시_레파지토리에_요청을_하는지_테스트() {
         // given
         when(mockImageRepository.requestImageList(any(ImageSearchRequest.class)))
-            .thenAnswer((Answer<Single<ImageSearchResult>>) invocation -> {
+            .thenAnswer((Answer<Single<ImageSearchResponse>>) invocation -> {
                 ImageSearchRequest request = invocation.getArgument(0);
-                ImageSearchResult result = createVirtualImageSearchResult(request, true);
+                ImageSearchResponse result = createVirtualImageSearchResult(request, true);
                 return Single.fromCallable(() -> result);
             });
 
@@ -288,37 +287,43 @@ public class ImageListViewModelTest {
             .requestImageList(any(ImageSearchRequest.class));
     }
 
-    private ImageSearchResult createEmptyImageSearchResult(ImageSearchRequest imageSearchRequest) {
-        String keyword = imageSearchRequest.getKeyword();
-        ImageSortType imageSortType = imageSearchRequest.getImageSortType();
+    private ImageSearchResponse createEmptyImageSearchResult(ImageSearchRequest imageSearchRequest) {
+        ArrayList<ImageDocument> simpleImageInfoList = new ArrayList<>();
+        SearchMetaInfo searchMetaInfo = new SearchMetaInfo(true);
 
-        ArrayList<SimpleImageInfo> simpleImageInfoList = new ArrayList<>();
-        ResultMeta resultMeta = new ResultMeta(true, keyword, imageSortType);
-
-        return new ImageSearchResult(resultMeta, simpleImageInfoList);
+        return new ImageSearchResponse(searchMetaInfo, simpleImageInfoList);
     }
 
-    private ImageSearchResult createVirtualImageSearchResult(ImageSearchRequest imageSearchRequest,
-                                                             boolean isLastData) {
-        String keyword = imageSearchRequest.getKeyword();
-        ImageSortType imageSortType = imageSearchRequest.getImageSortType();
+    private ImageSearchResponse createVirtualImageSearchResult(ImageSearchRequest imageSearchRequest,
+                                                               boolean isLastData) {
         int pageNumber = imageSearchRequest.getPageNumber();
         int requiredSize = imageSearchRequest.getRequiredSize();
         int startNumber = ((pageNumber-1) * requiredSize) + 1;
 
         int listSize = imageSearchRequest.getRequiredSize();
-        ArrayList<SimpleImageInfo> simpleImageInfoList = new ArrayList<>();
+        ArrayList<ImageDocument> simpleImageInfoList = new ArrayList<>();
         for(int i=0; i<listSize; i++) {
             int itemNumber = startNumber + i;
-            String id = keyword + imageSortType + itemNumber;
-            String url = "url" + itemNumber;
-            simpleImageInfoList.add(new SimpleImageInfo(id, url));
+            simpleImageInfoList.add(createVirtualImageDocument(itemNumber));
         }
 
 
-        ResultMeta resultMeta = new ResultMeta(isLastData, keyword, imageSortType);
+        SearchMetaInfo searchMetaInfo = new SearchMetaInfo(isLastData);
 
-        return new ImageSearchResult(resultMeta, simpleImageInfoList);
+        return new ImageSearchResponse(searchMetaInfo, simpleImageInfoList);
+    }
+
+    private ImageDocument createVirtualImageDocument(int id) {
+        return new ImageDocument(
+            "collection" + id,
+            "thumbnailUrl" + id,
+            "imageUrl" + id,
+            id,
+            id,
+            "displaySiteName" + id,
+            "docUrl" + id,
+            "dateTime" + id
+        );
     }
 
 }
