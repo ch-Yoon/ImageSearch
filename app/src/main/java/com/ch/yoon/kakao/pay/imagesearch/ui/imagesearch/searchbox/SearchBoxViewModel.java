@@ -9,7 +9,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
-import com.ch.yoon.kakao.pay.imagesearch.extentions.SingleLiveEvent;
+import com.ch.yoon.kakao.pay.imagesearch.ui.common.livedata.SingleLiveEvent;
 import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepository;
 import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.SearchLog;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel;

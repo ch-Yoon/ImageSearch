@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package com.ch.yoon.kakao.pay.imagesearch.extentions;
+package com.ch.yoon.kakao.pay.imagesearch.ui.common.livedata;
 
 import android.util.Log;
 
