@@ -1,23 +1,21 @@
-package com.ch.yoon.kakao.pay.imagesearch.repository;
+package com.ch.yoon.kakao.pay.imagesearch.data.repository;
 
 import com.ch.yoon.kakao.pay.imagesearch.RxSchedulerRule;
-import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.ImageLocalDataSource;
-import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.SearchLog;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.ImageSearchRequest;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.ImageSortType;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageDocument;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageSearchResponse;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.SearchMetaInfo;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.error.ImageSearchError;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.error.ImageSearchException;
-import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.ImageRemoteDataSource;
+import com.ch.yoon.kakao.pay.imagesearch.data.local.room.ImageLocalDataSource;
+import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLog;
+import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSearchRequest;
+import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSortType;
+import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageSearchResponse;
+import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.SearchMetaInfo;
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.ImageRemoteDataSource;
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepository;
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepositoryImpl;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
@@ -95,14 +93,14 @@ public class ImageRepositoryImplTest {
     @Test
     public void 로컬_데이터소스에_검색_목록_요청을_전달하는지_테스트() {
         // given
-        when(mockImageLocalDataSource.getSearchLogList())
+        when(mockImageLocalDataSource.selectAllSearchLog())
             .thenReturn(Single.just(emptySearchLogList()));
 
         // when
         imageRepository.requestSearchLogList();
 
         // then
-        verify(mockImageLocalDataSource, times(1)).getSearchLogList();
+        verify(mockImageLocalDataSource, times(1)).selectAllSearchLog();
     }
 
     @Test

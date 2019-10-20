@@ -7,14 +7,13 @@ import androidx.annotation.Nullable;
 import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.SearchLog;
+import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLog;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.adapter.SearchLogAdapter;
 import com.ch.yoon.kakao.pay.imagesearch.utils.BooleanUtil;
 import com.ch.yoon.kakao.pay.imagesearch.utils.KeyboardUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Creator : ch-yoon

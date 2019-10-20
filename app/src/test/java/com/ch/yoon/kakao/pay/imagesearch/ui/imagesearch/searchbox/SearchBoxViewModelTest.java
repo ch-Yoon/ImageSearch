@@ -9,8 +9,8 @@ import androidx.lifecycle.Observer;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.RxSchedulerRule;
-import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepository;
-import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.SearchLog;
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepository;
+import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLog;
 
 import org.junit.Before;
 import org.junit.Rule;

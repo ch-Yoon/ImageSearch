@@ -1,4 +1,4 @@
-package com.ch.yoon.kakao.pay.imagesearch.repository.local.room;
+package com.ch.yoon.kakao.pay.imagesearch.data.local.room;
 
 import android.content.Context;
 
@@ -7,8 +7,8 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.dao.ImageSearchDao;
-import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.SearchLog;
+import com.ch.yoon.kakao.pay.imagesearch.data.local.room.dao.SearchLogDao;
+import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLog;
 
 /**
  * Creator : ch-yoon
@@ -33,6 +33,6 @@ public abstract class ImageDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-    public abstract ImageSearchDao imageDocumentDao();
+    public abstract SearchLogDao searchLogDao();
 
 }

@@ -1,12 +1,12 @@
-package com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao;
+package com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao;
 
 import androidx.annotation.NonNull;
 
 import com.ch.yoon.kakao.pay.imagesearch.BuildConfig;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.ImageSearchRequest;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageSearchResponse;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.error.ImageSearchError;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.error.ImageSearchException;
+import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSearchRequest;
+import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageSearchResponse;
+import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.error.ImageSearchError;
+import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.error.ImageSearchException;
 
 import java.net.UnknownHostException;
 

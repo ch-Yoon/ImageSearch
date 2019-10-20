@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepository;
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepository;
 
 /**
  * Creator : ch-yoon

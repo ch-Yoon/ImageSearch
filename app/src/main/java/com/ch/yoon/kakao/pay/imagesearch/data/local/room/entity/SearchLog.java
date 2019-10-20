@@ -1,4 +1,4 @@
-package com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity;
+package com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

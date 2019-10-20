@@ -2,7 +2,7 @@ package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.adapter;
 
 import androidx.annotation.NonNull;
 
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageDocument;
+import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageDocument;
 
 /**
  * Creator : ch-yoon

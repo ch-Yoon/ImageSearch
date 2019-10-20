@@ -1,11 +1,11 @@
-package com.ch.yoon.kakao.pay.imagesearch.repository.local.room.dao;
+package com.ch.yoon.kakao.pay.imagesearch.data.local.room.dao;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.SearchLog;
+import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLog;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import io.reactivex.Single;
  * Date : 2019-08-05.
  */
 @Dao
-public interface ImageSearchDao {
+public interface SearchLogDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Completable insertOrUpdateSearchLog(SearchLog searchLog);

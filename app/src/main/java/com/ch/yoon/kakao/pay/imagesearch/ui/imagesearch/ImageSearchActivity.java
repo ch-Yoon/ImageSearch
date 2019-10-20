@@ -2,9 +2,7 @@ package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
 
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -13,12 +11,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ActivityImageSearchBinding;
-import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepository;
-import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepositoryImpl;
-import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.ImageDatabase;
-import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.ImageLocalDataSource;
-import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.dao.ImageSearchDao;
-import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.ImageRemoteDataSource;
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepository;
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepositoryImpl;
+import com.ch.yoon.kakao.pay.imagesearch.data.local.room.ImageDatabase;
+import com.ch.yoon.kakao.pay.imagesearch.data.local.room.ImageLocalDataSource;
+import com.ch.yoon.kakao.pay.imagesearch.data.local.room.dao.SearchLogDao;
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.ImageRemoteDataSource;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseActivity;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagedetail.ImageDetailActivity;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.ImageListViewModel;
@@ -28,8 +26,6 @@ import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.adapter.Search
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.helper.ImageSearchInspector;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewModel;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewModelFactory;
-
-import java.util.Optional;
 
 public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding> {
 
@@ -52,8 +48,8 @@ public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding
     }
 
     private void initSearchBoxViewModel() {
-        final ImageSearchDao imageSearchDao = ImageDatabase.getInstance(getApplicationContext()).imageDocumentDao();
-        final ImageLocalDataSource localDataSource = ImageLocalDataSource.getInstance(imageSearchDao);
+        final SearchLogDao searchLogDao = ImageDatabase.getInstance(getApplicationContext()).searchLogDao();
+        final ImageLocalDataSource localDataSource = ImageLocalDataSource.getInstance(searchLogDao);
         final ImageRemoteDataSource remoteDataSource = ImageRemoteDataSource.getInstance();
         final ImageRepository repository = ImageRepositoryImpl.getInstance(localDataSource, remoteDataSource);
 
@@ -112,8 +108,8 @@ public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding
     }
 
     private void initImageListViewModel() {
-        final ImageSearchDao imageSearchDao = ImageDatabase.getInstance(getApplicationContext()).imageDocumentDao();
-        final ImageLocalDataSource localDataSource = ImageLocalDataSource.getInstance(imageSearchDao);
+        final SearchLogDao searchLogDao = ImageDatabase.getInstance(getApplicationContext()).searchLogDao();
+        final ImageLocalDataSource localDataSource = ImageLocalDataSource.getInstance(searchLogDao);
         final ImageRemoteDataSource remoteDataSource = ImageRemoteDataSource.getInstance();
         final ImageRepository repository = ImageRepositoryImpl.getInstance(localDataSource, remoteDataSource);
 

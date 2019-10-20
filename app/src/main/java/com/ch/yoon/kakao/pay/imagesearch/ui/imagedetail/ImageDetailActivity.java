@@ -7,12 +7,11 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ActivityImageDetailBinding;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageDocument;
+import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageDocument;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseActivity;
 
 import java.util.Optional;

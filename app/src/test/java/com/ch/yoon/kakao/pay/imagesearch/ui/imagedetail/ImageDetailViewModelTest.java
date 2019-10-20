@@ -8,8 +8,7 @@ import androidx.lifecycle.Observer;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.RxSchedulerRule;
-import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepository;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageDocument;
+import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageDocument;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -19,8 +18,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-
-import io.reactivex.Single;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;

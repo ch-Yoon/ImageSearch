@@ -1,4 +1,4 @@
-package com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.error;
+package com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.error;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;

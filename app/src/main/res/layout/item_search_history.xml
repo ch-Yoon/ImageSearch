@@ -7,7 +7,7 @@
 
         <variable
             name="searchLog"
-            type="com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.SearchLog" />
+            type="com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLog" />
 
     </data>
 

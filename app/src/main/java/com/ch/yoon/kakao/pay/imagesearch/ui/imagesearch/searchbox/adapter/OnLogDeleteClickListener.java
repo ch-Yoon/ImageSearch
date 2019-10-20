@@ -2,7 +2,7 @@ package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.adapter;
 
 import androidx.annotation.NonNull;
 
-import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.SearchLog;
+import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLog;
 
 /**
  * Creator : ch-yoon

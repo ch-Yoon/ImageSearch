@@ -1,14 +1,14 @@
-package com.ch.yoon.kakao.pay.imagesearch.repository;
+package com.ch.yoon.kakao.pay.imagesearch.data.repository;
 
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 
-import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.ImageLocalDataSource;
-import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.SearchLog;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.ImageSearchRequest;
-import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.ImageRemoteDataSource;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageSearchResponse;
+import com.ch.yoon.kakao.pay.imagesearch.data.local.room.ImageLocalDataSource;
+import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLog;
+import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSearchRequest;
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.ImageRemoteDataSource;
+import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageSearchResponse;
 
 import java.util.List;
 
@@ -52,7 +52,7 @@ public class ImageRepositoryImpl implements ImageRepository {
     @NonNull
     @Override
     public Single<List<SearchLog>> requestSearchLogList() {
-        return imageLocalDataSource.getSearchLogList()
+        return imageLocalDataSource.selectAllSearchLog()
             .subscribeOn(Schedulers.io());
     }
 

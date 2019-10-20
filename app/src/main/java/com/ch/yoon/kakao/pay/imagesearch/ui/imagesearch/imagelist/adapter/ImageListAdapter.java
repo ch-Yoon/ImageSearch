@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageDocument;
+import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageDocument;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.adapter.viewholder.RetryFooterViewHolder;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.adapter.viewholder.ImageListViewHolder;
 
