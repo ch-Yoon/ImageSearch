@@ -20,7 +20,7 @@ import io.reactivex.Single;
 public interface ImageSearchDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Single<SearchLog> insertOrUpdate(SearchLog searchLog);
+    Completable insertOrUpdateSearchLog(SearchLog searchLog);
 
     @Query("SELECT * FROM searchLogs")
     Single<List<SearchLog>> selectAllSearchLog();

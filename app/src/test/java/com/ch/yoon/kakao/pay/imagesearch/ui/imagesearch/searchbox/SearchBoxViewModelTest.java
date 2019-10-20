@@ -17,9 +17,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -95,7 +93,7 @@ public class SearchBoxViewModelTest {
     @Test
     public void 키워드_검색_버튼_클릭시_입력한_키워드가_반영되는지_테스트() {
         // given
-        when(mockImageRepository.updateSearchLog(any(String.class)))
+        when(mockImageRepository.insertOrUpdateSearchLog(any(String.class)))
                 .thenReturn(Single.just(new SearchLog("테스트", 1)));
 
         // when
@@ -161,7 +159,7 @@ public class SearchBoxViewModelTest {
         // given
         when(mockImageRepository.requestSearchLogList()).thenReturn(Single.just(new ArrayList<>()));
 
-        when(mockImageRepository.updateSearchLog(any(String.class)))
+        when(mockImageRepository.insertOrUpdateSearchLog(any(String.class)))
                 .thenReturn(Single.just(new SearchLog("테스트", 1)));
 
         // when
@@ -253,7 +251,7 @@ public class SearchBoxViewModelTest {
     @Test
     public void 키워드_삭제_버튼_클릭시_레파지토리에_삭제_요청을_하는지_테스트() {
         // given
-        when(mockImageRepository.deleteAllByKeyword("테스트"))
+        when(mockImageRepository.deleteSearchLog("테스트"))
             .thenReturn(Completable.complete());
 
         // when
@@ -261,7 +259,7 @@ public class SearchBoxViewModelTest {
 
         // then
         verify(mockImageRepository, times(1))
-            .deleteAllByKeyword("테스트");
+            .deleteSearchLog("테스트");
     }
 
     @Test
@@ -274,7 +272,7 @@ public class SearchBoxViewModelTest {
 
         when(mockImageRepository.requestSearchLogList()).thenReturn(Single.just(searchLogList));
 
-        when(mockImageRepository.deleteAllByKeyword(any(String.class)))
+        when(mockImageRepository.deleteSearchLog(any(String.class)))
             .thenReturn(Completable.complete());
 
         // when
@@ -291,7 +289,7 @@ public class SearchBoxViewModelTest {
         when(mockImageRepository.requestSearchLogList())
             .thenReturn(Single.just(createVirtualSearchLogList(3)));
 
-        when(mockImageRepository.updateSearchLog("테스트3"))
+        when(mockImageRepository.insertOrUpdateSearchLog("테스트3"))
             .thenReturn(Single.just(new SearchLog("테스트3", 3)));
 
         // when
@@ -317,7 +315,7 @@ public class SearchBoxViewModelTest {
         when(mockImageRepository.requestSearchLogList())
             .thenReturn(Single.just(createVirtualSearchLogList(3)));
 
-        when(mockImageRepository.updateSearchLog("테스트0"))
+        when(mockImageRepository.insertOrUpdateSearchLog("테스트0"))
             .thenReturn(Single.just(new SearchLog("테스트0", 4)));
 
         // when

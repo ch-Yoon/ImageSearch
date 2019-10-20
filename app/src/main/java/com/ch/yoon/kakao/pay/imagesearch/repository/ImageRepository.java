@@ -21,12 +21,12 @@ public interface ImageRepository {
     Single<ImageSearchResponse> requestImageList(@NonNull ImageSearchRequest imageSearchRequest);
 
     @NonNull
-    Completable deleteAllByKeyword(@NonNull String keyword);
+    Completable deleteSearchLog(@NonNull String keyword);
 
     @NonNull
     Single<List<SearchLog>> requestSearchLogList();
 
     @NonNull
-    Single<SearchLog> updateSearchLog(@NonNull String keyword);
+    Single<SearchLog> insertOrUpdateSearchLog(@NonNull String keyword);
 
 }

@@ -11,7 +11,6 @@ import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.RxSchedulerRule;
 import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepository;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.ImageSearchRequest;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.ImageSortType;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageDocument;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.ImageSearchResponse;
 import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.SearchMetaInfo;
@@ -36,7 +35,6 @@ import io.reactivex.Single;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

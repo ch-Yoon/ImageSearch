@@ -38,13 +38,10 @@ public class ImageLocalDataSource {
     }
 
     @NonNull
-    public Single<SearchLog> insertOrUpdate(@NonNull String keyword) {
-        final SearchLog newSearchLog = new SearchLog(
-            keyword,
-            System.currentTimeMillis()
-        );
-
-        return imageSearchDao.insertOrUpdate(newSearchLog);
+    public Single<SearchLog> insertOrUpdateSearchLog(@NonNull String keyword) {
+        final SearchLog newSearchLog = new SearchLog(keyword, System.currentTimeMillis());
+        return imageSearchDao.insertOrUpdateSearchLog(newSearchLog)
+            .toSingle(() -> newSearchLog);
     }
 
     @NonNull

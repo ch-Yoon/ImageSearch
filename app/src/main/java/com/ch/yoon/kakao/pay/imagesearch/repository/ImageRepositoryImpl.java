@@ -50,12 +50,6 @@ public class ImageRepositoryImpl implements ImageRepository {
     }
 
     @NonNull
-    public Single<SearchLog> updateSearchLog(@NonNull final String keyword) {
-        return imageLocalDataSource.insertOrUpdate(keyword)
-            .subscribeOn(Schedulers.io());
-    }
-
-    @NonNull
     @Override
     public Single<List<SearchLog>> requestSearchLogList() {
         return imageLocalDataSource.getSearchLogList()
@@ -70,8 +64,15 @@ public class ImageRepositoryImpl implements ImageRepository {
 
     @NonNull
     @Override
-    public Completable deleteAllByKeyword(@NonNull final String keyword) {
+    public Completable deleteSearchLog(@NonNull final String keyword) {
         return imageLocalDataSource.deleteSearchLog(keyword)
+            .subscribeOn(Schedulers.io());
+    }
+
+    @NonNull
+    @Override
+    public Single<SearchLog> insertOrUpdateSearchLog(@NonNull final String keyword) {
+        return imageLocalDataSource.insertOrUpdateSearchLog(keyword)
             .subscribeOn(Schedulers.io());
     }
 

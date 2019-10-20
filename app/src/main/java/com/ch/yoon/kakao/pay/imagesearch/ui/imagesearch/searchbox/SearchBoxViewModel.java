@@ -76,7 +76,7 @@ public class SearchBoxViewModel extends BaseViewModel {
 
     public void clickKeywordDeleteButton(@NonNull final String keyword) {
         registerDisposable(
-            imageRepository.deleteAllByKeyword(keyword)
+            imageRepository.deleteSearchLog(keyword)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     () -> {
@@ -110,7 +110,7 @@ public class SearchBoxViewModel extends BaseViewModel {
             searchBoxFocusLiveData.setValue(false);
 
             registerDisposable(
-                imageRepository.updateSearchLog(keyword)
+                imageRepository.insertOrUpdateSearchLog(keyword)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                         this::applyReceivedSearchLog,
