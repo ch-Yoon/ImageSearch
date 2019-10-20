@@ -155,11 +155,7 @@ public class ImageListViewModelTest {
     public void 최초_이미지_목록_요청시_수신한_리스트의_사이즈가_0이어도_반영되는지_테스트() {
         // given
         when(mockImageRepository.requestImageList(any(ImageSearchRequest.class)))
-            .thenAnswer((Answer<Single<ImageSearchResponse>>) invocation -> {
-                ImageSearchRequest request = invocation.getArgument(0);
-                ImageSearchResponse result = createEmptyImageSearchResult(request);
-                return Single.fromCallable(() -> result);
-            });
+            .thenReturn(Single.just(createEmptyImageSearchResult()));
 
         // when
         imageListViewModel.loadImageList("테스트");
@@ -173,11 +169,7 @@ public class ImageListViewModelTest {
     public void 최초_이미지_목록_요청시_수신한_리스트의_사이즈가_0이라면_검색결과가_없다는_메시지가_반영되는지_테스트() {
         // given
         when(mockImageRepository.requestImageList(any(ImageSearchRequest.class)))
-            .thenAnswer((Answer<Single<ImageSearchResponse>>) invocation -> {
-                ImageSearchRequest request = invocation.getArgument(0);
-                ImageSearchResponse result = createEmptyImageSearchResult(request);
-                return Single.fromCallable(() -> result);
-            });
+            .thenReturn(Single.just(createEmptyImageSearchResult()));
 
         // when
         imageListViewModel.loadImageList("테스트");
@@ -285,7 +277,7 @@ public class ImageListViewModelTest {
             .requestImageList(any(ImageSearchRequest.class));
     }
 
-    private ImageSearchResponse createEmptyImageSearchResult(ImageSearchRequest imageSearchRequest) {
+    private ImageSearchResponse createEmptyImageSearchResult() {
         ArrayList<ImageDocument> simpleImageInfoList = new ArrayList<>();
         SearchMetaInfo searchMetaInfo = new SearchMetaInfo(true);
 
