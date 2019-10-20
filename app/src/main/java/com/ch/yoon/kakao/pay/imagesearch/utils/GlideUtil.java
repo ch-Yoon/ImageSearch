@@ -30,12 +30,12 @@ public class GlideUtil {
     private static final float THUMBNAIL_VALUE = 0.1f;
 
     private static final RequestOptions CENTER_CROP_REQUEST_OPTIONS = new RequestOptions()
-        .diskCacheStrategy(DiskCacheStrategy.DATA)
+        .diskCacheStrategy(DiskCacheStrategy.NONE)
         .centerCrop()
         .error(R.drawable.image_load_fail);
 
     private static final RequestOptions CENTER_INSIDE_REQUEST_OPTIONS = new RequestOptions()
-        .diskCacheStrategy(DiskCacheStrategy.DATA)
+        .diskCacheStrategy(DiskCacheStrategy.NONE)
         .centerInside()
         .error(R.drawable.image_load_fail);
 
