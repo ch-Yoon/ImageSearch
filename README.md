@@ -33,7 +33,7 @@
 ## 개발 환경
 ```xml
 complieSdkVersion : 28
-minSdkVersion : 15
+minSdkVersion : 24
 targetSdkVersion : 28
 AndroidStudioVersion : 3.2.1
 ```
