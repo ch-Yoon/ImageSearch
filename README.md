@@ -1,14 +1,7 @@
 
-## 윤찬혁 - Kakao 이미지 검색 API 활용 이미지 검색 앱
+## Kakao 이미지 검색 API 활용 이미지 검색 앱
 
 ![app_screen_shot](https://user-images.githubusercontent.com/20294749/62584271-bd598a80-b8ee-11e9-9c3b-c9edaf5191aa.png)
-
-## apk file
-- 다운로드 링크 -> [구글 드라이브](https://drive.google.com/drive/folders/1vkTsG283bOHdHUEd9cduHyEvTtt9Tydu?usp=sharing)
-
-## 만약 설치가 안된다면?
-
-![not_install_guide](https://user-images.githubusercontent.com/20294749/62586404-71abde80-b8f8-11e9-85d7-288e84418646.png)
 
 ## 개요
 - 사용 언어
