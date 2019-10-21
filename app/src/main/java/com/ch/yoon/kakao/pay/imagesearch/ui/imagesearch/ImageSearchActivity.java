@@ -1,8 +1,12 @@
 package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
+import android.view.View;
 
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -60,6 +64,7 @@ public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding
         binding.setSearchBoxViewModel(viewModel);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initSearchKeywordEditText() {
         binding.keywordEditText.setOnEditorActionListener((v, actionId, event) -> {
             if(actionId == KeyEvent.KEYCODE_ENDCALL) {
@@ -68,6 +73,13 @@ public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding
                 return true;
             }
 
+            return false;
+        });
+
+        binding.keywordEditText.setOnTouchListener((v, event) -> {
+            if(MotionEvent.ACTION_UP == event.getAction()) {
+                binding.getSearchBoxViewModel().clickSearchBox();
+            }
             return false;
         });
     }
@@ -89,6 +101,7 @@ public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding
         binding.getSearchBoxViewModel()
             .observeShowMessage()
             .observe(this, this::showToast);
+
     }
 
     private void initSearchLogRecyclerView() {

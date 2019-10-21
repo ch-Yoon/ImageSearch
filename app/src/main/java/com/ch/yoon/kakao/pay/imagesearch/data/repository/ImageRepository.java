@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLog;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSearchRequest;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageSearchResponse;
+import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageSearchResult;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ import io.reactivex.Single;
 public interface ImageRepository {
 
     @NonNull
-    Single<ImageSearchResponse> requestImageList(@NonNull ImageSearchRequest imageSearchRequest);
+    Single<ImageSearchResult> requestImageList(@NonNull ImageSearchRequest imageSearchRequest);
 
     @NonNull
     Completable deleteSearchLog(@NonNull String keyword);

@@ -55,6 +55,11 @@ public class ImageSearchInspector {
         approveImageSearchRetry(imageSortType);
     }
 
+    @NonNull
+    public String getPreviousRequestKeyword() {
+        return approveRequestLog.getKeyword();
+    }
+
     private void approveFirstImageSearch(final String keyword,
                                          final ImageSortType imageSortType) {
         initApproveRequestLog();
@@ -114,10 +119,11 @@ public class ImageSearchInspector {
         if(onImageSearchApproveListener != null) {
             onImageSearchApproveListener.onImageSearchApprove(
                     new ImageSearchRequest(
-                            keyword,
-                            imageSortType,
-                            pageNumber,
-                            REQUIRED_DATA_SIZE
+                        keyword,
+                        imageSortType,
+                        pageNumber,
+                        REQUIRED_DATA_SIZE,
+                        pageNumber == START_PAGE_NUMBER
                     )
             );
         }

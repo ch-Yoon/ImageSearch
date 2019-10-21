@@ -78,15 +78,12 @@ public class SearchBoxViewModel extends BaseViewModel {
         registerDisposable(
             imageRepository.deleteSearchLog(keyword)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    () -> {
-                        deleteKeywordFromList(keyword);
-                        updateMessage(R.string.success_all_image_info_delete_by_keyword);
-                    },
-                    throwable -> {
-                        Log.d(TAG, throwable.getMessage());
-                    }
-                )
+                .subscribe(() -> {
+                    deleteKeywordFromList(keyword);
+                    updateMessage(R.string.success_all_image_info_delete_by_keyword);
+                }, throwable -> {
+                    Log.d(TAG, throwable.getMessage());
+                })
         );
     }
 

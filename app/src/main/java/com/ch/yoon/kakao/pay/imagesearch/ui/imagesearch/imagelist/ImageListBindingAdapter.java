@@ -1,6 +1,8 @@
 package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist;
 
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,6 +10,7 @@ import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSortType;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageDocument;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.adapter.ImageListAdapter;
 import com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil;
@@ -69,11 +72,17 @@ public class ImageListBindingAdapter {
     }
 
     @BindingAdapter({"inputtedCountOfItemInLine", "expectedCountOfItemInLine"})
-    public static void applySelectedState(@NonNull final ImageView imageView,
+    public static void applySelectedState(@NonNull final View view,
                                           @Nullable final Integer inputtedCountOfItemInLine,
                                           @Nullable final Integer expectedCountOfItemInLine) {
         final boolean isSelected = IntegerUtil.isSame(inputtedCountOfItemInLine, expectedCountOfItemInLine);
-        imageView.setSelected(isSelected);
+        view.setSelected(isSelected);
+    }
+
+    @BindingAdapter("applySelectedState")
+    public static void applySelectedState(@NonNull final View view,
+                                          boolean isSelected) {
+        view.setSelected(isSelected);
     }
 
 }

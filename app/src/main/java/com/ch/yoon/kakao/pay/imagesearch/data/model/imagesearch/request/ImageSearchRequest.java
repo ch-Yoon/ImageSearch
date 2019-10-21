@@ -16,15 +16,18 @@ public final class ImageSearchRequest {
 
     private final int pageNumber;
     private final int requiredSize;
+    private final boolean isFirstRequest;
 
     public ImageSearchRequest(@NonNull String keyword,
                               @NonNull ImageSortType imageSortType,
                               int pageNumber,
-                              int requiredSize) {
+                              int requiredSize,
+                              boolean isFirstRequest) {
         this.keyword = keyword;
         this.imageSortType = imageSortType;
         this.pageNumber = pageNumber;
         this.requiredSize = requiredSize;
+        this.isFirstRequest = isFirstRequest;
     }
 
     @NonNull
@@ -43,6 +46,10 @@ public final class ImageSearchRequest {
 
     public int getRequiredSize() {
         return requiredSize;
+    }
+
+    public boolean isFirstRequest() {
+        return isFirstRequest;
     }
 
     @NonNull
