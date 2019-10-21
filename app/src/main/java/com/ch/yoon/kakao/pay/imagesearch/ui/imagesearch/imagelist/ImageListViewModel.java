@@ -20,6 +20,7 @@ import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSor
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.error.ImageSearchError;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.error.ImageSearchException;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel;
+import com.ch.yoon.kakao.pay.imagesearch.ui.common.livedata.SingleLiveEvent;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.helper.ImageSearchInspector;
 import com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil;
 
@@ -93,6 +94,7 @@ public class ImageListViewModel extends BaseViewModel {
     }
 
     public void changeImageSortType(final ImageSortType imageSortType) {
+        clearBeforeImageDocumentList();
         imageSortTypeLiveData.setValue(imageSortType);
 
         final String previousKeyword = imageSearchInspector.getPreviousRequestKeyword();
@@ -117,14 +119,12 @@ public class ImageListViewModel extends BaseViewModel {
     public void loadMoreImageListIfPossible(final int displayPosition) {
         if(isRemainingMoreData()) {
             final List<ImageDocument> imageDocumentList = imageDocumentListLiveData.getValue();
-            if (imageDocumentList != null) {
-                imageSearchInspector.submitPreloadRequest(
-                    displayPosition,
-                    imageDocumentList.size(),
-                    getImageSortType(),
-                    getCountOfItemInLine()
-                );
-            }
+            imageSearchInspector.submitPreloadRequest(
+                displayPosition,
+                imageDocumentList != null ? imageDocumentList.size() : 0,
+                getImageSortType(),
+                getCountOfItemInLine()
+            );
         }
     }
 
@@ -138,18 +138,27 @@ public class ImageListViewModel extends BaseViewModel {
         registerDisposable(
             imageRepository.requestImageList(imageSearchRequest)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::handlingReceivedResponse, this::handlingError)
+                .subscribe(imageSearchResult -> {
+                    changeImageSearchState(ImageSearchState.SUCCESS);
+                    clearBeforeDocumentListIfFirstRequest(imageSearchResult.getImageSearchRequest());
+                    updateSearchMetaInfo(imageSearchResult.getSearchMetaInfo());
+                    updateImageInfoList(imageSearchResult.getImageDocumentList());
+                }, throwable -> {
+                    changeImageSearchState(ImageSearchState.FAIL);
+                    if(throwable instanceof ImageSearchException) {
+                        final ImageSearchError error = ((ImageSearchException)throwable).getImageSearchError();
+                        updateMessage(error.getErrorMessageResourceId());
+                    } else {
+                        Log.d(TAG, throwable.getMessage());
+                    }
+                })
         );
     }
 
-    private void handlingReceivedResponse(final ImageSearchResult imageSearchResult) {
-        changeImageSearchState(ImageSearchState.SUCCESS);
-
-        if(imageSearchResult.getImageSearchRequest().isFirstRequest()) {
+    private void clearBeforeDocumentListIfFirstRequest(final ImageSearchRequest imageSearchRequest) {
+        if(imageSearchRequest.isFirstRequest()) {
             clearBeforeImageDocumentList();
         }
-        updateSearchMetaInfo(imageSearchResult.getSearchMetaInfo());
-        updateImageInfoList(imageSearchResult.getImageDocumentList());
     }
 
     private void updateSearchMetaInfo(final SearchMetaInfo searchMetaInfo) {
@@ -158,7 +167,6 @@ public class ImageListViewModel extends BaseViewModel {
 
     private void updateImageInfoList(final List<ImageDocument> receivedImageDocumentList) {
         final List<ImageDocument> oldList = imageDocumentListLiveData.getValue();
-
         final List<ImageDocument> newList = new ArrayList<>(oldList == null ? new ArrayList<>() : oldList);
         newList.addAll(receivedImageDocumentList);
 
@@ -172,18 +180,7 @@ public class ImageListViewModel extends BaseViewModel {
     }
 
     private void clearBeforeImageDocumentList() {
-        imageDocumentListLiveData.setValue(new ArrayList<>());
-    }
-
-    private void handlingError(final Throwable throwable) {
-        changeImageSearchState(ImageSearchState.FAIL);
-
-        if(throwable instanceof ImageSearchException) {
-            final ImageSearchError error = ((ImageSearchException)throwable).getImageSearchError();
-            updateMessage(error.getErrorMessageResourceId());
-        } else {
-            Log.d(TAG, throwable.getMessage());
-        }
+        imageDocumentListLiveData.setValue(null);
     }
 
     private boolean isNotRemainingMoreData() {
@@ -202,12 +199,12 @@ public class ImageListViewModel extends BaseViewModel {
     }
 
     private ImageSortType getImageSortType() {
-        ImageSortType imageSortType = imageSortTypeLiveData.getValue();
+        final ImageSortType imageSortType = imageSortTypeLiveData.getValue();
         return imageSortType != null ? imageSortType : DEFAULT_IMAGE_SORT_TYPE;
     }
 
     private int getCountOfItemInLine() {
-        Integer countOfItemInLine = countOfItemInLineLiveData.getValue();
+        final Integer countOfItemInLine = countOfItemInLineLiveData.getValue();
         return countOfItemInLine != null ? countOfItemInLine : DEFAULT_COUNT_OF_ITEM_IN_LINE;
     }
 

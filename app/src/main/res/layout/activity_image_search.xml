@@ -69,7 +69,6 @@
                     android:background="@null"
                     android:hint="@string/image_search_edit_text_hint"
                     android:imeOptions="flagNoExtractUi"
-                    android:onClick="@{() -> searchBoxViewModel.clickSearchBox()}"
                     android:singleLine="true"
                     android:textSize="14dp"
                     app:hideKeyboard="@{searchBoxViewModel.observeSearchBoxFocus()}"
@@ -172,12 +171,12 @@
             android:visibility="@{CollectionUtil.isEmpty(imageListViewModel.observeImageDocumentList()) ? View.INVISIBLE : View.VISIBLE}"
             app:countOfItemInLine="@{imageListViewModel.observeCountOfItemInLine()}"
             app:imageSearchState="@{imageListViewModel.observeImageSearchState()}"
+            app:searchImageInfoList="@{imageListViewModel.observeImageDocumentList()}"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fourImageInLineButton"
-            app:searchImageInfoList="@{imageListViewModel.observeImageDocumentList()}" />
+            app:layout_constraintTop_toBottomOf="@+id/fourImageInLineButton" />
 
         <View
             android:id="@+id/searchHistoryBackground"
@@ -185,7 +184,7 @@
             android:layout_height="0dp"
             android:background="@color/colorDarkGrayTransparent"
             android:onClick="@{() -> searchBoxViewModel.clickBackground()}"
-            android:visibility="gone"
+            android:visibility="@{BooleanUtil.isTrue(searchBoxViewModel.observeSearchBoxFocus()) ? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -198,7 +197,7 @@
             android:layout_marginStart="@dimen/image_search_box_side_margin"
             android:layout_marginEnd="@dimen/image_search_box_side_margin"
             android:background="@color/colorLightGray"
-            android:visibility="gone"
+            android:visibility="@{BooleanUtil.isTrue(searchBoxViewModel.observeSearchBoxFocus()) ? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintBottom_toBottomOf="@+id/searchHistoryBackground"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_default="wrap"
