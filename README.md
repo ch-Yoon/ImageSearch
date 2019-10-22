@@ -1,7 +1,7 @@
 
 ## Kakao 이미지 검색 API 활용 이미지 검색 앱
 
-![app_screen_shot](https://user-images.githubusercontent.com/20294749/62584271-bd598a80-b8ee-11e9-9c3b-c9edaf5191aa.png)
+![app_demo](https://user-images.githubusercontent.com/20294749/67322924-b5ec6980-f54c-11e9-96f3-f2394375aab2.png)
 
 ## 개요
 - 사용 언어
@@ -17,25 +17,17 @@
   - Unit Test(Mockito, Powermock)
 
 ## 구현 기능
-### 기본 요구사항 구현
-- 이미지 검색 API 활용 -> **(카카오 이미지 검색 API 활용)**
-- List나 Grid로 구성 -> **(Grid로 구성)**
-- 상세 화면 자유롭게 구성 -> **(상세 화면 구성 및 웹 이동 구성)**
-- Toolbar에 이름 나오도록 구성 -> **(Toolbar 왼쪽 상단에 이름 노출)**
-- 개발언어는 Java나 Kotlin으로 선택 -> **(Java 선택)**
-
-### 추가 기능 구현
-- Grid 사이즈 변경 가능하도록 구현
+- 카카오 이미지 검색 API를 활용하여 검색한 Grid로 구성
+- 정렬 타입(정확도, 최신) 및 Grid Size 변경 가능
 - Preload 구현
 - 최근 검색 기록 구현
-- Network 장애 시, RecyclerView 하단에 존재하는 FooterView를 통해 재시도 요청 구현
+- Network 장애 시, RecyclerView FooterView를 통한 재시도 요청 구현
 
 ## 개발 환경
 ```xml
 complieSdkVersion : 28
 minSdkVersion : 24
 targetSdkVersion : 28
-AndroidStudioVersion : 3.2.1
 ```
 
 
