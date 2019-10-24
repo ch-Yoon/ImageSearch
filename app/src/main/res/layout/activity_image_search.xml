@@ -10,6 +10,7 @@
         <import type="com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil" />
         <import type="com.ch.yoon.kakao.pay.imagesearch.utils.BooleanUtil" />
         <import type="com.ch.yoon.kakao.pay.imagesearch.utils.IntegerUtil" />
+        <import type="com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSortType" />
 
         <variable
             name="searchBoxViewModel"
@@ -41,30 +42,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/toolbarSubTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="3dp"
-                    android:text="@string/my_name"
-                    android:textSize="@dimen/image_search_box_sub_title_text_size"
-                    app:layout_constraintStart_toStartOf="@+id/view"
-                    app:layout_constraintTop_toTopOf="parent" />
-
                 <View
                     android:id="@+id/view"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginStart="@dimen/image_search_box_side_margin"
-                    android:layout_marginTop="3dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginEnd="@dimen/image_search_box_side_margin"
-                    android:layout_marginBottom="3dp"
+                    android:layout_marginBottom="5dp"
                     android:background="@drawable/search_box_border"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/toolbarSubTitle">
+                    app:layout_constraintTop_toTopOf="parent">
 
                 </View>
 
@@ -73,19 +63,19 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/image_search_box_side_margin"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="@dimen/image_search_box_side_margin"
                     android:layout_weight="1"
                     android:background="@null"
                     android:hint="@string/image_search_edit_text_hint"
+                    android:imeOptions="flagNoExtractUi"
                     android:singleLine="true"
                     android:textSize="14dp"
-                    android:onClick="@{() -> searchBoxViewModel.clickSearchBox()}"
-                    android:imeOptions="flagNoExtractUi"
+                    app:hideKeyboard="@{searchBoxViewModel.observeSearchBoxFocus()}"
                     app:layout_constraintBottom_toBottomOf="@+id/view"
                     app:layout_constraintEnd_toStartOf="@+id/searchButton"
                     app:layout_constraintStart_toStartOf="@+id/view"
-                    app:layout_constraintTop_toTopOf="@+id/view"
-                    app:hideKeyboard="@{searchBoxViewModel.observeSearchBoxFocus()}"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/searchButton"
@@ -104,22 +94,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.appcompat.widget.Toolbar>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/imageRecyclerView"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="@dimen/count_in_line_icon_side_margin"
-            android:scrollbars="vertical"
-            android:visibility="@{CollectionUtil.isEmpty(imageListViewModel.observeImageInfoList()) ? View.INVISIBLE : View.VISIBLE}"
-            app:countOfItemInLine="@{imageListViewModel.observeCountOfItemInLine()}"
-            app:imageSearchState="@{imageListViewModel.observeImageSearchState()}"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fourImageInLineButton"
-            app:searchImageInfoList="@{imageListViewModel.observeImageInfoList()}" />
 
         <ImageView
             android:id="@+id/fourImageInLineButton"
@@ -159,6 +133,50 @@
             app:layout_constraintEnd_toStartOf="@+id/threeImageInLineButton"
             app:layout_constraintTop_toTopOf="@+id/threeImageInLineButton"
             app:srcCompat="@drawable/ic_two_image_in_line_selector" />
+
+        <TextView
+            android:id="@+id/accuracySortTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/image_sort_type_text_view_side_margin"
+            android:text="@string/image_sort_type_accuracy_text"
+            android:textStyle="bold"
+            android:textColor="@drawable/image_sort_type_textview_selector"
+            android:onClick="@{() -> imageListViewModel.changeImageSortType(ImageSortType.ACCURACY)}"
+            app:applySelectedState="@{imageListViewModel.observeImageSortType() == ImageSortType.ACCURACY}"
+            app:layout_constraintBottom_toBottomOf="@+id/twoImageInLineButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/twoImageInLineButton" />
+
+        <TextView
+            android:id="@+id/recencySortTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/image_sort_type_text_view_side_margin"
+            android:text="@string/image_sort_type_recency_text"
+            android:textStyle="bold"
+            android:textColor="@drawable/image_sort_type_textview_selector"
+            android:onClick="@{() -> imageListViewModel.changeImageSortType(ImageSortType.RECENCY)}"
+            app:applySelectedState="@{imageListViewModel.observeImageSortType() == ImageSortType.RECENCY}"
+            app:layout_constraintBottom_toBottomOf="@+id/accuracySortTextView"
+            app:layout_constraintStart_toEndOf="@+id/accuracySortTextView"
+            app:layout_constraintTop_toTopOf="@+id/accuracySortTextView" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/imageRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/count_in_line_icon_side_margin"
+            android:scrollbars="vertical"
+            android:visibility="@{CollectionUtil.isEmpty(imageListViewModel.observeImageDocumentList()) ? View.INVISIBLE : View.VISIBLE}"
+            app:countOfItemInLine="@{imageListViewModel.observeCountOfItemInLine()}"
+            app:imageSearchState="@{imageListViewModel.observeImageSearchState()}"
+            app:searchImageInfoList="@{imageListViewModel.observeImageDocumentList()}"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fourImageInLineButton" />
 
         <View
             android:id="@+id/searchHistoryBackground"

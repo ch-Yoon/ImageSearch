@@ -8,7 +8,8 @@ import androidx.annotation.Nullable;
  */
 public class IntegerUtil {
 
-    public static boolean isSame(@Nullable Integer firstValue, @Nullable Integer secondValue) {
+    public static boolean isSame(@Nullable final Integer firstValue,
+                                 @Nullable final Integer secondValue) {
         if(firstValue != null && secondValue != null) {
             return firstValue.equals(secondValue);
         } else {

@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepository;
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepository;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.helper.ImageSearchInspector;
 
 /**
@@ -23,8 +23,8 @@ public class ImageListViewModelFactory implements ViewModelProvider.Factory {
     private final ImageSearchInspector imageSearchInspector;
 
     public ImageListViewModelFactory(@NonNull Application application,
-                              @NonNull ImageRepository imageRepository,
-                              @NonNull ImageSearchInspector imageSearchInspector) {
+                                     @NonNull ImageRepository imageRepository,
+                                     @NonNull ImageSearchInspector imageSearchInspector) {
         this.application = application;
         this.imageRepository = imageRepository;
         this.imageSearchInspector = imageSearchInspector;

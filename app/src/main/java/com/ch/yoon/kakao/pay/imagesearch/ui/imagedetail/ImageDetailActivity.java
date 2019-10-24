@@ -7,32 +7,25 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ActivityImageDetailBinding;
-import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepository;
-import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepositoryImpl;
-import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.ImageDatabase;
-import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.ImageLocalDataSource;
-import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.dao.ImageSearchDao;
-import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.ImageRemoteDataSource;
+import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageDocument;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseActivity;
 
-import static com.google.gson.reflect.TypeToken.get;
+import java.util.Optional;
 
 public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding> {
 
-    public static final String EXTRA_IMAGE_UNIQUE_INFO_KEY = "EXTRA_IMAGE_UNIQUE_INFO_KEY";
+    public static final String EXTRA_IMAGE_DOCUMENT_KEY = "EXTRA_IMAGE_DOCUMENT_KEY";
 
     private ActivityImageDetailBinding binding;
 
     public static Intent getImageDetailActivityIntent(@NonNull Context context,
-                                                      @NonNull String id) {
-        Intent imageDetailIntent = new Intent(context, ImageDetailActivity.class);
-        imageDetailIntent.putExtra(ImageDetailActivity.EXTRA_IMAGE_UNIQUE_INFO_KEY, id);
+                                                      @NonNull ImageDocument imageDocument) {
+        final Intent imageDetailIntent = new Intent(context, ImageDetailActivity.class);
+        imageDetailIntent.putExtra(ImageDetailActivity.EXTRA_IMAGE_DOCUMENT_KEY, imageDocument);
         return imageDetailIntent;
     }
 
@@ -41,16 +34,16 @@ public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding
         super.onCreate(savedInstanceState);
         binding = binding(R.layout.activity_image_detail);
 
-        String id = getIntent().getStringExtra(EXTRA_IMAGE_UNIQUE_INFO_KEY);
+        final ImageDocument passedImageDocument = getIntent().getParcelableExtra(EXTRA_IMAGE_DOCUMENT_KEY);
 
         initBackArrow();
-        initImageDetailViewModel(id);
+        initImageDetailViewModel(passedImageDocument);
         observeImageDetailViewModel();
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        final int itemId = item.getItemId();
         if(itemId == android.R.id.home) {
             onBackPressed();
             return true;
@@ -61,23 +54,16 @@ public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding
 
     private void initBackArrow() {
         setSupportActionBar(binding.mainToolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        Optional.ofNullable(getSupportActionBar())
+            .ifPresent(actionBar -> actionBar.setDisplayHomeAsUpEnabled(true));
     }
 
-    private void initImageDetailViewModel(String uniqueImageInfo) {
-        final ImageSearchDao imageSearchDao = ImageDatabase.getInstance(getApplicationContext()).imageDocumentDao();
-        final ImageLocalDataSource localDataSource = ImageLocalDataSource.getInstance(imageSearchDao);
-        final ImageRemoteDataSource remoteDataSource = ImageRemoteDataSource.getInstance();
-        final ImageRepository repository = ImageRepositoryImpl.getInstance(localDataSource, remoteDataSource);
-
+    private void initImageDetailViewModel(ImageDocument imageDocument) {
         final ImageDetailViewModel viewModel = ViewModelProviders.of(this, new ImageDetailViewModelFactory(
-            getApplication(), repository
+            getApplication()
         )).get(ImageDetailViewModel.class);
 
-        viewModel.loadImage(uniqueImageInfo);
+        viewModel.showImageDetailInfo(imageDocument);
 
         binding.setImageDetailViewModel(viewModel);
     }

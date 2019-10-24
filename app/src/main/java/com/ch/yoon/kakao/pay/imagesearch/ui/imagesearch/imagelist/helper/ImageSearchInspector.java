@@ -3,8 +3,8 @@ package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.helper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.ImageSearchRequest;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.ImageSortType;
+import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSearchRequest;
+import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSortType;
 
 /**
  * Creator : ch-yoon
@@ -33,30 +33,35 @@ public class ImageSearchInspector {
         PRELOAD_ALLOW_LINE_MULTIPLE = preloadAllowLineMultiple;
     }
 
-    public void observeImageSearchApprove(@Nullable OnImageSearchApproveListener approveListener) {
+    public void observeImageSearchApprove(@Nullable final OnImageSearchApproveListener approveListener) {
         onImageSearchApproveListener = approveListener;
     }
 
-    public void submitFirstImageSearchRequest(@NonNull String keyword,
-                                              @NonNull ImageSortType imageSortType) {
+    public void submitFirstImageSearchRequest(@NonNull final String keyword,
+                                              @NonNull final ImageSortType imageSortType) {
         approveFirstImageSearch(keyword, imageSortType);
     }
 
-    public void submitPreloadRequest(int displayPosition,
-                                     int dataTotalSize,
-                                     @NonNull ImageSortType imageSortType,
-                                     int countOfItemInLine) {
+    public void submitPreloadRequest(final int displayPosition,
+                                     final int dataTotalSize,
+                                     final @NonNull ImageSortType imageSortType,
+                                     final int countOfItemInLine) {
         if(isPreloadPossible(displayPosition, dataTotalSize, countOfItemInLine)) {
             approvePreload(imageSortType, dataTotalSize);
         }
     }
 
-    public void submitRetryRequest(@NonNull ImageSortType imageSortType) {
+    public void submitRetryRequest(@NonNull final ImageSortType imageSortType) {
         approveImageSearchRetry(imageSortType);
     }
 
-    private void approveFirstImageSearch(String keyword,
-                                         ImageSortType imageSortType) {
+    @NonNull
+    public String getPreviousRequestKeyword() {
+        return approveRequestLog.getKeyword();
+    }
+
+    private void approveFirstImageSearch(final String keyword,
+                                         final ImageSortType imageSortType) {
         initApproveRequestLog();
         approveImageSearch(keyword, imageSortType, 0);
     }
@@ -67,15 +72,15 @@ public class ImageSearchInspector {
         approveRequestLog.setPageNumber(START_PAGE_NUMBER - 1);
     }
 
-    private void approvePreload(ImageSortType imageSortType,
-                                int dataTotalSize) {
+    private void approvePreload(final ImageSortType imageSortType,
+                                final int dataTotalSize) {
         final String keyword = approveRequestLog.getKeyword();
         approveImageSearch(keyword, imageSortType, dataTotalSize);
     }
 
-    private boolean isPreloadPossible(int displayPosition,
-                                      int dataTotalSize,
-                                      int countOfItemInLine) {
+    private boolean isPreloadPossible(final int displayPosition,
+                                      final int dataTotalSize,
+                                      final int countOfItemInLine) {
         return isNotMaxPage() &&
             isAllowPreloadRange(displayPosition, dataTotalSize, countOfItemInLine);
     }
@@ -84,44 +89,49 @@ public class ImageSearchInspector {
         return approveRequestLog.getPageNumber() < MAX_PAGE_NUMBER;
     }
 
-    private boolean isAllowPreloadRange(int displayPosition,
-                                        int dataTotalSize,
-                                        int countOfItemInLine) {
+    private boolean isAllowPreloadRange(final int displayPosition,
+                                        final int dataTotalSize,
+                                        final int countOfItemInLine) {
         final int preloadAllowLimit = dataTotalSize - (countOfItemInLine * PRELOAD_ALLOW_LINE_MULTIPLE);
         final int previousDataTotalSize = approveRequestLog.getDataTotalSize();
 
         return dataTotalSize > previousDataTotalSize && displayPosition > preloadAllowLimit;
     }
 
-    private void approveImageSearchRetry(ImageSortType imageSortType) {
+    private void approveImageSearchRetry(final ImageSortType imageSortType) {
         final String keyword = approveRequestLog.getKeyword();
         final int pageNumber = approveRequestLog.getPageNumber();
         sendApproveToListener(keyword, imageSortType, pageNumber);
     }
 
-    private void approveImageSearch(String keyword,
-                                    ImageSortType imageSortType,
-                                    int dataTotalSize) {
+    private void approveImageSearch(final String keyword,
+                                    final ImageSortType imageSortType,
+                                    final int dataTotalSize) {
         final int requestPageNumber = approveRequestLog.getPageNumber() + 1;
 
         recordApproveRequest(keyword, dataTotalSize, requestPageNumber);
         sendApproveToListener(keyword, imageSortType, requestPageNumber);
     }
 
-    private void sendApproveToListener(String keyword, ImageSortType imageSortType, int pageNumber) {
+    private void sendApproveToListener(final String keyword,
+                                       final ImageSortType imageSortType,
+                                       final int pageNumber) {
         if(onImageSearchApproveListener != null) {
             onImageSearchApproveListener.onImageSearchApprove(
                     new ImageSearchRequest(
-                            keyword,
-                            imageSortType,
-                            pageNumber,
-                            REQUIRED_DATA_SIZE
+                        keyword,
+                        imageSortType,
+                        pageNumber,
+                        REQUIRED_DATA_SIZE,
+                        pageNumber == START_PAGE_NUMBER
                     )
             );
         }
     }
 
-    private void recordApproveRequest(String keyword, int dataTotalSize, int pageNumber) {
+    private void recordApproveRequest(final String keyword,
+                                      final int dataTotalSize,
+                                      final int pageNumber) {
         approveRequestLog.setKeyword(keyword);
         approveRequestLog.setDataTotalSize(dataTotalSize);
         approveRequestLog.setPageNumber(pageNumber);

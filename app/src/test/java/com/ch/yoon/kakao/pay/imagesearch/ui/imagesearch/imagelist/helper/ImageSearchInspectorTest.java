@@ -1,13 +1,12 @@
 package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.helper;
 
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.ImageSearchRequest;
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.request.ImageSortType;
+import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSearchRequest;
+import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSortType;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ImageSearchInspectorTest {
 
@@ -24,7 +23,7 @@ public class ImageSearchInspectorTest {
 
         // then
         ArrayList<ImageSearchRequest> expectedList = new ArrayList<>();
-        expectedList.add(new ImageSearchRequest("테스트", ImageSortType.ACCURACY, 1, 20));
+        expectedList.add(new ImageSearchRequest("테스트", ImageSortType.ACCURACY, 1, 20, true));
 
         Assert.assertEquals(receivedList, expectedList);
     }
@@ -59,8 +58,8 @@ public class ImageSearchInspectorTest {
 
         // then
         ArrayList<ImageSearchRequest> expectedList = new ArrayList<>();
-        expectedList.add(new ImageSearchRequest("테스트", ImageSortType.ACCURACY, 1, 20));
-        expectedList.add(new ImageSearchRequest("테스트", ImageSortType.ACCURACY, 2, 20));
+        expectedList.add(new ImageSearchRequest("테스트", ImageSortType.ACCURACY, 1, 20, true));
+        expectedList.add(new ImageSearchRequest("테스트", ImageSortType.ACCURACY, 2, 20, false));
 
         Assert.assertEquals(expectedList, receivedList);
     }
@@ -79,7 +78,7 @@ public class ImageSearchInspectorTest {
 
         // then
         ArrayList<ImageSearchRequest> expectedList = new ArrayList<>();
-        expectedList.add(new ImageSearchRequest("테스트", ImageSortType.ACCURACY, 1, 20));
+        expectedList.add(new ImageSearchRequest("테스트", ImageSortType.ACCURACY, 1, 20, true));
 
         Assert.assertEquals(receivedList, expectedList);
     }
@@ -99,8 +98,8 @@ public class ImageSearchInspectorTest {
 
         // then
         ArrayList<ImageSearchRequest> expectedList = new ArrayList<>();
-        expectedList.add(new ImageSearchRequest("테스트", ImageSortType.ACCURACY, 1, 20));
-        expectedList.add(new ImageSearchRequest("테스트", ImageSortType.ACCURACY, 2, 20));
+        expectedList.add(new ImageSearchRequest("테스트", ImageSortType.ACCURACY, 1, 20, true));
+        expectedList.add(new ImageSearchRequest("테스트", ImageSortType.ACCURACY, 2, 20, false));
 
         Assert.assertEquals(receivedList, expectedList);
     }

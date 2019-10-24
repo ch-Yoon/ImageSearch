@@ -1,6 +1,8 @@
 package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist;
 
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,7 +10,8 @@ import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.SimpleImageInfo;
+import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSortType;
+import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageDocument;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.adapter.ImageListAdapter;
 import com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil;
 import com.ch.yoon.kakao.pay.imagesearch.utils.GlideUtil;
@@ -24,8 +27,8 @@ import java.util.List;
 public class ImageListBindingAdapter {
 
     @BindingAdapter("countOfItemInLine")
-    public static void setSpanCount(@NonNull RecyclerView recyclerView,
-                                    @NonNull Integer countOfItemInLine) {
+    public static void setSpanCount(@NonNull final RecyclerView recyclerView,
+                                    @NonNull final Integer countOfItemInLine) {
         final GridLayoutManager gridLayoutManager = (GridLayoutManager)recyclerView.getLayoutManager();
         if(gridLayoutManager != null) {
             gridLayoutManager.setSpanCount(countOfItemInLine);
@@ -33,8 +36,8 @@ public class ImageListBindingAdapter {
     }
 
     @BindingAdapter("searchImageInfoList")
-    public static void setItems(@NonNull RecyclerView recyclerView,
-                                @Nullable List<SimpleImageInfo> simpleImageInfoList) {
+    public static void setItems(@NonNull final RecyclerView recyclerView,
+                                @Nullable final List<ImageDocument> simpleImageInfoList) {
         final ImageListAdapter adapter = ((ImageListAdapter)recyclerView.getAdapter());
         if(adapter != null) {
             adapter.submitList(simpleImageInfoList == null ? null : new ArrayList<>(simpleImageInfoList));
@@ -46,8 +49,8 @@ public class ImageListBindingAdapter {
     }
 
     @BindingAdapter("imageSearchState")
-    public static void setImageSearchState(@NonNull RecyclerView recyclerView,
-                                           @NonNull ImageSearchState imageSearchState) {
+    public static void setImageSearchState(@NonNull final RecyclerView recyclerView,
+                                           @NonNull final ImageSearchState imageSearchState) {
         final ImageListAdapter adapter = ((ImageListAdapter)recyclerView.getAdapter());
         if(adapter != null) {
             switch (imageSearchState) {
@@ -63,17 +66,23 @@ public class ImageListBindingAdapter {
     }
 
     @BindingAdapter("loadImageWithCenterCrop")
-    public static void loadImageWithCenterCrop(@NonNull ImageView imageView,
-                                               @Nullable String imageUrl) {
+    public static void loadImageWithCenterCrop(@NonNull final ImageView imageView,
+                                               @Nullable final String imageUrl) {
         GlideUtil.loadWithCenterCrop(imageView, imageUrl);
     }
 
     @BindingAdapter({"inputtedCountOfItemInLine", "expectedCountOfItemInLine"})
-    public static void applySelectedState(@NonNull ImageView imageView,
-                                          @Nullable Integer inputtedCountOfItemInLine,
-                                          @Nullable Integer expectedCountOfItemInLine) {
-        boolean isSelected = IntegerUtil.isSame(inputtedCountOfItemInLine, expectedCountOfItemInLine);
-        imageView.setSelected(isSelected);
+    public static void applySelectedState(@NonNull final View view,
+                                          @Nullable final Integer inputtedCountOfItemInLine,
+                                          @Nullable final Integer expectedCountOfItemInLine) {
+        final boolean isSelected = IntegerUtil.isSame(inputtedCountOfItemInLine, expectedCountOfItemInLine);
+        view.setSelected(isSelected);
+    }
+
+    @BindingAdapter("applySelectedState")
+    public static void applySelectedState(@NonNull final View view,
+                                          boolean isSelected) {
+        view.setSelected(isSelected);
     }
 
 }

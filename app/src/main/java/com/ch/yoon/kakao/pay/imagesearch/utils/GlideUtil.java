@@ -30,34 +30,34 @@ public class GlideUtil {
     private static final float THUMBNAIL_VALUE = 0.1f;
 
     private static final RequestOptions CENTER_CROP_REQUEST_OPTIONS = new RequestOptions()
-        .diskCacheStrategy(DiskCacheStrategy.DATA)
+        .diskCacheStrategy(DiskCacheStrategy.NONE)
         .centerCrop()
         .error(R.drawable.image_load_fail);
 
     private static final RequestOptions CENTER_INSIDE_REQUEST_OPTIONS = new RequestOptions()
-        .diskCacheStrategy(DiskCacheStrategy.DATA)
+        .diskCacheStrategy(DiskCacheStrategy.NONE)
         .centerInside()
         .error(R.drawable.image_load_fail);
 
-    public static void cancel(@NonNull ImageView imageView) {
+    public static void cancel(@NonNull final ImageView imageView) {
         Glide.with(imageView.getContext()).clear(imageView);
     }
 
-    public static void loadWithCenterCrop(@NonNull ImageView imageView,
-                                          @Nullable String imageUrl) {
+    public static void loadWithCenterCrop(@NonNull final ImageView imageView,
+                                          @Nullable final String imageUrl) {
         load(imageView, imageUrl, CENTER_CROP_REQUEST_OPTIONS, null);
     }
 
-    public static void loadWithCenterInside(@NonNull ImageView imageView,
-                                            @Nullable String imageUrl,
-                                            @NonNull ProgressBar progressBar) {
+    public static void loadWithCenterInside(@NonNull final ImageView imageView,
+                                            @Nullable final String imageUrl,
+                                            @NonNull final ProgressBar progressBar) {
         load(imageView, imageUrl, CENTER_INSIDE_REQUEST_OPTIONS, progressBar);
     }
 
-    private static void load(@NonNull ImageView imageView,
-                             @Nullable String imageUrl,
-                             @NonNull RequestOptions requestOptions,
-                             @Nullable ProgressBar progressBar) {
+    private static void load(@NonNull final ImageView imageView,
+                             @Nullable final String imageUrl,
+                             @NonNull final RequestOptions requestOptions,
+                             @Nullable final ProgressBar progressBar) {
         if(progressBar != null) {
             progressBar.setVisibility(View.VISIBLE);
         }

@@ -1,8 +1,12 @@
 package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
+import android.view.View;
 
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -11,12 +15,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ActivityImageSearchBinding;
-import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepository;
-import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepositoryImpl;
-import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.ImageDatabase;
-import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.ImageLocalDataSource;
-import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.dao.ImageSearchDao;
-import com.ch.yoon.kakao.pay.imagesearch.repository.remote.kakao.ImageRemoteDataSource;
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepository;
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepositoryImpl;
+import com.ch.yoon.kakao.pay.imagesearch.data.local.room.ImageDatabase;
+import com.ch.yoon.kakao.pay.imagesearch.data.local.room.ImageLocalDataSource;
+import com.ch.yoon.kakao.pay.imagesearch.data.local.room.dao.SearchLogDao;
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.ImageRemoteDataSource;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseActivity;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagedetail.ImageDetailActivity;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.ImageListViewModel;
@@ -48,8 +52,8 @@ public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding
     }
 
     private void initSearchBoxViewModel() {
-        final ImageSearchDao imageSearchDao = ImageDatabase.getInstance(getApplicationContext()).imageDocumentDao();
-        final ImageLocalDataSource localDataSource = ImageLocalDataSource.getInstance(imageSearchDao);
+        final SearchLogDao searchLogDao = ImageDatabase.getInstance(getApplicationContext()).searchLogDao();
+        final ImageLocalDataSource localDataSource = ImageLocalDataSource.getInstance(searchLogDao);
         final ImageRemoteDataSource remoteDataSource = ImageRemoteDataSource.getInstance();
         final ImageRepository repository = ImageRepositoryImpl.getInstance(localDataSource, remoteDataSource);
 
@@ -60,14 +64,22 @@ public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding
         binding.setSearchBoxViewModel(viewModel);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initSearchKeywordEditText() {
         binding.keywordEditText.setOnEditorActionListener((v, actionId, event) -> {
             if(actionId == KeyEvent.KEYCODE_ENDCALL) {
-                String text = v.getText().toString();
+                final String text = v.getText().toString();
                 binding.getSearchBoxViewModel().clickSearchButton(text);
                 return true;
             }
 
+            return false;
+        });
+
+        binding.keywordEditText.setOnTouchListener((v, event) -> {
+            if(MotionEvent.ACTION_UP == event.getAction()) {
+                binding.getSearchBoxViewModel().clickSearchBox();
+            }
             return false;
         });
     }
@@ -89,6 +101,7 @@ public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding
         binding.getSearchBoxViewModel()
             .observeShowMessage()
             .observe(this, this::showToast);
+
     }
 
     private void initSearchLogRecyclerView() {
@@ -108,8 +121,8 @@ public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding
     }
 
     private void initImageListViewModel() {
-        final ImageSearchDao imageSearchDao = ImageDatabase.getInstance(getApplicationContext()).imageDocumentDao();
-        final ImageLocalDataSource localDataSource = ImageLocalDataSource.getInstance(imageSearchDao);
+        final SearchLogDao searchLogDao = ImageDatabase.getInstance(getApplicationContext()).searchLogDao();
+        final ImageLocalDataSource localDataSource = ImageLocalDataSource.getInstance(searchLogDao);
         final ImageRemoteDataSource remoteDataSource = ImageRemoteDataSource.getInstance();
         final ImageRepository repository = ImageRepositoryImpl.getInstance(localDataSource, remoteDataSource);
 
@@ -135,14 +148,14 @@ public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding
             binding.getImageListViewModel().loadMoreImageListIfPossible(position)
         );
 
-        imageListAdapter.setOnListItemClickListener((imageInfo, position) -> {
-            Intent imageDetailIntent = ImageDetailActivity.getImageDetailActivityIntent(this, imageInfo.getId());
-            startActivity(imageDetailIntent);
-        });
-
         imageListAdapter.setOnFooterItemClickListener(() ->
             binding.getImageListViewModel().retryLoadMoreImageList()
         );
+
+        imageListAdapter.setOnListItemClickListener((imageDocument, position) -> {
+            Intent imageDetailIntent = ImageDetailActivity.getImageDetailActivityIntent(this, imageDocument);
+            startActivity(imageDetailIntent);
+        });
 
         GridLayoutManager gridLayoutManager = (GridLayoutManager)binding.imageRecyclerView.getLayoutManager();
         if(gridLayoutManager != null) {
@@ -158,8 +171,8 @@ public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding
             });
         }
 
-        binding.imageRecyclerView.setLayoutManager(gridLayoutManager);
         binding.imageRecyclerView.setAdapter(imageListAdapter);
+        binding.imageRecyclerView.setLayoutManager(gridLayoutManager);
     }
 
     @Override

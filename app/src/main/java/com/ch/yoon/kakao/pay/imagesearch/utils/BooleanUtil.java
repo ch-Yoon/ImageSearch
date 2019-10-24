@@ -8,11 +8,11 @@ import androidx.annotation.Nullable;
  */
 public class BooleanUtil {
 
-    public static boolean isTrue(@Nullable Boolean value) {
+    public static boolean isTrue(@Nullable final Boolean value) {
         return value != null && value;
     }
 
-    public static boolean isFalse(@Nullable Boolean value) {
+    public static boolean isFalse(@Nullable final Boolean value) {
         return !isTrue(value);
     }
 

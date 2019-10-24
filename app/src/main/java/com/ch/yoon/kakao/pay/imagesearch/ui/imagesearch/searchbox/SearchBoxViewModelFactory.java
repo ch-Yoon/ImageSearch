@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepository;
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepository;
 
 /**
  * Creator : ch-yoon
@@ -29,7 +29,7 @@ public class SearchBoxViewModelFactory implements ViewModelProvider.Factory {
     @SuppressWarnings("unchecked")
     @NonNull
     @Override
-    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+    public <T extends ViewModel> T create(@NonNull final Class<T> modelClass) {
         if (modelClass.isAssignableFrom(SearchBoxViewModel.class)) {
             return (T) new SearchBoxViewModel(application, imageRepository);
         }

@@ -16,18 +16,14 @@ import androidx.databinding.ViewDataBinding;
  */
 public abstract class BaseActivity<B extends ViewDataBinding> extends AppCompatActivity {
 
-    protected B binding(@LayoutRes int layoutId) {
+    protected B binding(@LayoutRes final int layoutId) {
         B dataBinding = DataBindingUtil.setContentView(this, layoutId);
         dataBinding.setLifecycleOwner(this);
 
         return dataBinding;
     }
 
-    protected void showToast(@StringRes int stringResourceId) {
-        showToast(getString(stringResourceId));
-    }
-
-    protected void showToast(@Nullable String message) {
+    protected void showToast(@Nullable final String message) {
         if(!TextUtils.isEmpty(message)) {
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
         }

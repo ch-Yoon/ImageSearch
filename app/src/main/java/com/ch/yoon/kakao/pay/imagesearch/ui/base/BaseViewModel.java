@@ -5,6 +5,9 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+
+import com.ch.yoon.kakao.pay.imagesearch.ui.common.livedata.SingleLiveEvent;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -21,18 +24,31 @@ public class BaseViewModel extends AndroidViewModel {
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
+    @NonNull
+    private final SingleLiveEvent<String> showMessageLiveEvent = new SingleLiveEvent<>();
+
     @Override
     protected void onCleared() {
         compositeDisposable.clear();
         super.onCleared();
     }
 
-    protected void registerDisposable(Disposable disposable) {
+    @NonNull
+    public LiveData<String> observeShowMessage() {
+        return showMessageLiveEvent;
+    }
+
+    protected void updateMessage(@StringRes final int stringResId) {
+        final String message = getApplication().getString(stringResId);
+        showMessageLiveEvent.setValue(message);
+    }
+
+    protected void registerDisposable(final Disposable disposable) {
         compositeDisposable.add(disposable);
     }
 
     @NonNull
-    protected String getString(@StringRes int stringResourceId) {
+    protected String getString(@StringRes final int stringResourceId) {
         return getApplication().getString(stringResourceId);
     }
 

@@ -7,7 +7,7 @@
 
         <variable
             name="imageInfo"
-            type="com.ch.yoon.kakao.pay.imagesearch.repository.model.imagesearch.response.SimpleImageInfo" />
+            type="com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageDocument" />
 
     </data>
 

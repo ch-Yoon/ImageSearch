@@ -9,9 +9,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
-import com.ch.yoon.kakao.pay.imagesearch.extentions.SingleLiveEvent;
-import com.ch.yoon.kakao.pay.imagesearch.repository.ImageRepository;
-import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.SearchLog;
+import com.ch.yoon.kakao.pay.imagesearch.ui.common.livedata.SingleLiveEvent;
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepository;
+import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLog;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel;
 import com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil;
 
@@ -33,16 +33,14 @@ public class SearchBoxViewModel extends BaseViewModel {
     private final ImageRepository imageRepository;
 
     @NonNull
-    private MutableLiveData<List<SearchLog>> searchLogListLiveData = new MutableLiveData<>();
+    private final MutableLiveData<List<SearchLog>> searchLogListLiveData = new MutableLiveData<>();
     @NonNull
-    private MutableLiveData<Boolean> searchBoxFocusLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> searchBoxFocusLiveData = new MutableLiveData<>();
 
     @NonNull
-    private SingleLiveEvent<String> searchKeywordLiveEvent = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> searchKeywordLiveEvent = new SingleLiveEvent<>();
     @NonNull
-    private SingleLiveEvent<Void> searchBoxFinishEvent = new SingleLiveEvent<>();
-    @NonNull
-    private SingleLiveEvent<String> showMessageLiveEvent = new SingleLiveEvent<>();
+    private final SingleLiveEvent<Void> searchBoxFinishEvent = new SingleLiveEvent<>();
 
     SearchBoxViewModel(@NonNull Application application,
                        @NonNull ImageRepository imageRepository) {
@@ -76,23 +74,16 @@ public class SearchBoxViewModel extends BaseViewModel {
         return searchBoxFinishEvent;
     }
 
-    @NonNull
-    public LiveData<String> observeShowMessage() {
-        return showMessageLiveEvent;
-    }
-
-    public void clickKeywordDeleteButton(@NonNull String keyword) {
+    public void clickKeywordDeleteButton(@NonNull final String keyword) {
         registerDisposable(
-            imageRepository.deleteAllByKeyword(keyword)
+            imageRepository.deleteSearchLog(keyword)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    () -> {
-                        deleteKeywordFromList(keyword);
-                        final String successMessage = getString(R.string.success_all_image_info_delete_by_keyword);
-                        showMessageLiveEvent.setValue(successMessage);
-                    },
-                    throwable -> Log.d(TAG, throwable.getMessage())
-                )
+                .subscribe(() -> {
+                    deleteKeywordFromList(keyword);
+                    updateMessage(R.string.success_all_image_info_delete_by_keyword);
+                }, throwable -> {
+                    Log.d(TAG, throwable.getMessage());
+                })
         );
     }
 
@@ -108,19 +99,18 @@ public class SearchBoxViewModel extends BaseViewModel {
         }
     }
 
-    public void clickSearchButton(@NonNull String keyword) {
+    public void clickSearchButton(@NonNull final String keyword) {
         if(TextUtils.isEmpty(keyword)) {
-            String emptyKeywordMessage = getString(R.string.empty_keyword_guide);
-            showMessageLiveEvent.setValue(emptyKeywordMessage);
+            updateMessage(R.string.empty_keyword_guide);
         } else {
             searchKeywordLiveEvent.setValue(keyword);
             searchBoxFocusLiveData.setValue(false);
 
             registerDisposable(
-                imageRepository.updateSearchLog(keyword)
+                imageRepository.insertOrUpdateSearchLog(keyword)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
-                        this::applyRequestedKeyword,
+                        this::applyReceivedSearchLog,
                         throwable -> Log.d(TAG, throwable.getMessage())
                     )
             );
@@ -144,7 +134,7 @@ public class SearchBoxViewModel extends BaseViewModel {
         }
     }
 
-    private void updateSearchLogList(List<SearchLog> searchLogList) {
+    private void updateSearchLogList(final List<SearchLog> searchLogList) {
         if(CollectionUtil.isNotEmpty(searchLogList)) {
             Collections.sort(searchLogList);
             searchLogListLiveData.setValue(searchLogList);
@@ -154,7 +144,7 @@ public class SearchBoxViewModel extends BaseViewModel {
         }
     }
 
-    private void deleteKeywordFromList(String keyword) {
+    private void deleteKeywordFromList(final String keyword) {
         List<SearchLog> searchLogList = searchLogListLiveData.getValue();
         if(searchLogList != null) {
             if(removeIfExistKeyword(keyword, searchLogList)) {
@@ -163,12 +153,10 @@ public class SearchBoxViewModel extends BaseViewModel {
         }
     }
 
-    private void applyRequestedKeyword(SearchLog newSearchLog) {
-        final String keyword = newSearchLog.getKeyword();
-
+    private void applyReceivedSearchLog(final SearchLog newSearchLog) {
         List<SearchLog> searchLogList = searchLogListLiveData.getValue();
         if(searchLogList != null) {
-            removeIfExistKeyword(keyword, searchLogList);
+            removeIfExistKeyword(newSearchLog.getKeyword(), searchLogList);
             searchLogList.add(0, newSearchLog);
         } else {
             searchLogList = new ArrayList<>();
@@ -178,7 +166,7 @@ public class SearchBoxViewModel extends BaseViewModel {
         searchLogListLiveData.setValue(searchLogList);
     }
 
-    private boolean removeIfExistKeyword(String keyword, List<SearchLog> searchLogList) {
+    private boolean removeIfExistKeyword(final String keyword, final List<SearchLog> searchLogList) {
         for(int i=0; i<searchLogList.size(); i++) {
             SearchLog oldLog = searchLogList.get(i);
             if(oldLog.getKeyword().equals(keyword)) {
@@ -190,13 +178,13 @@ public class SearchBoxViewModel extends BaseViewModel {
         return false;
     }
 
+    private boolean notHasSearchLogList() {
+        return !hasSearchLogList();
+    }
+
     private boolean hasSearchLogList() {
         List<SearchLog> searchLogList = searchLogListLiveData.getValue();
         return CollectionUtil.isNotEmpty(searchLogList);
-    }
-
-    private boolean notHasSearchLogList() {
-        return !hasSearchLogList();
     }
 
     private boolean isSearchBoxNotFocus() {

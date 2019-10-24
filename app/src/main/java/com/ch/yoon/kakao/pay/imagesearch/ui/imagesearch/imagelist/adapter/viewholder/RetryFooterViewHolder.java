@@ -1,6 +1,5 @@
 package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.adapter.viewholder;
 
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;

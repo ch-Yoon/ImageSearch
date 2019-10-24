@@ -1,16 +1,14 @@
 package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.adapter.viewholder;
 
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ItemSearchHistoryBinding;
-import com.ch.yoon.kakao.pay.imagesearch.repository.local.room.entity.SearchLog;
+import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLog;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.adapter.OnLogDeleteClickListener;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.adapter.OnSearchLogClickListener;
 
@@ -20,7 +18,7 @@ import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.adapter.OnSear
  */
 public class SearchLogViewHolder extends RecyclerView.ViewHolder {
 
-    private ItemSearchHistoryBinding binding;
+    private final ItemSearchHistoryBinding binding;
 
     public SearchLogViewHolder(@NonNull View itemView) {
         super(itemView);
