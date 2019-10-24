@@ -7,6 +7,9 @@
     <string name="image_sort_type_accuracy_text">정확도</string>
     <string name="image_sort_type_recency_text">최신</string>
 
+    <!-- image detail activity -->
+    <string name="image_detail_title">상세보기</string>
+
     <!-- error message -->
     <string name="error_image_search_wrong_request">잘못된 요청입니다</string>
     <string name="error_image_search_authentication_error">카카오 서버 인증 실패로 인해 요청에 실패했습니다</string>

@@ -37,7 +37,7 @@ public class ImageListViewModel extends BaseViewModel {
 
     private static final String TAG = ImageListViewModel.class.getName();
     private static final ImageSortType DEFAULT_IMAGE_SORT_TYPE = ImageSortType.ACCURACY;
-    private static final int DEFAULT_COUNT_OF_ITEM_IN_LINE = 3;
+    private static final int DEFAULT_COUNT_OF_ITEM_IN_LINE = 2;
 
     @NonNull
     private final ImageRepository imageRepository;
