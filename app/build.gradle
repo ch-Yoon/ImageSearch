@@ -77,4 +77,8 @@ dependencies {
 
     // photo view
     implementation "com.github.chrisbanes:PhotoView:$photo_view_version"
+
+    // koin
+    implementation "org.koin:koin-android:$koin_version"
+    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
 }
