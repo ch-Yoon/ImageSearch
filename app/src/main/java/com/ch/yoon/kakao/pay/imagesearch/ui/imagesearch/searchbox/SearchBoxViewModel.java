@@ -12,7 +12,7 @@ import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.ui.common.livedata.SingleLiveEvent;
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepository;
 import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLog;
-import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel;
+import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel2;
 import com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
  * Creator : ch-yoon
  * Date : 2019-08-06.
  */
-public class SearchBoxViewModel extends BaseViewModel {
+public class SearchBoxViewModel extends BaseViewModel2 {
 
     private static final String TAG = SearchBoxViewModel.class.getName();
 

@@ -6,6 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 
+/**
+ * Creator : ch-yoon
+ * Date : 2019-10-25.
+ */
 abstract class BaseActivity<B : ViewDataBinding> : AppCompatActivity() {
 
     protected fun binding(@LayoutRes layoutId: Int): B {

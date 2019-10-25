@@ -11,13 +11,13 @@ import androidx.lifecycle.MutableLiveData;
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageDocument;
 import com.ch.yoon.kakao.pay.imagesearch.ui.common.livedata.SingleLiveEvent;
-import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel;
+import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel2;
 
 /**
  * Creator : ch-yoon
  * Date : 2019-08-05.
  */
-public class ImageDetailViewModel extends BaseViewModel {
+public class ImageDetailViewModel extends BaseViewModel2 {
 
     private static final String TAG = ImageDetailViewModel.class.getName();
 

@@ -19,7 +19,7 @@ import com.ch.yoon.kakao.pay.imagesearch.data.local.room.ImageDatabase;
 import com.ch.yoon.kakao.pay.imagesearch.data.local.room.ImageLocalDataSource;
 import com.ch.yoon.kakao.pay.imagesearch.data.local.room.dao.SearchLogDao;
 import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.ImageRemoteDataSource;
-import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseActivity2;
+import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseActivity;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagedetail.ImageDetailActivity;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.ImageListViewModel;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.ImageListViewModelFactory;
@@ -29,7 +29,7 @@ import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.helper.ImageSe
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewModel;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewModelFactory;
 
-public class ImageSearchActivity extends BaseActivity2<ActivityImageSearchBinding> {
+public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding> {
 
     private ActivityImageSearchBinding binding;
 

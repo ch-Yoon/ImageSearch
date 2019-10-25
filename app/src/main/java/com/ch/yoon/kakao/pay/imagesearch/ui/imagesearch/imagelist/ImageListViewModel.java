@@ -11,16 +11,13 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageDocument;
-import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageSearchResponse;
-import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageSearchResult;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.SearchMetaInfo;
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepository;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSearchRequest;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSortType;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.error.ImageSearchError;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.error.ImageSearchException;
-import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel;
-import com.ch.yoon.kakao.pay.imagesearch.ui.common.livedata.SingleLiveEvent;
+import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel2;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.helper.ImageSearchInspector;
 import com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil;
 
@@ -33,7 +30,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
  * Creator : ch-yoon
  * Date : 2019-08-01.
  */
-public class ImageListViewModel extends BaseViewModel {
+public class ImageListViewModel extends BaseViewModel2 {
 
     private static final String TAG = ImageListViewModel.class.getName();
     private static final ImageSortType DEFAULT_IMAGE_SORT_TYPE = ImageSortType.ACCURACY;

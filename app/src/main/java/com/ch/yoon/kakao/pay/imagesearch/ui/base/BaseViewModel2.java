@@ -16,9 +16,9 @@ import io.reactivex.disposables.Disposable;
  * Creator : ch-yoon
  * Date : 2019-08-01.
  */
-public class BaseViewModel extends AndroidViewModel {
+public class BaseViewModel2 extends AndroidViewModel {
 
-    public BaseViewModel(@NonNull Application application) {
+    public BaseViewModel2(@NonNull Application application) {
         super(application);
     }
 
