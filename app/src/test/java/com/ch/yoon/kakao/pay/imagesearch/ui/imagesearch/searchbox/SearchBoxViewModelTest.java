@@ -25,9 +25,11 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
+import kotlin.Unit;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -53,7 +55,7 @@ public class SearchBoxViewModelTest {
     @Mock
     private ImageRepository mockImageRepository;
     @Mock
-    private Observer<Void> mockVoidObserver;
+    private Observer<Unit> mockVoidObserver;
 
     private SearchBoxViewModel searchBoxViewModel;
 
@@ -97,32 +99,33 @@ public class SearchBoxViewModelTest {
                 .thenReturn(Single.just(new SearchLog("테스트", 1)));
 
         // when
-        searchBoxViewModel.clickSearchButton("테스트");
+        searchBoxViewModel.onClickSearchButton("테스트");
 
         // then
-        assertEquals(searchBoxViewModel.observeSearchKeyword().getValue(), "테스트");
+        assertEquals(searchBoxViewModel.getSearchKeyword().getValue(), "테스트");
     }
 
     @Test
     public void 키워드_검색_버튼_클릭시_키워드가_비어있다면_거절_메시지가_반영되는지_테스트() {
         // when
-        searchBoxViewModel.clickSearchButton("");
+        searchBoxViewModel.onClickSearchButton("");
 
         // then
-        assertEquals(searchBoxViewModel.observeShowMessage().getValue(), EMPTY_KEYWORD_MESSAGE);
+        assertEquals(searchBoxViewModel.getShowMessageEvent().getValue(), EMPTY_KEYWORD_MESSAGE);
     }
 
     @Test
     public void 검색상자_클릭시_수신한_검색_목록이_반영되는지_테스트() {
         // given
-        List<SearchLog> expectedList = createVirtualSearchLogList(3);
-        when(mockImageRepository.requestSearchLogList()).thenReturn(Single.just(expectedList));
+        when(mockImageRepository.requestSearchLogList()).thenReturn(Single.just(createVirtualSearchLogList(3)));
 
         // when
-        searchBoxViewModel.clickSearchBox();
+        searchBoxViewModel.onClickSearchBox();
 
         // then
-        assertEquals(searchBoxViewModel.observeSearchLogList().getValue(), expectedList);
+        searchBoxViewModel.getSearchLogList().observeForever(receivedList -> {
+            assertEquals(receivedList.size(), 3);
+        });
     }
 
     @Test
@@ -136,10 +139,13 @@ public class SearchBoxViewModelTest {
         when(mockImageRepository.requestSearchLogList()).thenReturn(Single.just(searchLogList));
 
         // when
-        searchBoxViewModel.clickSearchBox();
+        searchBoxViewModel.onClickSearchBox();
 
         // then
-        assertEquals(searchBoxViewModel.observeSearchLogList().getValue(), expectedList);
+        searchBoxViewModel.getSearchLogList().observeForever(receivedList -> {
+            assertEquals(receivedList, expectedList);
+        });
+
     }
 
     @Test
@@ -148,10 +154,10 @@ public class SearchBoxViewModelTest {
         when(mockImageRepository.requestSearchLogList()).thenReturn(Single.just(new ArrayList<>()));
 
         // when
-        searchBoxViewModel.clickSearchBox();
+        searchBoxViewModel.onClickSearchBox();
 
         //then
-        assertEquals(searchBoxViewModel.observeSearchBoxFocus().getValue(), true);
+        assertEquals(searchBoxViewModel.getSearchBoxFocus().getValue(), true);
     }
 
     @Test
@@ -163,11 +169,11 @@ public class SearchBoxViewModelTest {
                 .thenReturn(Single.just(new SearchLog("테스트", 1)));
 
         // when
-        searchBoxViewModel.clickSearchBox();
-        searchBoxViewModel.clickSearchButton("테스트");
+        searchBoxViewModel.onClickSearchBox();
+        searchBoxViewModel.onClickSearchButton("테스트");
 
         // then
-        assertEquals(searchBoxViewModel.observeSearchBoxFocus().getValue(), false);
+        assertEquals(searchBoxViewModel.getSearchBoxFocus().getValue(), false);
     }
 
     @Test
@@ -176,10 +182,10 @@ public class SearchBoxViewModelTest {
         when(mockImageRepository.requestSearchLogList()).thenReturn(Single.just(new ArrayList<>()));
 
         // when
-        searchBoxViewModel.clickSearchBox();
+        searchBoxViewModel.onClickSearchBox();
 
         // then
-        assertEquals(searchBoxViewModel.observeSearchBoxFocus().getValue(), true);
+        assertEquals(searchBoxViewModel.getSearchBoxFocus().getValue(), true);
     }
 
     @Test
@@ -188,11 +194,11 @@ public class SearchBoxViewModelTest {
         when(mockImageRepository.requestSearchLogList()).thenReturn(Single.just(new ArrayList<>()));
 
         // when
-        searchBoxViewModel.clickSearchBox();
-        searchBoxViewModel.clickSearchButton("");
+        searchBoxViewModel.onClickSearchBox();
+        searchBoxViewModel.onClickSearchButton("");
 
         //then
-        assertEquals(searchBoxViewModel.observeSearchBoxFocus().getValue(), true);
+        assertEquals(searchBoxViewModel.getSearchBoxFocus().getValue(), true);
     }
 
     @Test
@@ -201,11 +207,11 @@ public class SearchBoxViewModelTest {
         when(mockImageRepository.requestSearchLogList()).thenReturn(Single.just(new ArrayList<>()));
 
         // when
-        searchBoxViewModel.clickSearchBox();
-        searchBoxViewModel.clickBackground();
+        searchBoxViewModel.onClickSearchBox();
+        searchBoxViewModel.onClickBackground();
 
         //then
-        assertEquals(searchBoxViewModel.observeSearchBoxFocus().getValue(), false);
+        assertEquals(searchBoxViewModel.getSearchBoxFocus().getValue(), false);
     }
 
     @Test
@@ -214,23 +220,23 @@ public class SearchBoxViewModelTest {
         when(mockImageRepository.requestSearchLogList()).thenReturn(Single.just(new ArrayList<>()));
 
         // when
-        searchBoxViewModel.clickSearchBox();
-        searchBoxViewModel.clickBackPress();
+        searchBoxViewModel.onClickSearchBox();
+        searchBoxViewModel.onClickBackPressButton();
 
         // then
-        assertEquals(searchBoxViewModel.observeSearchBoxFocus().getValue(), false);
+        assertEquals(searchBoxViewModel.getSearchBoxFocus().getValue(), false);
     }
 
     @Test
     public void 뒤로가기_두번_클릭시_포커스가_존재했다면_종료_이벤트가_호출되는지_테스트() {
         // given
         when(mockImageRepository.requestSearchLogList()).thenReturn(Single.just(new ArrayList<>()));
-        searchBoxViewModel.observeSearchBoxFinish().observeForever(mockVoidObserver);
+        searchBoxViewModel.getSearchBoxFinishEvent().observeForever(mockVoidObserver);
 
         // when
-        searchBoxViewModel.clickSearchBox();
-        searchBoxViewModel.clickBackPress();
-        searchBoxViewModel.clickBackPress();
+        searchBoxViewModel.onClickSearchBox();
+        searchBoxViewModel.onClickBackPressButton();
+        searchBoxViewModel.onClickBackPressButton();
 
         // then
         verify(mockVoidObserver, times(1)).onChanged(any());
@@ -239,10 +245,10 @@ public class SearchBoxViewModelTest {
     @Test
     public void 뒤로가기_클릭시_포커스가_없다면_종료_이벤트가_호출되는지_테스트() {
         // given
-        searchBoxViewModel.observeSearchBoxFinish().observeForever(mockVoidObserver);
+        searchBoxViewModel.getSearchBoxFinishEvent().observeForever(mockVoidObserver);
 
         // when
-        searchBoxViewModel.clickBackPress();
+        searchBoxViewModel.onClickBackPressButton();
 
         // then
         verify(mockVoidObserver, times(1)).onChanged(any());
@@ -255,7 +261,7 @@ public class SearchBoxViewModelTest {
             .thenReturn(Completable.complete());
 
         // when
-        searchBoxViewModel.clickKeywordDeleteButton("테스트");
+        searchBoxViewModel.onClickSearchLogDeleteButton(new SearchLog("테스트", 1));
 
         // then
         verify(mockImageRepository, times(1))
@@ -267,8 +273,8 @@ public class SearchBoxViewModelTest {
         // given
         List<SearchLog> searchLogList = createVirtualSearchLogList(3);
         List<SearchLog> expectedList = createVirtualSearchLogList(3);
-        Collections.sort(expectedList);
         expectedList.remove(0);
+        Collections.sort(expectedList);
 
         when(mockImageRepository.requestSearchLogList()).thenReturn(Single.just(searchLogList));
 
@@ -276,37 +282,13 @@ public class SearchBoxViewModelTest {
             .thenReturn(Completable.complete());
 
         // when
-        searchBoxViewModel.clickSearchBox();
-        searchBoxViewModel.clickKeywordDeleteButton(searchLogList.get(0).getKeyword());
+        searchBoxViewModel.onClickSearchBox();
+        searchBoxViewModel.onClickSearchLogDeleteButton(searchLogList.get(0));
 
         // then
-        assertEquals(searchBoxViewModel.observeSearchLogList().getValue(), expectedList);
-    }
-
-    @Test
-    public void 키워드_검색_버튼_클릭시_검색기록_가장_앞쪽에_삽입되는지_테스트() {
-        // given
-        when(mockImageRepository.requestSearchLogList())
-            .thenReturn(Single.just(createVirtualSearchLogList(3)));
-
-        when(mockImageRepository.insertOrUpdateSearchLog("테스트3"))
-            .thenReturn(Single.just(new SearchLog("테스트3", 3)));
-
-        // when
-        searchBoxViewModel.clickSearchBox();
-
-        // then
-        List<SearchLog> beforeList = searchBoxViewModel.observeSearchLogList().getValue();
-        assertEquals(beforeList.size(), 3);
-        assertEquals(beforeList.get(0).getKeyword(), "테스트2");
-
-        // when
-        searchBoxViewModel.clickSearchButton("테스트3");
-
-        // then
-        List<SearchLog> afterList = searchBoxViewModel.observeSearchLogList().getValue();
-        assertEquals(afterList.size(), 4);
-        assertEquals(afterList.get(0).getKeyword(), "테스트3");
+        searchBoxViewModel.getSearchLogList().observeForever(receivedList -> {
+            assertEquals(expectedList, receivedList);
+        });
     }
 
     @Test
@@ -319,20 +301,14 @@ public class SearchBoxViewModelTest {
             .thenReturn(Single.just(new SearchLog("테스트0", 4)));
 
         // when
-        searchBoxViewModel.clickSearchBox();
+        searchBoxViewModel.onClickSearchBox();
+        searchBoxViewModel.onClickSearchButton("테스트0");
 
         // then
-        List<SearchLog> beforeList = searchBoxViewModel.observeSearchLogList().getValue();
-        assertEquals(beforeList.get(0).getKeyword(), "테스트2");
-        assertEquals(beforeList.size(), 3);
-
-        // when
-        searchBoxViewModel.clickSearchButton("테스트0");
-
-        // then
-        List<SearchLog> afterList = searchBoxViewModel.observeSearchLogList().getValue();
-        assertEquals(afterList.get(0).getKeyword(), "테스트0");
-        assertEquals(afterList.size(), 3);
+        searchBoxViewModel.getSearchLogList().observeForever(searchLogs -> {
+            assertEquals(searchLogs.get(0).getKeyword(), "테스트0");
+            assertEquals(searchLogs.size(), 3);
+        });
     }
 
     private List<SearchLog> createVirtualSearchLogList(int size) {

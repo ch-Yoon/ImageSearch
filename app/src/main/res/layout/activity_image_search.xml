@@ -71,7 +71,7 @@
                     android:imeOptions="flagNoExtractUi"
                     android:singleLine="true"
                     android:textSize="14dp"
-                    app:hideKeyboard="@{searchBoxViewModel.observeSearchBoxFocus()}"
+                    app:hideKeyboard="@{searchBoxViewModel.searchBoxFocus}"
                     app:layout_constraintBottom_toBottomOf="@+id/view"
                     app:layout_constraintEnd_toStartOf="@+id/searchButton"
                     app:layout_constraintStart_toStartOf="@+id/view"
@@ -84,7 +84,7 @@
                     android:layout_gravity="center"
                     android:layout_marginEnd="@dimen/image_search_box_side_margin"
                     android:background="@drawable/ic_action_search"
-                    android:onClick="@{() -> searchBoxViewModel.clickSearchButton(keywordEditText.getText().toString())}"
+                    android:onClick="@{() -> searchBoxViewModel.onClickSearchButton(keywordEditText.getText().toString())}"
                     android:padding="5dp"
                     app:layout_constraintBottom_toBottomOf="@+id/view"
                     app:layout_constraintDimensionRatio="1:1"
@@ -183,8 +183,8 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@color/colorDarkGrayTransparent"
-            android:onClick="@{() -> searchBoxViewModel.clickBackground()}"
-            android:visibility="@{BooleanUtil.isTrue(searchBoxViewModel.observeSearchBoxFocus()) ? View.VISIBLE : View.INVISIBLE}"
+            android:onClick="@{() -> searchBoxViewModel.onClickBackground()}"
+            android:visibility="@{BooleanUtil.isTrue(searchBoxViewModel.searchBoxFocus) ? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -197,7 +197,7 @@
             android:layout_marginStart="@dimen/image_search_box_side_margin"
             android:layout_marginEnd="@dimen/image_search_box_side_margin"
             android:background="@color/colorLightGray"
-            android:visibility="@{BooleanUtil.isTrue(searchBoxViewModel.observeSearchBoxFocus()) ? View.VISIBLE : View.INVISIBLE}"
+            android:visibility="@{BooleanUtil.isTrue(searchBoxViewModel.searchBoxFocus) ? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintBottom_toBottomOf="@+id/searchHistoryBackground"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_default="wrap"
@@ -205,7 +205,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/searchHistoryBackground"
             app:layout_constraintVertical_bias="0.0"
-            app:searchLogList="@{searchBoxViewModel.observeSearchLogList()}" />
+            app:searchLogList="@{searchBoxViewModel.searchLogList}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

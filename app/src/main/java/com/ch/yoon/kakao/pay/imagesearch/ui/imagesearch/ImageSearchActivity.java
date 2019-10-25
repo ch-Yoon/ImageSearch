@@ -24,9 +24,9 @@ import com.ch.yoon.kakao.pay.imagesearch.ui.imagedetail.ImageDetailActivity;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.ImageListViewModel;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.ImageListViewModelFactory;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.adapter.ImageListAdapter;
+import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewModel;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.adapter.SearchLogAdapter;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.helper.ImageSearchInspector;
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewModel;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewModelFactory;
 
 public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding> {
@@ -67,7 +67,7 @@ public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding
         binding.keywordEditText.setOnEditorActionListener((v, actionId, event) -> {
             if(actionId == KeyEvent.KEYCODE_ENDCALL) {
                 final String text = v.getText().toString();
-                binding.getSearchBoxViewModel().clickSearchButton(text);
+                binding.getSearchBoxViewModel().onClickSearchButton(text);
                 return true;
             }
 
@@ -76,28 +76,25 @@ public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding
 
         binding.keywordEditText.setOnTouchListener((v, event) -> {
             if(MotionEvent.ACTION_UP == event.getAction()) {
-                binding.getSearchBoxViewModel().clickSearchBox();
+                binding.getSearchBoxViewModel().onClickSearchBox();
             }
             return false;
         });
     }
 
     private void observeSearchBoxViewModel() {
-        binding.getSearchBoxViewModel()
-            .observeSearchKeyword()
+        binding.getSearchBoxViewModel().getSearchKeyword()
             .observe(this, keyword -> {
                 binding.getImageListViewModel().loadImageList(keyword);
                 binding.keywordEditText.setText(keyword);
             });
 
-        binding.getSearchBoxViewModel()
-            .observeSearchBoxFinish()
+        binding.getSearchBoxViewModel().getSearchBoxFinishEvent()
             .observe(this, voidEvent ->
                 finish()
             );
 
-        binding.getSearchBoxViewModel()
-            .observeShowMessage()
+        binding.getSearchBoxViewModel().getShowMessageEvent()
             .observe(this, this::showToast);
 
     }
@@ -108,11 +105,11 @@ public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding
 
         final SearchLogAdapter adapter = new SearchLogAdapter();
         adapter.setOnSearchLogClickListener((searchLog, position) ->
-            binding.getSearchBoxViewModel().clickSearchButton(searchLog.getKeyword())
+            binding.getSearchBoxViewModel().onClickSearchButton(searchLog.getKeyword())
         );
 
         adapter.setOnLogDeleteClickListener((searchLog, position) ->
-            binding.getSearchBoxViewModel().clickKeywordDeleteButton(searchLog.getKeyword())
+            binding.getSearchBoxViewModel().onClickSearchLogDeleteButton(searchLog)
         );
 
         binding.searchLogRecyclerView.setAdapter(adapter);
@@ -175,7 +172,7 @@ public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding
 
     @Override
     public void onBackPressed() {
-        binding.getSearchBoxViewModel().clickBackPress();
+        binding.getSearchBoxViewModel().onClickBackPressButton();
     }
 
 }
