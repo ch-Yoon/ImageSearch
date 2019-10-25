@@ -3,10 +3,8 @@ package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.View;
 
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -21,7 +19,7 @@ import com.ch.yoon.kakao.pay.imagesearch.data.local.room.ImageDatabase;
 import com.ch.yoon.kakao.pay.imagesearch.data.local.room.ImageLocalDataSource;
 import com.ch.yoon.kakao.pay.imagesearch.data.local.room.dao.SearchLogDao;
 import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.ImageRemoteDataSource;
-import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseActivity;
+import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseActivity2;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagedetail.ImageDetailActivity;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.ImageListViewModel;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.ImageListViewModelFactory;
@@ -31,7 +29,7 @@ import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.helper.ImageSe
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewModel;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewModelFactory;
 
-public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding> {
+public class ImageSearchActivity extends BaseActivity2<ActivityImageSearchBinding> {
 
     private ActivityImageSearchBinding binding;
 

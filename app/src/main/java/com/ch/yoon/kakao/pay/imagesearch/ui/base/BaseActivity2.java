@@ -14,7 +14,7 @@ import androidx.databinding.ViewDataBinding;
  * Creator : ch-yoon
  * Date : 2019-08-01.
  */
-public abstract class BaseActivity<B extends ViewDataBinding> extends AppCompatActivity {
+public abstract class BaseActivity2<B extends ViewDataBinding> extends AppCompatActivity {
 
     protected B binding(@LayoutRes final int layoutId) {
         B dataBinding = DataBindingUtil.setContentView(this, layoutId);

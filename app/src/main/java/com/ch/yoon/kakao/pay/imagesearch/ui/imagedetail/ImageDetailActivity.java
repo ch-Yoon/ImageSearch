@@ -12,11 +12,11 @@ import androidx.lifecycle.ViewModelProviders;
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ActivityImageDetailBinding;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageDocument;
-import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseActivity;
+import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseActivity2;
 
 import java.util.Optional;
 
-public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding> {
+public class ImageDetailActivity extends BaseActivity2<ActivityImageDetailBinding> {
 
     public static final String EXTRA_IMAGE_DOCUMENT_KEY = "EXTRA_IMAGE_DOCUMENT_KEY";
 
