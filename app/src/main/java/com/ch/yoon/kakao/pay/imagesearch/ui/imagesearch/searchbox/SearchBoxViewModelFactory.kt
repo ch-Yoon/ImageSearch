@@ -21,5 +21,4 @@ class SearchBoxViewModelFactory(
         }
         throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
     }
-
 }

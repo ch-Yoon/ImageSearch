@@ -23,7 +23,7 @@ import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.adapter.ImageL
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.helper.ImageSearchInspector
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewModel
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewModelFactory
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.adapter.SearchLogAdapter
+import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchLogAdapter
 
 /**
  * Creator : ch-yoon
@@ -88,28 +88,26 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
     }
 
     private fun observeSearchBoxViewModel() {
-        searchBoxViewModel.searchKeyword.observe(this, Observer { keyword ->
-            binding.imageListViewModel?.loadImageList(keyword)
-        })
+        val owner = this
+        searchBoxViewModel.run {
+            searchKeyword.observe(owner, Observer { keyword ->
+                imageListViewModel.loadImageList(keyword)
+            })
 
-        searchBoxViewModel.searchBoxFinishEvent.observe(this, Observer { finish() })
+            searchBoxFinishEvent.observe(owner, Observer {
+                finish()
+            })
 
-        searchBoxViewModel.showMessageEvent.observe(this, Observer { message ->
-            showToast(message)
-        })
+            showMessageEvent.observe(owner, Observer { message ->
+                showToast(message)
+            })
+        }
     }
 
     private fun initSearchLogRecyclerView() {
         binding.searchLogRecyclerView.apply {
             layoutManager = LinearLayoutManager(this@ImageSearchActivity, RecyclerView.VERTICAL, false)
-            adapter = SearchLogAdapter().apply {
-                setOnSearchLogClickListener { searchLog, _ ->
-                    binding.searchBoxViewModel?.onClickSearchButton(searchLog.keyword)
-                }
-                setOnLogDeleteClickListener { searchLog, _ ->
-                    binding.searchBoxViewModel?.onClickSearchLogDeleteButton(searchLog)
-                }
-            }
+            adapter = SearchLogAdapter(searchBoxViewModel)
         }
     }
 
@@ -137,10 +135,10 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
         binding.imageRecyclerView.apply {
             adapter = ImageListAdapter().apply {
                 setOnBindPositionListener { position ->
-                    binding.imageListViewModel?.loadMoreImageListIfPossible(position)
+                    imageListViewModel.loadMoreImageListIfPossible(position)
                 }
                 setOnFooterItemClickListener {
-                    binding.imageListViewModel?.retryLoadMoreImageList()
+                    imageListViewModel.retryLoadMoreImageList()
                 }
                 setOnListItemClickListener { imageDocument, _ ->
                     val imageDetailIntent = ImageDetailActivity.getImageDetailActivityIntent(this@ImageSearchActivity, imageDocument)
@@ -165,7 +163,6 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
     }
 
     override fun onBackPressed() {
-        binding.searchBoxViewModel?.onClickBackPressButton()
+        searchBoxViewModel.onClickBackPressButton()
     }
-
 }

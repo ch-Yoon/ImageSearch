@@ -10,14 +10,14 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageDocument;
+import com.ch.yoon.kakao.pay.imagesearch.ui.base.KBaseViewModel;
 import com.ch.yoon.kakao.pay.imagesearch.ui.common.livedata.SingleLiveEvent;
-import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel2;
 
 /**
  * Creator : ch-yoon
  * Date : 2019-08-05.
  */
-public class ImageDetailViewModel extends BaseViewModel2 {
+public class ImageDetailViewModel extends KBaseViewModel {
 
     private static final String TAG = ImageDetailViewModel.class.getName();
 
@@ -73,7 +73,7 @@ public class ImageDetailViewModel extends BaseViewModel2 {
             if(docUrl != null) {
                 docUrlLiveEvent.setValue(docUrl);
             } else {
-                showMessageLiveEvent.setValue(getString(R.string.error_nonexistent_url));
+                updateShowMessage(R.string.error_nonexistent_url);
             }
         } else {
             handlingUnknownError();
@@ -85,7 +85,7 @@ public class ImageDetailViewModel extends BaseViewModel2 {
     }
 
     private void handlingUnknownError() {
-        showMessageLiveEvent.setValue(getString(R.string.error_unknown_error));
+        updateShowMessage(R.string.error_unknown_error);
         finishEvent.call();
 
         Log.d(TAG, "image document is null");

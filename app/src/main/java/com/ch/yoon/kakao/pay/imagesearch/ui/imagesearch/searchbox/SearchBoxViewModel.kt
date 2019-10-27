@@ -10,10 +10,9 @@ import com.ch.yoon.kakao.pay.imagesearch.R
 import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLog
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepository
 import com.ch.yoon.kakao.pay.imagesearch.extention.*
-import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel
+import com.ch.yoon.kakao.pay.imagesearch.ui.base.KBaseViewModel
 import com.ch.yoon.kakao.pay.imagesearch.ui.common.livedata.SingleLiveEvent
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.internal.util.BackpressureHelper.add
 
 /**
  * Creator : ch-yoon
@@ -22,7 +21,7 @@ import io.reactivex.internal.util.BackpressureHelper.add
 class SearchBoxViewModel(
     application: Application,
     private val imageRepository: ImageRepository
-) : BaseViewModel (application) {
+) : KBaseViewModel (application) {
 
     private val _searchLogList = MutableLiveData<MutableList<SearchLog>>().apply { value = mutableListOf() }
     val searchLogList: LiveData<List<SearchLog>> = Transformations.map(_searchLogList) { it.toList() }

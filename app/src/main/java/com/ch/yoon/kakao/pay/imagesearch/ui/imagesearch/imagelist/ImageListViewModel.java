@@ -17,7 +17,7 @@ import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSea
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSortType;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.error.ImageSearchError;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.error.ImageSearchException;
-import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel2;
+import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.helper.ImageSearchInspector;
 import com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil;
 
@@ -30,7 +30,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
  * Creator : ch-yoon
  * Date : 2019-08-01.
  */
-public class ImageListViewModel extends BaseViewModel2 {
+public class ImageListViewModel extends BaseViewModel {
 
     private static final String TAG = ImageListViewModel.class.getName();
     private static final ImageSortType DEFAULT_IMAGE_SORT_TYPE = ImageSortType.ACCURACY;
@@ -53,7 +53,7 @@ public class ImageListViewModel extends BaseViewModel2 {
     @Nullable
     private SearchMetaInfo searchMetaInfo;
 
-    public ImageListViewModel(@NonNull Application application,
+    ImageListViewModel(@NonNull Application application,
                        @NonNull ImageRepository imageRepository,
                        @NonNull ImageSearchInspector imageSearchInspector) {
         super(application);
