@@ -19,7 +19,10 @@ abstract class BaseActivity<B : ViewDataBinding> : AppCompatActivity() {
     }
 
     protected lateinit var binding: B
+        private set
+
     protected var isActivityFirstCreate: Boolean = true
+        private set
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

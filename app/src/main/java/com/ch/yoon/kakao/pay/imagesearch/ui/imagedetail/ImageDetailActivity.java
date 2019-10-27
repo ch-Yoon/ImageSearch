@@ -20,8 +20,6 @@ public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding
 
     public static final String EXTRA_IMAGE_DOCUMENT_KEY = "EXTRA_IMAGE_DOCUMENT_KEY";
 
-    private ActivityImageDetailBinding binding;
-
     public static Intent getImageDetailActivityIntent(@NonNull Context context,
                                                       @NonNull ImageDocument imageDocument) {
         final Intent imageDetailIntent = new Intent(context, ImageDetailActivity.class);
@@ -30,9 +28,13 @@ public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding
     }
 
     @Override
+    protected int getLayoutId() {
+        return R.layout.activity_image_detail;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = binding(R.layout.activity_image_detail);
 
         final ImageDocument passedImageDocument = getIntent().getParcelableExtra(EXTRA_IMAGE_DOCUMENT_KEY);
 
@@ -53,7 +55,7 @@ public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding
     }
 
     private void initBackArrow() {
-        setSupportActionBar(binding.mainToolbar);
+        setSupportActionBar(getBinding().mainToolbar);
         Optional.ofNullable(getSupportActionBar())
             .ifPresent(actionBar -> actionBar.setDisplayHomeAsUpEnabled(true));
     }
@@ -65,15 +67,15 @@ public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding
 
         viewModel.showImageDetailInfo(imageDocument);
 
-        binding.setImageDetailViewModel(viewModel);
+        getBinding().setImageDetailViewModel(viewModel);
     }
 
     private void observeImageDetailViewModel() {
-        binding.getImageDetailViewModel()
+        getBinding().getImageDetailViewModel()
             .observeShowMessage()
             .observe(this, this::showToast);
 
-        binding.getImageDetailViewModel()
+        getBinding().getImageDetailViewModel()
             .observeMoveWebEvent()
             .observe(this, url -> {
                 Uri webUri = Uri.parse(url);
@@ -81,14 +83,14 @@ public class ImageDetailActivity extends BaseActivity<ActivityImageDetailBinding
                 startActivity(movieWebIntent);
             });
 
-        binding.getImageDetailViewModel()
+        getBinding().getImageDetailViewModel()
             .observeFinishEvent()
             .observe(this, aVoid -> finish());
     }
 
     @Override
     public void onBackPressed() {
-        binding.getImageDetailViewModel().onClickBackPress();
+        getBinding().getImageDetailViewModel().onClickBackPress();
     }
 
 }
