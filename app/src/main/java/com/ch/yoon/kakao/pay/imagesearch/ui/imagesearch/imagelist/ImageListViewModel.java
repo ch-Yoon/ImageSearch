@@ -53,7 +53,7 @@ public class ImageListViewModel extends BaseViewModel2 {
     @Nullable
     private SearchMetaInfo searchMetaInfo;
 
-    ImageListViewModel(@NonNull Application application,
+    public ImageListViewModel(@NonNull Application application,
                        @NonNull ImageRepository imageRepository,
                        @NonNull ImageSearchInspector imageSearchInspector) {
         super(application);
