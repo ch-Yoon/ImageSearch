@@ -115,12 +115,12 @@ public class SearchBoxViewModelTest {
     }
 
     @Test
-    public void 검색상자_클릭시_수신한_검색_목록이_반영되는지_테스트() {
+    public void 이미지_로드가_되는지_테스트() {
         // given
         when(mockImageRepository.requestSearchLogList()).thenReturn(Single.just(createVirtualSearchLogList(3)));
 
         // when
-        searchBoxViewModel.onClickSearchBox();
+        searchBoxViewModel.loadSearchLogList();
 
         // then
         searchBoxViewModel.getSearchLogList().observeForever(receivedList -> {
@@ -129,7 +129,7 @@ public class SearchBoxViewModelTest {
     }
 
     @Test
-    public void 검색상자_클릭시_수신한_검색_목록이_내림차순으로_정렬되는지_테스트() {
+    public void 이미지_로드시_내림차순으로_정렬되는지_테스트() {
         // given
         List<SearchLog> searchLogList = createVirtualSearchLogList(3);
 
@@ -139,7 +139,7 @@ public class SearchBoxViewModelTest {
         when(mockImageRepository.requestSearchLogList()).thenReturn(Single.just(searchLogList));
 
         // when
-        searchBoxViewModel.onClickSearchBox();
+        searchBoxViewModel.loadSearchLogList();
 
         // then
         searchBoxViewModel.getSearchLogList().observeForever(receivedList -> {
@@ -169,6 +169,7 @@ public class SearchBoxViewModelTest {
                 .thenReturn(Single.just(new SearchLog("테스트", 1)));
 
         // when
+        searchBoxViewModel.loadSearchLogList();
         searchBoxViewModel.onClickSearchBox();
         searchBoxViewModel.onClickSearchButton("테스트");
 
@@ -177,11 +178,12 @@ public class SearchBoxViewModelTest {
     }
 
     @Test
-    public void 키워드_검색_버튼_클릭시_수신한_검색_리스트가_비어있어도_포커스를_유지하는지_테스트() {
+    public void 리스트가_비어있어도_포커스를_갖는지_테스트() {
         // given
         when(mockImageRepository.requestSearchLogList()).thenReturn(Single.just(new ArrayList<>()));
 
         // when
+        searchBoxViewModel.loadSearchLogList();
         searchBoxViewModel.onClickSearchBox();
 
         // then
@@ -189,11 +191,12 @@ public class SearchBoxViewModelTest {
     }
 
     @Test
-    public void 키워드_검색_버튼_클릭시_키워드가_비어있다면_갖고있던_포커스를_계속_유지하는지_테스트() {
+    public void 키워드_검색_버튼_클릭시_키워드가_비어있어도_갖고있던_포커스를_계속_유지하는지_테스트() {
         // given
         when(mockImageRepository.requestSearchLogList()).thenReturn(Single.just(new ArrayList<>()));
 
         // when
+        searchBoxViewModel.loadSearchLogList();
         searchBoxViewModel.onClickSearchBox();
         searchBoxViewModel.onClickSearchButton("");
 
@@ -282,7 +285,7 @@ public class SearchBoxViewModelTest {
             .thenReturn(Completable.complete());
 
         // when
-        searchBoxViewModel.onClickSearchBox();
+        searchBoxViewModel.loadSearchLogList();
         searchBoxViewModel.onClickSearchLogDeleteButton(searchLogList.get(0));
 
         // then
@@ -301,7 +304,7 @@ public class SearchBoxViewModelTest {
             .thenReturn(Single.just(new SearchLog("테스트0", 4)));
 
         // when
-        searchBoxViewModel.onClickSearchBox();
+        searchBoxViewModel.loadSearchLogList();
         searchBoxViewModel.onClickSearchButton("테스트0");
 
         // then
