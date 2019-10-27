@@ -108,10 +108,9 @@ class SearchBoxViewModel(
 
     private fun updateSearchLogList(newSearchLog: SearchLog) {
         _searchLogList.updateOnMainThread { beforeSearchLogList ->
-            beforeSearchLogList?.apply {
-                removeFirstIf { oldLog -> oldLog.keyword == newSearchLog.keyword }
-                add(0, newSearchLog)
-            } ?: mutableListOf(newSearchLog)
+            beforeSearchLogList?.removeFirstIf { oldLog -> oldLog.keyword == newSearchLog.keyword }
+                ?.addFirst(newSearchLog)
+                ?: mutableListOf(newSearchLog)
         }
     }
 
