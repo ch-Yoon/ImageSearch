@@ -31,13 +31,14 @@ import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewM
 
 public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding> {
 
-    private ActivityImageSearchBinding binding;
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_image_search;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = binding(R.layout.activity_image_search);
-
         initSearchBoxViewModel();
         initSearchKeywordEditText();
         observeSearchBoxViewModel();
@@ -59,60 +60,64 @@ public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding
             new SearchBoxViewModelFactory(getApplication(), repository)
         ).get(SearchBoxViewModel.class);
 
-        binding.setSearchBoxViewModel(viewModel);
+        getBinding().setSearchBoxViewModel(viewModel);
+
+        if(isActivityFirstCreate()) {
+            viewModel.loadSearchLogList();
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private void initSearchKeywordEditText() {
-        binding.keywordEditText.setOnEditorActionListener((v, actionId, event) -> {
+        getBinding().keywordEditText.setOnEditorActionListener((v, actionId, event) -> {
             if(actionId == KeyEvent.KEYCODE_ENDCALL) {
                 final String text = v.getText().toString();
-                binding.getSearchBoxViewModel().onClickSearchButton(text);
+                getBinding().getSearchBoxViewModel().onClickSearchButton(text);
                 return true;
             }
 
             return false;
         });
 
-        binding.keywordEditText.setOnTouchListener((v, event) -> {
+        getBinding().keywordEditText.setOnTouchListener((v, event) -> {
             if(MotionEvent.ACTION_UP == event.getAction()) {
-                binding.getSearchBoxViewModel().onClickSearchBox();
+                getBinding().getSearchBoxViewModel().onClickSearchBox();
             }
             return false;
         });
     }
 
     private void observeSearchBoxViewModel() {
-        binding.getSearchBoxViewModel().getSearchKeyword()
+        getBinding().getSearchBoxViewModel().getSearchKeyword()
             .observe(this, keyword -> {
-                binding.getImageListViewModel().loadImageList(keyword);
-                binding.keywordEditText.setText(keyword);
+                getBinding().getImageListViewModel().loadImageList(keyword);
+                getBinding().keywordEditText.setText(keyword);
             });
 
-        binding.getSearchBoxViewModel().getSearchBoxFinishEvent()
+        getBinding().getSearchBoxViewModel().getSearchBoxFinishEvent()
             .observe(this, voidEvent ->
                 finish()
             );
 
-        binding.getSearchBoxViewModel().getShowMessageEvent()
+        getBinding().getSearchBoxViewModel().getShowMessageEvent()
             .observe(this, this::showToast);
 
     }
 
     private void initSearchLogRecyclerView() {
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
-        binding.searchLogRecyclerView.setLayoutManager(linearLayoutManager);
+        getBinding().searchLogRecyclerView.setLayoutManager(linearLayoutManager);
 
         final SearchLogAdapter adapter = new SearchLogAdapter();
         adapter.setOnSearchLogClickListener((searchLog, position) ->
-            binding.getSearchBoxViewModel().onClickSearchButton(searchLog.getKeyword())
+            getBinding().getSearchBoxViewModel().onClickSearchButton(searchLog.getKeyword())
         );
 
         adapter.setOnLogDeleteClickListener((searchLog, position) ->
-            binding.getSearchBoxViewModel().onClickSearchLogDeleteButton(searchLog)
+            getBinding().getSearchBoxViewModel().onClickSearchLogDeleteButton(searchLog)
         );
 
-        binding.searchLogRecyclerView.setAdapter(adapter);
+        getBinding().searchLogRecyclerView.setAdapter(adapter);
     }
 
     private void initImageListViewModel() {
@@ -127,11 +132,11 @@ public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding
             getApplication(), repository, imageSearchInspector
         )).get(ImageListViewModel.class);
 
-        binding.setImageListViewModel(viewModel);
+        getBinding().setImageListViewModel(viewModel);
     }
 
     private void observeImageListViewModel() {
-        binding.getImageListViewModel()
+        getBinding().getImageListViewModel()
             .observeShowMessage()
             .observe(this, this::showToast);
     }
@@ -140,11 +145,11 @@ public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding
         final ImageListAdapter imageListAdapter = new ImageListAdapter();
 
         imageListAdapter.setOnBindPositionListener(position ->
-            binding.getImageListViewModel().loadMoreImageListIfPossible(position)
+            getBinding().getImageListViewModel().loadMoreImageListIfPossible(position)
         );
 
         imageListAdapter.setOnFooterItemClickListener(() ->
-            binding.getImageListViewModel().retryLoadMoreImageList()
+            getBinding().getImageListViewModel().retryLoadMoreImageList()
         );
 
         imageListAdapter.setOnListItemClickListener((imageDocument, position) -> {
@@ -152,7 +157,7 @@ public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding
             startActivity(imageDetailIntent);
         });
 
-        GridLayoutManager gridLayoutManager = (GridLayoutManager)binding.imageRecyclerView.getLayoutManager();
+        GridLayoutManager gridLayoutManager = (GridLayoutManager)getBinding().imageRecyclerView.getLayoutManager();
         if(gridLayoutManager != null) {
             gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
@@ -166,13 +171,13 @@ public class ImageSearchActivity extends BaseActivity<ActivityImageSearchBinding
             });
         }
 
-        binding.imageRecyclerView.setAdapter(imageListAdapter);
-        binding.imageRecyclerView.setLayoutManager(gridLayoutManager);
+        getBinding().imageRecyclerView.setAdapter(imageListAdapter);
+        getBinding().imageRecyclerView.setLayoutManager(gridLayoutManager);
     }
 
     @Override
     public void onBackPressed() {
-        binding.getSearchBoxViewModel().onClickBackPressButton();
+        getBinding().getSearchBoxViewModel().onClickBackPressButton();
     }
 
 }

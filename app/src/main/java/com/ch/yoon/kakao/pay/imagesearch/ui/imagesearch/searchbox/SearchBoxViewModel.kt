@@ -13,6 +13,7 @@ import com.ch.yoon.kakao.pay.imagesearch.extention.*
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel
 import com.ch.yoon.kakao.pay.imagesearch.ui.common.livedata.SingleLiveEvent
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.internal.util.BackpressureHelper.add
 
 /**
  * Creator : ch-yoon
@@ -39,28 +40,21 @@ class SearchBoxViewModel(
         get() = hasFocus.not()
 
     private val hasFocus
-        get() = _searchBoxFocus.value ?: false
+        get() = _searchBoxFocus.value == true
 
-    private val notHasSearchLogList
-        get() = hasSearchLogList.not()
-
-    private val hasSearchLogList
-        get() = _searchLogList.value?.isEmpty()?.not() ?: false
-
+    fun loadSearchLogList() {
+        imageRepository.requestSearchLogList()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ receivedSearchLogList ->
+                _searchLogList.value = receivedSearchLogList.sorted().toMutableList()
+            }, { throwable ->
+                Log.d(TAG, throwable.message)
+            })
+            .register()
+    }
 
     fun onClickSearchBox() {
-        if (notHasSearchLogList) {
-            imageRepository.requestSearchLogList()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ receivedSearchLogList ->
-                    _searchLogList.value = receivedSearchLogList.sorted().toMutableList()
-                }, { throwable ->
-                    Log.d(TAG, throwable.message)
-                })
-                .register()
-        }
-
-        if (notHasFocus) {
+        if(notHasFocus) {
             _searchBoxFocus.value = true
         }
     }
@@ -106,17 +100,17 @@ class SearchBoxViewModel(
         }
     }
 
-    private fun updateSearchLogList(newSearchLog: SearchLog) {
-        _searchLogList.updateOnMainThread { beforeSearchLogList ->
-            beforeSearchLogList?.removeFirstIf { oldLog -> oldLog.keyword == newSearchLog.keyword }
-                ?.addFirst(newSearchLog)
-                ?: mutableListOf(newSearchLog)
+    private fun updateSearchLogList(newLog: SearchLog) {
+        _searchLogList.updateOnMainThread { currentSearchLogList ->
+            currentSearchLogList?.removeFirstIf { oldLog -> oldLog.keyword == newLog.keyword }
+                ?.addFirst(newLog)
+                ?: mutableListOf(newLog)
         }
     }
 
-    private fun removeFromSearchLogList(targetSearchLog: SearchLog) {
-        _searchLogList.updateOnMainThread { beforeSearchLogList ->
-            beforeSearchLogList?.removeFirstIf { oldLog -> oldLog.keyword == targetSearchLog.keyword }
+    private fun removeFromSearchLogList(targetLog: SearchLog) {
+        _searchLogList.updateOnMainThread { currentSearchLogList ->
+            currentSearchLogList?.removeFirstIf { oldLog -> oldLog.keyword == targetLog.keyword }
         }
     }
 
