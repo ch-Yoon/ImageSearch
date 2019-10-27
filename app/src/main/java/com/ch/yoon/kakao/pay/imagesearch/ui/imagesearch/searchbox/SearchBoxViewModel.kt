@@ -35,8 +35,21 @@ class SearchBoxViewModel(
     private val _searchBoxFinishEvent = SingleLiveEvent<Unit>()
     val searchBoxFinishEvent: LiveData<Unit> = _searchBoxFinishEvent
 
+    private val notHasFocus
+        get() = hasFocus.not()
+
+    private val hasFocus
+        get() = _searchBoxFocus.value ?: false
+
+    private val notHasSearchLogList
+        get() = hasSearchLogList.not()
+
+    private val hasSearchLogList
+        get() = _searchLogList.value?.isEmpty()?.not() ?: false
+
+
     fun onClickSearchBox() {
-        if (notHasSearchLogList()) {
+        if (notHasSearchLogList) {
             imageRepository.requestSearchLogList()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ receivedSearchLogList ->
@@ -47,7 +60,7 @@ class SearchBoxViewModel(
                 .register()
         }
 
-        if (notHasFocus()) {
+        if (notHasFocus) {
             _searchBoxFocus.value = true
         }
     }
@@ -86,7 +99,7 @@ class SearchBoxViewModel(
     }
 
     fun onClickBackPressButton() {
-        if(hasFocus()) {
+        if(hasFocus) {
             _searchBoxFocus.value = false
         } else {
             _searchBoxFinishEvent.call()
@@ -107,13 +120,5 @@ class SearchBoxViewModel(
             beforeSearchLogList?.removeFirstIf { oldLog -> oldLog.keyword == targetSearchLog.keyword }
         }
     }
-
-    private fun notHasFocus() = hasFocus().not()
-
-    private fun hasFocus() = _searchBoxFocus.value ?: false
-
-    private fun notHasSearchLogList() = hasSearchLogList().not()
-
-    private fun hasSearchLogList() = _searchLogList.value?.isEmpty()?.not() ?: false
 
 }
