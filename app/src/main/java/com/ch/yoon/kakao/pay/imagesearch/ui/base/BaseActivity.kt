@@ -43,7 +43,7 @@ abstract class BaseActivity<B : ViewDataBinding> : AppCompatActivity() {
     }
 
     private fun checkActivityFirstCreate(savedInstanceState: Bundle?) {
-        isActivityFirstCreate = savedInstanceState?.getBoolean(ARGUMENT_ACTIVITY_IS_CREATED)?.not() ?: true
+        isActivityFirstCreate = savedInstanceState?.run { !getBoolean(ARGUMENT_ACTIVITY_IS_CREATED) } ?: true
     }
 
     protected fun binding(@LayoutRes layoutId: Int): B {
