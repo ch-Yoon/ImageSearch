@@ -12,11 +12,11 @@ class PageLoadInspector<T>(private val pageLoadConfiguration: PageLoadConfigurat
 
     var onPageLoadApprove: ((key: T, pageNumber: Int, dataSize: Int) -> Unit)? = null
 
-    fun submitFirstImageSearchRequest(key: T) {
+    fun requestFirstLoad(key: T) {
         approveFirstImageSearch(key)
     }
 
-    fun submitPreloadRequest(
+    fun requestPreloadIfPossible(
         currentPosition: Int,
         dataTotalSize: Int,
         countOfItemInLine: Int = 1
@@ -30,11 +30,17 @@ class PageLoadInspector<T>(private val pageLoadConfiguration: PageLoadConfigurat
         }
     }
 
-    fun submitRetryRequest() {
+    fun requestRetryAsPreviousValue() {
         previousApproveLog.run {
-            safeLet(key, pageNumber, dataTotalSize) { previousKey, previousPageNumber, previousDataTotalSize ->
-                approveImageSearch(previousKey, previousPageNumber, previousDataTotalSize)
+            safeLet(key, pageNumber, dataTotalSize) { currentKey, previousPageNumber, previousDataTotalSize ->
+                approveImageSearch(currentKey, previousPageNumber, previousDataTotalSize)
             }
+        }
+    }
+
+    fun requestStartOverFromTheBegining() {
+        previousApproveLog.key?.let { currentKey ->
+            approveImageSearch(currentKey, pageLoadConfiguration.startPageNumber, 0)
         }
     }
 

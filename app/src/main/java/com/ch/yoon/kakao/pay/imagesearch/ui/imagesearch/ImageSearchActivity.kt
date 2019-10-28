@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ch.yoon.kakao.pay.imagesearch.R
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ActivityImageSearchBinding
-import com.ch.yoon.kakao.pay.imagesearch.databinding.ActivityImageSearchBindingImpl
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseActivity
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagedetail.ImageDetailActivity
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.ImageListViewModel
@@ -101,7 +100,7 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
     }
 
     private fun observeImageListViewModel() {
-        imageListViewModel.observeShowMessage().observe(this, Observer { message ->
+        imageListViewModel.showMessageEvent.observe(this, Observer { message ->
             showToast(message)
         })
     }

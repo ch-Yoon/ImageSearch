@@ -17,7 +17,7 @@ import com.ch.yoon.kakao.pay.imagesearch.extention.TAG
 import com.ch.yoon.kakao.pay.imagesearch.extention.updateOnMainThread
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.KBaseViewModel
 import com.ch.yoon.kakao.pay.imagesearch.ui.common.livedata.NotNullMutableLiveData
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.helper.ImageSearchInspector
+import com.ch.yoon.kakao.pay.imagesearch.ui.common.pageload.PageLoadInspector
 import io.reactivex.android.schedulers.AndroidSchedulers
 import java.util.ArrayList
 
@@ -25,14 +25,14 @@ import java.util.ArrayList
  * Creator : ch-yoon
  * Date : 2019-10-28
  **/
-class KImageListViewModel(
+class ImageListViewModel(
     application: Application,
     private val imageSearchRepository: ImageSearchRepository,
-    private val imageSearchInspector: ImageSearchInspector
+    private val pageLoadInspector: PageLoadInspector<String>
 ) : KBaseViewModel(application) {
 
     init {
-        observeImageSearchApprove()
+        observePageLoadInspector()
     }
 
     private val _imageSortType = NotNullMutableLiveData(ImageSortType.ACCURACY)
@@ -58,11 +58,7 @@ class KImageListViewModel(
     fun changeImageSortType(imageSortType: ImageSortType) {
         _imageDocumentList.value = null
         _imageSortType.value = imageSortType
-
-        val previousKeyword = imageSearchInspector.previousRequestKeyword
-        if (previousKeyword.isNotEmpty()) {
-            imageSearchInspector.submitFirstImageSearchRequest(previousKeyword, _imageSortType.value)
-        }
+        pageLoadInspector.requestStartOverFromTheBegining()
     }
 
     fun changeCountOfItemInLine(countOfItemInLine: Int) {
@@ -71,27 +67,27 @@ class KImageListViewModel(
 
     fun loadImageList(keyword: String) {
         _imageDocumentList.value = null
-        imageSearchInspector.submitFirstImageSearchRequest(keyword, _imageSortType.value)
+        pageLoadInspector.requestFirstLoad(keyword)
     }
 
     fun retryLoadMoreImageList() {
-        imageSearchInspector.submitRetryRequest(_imageSortType.value)
+        pageLoadInspector.requestRetryAsPreviousValue()
     }
 
     fun loadMoreImageListIfPossible(displayPosition: Int) {
         if (isRemainingMoreData) {
-            imageSearchInspector.submitPreloadRequest(
+            pageLoadInspector.requestPreloadIfPossible(
                 displayPosition,
                 _imageDocumentList.value?.size ?: 0,
-                _imageSortType.value,
                 _countOfItemInLine.value
             )
         }
     }
 
-    private fun observeImageSearchApprove() {
-        imageSearchInspector.observeImageSearchApprove { imageSearchRequest ->
-            requestImageSearchToRepository(imageSearchRequest)
+    private fun observePageLoadInspector() {
+        pageLoadInspector.onPageLoadApprove = { key, pageNumber, dataSize ->
+            val request = ImageSearchRequest(key, _imageSortType.value, pageNumber, dataSize, pageNumber == 1)
+            requestImageSearchToRepository(request)
         }
     }
 
@@ -144,8 +140,7 @@ class KImageListViewModel(
     private fun handlingImageSearchError(throwable: Throwable) {
         when(throwable) {
             is ImageSearchException -> {
-                val error = throwable.imageSearchError
-                updateShowMessage(error.errorMessageResourceId)
+                updateShowMessage(throwable.errorMessageResourceId)
             }
             else -> {
                 Log.d(TAG, throwable.message)

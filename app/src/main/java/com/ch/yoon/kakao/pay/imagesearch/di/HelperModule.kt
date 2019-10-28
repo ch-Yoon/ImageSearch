@@ -1,6 +1,7 @@
 package com.ch.yoon.kakao.pay.imagesearch.di
 
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.helper.ImageSearchInspector
+import com.ch.yoon.kakao.pay.imagesearch.ui.common.pageload.PageLoadConfiguration
+import com.ch.yoon.kakao.pay.imagesearch.ui.common.pageload.PageLoadInspector
 import org.koin.dsl.module.module
 
 /**
@@ -10,7 +11,11 @@ import org.koin.dsl.module.module
 val helperModule = module {
 
     factory {
-        ImageSearchInspector(1, 50, 80, 20)
+        PageLoadInspector<String>(get())
+    }
+
+    factory {
+        PageLoadConfiguration(1, 50, 50, 10)
     }
 
 }
