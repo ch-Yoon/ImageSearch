@@ -10,7 +10,6 @@ import androidx.lifecycle.Observer;
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.RxSchedulerRule;
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepository;
-import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLog;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -25,7 +24,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;

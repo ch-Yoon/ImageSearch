@@ -1,6 +1,5 @@
 package com.ch.yoon.kakao.pay.imagesearch.data.local.room
 
-import com.ch.yoon.kakao.pay.imagesearch.data.local.room.dao.SearchLogDAO
 import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLog
 import io.reactivex.Completable
 import io.reactivex.Single

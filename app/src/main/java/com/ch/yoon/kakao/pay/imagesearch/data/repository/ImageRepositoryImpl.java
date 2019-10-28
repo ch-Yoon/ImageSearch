@@ -5,7 +5,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 
 import com.ch.yoon.kakao.pay.imagesearch.data.local.room.ImageSearchLocalDataSource;
-import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLog;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSearchRequest;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageDocument;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageSearchResult;

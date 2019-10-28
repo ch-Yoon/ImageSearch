@@ -2,7 +2,6 @@ package com.ch.yoon.kakao.pay.imagesearch.data.repository;
 
 import com.ch.yoon.kakao.pay.imagesearch.RxSchedulerRule;
 import com.ch.yoon.kakao.pay.imagesearch.data.local.room.ImageSearchLocalDataSource;
-import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLog;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSearchRequest;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSortType;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageSearchResponse;
