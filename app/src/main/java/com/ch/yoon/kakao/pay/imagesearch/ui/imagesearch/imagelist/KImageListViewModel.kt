@@ -1,22 +1,23 @@
 package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist
 
 import android.app.Application
-import android.text.TextUtils
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import com.ch.yoon.kakao.pay.imagesearch.R
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSearchRequest
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSortType
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageDocument
+import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageSearchResult
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.SearchMetaInfo
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.error.ImageSearchException
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageSearchRepository
 import com.ch.yoon.kakao.pay.imagesearch.extention.TAG
+import com.ch.yoon.kakao.pay.imagesearch.extention.updateOnMainThread
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.KBaseViewModel
+import com.ch.yoon.kakao.pay.imagesearch.ui.common.livedata.NotNullMutableLiveData
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.helper.ImageSearchInspector
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.helper.OnImageSearchApproveListener
-import com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
 import java.util.ArrayList
 
@@ -34,35 +35,33 @@ class KImageListViewModel(
         observeImageSearchApprove()
     }
 
-    companion object {
-        private val DEFAULT_IMAGE_SORT_TYPE = ImageSortType.ACCURACY
-        private val DEFAULT_COUNT_OF_ITEM_IN_LINE = 2
-    }
-
-    private val _imageSortType = MutableLiveData<ImageSortType>().apply { value = DEFAULT_IMAGE_SORT_TYPE }
+    private val _imageSortType = NotNullMutableLiveData(ImageSortType.ACCURACY)
     val imageSortType: LiveData<ImageSortType> = _imageSortType
 
-    private val _countOfItemInLine = MutableLiveData<Int>().apply { value = DEFAULT_COUNT_OF_ITEM_IN_LINE }
+    private val _countOfItemInLine = NotNullMutableLiveData(2)
     val countOfItemInLine: LiveData<Int> = _countOfItemInLine
 
-    private val _imageDocumentList = MutableLiveData<List<ImageDocument>>()
-    val imageDocumentList: LiveData<List<ImageDocument>> = _imageDocumentList
+    private val _imageDocumentList = MutableLiveData<MutableList<ImageDocument>>()
+    val imageDocumentList: LiveData<List<ImageDocument>> = Transformations.map(_imageDocumentList) { it.toList() }
 
     private val _imageSearchState = MutableLiveData<ImageSearchState>().apply { value = ImageSearchState.NONE }
     val imageSearchState: LiveData<ImageSearchState> = _imageSearchState
 
-    private var searchMetaInfo: SearchMetaInfo? = null
+    private val isNotRemainingMoreData
+        get() = isRemainingMoreData.not()
 
-    private val currentImageSortType: ImageSortType
-        get() = _imageSortType.value ?: ImageSortType.ACCURACY
+    private val isRemainingMoreData
+        get() = searchMeta?.isEnd ?: true
+
+    private var searchMeta: SearchMetaInfo? = null
 
     fun changeImageSortType(imageSortType: ImageSortType) {
         _imageDocumentList.value = null
         _imageSortType.value = imageSortType
 
         val previousKeyword = imageSearchInspector.previousRequestKeyword
-        if (!TextUtils.isEmpty(previousKeyword)) {
-            imageSearchInspector.submitFirstImageSearchRequest(previousKeyword, getImageSortType())
+        if (previousKeyword.isNotEmpty()) {
+            imageSearchInspector.submitFirstImageSearchRequest(previousKeyword, _imageSortType.value)
         }
     }
 
@@ -72,52 +71,51 @@ class KImageListViewModel(
 
     fun loadImageList(keyword: String) {
         _imageDocumentList.value = null
-        imageSearchInspector.submitFirstImageSearchRequest(keyword, getImageSortType())
+        imageSearchInspector.submitFirstImageSearchRequest(keyword, _imageSortType.value)
     }
 
     fun retryLoadMoreImageList() {
-        imageSearchInspector.submitRetryRequest(getImageSortType())
+        imageSearchInspector.submitRetryRequest(_imageSortType.value)
     }
 
     fun loadMoreImageListIfPossible(displayPosition: Int) {
-        if (isRemainingMoreData()) {
-            val imageDocumentList = _imageDocumentList.value
+        if (isRemainingMoreData) {
             imageSearchInspector.submitPreloadRequest(
                 displayPosition,
-                imageDocumentList?.size ?: 0,
-                getImageSortType(),
-                getCountOfItemInLine()
+                _imageDocumentList.value?.size ?: 0,
+                _imageSortType.value,
+                _countOfItemInLine.value
             )
         }
     }
 
     private fun observeImageSearchApprove() {
-        imageSearchInspector.observeImageSearchApprove { this.requestImageSearchToRepository(it) }
+        imageSearchInspector.observeImageSearchApprove { imageSearchRequest ->
+            requestImageSearchToRepository(imageSearchRequest)
+        }
     }
 
     private fun requestImageSearchToRepository(imageSearchRequest: ImageSearchRequest) {
-        changeImageSearchState(ImageSearchState.NONE)
+        _imageSearchState.value = ImageSearchState.NONE
 
-            imageSearchRepository.requestImageList(imageSearchRequest)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ imageSearchResult ->
-                    changeImageSearchState(ImageSearchState.SUCCESS)
-                    clearBeforeDocumentListIfFirstRequest(imageSearchResult.getImageSearchRequest())
-                    updateSearchMetaInfo(imageSearchResult.getSearchMetaInfo())
-                    updateImageInfoList(imageSearchResult.getImageDocumentList())
-                }, { throwable ->
-                    changeImageSearchState(ImageSearchState.FAIL)
-                    when(throwable) {
-                        is ImageSearchException -> {
-                            val error = throwable.imageSearchError
-                            updateShowMessage(error.errorMessageResourceId)
-                        }
-                        else -> {
-                            Log.d(TAG, throwable.message)
-                        }
-                    }
-                })
-                .register()
+        imageSearchRepository.requestImageList(imageSearchRequest)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ imageSearchResult ->
+                _imageSearchState.value = ImageSearchState.SUCCESS
+                handlingImageSearchResult(imageSearchResult)
+            }, { throwable ->
+                _imageSearchState.value = ImageSearchState.FAIL
+                handlingImageSearchError(throwable)
+            })
+            .register()
+    }
+
+    private fun handlingImageSearchResult(imageSearchResult: ImageSearchResult) {
+        imageSearchResult.run {
+            clearBeforeDocumentListIfFirstRequest(imageSearchRequest)
+            updateSearchMetaInfo(searchMetaInfo)
+            updateImageDocumentList(imageDocumentList)
+        }
     }
 
     private fun clearBeforeDocumentListIfFirstRequest(imageSearchRequest: ImageSearchRequest) {
@@ -127,46 +125,32 @@ class KImageListViewModel(
     }
 
     private fun updateSearchMetaInfo(searchMetaInfo: SearchMetaInfo?) {
-        this.searchMetaInfo = searchMetaInfo
+        searchMeta = searchMetaInfo
     }
 
-    private fun updateImageInfoList(receivedImageDocumentList: List<ImageDocument>) {
-        val oldList = _imageDocumentList.value
-        val newList = ArrayList(oldList ?: ArrayList())
-        newList.addAll(receivedImageDocumentList)
-
-        if (CollectionUtil.isEmpty(newList)) {
-            updateShowMessage(R.string.success_image_search_no_result)
-        } else if (isNotRemainingMoreData()) {
-            updateShowMessage(R.string.success_image_search_last_data)
-        }
-
-        _imageDocumentList.value = newList
-    }
-
-
-    private fun isNotRemainingMoreData(): Boolean {
-        return !isRemainingMoreData()
-    }
-
-    private fun isRemainingMoreData(): Boolean {
-        return searchMetaInfo == null || !searchMetaInfo!!.isEnd
-    }
-
-    private fun changeImageSearchState(imageSearchState: ImageSearchState) {
-        val previousImageSearchState = _imageSearchState.value
-        if (previousImageSearchState !== imageSearchState) {
-            _imageSearchState.value = imageSearchState
+    private fun updateImageDocumentList(receivedImageDocumentList: List<ImageDocument>) {
+        _imageDocumentList.updateOnMainThread { oldList ->
+            val newList = oldList ?: ArrayList()
+            newList.addAll(receivedImageDocumentList)
+            if(newList.isEmpty()) {
+                updateShowMessage(R.string.success_image_search_no_result)
+            } else if(isNotRemainingMoreData) {
+                updateShowMessage(R.string.success_image_search_last_data)
+            }
+            newList
         }
     }
 
-    private fun getImageSortType(): ImageSortType {
-        val imageSortType = _imageSortType.value
-        return imageSortType ?: DEFAULT_IMAGE_SORT_TYPE
+    private fun handlingImageSearchError(throwable: Throwable) {
+        when(throwable) {
+            is ImageSearchException -> {
+                val error = throwable.imageSearchError
+                updateShowMessage(error.errorMessageResourceId)
+            }
+            else -> {
+                Log.d(TAG, throwable.message)
+            }
+        }
     }
 
-    private fun getCountOfItemInLine(): Int {
-        val countOfItemInLine = _countOfItemInLine.value
-        return countOfItemInLine ?: DEFAULT_COUNT_OF_ITEM_IN_LINE
-    }
 }

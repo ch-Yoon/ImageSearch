@@ -38,7 +38,7 @@ public class ImageSearchInspector {
     }
 
     public void submitFirstImageSearchRequest(@NonNull final String keyword,
-                                              @NonNull final ImageSortType imageSortType) {
+                                                   @NonNull final ImageSortType imageSortType) {
         approveFirstImageSearch(keyword, imageSortType);
     }
 
