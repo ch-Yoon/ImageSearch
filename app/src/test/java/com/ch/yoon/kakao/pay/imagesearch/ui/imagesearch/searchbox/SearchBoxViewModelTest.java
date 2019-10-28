@@ -9,7 +9,6 @@ import androidx.lifecycle.Observer;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.RxSchedulerRule;
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepository;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -51,7 +50,7 @@ public class SearchBoxViewModelTest {
     @Mock
     private Application mockApplication;
     @Mock
-    private ImageRepository mockImageRepository;
+    private ImageSearchRepository mockImageSearchRepository;
     @Mock
     private Observer<Unit> mockVoidObserver;
 
@@ -72,7 +71,7 @@ public class SearchBoxViewModelTest {
     }
 
     private void initSearchBoxViewModel() {
-        searchBoxViewModel = new SearchBoxViewModel(mockApplication, mockImageRepository);
+        searchBoxViewModel = new SearchBoxViewModel(mockApplication, mockImageSearchRepository);
     }
 
     private void initUtils() {
@@ -93,7 +92,7 @@ public class SearchBoxViewModelTest {
     @Test
     public void 키워드_검색_버튼_클릭시_입력한_키워드가_반영되는지_테스트() {
         // given
-        when(mockImageRepository.insertOrUpdateSearchLog(any(String.class)))
+        when(mockImageSearchRepository.insertOrUpdateSearchLog(any(String.class)))
                 .thenReturn(Single.just(new SearchLog("테스트", 1)));
 
         // when
@@ -115,7 +114,7 @@ public class SearchBoxViewModelTest {
     @Test
     public void 이미지_로드가_되는지_테스트() {
         // given
-        when(mockImageRepository.requestSearchLogList()).thenReturn(Single.just(createVirtualSearchLogList(3)));
+        when(mockImageSearchRepository.requestSearchLogList()).thenReturn(Single.just(createVirtualSearchLogList(3)));
 
         // when
         searchBoxViewModel.loadSearchLogList();
@@ -134,7 +133,7 @@ public class SearchBoxViewModelTest {
         List<SearchLog> expectedList = createVirtualSearchLogList(3);
         Collections.sort(expectedList);
 
-        when(mockImageRepository.requestSearchLogList()).thenReturn(Single.just(searchLogList));
+        when(mockImageSearchRepository.requestSearchLogList()).thenReturn(Single.just(searchLogList));
 
         // when
         searchBoxViewModel.loadSearchLogList();
@@ -149,7 +148,7 @@ public class SearchBoxViewModelTest {
     @Test
     public void 검색상자_클릭시_포커스를_갖는지_테스트() {
         // given
-        when(mockImageRepository.requestSearchLogList()).thenReturn(Single.just(new ArrayList<>()));
+        when(mockImageSearchRepository.requestSearchLogList()).thenReturn(Single.just(new ArrayList<>()));
 
         // when
         searchBoxViewModel.onClickSearchBox();
@@ -161,9 +160,9 @@ public class SearchBoxViewModelTest {
     @Test
     public void 키워드_검색_버튼_클릭시_키워드가_비어있지_않다면_포커스를_잃는지_테스트() {
         // given
-        when(mockImageRepository.requestSearchLogList()).thenReturn(Single.just(new ArrayList<>()));
+        when(mockImageSearchRepository.requestSearchLogList()).thenReturn(Single.just(new ArrayList<>()));
 
-        when(mockImageRepository.insertOrUpdateSearchLog(any(String.class)))
+        when(mockImageSearchRepository.insertOrUpdateSearchLog(any(String.class)))
                 .thenReturn(Single.just(new SearchLog("테스트", 1)));
 
         // when
@@ -178,7 +177,7 @@ public class SearchBoxViewModelTest {
     @Test
     public void 리스트가_비어있어도_포커스를_갖는지_테스트() {
         // given
-        when(mockImageRepository.requestSearchLogList()).thenReturn(Single.just(new ArrayList<>()));
+        when(mockImageSearchRepository.requestSearchLogList()).thenReturn(Single.just(new ArrayList<>()));
 
         // when
         searchBoxViewModel.loadSearchLogList();
@@ -191,7 +190,7 @@ public class SearchBoxViewModelTest {
     @Test
     public void 키워드_검색_버튼_클릭시_키워드가_비어있어도_갖고있던_포커스를_계속_유지하는지_테스트() {
         // given
-        when(mockImageRepository.requestSearchLogList()).thenReturn(Single.just(new ArrayList<>()));
+        when(mockImageSearchRepository.requestSearchLogList()).thenReturn(Single.just(new ArrayList<>()));
 
         // when
         searchBoxViewModel.loadSearchLogList();
@@ -205,7 +204,7 @@ public class SearchBoxViewModelTest {
     @Test
     public void 배경_클릭시_포커스를_잃는지_테스트() {
         // given
-        when(mockImageRepository.requestSearchLogList()).thenReturn(Single.just(new ArrayList<>()));
+        when(mockImageSearchRepository.requestSearchLogList()).thenReturn(Single.just(new ArrayList<>()));
 
         // when
         searchBoxViewModel.onClickSearchBox();
@@ -218,7 +217,7 @@ public class SearchBoxViewModelTest {
     @Test
     public void 뒤로가기_클릭시_갖고있던_포커스를_잃는지_테스트() {
         // given
-        when(mockImageRepository.requestSearchLogList()).thenReturn(Single.just(new ArrayList<>()));
+        when(mockImageSearchRepository.requestSearchLogList()).thenReturn(Single.just(new ArrayList<>()));
 
         // when
         searchBoxViewModel.onClickSearchBox();
@@ -231,7 +230,7 @@ public class SearchBoxViewModelTest {
     @Test
     public void 뒤로가기_두번_클릭시_포커스가_존재했다면_종료_이벤트가_호출되는지_테스트() {
         // given
-        when(mockImageRepository.requestSearchLogList()).thenReturn(Single.just(new ArrayList<>()));
+        when(mockImageSearchRepository.requestSearchLogList()).thenReturn(Single.just(new ArrayList<>()));
         searchBoxViewModel.getSearchBoxFinishEvent().observeForever(mockVoidObserver);
 
         // when
@@ -258,14 +257,14 @@ public class SearchBoxViewModelTest {
     @Test
     public void 키워드_삭제_버튼_클릭시_레파지토리에_삭제_요청을_하는지_테스트() {
         // given
-        when(mockImageRepository.deleteSearchLog("테스트"))
+        when(mockImageSearchRepository.deleteSearchLog("테스트"))
             .thenReturn(Completable.complete());
 
         // when
         searchBoxViewModel.onClickSearchLogDeleteButton(new SearchLog("테스트", 1));
 
         // then
-        verify(mockImageRepository, times(1))
+        verify(mockImageSearchRepository, times(1))
             .deleteSearchLog("테스트");
     }
 
@@ -277,9 +276,9 @@ public class SearchBoxViewModelTest {
         expectedList.remove(0);
         Collections.sort(expectedList);
 
-        when(mockImageRepository.requestSearchLogList()).thenReturn(Single.just(searchLogList));
+        when(mockImageSearchRepository.requestSearchLogList()).thenReturn(Single.just(searchLogList));
 
-        when(mockImageRepository.deleteSearchLog(any(String.class)))
+        when(mockImageSearchRepository.deleteSearchLog(any(String.class)))
             .thenReturn(Completable.complete());
 
         // when
@@ -295,10 +294,10 @@ public class SearchBoxViewModelTest {
     @Test
     public void 키워드_검색_버튼_클릭시_기존에_검색했던_키워드라면_목록의_가장_앞쪽으로_이동시키는지_테스트() {
         // given
-        when(mockImageRepository.requestSearchLogList())
+        when(mockImageSearchRepository.requestSearchLogList())
             .thenReturn(Single.just(createVirtualSearchLogList(3)));
 
-        when(mockImageRepository.insertOrUpdateSearchLog("테스트0"))
+        when(mockImageSearchRepository.insertOrUpdateSearchLog("테스트0"))
             .thenReturn(Single.just(new SearchLog("테스트0", 4)));
 
         // when

@@ -9,8 +9,8 @@ import androidx.room.PrimaryKey
  **/
 @Entity(tableName = "searchLogs")
 data class SearchLog(
-    @PrimaryKey private val keyword: String,
-    private val time: Long
+    @PrimaryKey val keyword: String,
+    val time: Long
 ) :  Comparable<SearchLog> {
 
     override fun compareTo(other: SearchLog): Int {

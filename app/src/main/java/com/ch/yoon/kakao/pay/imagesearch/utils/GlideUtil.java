@@ -16,10 +16,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-import com.ch.yoon.kakao.pay.imagesearch.App;
 import com.ch.yoon.kakao.pay.imagesearch.R;
-
-import io.reactivex.Completable;
 
 /**
  * Creator : ch-yoon

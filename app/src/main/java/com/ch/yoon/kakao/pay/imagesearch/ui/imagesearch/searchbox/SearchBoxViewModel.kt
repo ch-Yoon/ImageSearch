@@ -8,7 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.ch.yoon.kakao.pay.imagesearch.R
 import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLog
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepository
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageSearchRepository
 import com.ch.yoon.kakao.pay.imagesearch.extention.*
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.KBaseViewModel
 import com.ch.yoon.kakao.pay.imagesearch.ui.common.livedata.SingleLiveEvent
@@ -20,7 +20,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
  */
 class SearchBoxViewModel(
     application: Application,
-    private val imageRepository: ImageRepository
+    private val imageSearchRepository: ImageSearchRepository
 ) : KBaseViewModel (application) {
 
     private val _searchLogList = MutableLiveData<MutableList<SearchLog>>().apply { value = mutableListOf() }
@@ -42,7 +42,7 @@ class SearchBoxViewModel(
         get() = _searchBoxFocus.value == true
 
     fun loadSearchLogList() {
-        imageRepository.requestSearchLogList()
+        imageSearchRepository.requestSearchLogList()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ receivedSearchLogList ->
                 _searchLogList.value = receivedSearchLogList.sorted().toMutableList()
@@ -65,7 +65,7 @@ class SearchBoxViewModel(
             _searchKeyword.value = keyword
             _searchBoxFocus.value = false
 
-            imageRepository.insertOrUpdateSearchLog(keyword)
+            imageSearchRepository.insertOrUpdateSearchLog(keyword)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ updatedSearchLog ->
                     updateSearchLogList(updatedSearchLog)
@@ -77,7 +77,7 @@ class SearchBoxViewModel(
     }
 
     fun onClickSearchLogDeleteButton(targetSearchLog: SearchLog) {
-        imageRepository.deleteSearchLog(targetSearchLog.keyword)
+        imageSearchRepository.deleteSearchLog(targetSearchLog.keyword)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 removeFromSearchLogList(targetSearchLog)

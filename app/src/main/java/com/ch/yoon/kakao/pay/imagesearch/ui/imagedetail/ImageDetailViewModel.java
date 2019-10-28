@@ -34,7 +34,7 @@ public class ImageDetailViewModel extends KBaseViewModel {
     @Nullable
     private ImageDocument imageDocument;
 
-    ImageDetailViewModel(@NonNull Application application) {
+    public ImageDetailViewModel(@NonNull Application application) {
         super(application);
     }
 

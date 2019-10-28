@@ -12,11 +12,11 @@ import androidx.lifecycle.MutableLiveData;
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageDocument;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.SearchMetaInfo;
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepository;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSearchRequest;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSortType;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.error.ImageSearchError;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.error.ImageSearchException;
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageSearchRepository;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.helper.ImageSearchInspector;
 import com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil;
@@ -37,7 +37,7 @@ public class ImageListViewModel extends BaseViewModel {
     private static final int DEFAULT_COUNT_OF_ITEM_IN_LINE = 2;
 
     @NonNull
-    private final ImageRepository imageRepository;
+    private final ImageSearchRepository imageSearchRepository;
     @NonNull
     private final ImageSearchInspector imageSearchInspector;
 
@@ -53,11 +53,11 @@ public class ImageListViewModel extends BaseViewModel {
     @Nullable
     private SearchMetaInfo searchMetaInfo;
 
-    ImageListViewModel(@NonNull Application application,
-                       @NonNull ImageRepository imageRepository,
+    public ImageListViewModel(@NonNull Application application,
+                       @NonNull ImageSearchRepository imageSearchRepository,
                        @NonNull ImageSearchInspector imageSearchInspector) {
         super(application);
-        this.imageRepository = imageRepository;
+        this.imageSearchRepository = imageSearchRepository;
         this.imageSearchInspector = imageSearchInspector;
 
         init();
@@ -133,7 +133,7 @@ public class ImageListViewModel extends BaseViewModel {
         changeImageSearchState(ImageSearchState.NONE);
 
         registerDisposable(
-            imageRepository.requestImageList(imageSearchRequest)
+            imageSearchRepository.requestImageList(imageSearchRequest)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(imageSearchResult -> {
                     changeImageSearchState(ImageSearchState.SUCCESS);

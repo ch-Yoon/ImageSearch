@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ch.yoon.kakao.pay.imagesearch.R
 import com.ch.yoon.kakao.pay.imagesearch.data.local.room.ImageDatabase
 import com.ch.yoon.kakao.pay.imagesearch.data.local.room.ImageSearchLocalDataSourceImpl
-import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.ImageRemoteDataSource
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepositoryImpl
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ActivityImageSearchBinding
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseActivity
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagedetail.ImageDetailActivity
@@ -55,7 +53,7 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
         val searchLogDao = ImageDatabase.getInstance(applicationContext).searchLogDao()
         val localDataSource = ImageSearchLocalDataSourceImpl(searchLogDao)
         val remoteDataSource = ImageRemoteDataSource.getInstance()
-        val repository = ImageRepositoryImpl.getInstance(localDataSource, remoteDataSource)
+        val repository = ImageSearchRepositoryImpl.getInstance(localDataSource, remoteDataSource)
 
         searchBoxViewModel = ViewModelProviders.of(this,
             SearchBoxViewModelFactory(application, repository)
@@ -115,7 +113,7 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
         val searchLogDao = ImageDatabase.getInstance(applicationContext).searchLogDao()
         val localDataSource = ImageSearchLocalDataSourceImpl(searchLogDao)
         val remoteDataSource = ImageRemoteDataSource.getInstance()
-        val repository = ImageRepositoryImpl.getInstance(localDataSource, remoteDataSource)
+        val repository = ImageSearchRepositoryImpl.getInstance(localDataSource, remoteDataSource)
         val imageSearchInspector = ImageSearchInspector(1, 50, 80, 20)
 
         imageListViewModel = ViewModelProviders.of(this, ImageListViewModelFactory(
