@@ -5,7 +5,6 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLog
 import com.ch.yoon.kakao.pay.imagesearch.extention.hideKeyboard
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.adapter.SearchLogAdapter
 import java.util.ArrayList
 
 /**

@@ -2,6 +2,7 @@ package com.ch.yoon.kakao.pay.imagesearch.di
 
 import com.ch.yoon.kakao.pay.imagesearch.BuildConfig
 import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.ImageSearchApi
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.ImageSearchRemoteDataSource
 import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.ImageSearchRemoteDataSourceImpl
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -17,7 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory
  **/
 val networkModule = module {
 
-    single {
+    single<ImageSearchRemoteDataSource> {
         ImageSearchRemoteDataSourceImpl(get())
     }
 
@@ -51,8 +52,7 @@ val networkModule = module {
                 chain.request()
                     .newBuilder()
                     .header("Authorization", BuildConfig.KAKAO_API_KEY)
-                    .build()
-            )
+                    .build())
         }
     }
 

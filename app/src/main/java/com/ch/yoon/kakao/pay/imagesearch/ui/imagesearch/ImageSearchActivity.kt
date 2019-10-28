@@ -5,23 +5,18 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.view.MotionEvent
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ch.yoon.kakao.pay.imagesearch.R
-import com.ch.yoon.kakao.pay.imagesearch.data.local.room.ImageDatabase
-import com.ch.yoon.kakao.pay.imagesearch.data.local.room.ImageSearchLocalDataSourceImpl
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ActivityImageSearchBinding
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseActivity
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagedetail.ImageDetailActivity
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.ImageListViewModel
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.ImageListViewModelFactory
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.adapter.ImageListAdapter
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.helper.ImageSearchInspector
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewModel
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewModelFactory
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.adapter.SearchLogAdapter
+import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchLogAdapter
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * Creator : ch-yoon
@@ -29,8 +24,8 @@ import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.adapter.Search
  */
 class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
 
-    private lateinit var searchBoxViewModel: SearchBoxViewModel
-    private lateinit var imageListViewModel: ImageListViewModel
+    private val searchBoxViewModel: SearchBoxViewModel by viewModel()
+    private val imageListViewModel: ImageListViewModel by viewModel()
 
     override fun getLayoutId(): Int {
         return R.layout.activity_image_search
@@ -50,20 +45,12 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
     }
 
     private fun initSearchBoxViewModel() {
-        val searchLogDao = ImageDatabase.getInstance(applicationContext).searchLogDao()
-        val localDataSource = ImageSearchLocalDataSourceImpl(searchLogDao)
-        val remoteDataSource = ImageRemoteDataSource.getInstance()
-        val repository = ImageSearchRepositoryImpl.getInstance(localDataSource, remoteDataSource)
-
-        searchBoxViewModel = ViewModelProviders.of(this,
-            SearchBoxViewModelFactory(application, repository)
-        ).get(SearchBoxViewModel::class.java)
+        val a = searchBoxViewModel
+        binding.searchBoxViewModel = searchBoxViewModel
 
         if (isActivityFirstCreate) {
             searchBoxViewModel.loadSearchLogList()
         }
-
-        binding.searchBoxViewModel = searchBoxViewModel
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -110,16 +97,6 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
     }
 
     private fun initImageListViewModel() {
-        val searchLogDao = ImageDatabase.getInstance(applicationContext).searchLogDao()
-        val localDataSource = ImageSearchLocalDataSourceImpl(searchLogDao)
-        val remoteDataSource = ImageRemoteDataSource.getInstance()
-        val repository = ImageSearchRepositoryImpl.getInstance(localDataSource, remoteDataSource)
-        val imageSearchInspector = ImageSearchInspector(1, 50, 80, 20)
-
-        imageListViewModel = ViewModelProviders.of(this, ImageListViewModelFactory(
-            application, repository, imageSearchInspector
-        )).get(ImageListViewModel::class.java)
-
         binding.imageListViewModel = imageListViewModel
     }
 
