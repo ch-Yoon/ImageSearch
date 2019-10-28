@@ -45,7 +45,6 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
     }
 
     private fun initSearchBoxViewModel() {
-        val a = searchBoxViewModel
         binding.searchBoxViewModel = searchBoxViewModel
 
         if (isActivityFirstCreate) {
@@ -57,7 +56,7 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
     private fun initSearchKeywordEditText() {
         binding.keywordEditText.setOnEditorActionListener{ v, actionId, _ ->
             if (actionId == KeyEvent.KEYCODE_ENDCALL) {
-                binding.searchBoxViewModel?.onClickSearchButton(v.text.toString())
+                searchBoxViewModel.onClickSearchButton(v.text.toString())
                 true
             } else {
                 false
@@ -66,7 +65,7 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
 
         binding.keywordEditText.setOnTouchListener { _, event ->
             if (MotionEvent.ACTION_UP == event.action) {
-                binding.searchBoxViewModel?.onClickSearchBox()
+                searchBoxViewModel.onClickSearchBox()
             }
             false
         }
