@@ -17,7 +17,7 @@ import io.reactivex.Single;
  * Date : 2019-08-05.
  */
 @Dao
-public interface SearchLogDao {
+public interface SearchLogDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Completable insertOrUpdateSearchLog(SearchLog searchLog);

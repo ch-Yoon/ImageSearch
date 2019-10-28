@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ch.yoon.kakao.pay.imagesearch.R
 import com.ch.yoon.kakao.pay.imagesearch.data.local.room.ImageDatabase
-import com.ch.yoon.kakao.pay.imagesearch.data.local.room.ImageLocalDataSource
+import com.ch.yoon.kakao.pay.imagesearch.data.local.room.ImageSearchLocalDataSourceImpl
 import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.ImageRemoteDataSource
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepositoryImpl
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ActivityImageSearchBinding
@@ -23,7 +23,7 @@ import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.adapter.ImageL
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.helper.ImageSearchInspector
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewModel
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewModelFactory
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchLogAdapter
+import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.adapter.SearchLogAdapter
 
 /**
  * Creator : ch-yoon
@@ -53,7 +53,7 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
 
     private fun initSearchBoxViewModel() {
         val searchLogDao = ImageDatabase.getInstance(applicationContext).searchLogDao()
-        val localDataSource = ImageLocalDataSource.getInstance(searchLogDao)
+        val localDataSource = ImageSearchLocalDataSourceImpl(searchLogDao)
         val remoteDataSource = ImageRemoteDataSource.getInstance()
         val repository = ImageRepositoryImpl.getInstance(localDataSource, remoteDataSource)
 
@@ -113,7 +113,7 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
 
     private fun initImageListViewModel() {
         val searchLogDao = ImageDatabase.getInstance(applicationContext).searchLogDao()
-        val localDataSource = ImageLocalDataSource.getInstance(searchLogDao)
+        val localDataSource = ImageSearchLocalDataSourceImpl(searchLogDao)
         val remoteDataSource = ImageRemoteDataSource.getInstance()
         val repository = ImageRepositoryImpl.getInstance(localDataSource, remoteDataSource)
         val imageSearchInspector = ImageSearchInspector(1, 50, 80, 20)

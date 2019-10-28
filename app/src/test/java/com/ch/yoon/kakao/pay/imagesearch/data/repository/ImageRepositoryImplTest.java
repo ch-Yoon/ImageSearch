@@ -1,15 +1,13 @@
 package com.ch.yoon.kakao.pay.imagesearch.data.repository;
 
 import com.ch.yoon.kakao.pay.imagesearch.RxSchedulerRule;
-import com.ch.yoon.kakao.pay.imagesearch.data.local.room.ImageLocalDataSource;
+import com.ch.yoon.kakao.pay.imagesearch.data.local.room.ImageSearchLocalDataSource;
 import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLog;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSearchRequest;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSortType;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageSearchResponse;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.SearchMetaInfo;
 import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.ImageRemoteDataSource;
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepository;
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepositoryImpl;
 
 import org.junit.After;
 import org.junit.Before;
@@ -38,7 +36,7 @@ public class ImageRepositoryImplTest {
     @Mock
     private ImageRemoteDataSource mockImageRemoteDataSource;
     @Mock
-    private ImageLocalDataSource mockImageLocalDataSource;
+    private ImageSearchLocalDataSource mockImageLocalDataSource;
 
     private ImageRepository imageRepository;
     private CompositeDisposable compositeDisposable;

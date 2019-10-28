@@ -7,7 +7,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.ch.yoon.kakao.pay.imagesearch.data.local.room.dao.SearchLogDao;
+import com.ch.yoon.kakao.pay.imagesearch.data.local.room.dao.SearchLogDAO;
 import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLog;
 
 /**
@@ -33,6 +33,6 @@ public abstract class ImageDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-    public abstract SearchLogDao searchLogDao();
+    public abstract SearchLogDAO searchLogDao();
 
 }

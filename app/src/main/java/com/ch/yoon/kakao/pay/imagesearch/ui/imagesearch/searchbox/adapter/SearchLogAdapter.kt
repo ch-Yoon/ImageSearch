@@ -1,4 +1,4 @@
-package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox
+package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.adapter
 
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
@@ -8,7 +8,8 @@ import com.ch.yoon.kakao.pay.imagesearch.R
 import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLog
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ItemSearchHistoryBinding
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewHolder
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchLogAdapter.SearchLogViewHolder
+import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewModel
+import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.adapter.SearchLogAdapter.SearchLogViewHolder
 
 /**
  * Creator : ch-yoon

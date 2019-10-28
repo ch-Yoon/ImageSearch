@@ -4,14 +4,13 @@ package com.ch.yoon.kakao.pay.imagesearch.data.repository;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 
-import com.ch.yoon.kakao.pay.imagesearch.data.local.room.ImageLocalDataSource;
+import com.ch.yoon.kakao.pay.imagesearch.data.local.room.ImageSearchLocalDataSource;
 import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLog;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSearchRequest;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageDocument;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageSearchResult;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.SearchMetaInfo;
 import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.ImageRemoteDataSource;
-import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageSearchResponse;
 
 import java.util.List;
 
@@ -30,9 +29,9 @@ public class ImageRepositoryImpl implements ImageRepository {
     @NonNull
     private final ImageRemoteDataSource imageRemoteDataSource;
     @NonNull
-    private final ImageLocalDataSource imageLocalDataSource;
+    private final ImageSearchLocalDataSource imageLocalDataSource;
 
-    public static synchronized ImageRepository getInstance(@NonNull ImageLocalDataSource imageLocalDataSource,
+    public static synchronized ImageRepository getInstance(@NonNull ImageSearchLocalDataSource imageLocalDataSource,
                                                            @NonNull ImageRemoteDataSource imageRemoteDataSource) {
         if(INSTANCE == null) {
             INSTANCE = new ImageRepositoryImpl(imageLocalDataSource, imageRemoteDataSource);
@@ -46,7 +45,7 @@ public class ImageRepositoryImpl implements ImageRepository {
         INSTANCE = null;
     }
 
-    private ImageRepositoryImpl(@NonNull ImageLocalDataSource imageLocalDataSource,
+    private ImageRepositoryImpl(@NonNull ImageSearchLocalDataSource imageLocalDataSource,
                                 @NonNull ImageRemoteDataSource imageRemoteDataSource) {
         this.imageLocalDataSource = imageLocalDataSource;
         this.imageRemoteDataSource = imageRemoteDataSource;
