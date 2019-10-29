@@ -9,7 +9,7 @@ import com.ch.yoon.kakao.pay.imagesearch.R
 import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLog
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageSearchRepository
 import com.ch.yoon.kakao.pay.imagesearch.extention.*
-import com.ch.yoon.kakao.pay.imagesearch.ui.base.KBaseViewModel
+import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel
 import com.ch.yoon.kakao.pay.imagesearch.ui.common.livedata.SingleLiveEvent
 import io.reactivex.android.schedulers.AndroidSchedulers
 
@@ -20,7 +20,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 class SearchBoxViewModel(
     application: Application,
     private val imageSearchRepository: ImageSearchRepository
-) : KBaseViewModel (application) {
+) : BaseViewModel (application) {
 
     private val _searchLogList = MutableLiveData<MutableList<SearchLog>>(mutableListOf())
     val searchLogList: LiveData<List<SearchLog>> = Transformations.map(_searchLogList) { it?.toList() }

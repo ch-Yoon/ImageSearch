@@ -15,7 +15,7 @@ import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.error.I
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageSearchRepository
 import com.ch.yoon.kakao.pay.imagesearch.extention.TAG
 import com.ch.yoon.kakao.pay.imagesearch.extention.updateOnMainThread
-import com.ch.yoon.kakao.pay.imagesearch.ui.base.KBaseViewModel
+import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel
 import com.ch.yoon.kakao.pay.imagesearch.ui.common.livedata.NotNullMutableLiveData
 import com.ch.yoon.kakao.pay.imagesearch.ui.common.livedata.SingleLiveEvent
 import com.ch.yoon.kakao.pay.imagesearch.ui.common.pageload.PageLoadHelper
@@ -30,7 +30,7 @@ class ImageListViewModel(
     application: Application,
     private val imageSearchRepository: ImageSearchRepository,
     private val pageLoadHelper: PageLoadHelper<String>
-) : KBaseViewModel(application) {
+) : BaseViewModel(application) {
 
     init {
         observePageLoadInspector()

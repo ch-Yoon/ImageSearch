@@ -12,7 +12,7 @@ import io.reactivex.disposables.Disposable
  * Creator : ch-yoon
  * Date : 2019-10-25.
  */
-open class KBaseViewModel(application: Application) : AndroidViewModel(application){
+open class BaseViewModel(application: Application) : AndroidViewModel(application){
 
     private val compositeDisposable = CompositeDisposable()
 

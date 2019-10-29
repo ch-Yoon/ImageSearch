@@ -7,14 +7,14 @@ import androidx.lifecycle.MutableLiveData
 import com.ch.yoon.kakao.pay.imagesearch.R
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageDocument
 import com.ch.yoon.kakao.pay.imagesearch.extention.TAG
-import com.ch.yoon.kakao.pay.imagesearch.ui.base.KBaseViewModel
+import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel
 import com.ch.yoon.kakao.pay.imagesearch.ui.common.livedata.SingleLiveEvent
 
 /**
  * Creator : ch-yoon
  * Date : 2019-10-29.
  */
-class ImageDetailViewModel(application: Application) : KBaseViewModel(application) {
+class ImageDetailViewModel(application: Application) : BaseViewModel(application) {
 
     private val _imageUrlInfo = MutableLiveData<String>()
     val imageUrlInfo: LiveData<String> = _imageUrlInfo
