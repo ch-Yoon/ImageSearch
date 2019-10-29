@@ -6,7 +6,7 @@ import com.ch.yoon.kakao.pay.imagesearch.extention.safeLet
  * Creator : ch-yoon
  * Date : 2019-10-28.
  */
-class PageLoadInspector<T>(private val pageLoadConfiguration: PageLoadConfiguration) {
+class PageLoadHelper<T>(private val pageLoadConfiguration: PageLoadConfiguration) {
 
     private val previousApproveLog = PageLoadApproveLog<T>()
 
@@ -38,7 +38,7 @@ class PageLoadInspector<T>(private val pageLoadConfiguration: PageLoadConfigurat
         }
     }
 
-    fun requestStartOverFromTheBegining() {
+    fun requestStartOverFromTheBeginning() {
         previousApproveLog.key?.let { currentKey ->
             approveImageSearch(currentKey, pageLoadConfiguration.startPageNumber, 0)
         }

@@ -18,7 +18,7 @@ import com.ch.yoon.kakao.pay.imagesearch.extention.updateOnMainThread
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.KBaseViewModel
 import com.ch.yoon.kakao.pay.imagesearch.ui.common.livedata.NotNullMutableLiveData
 import com.ch.yoon.kakao.pay.imagesearch.ui.common.livedata.SingleLiveEvent
-import com.ch.yoon.kakao.pay.imagesearch.ui.common.pageload.PageLoadInspector
+import com.ch.yoon.kakao.pay.imagesearch.ui.common.pageload.PageLoadHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import java.util.ArrayList
 
@@ -29,7 +29,7 @@ import java.util.ArrayList
 class ImageListViewModel(
     application: Application,
     private val imageSearchRepository: ImageSearchRepository,
-    private val pageLoadInspector: PageLoadInspector<String>
+    private val pageLoadHelper: PageLoadHelper<String>
 ) : KBaseViewModel(application) {
 
     init {
@@ -62,7 +62,7 @@ class ImageListViewModel(
     fun changeImageSortType(imageSortType: ImageSortType) {
         _imageDocumentList.value = null
         _imageSortType.value = imageSortType
-        pageLoadInspector.requestStartOverFromTheBegining()
+        pageLoadHelper.requestStartOverFromTheBeginning()
     }
 
     fun changeCountOfItemInLine(countOfItemInLine: Int) {
@@ -71,16 +71,16 @@ class ImageListViewModel(
 
     fun loadImageList(keyword: String) {
         _imageDocumentList.value = null
-        pageLoadInspector.requestFirstLoad(keyword)
+        pageLoadHelper.requestFirstLoad(keyword)
     }
 
     fun retryLoadMoreImageList() {
-        pageLoadInspector.requestRetryAsPreviousValue()
+        pageLoadHelper.requestRetryAsPreviousValue()
     }
 
     fun loadMoreImageListIfPossible(displayPosition: Int) {
         if (isRemainingMoreData) {
-            pageLoadInspector.requestPreloadIfPossible(
+            pageLoadHelper.requestPreloadIfPossible(
                 displayPosition,
                 _imageDocumentList.value?.size ?: 0,
                 _countOfItemInLine.value
@@ -93,7 +93,7 @@ class ImageListViewModel(
     }
 
     private fun observePageLoadInspector() {
-        pageLoadInspector.onPageLoadApprove = { key, pageNumber, dataSize ->
+        pageLoadHelper.onPageLoadApprove = { key, pageNumber, dataSize ->
             val request = ImageSearchRequest(key, _imageSortType.value, pageNumber, dataSize, pageNumber == 1)
             requestImageSearchToRepository(request)
         }

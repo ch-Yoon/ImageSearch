@@ -1,7 +1,6 @@
 package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox
 
 import android.app.Application
-import android.text.TextUtils
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -66,12 +65,12 @@ class SearchBoxViewModel(
     }
 
     fun onClickSearchButton() {
-        checkSearchKeywordValidation()
+        validationSearchKeyword()
     }
 
     fun onClickSearchButton(keyword: String) {
         _searchKeyword.value = keyword
-        checkSearchKeywordValidation()
+        validationSearchKeyword()
     }
 
     fun onClickSearchLogDeleteButton(targetSearchLog: SearchLog) {
@@ -97,7 +96,7 @@ class SearchBoxViewModel(
         }
     }
 
-    private fun checkSearchKeywordValidation() {
+    private fun validationSearchKeyword() {
         val keyword = _searchKeyword.value ?: ""
         if (keyword.isEmpty()) {
             updateShowMessage(R.string.empty_keyword_guide)
