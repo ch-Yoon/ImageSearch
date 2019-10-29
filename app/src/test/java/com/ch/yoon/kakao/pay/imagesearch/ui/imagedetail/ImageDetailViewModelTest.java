@@ -8,7 +8,6 @@ import androidx.lifecycle.Observer;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.RxSchedulerRule;
-import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageDocument;
 
 import org.junit.Before;
 import org.junit.Rule;

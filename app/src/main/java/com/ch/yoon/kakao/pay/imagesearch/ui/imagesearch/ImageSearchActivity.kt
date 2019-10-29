@@ -13,9 +13,10 @@ import com.ch.yoon.kakao.pay.imagesearch.databinding.ActivityImageSearchBinding
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseActivity
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagedetail.ImageDetailActivity
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.ImageListViewModel
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.adapter.ImageListAdapter
+import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.ImageListAdapter
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewModel
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchLogAdapter
+import kotlinx.android.synthetic.main.activity_image_search.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
@@ -74,7 +75,7 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
     private fun observeSearchBoxViewModel() {
         val owner = this
         searchBoxViewModel.run {
-            searchKeyword.observe(owner, Observer { keyword ->
+            searchEvent.observe(owner, Observer { keyword ->
                 imageListViewModel.loadImageList(keyword)
             })
 
@@ -100,23 +101,24 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
     }
 
     private fun observeImageListViewModel() {
-        imageListViewModel.showMessageEvent.observe(this, Observer { message ->
-            showToast(message)
-        })
+        val owner = this
+        imageListViewModel.run {
+            showMessageEvent.observe(owner, Observer { message ->
+                showToast(message)
+            })
+
+            moveToDetailScreenEvent.observe(owner, Observer { imageDocument ->
+                val imageDetailIntent = ImageDetailActivity.getImageDetailActivityIntent(owner, imageDocument)
+                startActivity(imageDetailIntent)
+            })
+        }
     }
 
     private fun initImageRecyclerView() {
         binding.imageRecyclerView.apply {
-            adapter = ImageListAdapter().apply {
-                setOnBindPositionListener { position ->
+            adapter = ImageListAdapter(imageListViewModel).apply {
+                onBindPosition = { position ->
                     imageListViewModel.loadMoreImageListIfPossible(position)
-                }
-                setOnFooterItemClickListener {
-                    imageListViewModel.retryLoadMoreImageList()
-                }
-                setOnListItemClickListener { imageDocument, _ ->
-                    val imageDetailIntent = ImageDetailActivity.getImageDetailActivityIntent(this@ImageSearchActivity, imageDocument)
-                    startActivity(imageDetailIntent)
                 }
             }
 

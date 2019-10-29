@@ -17,6 +17,7 @@ import com.ch.yoon.kakao.pay.imagesearch.extention.TAG
 import com.ch.yoon.kakao.pay.imagesearch.extention.updateOnMainThread
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.KBaseViewModel
 import com.ch.yoon.kakao.pay.imagesearch.ui.common.livedata.NotNullMutableLiveData
+import com.ch.yoon.kakao.pay.imagesearch.ui.common.livedata.SingleLiveEvent
 import com.ch.yoon.kakao.pay.imagesearch.ui.common.pageload.PageLoadInspector
 import io.reactivex.android.schedulers.AndroidSchedulers
 import java.util.ArrayList
@@ -42,16 +43,19 @@ class ImageListViewModel(
     val countOfItemInLine: LiveData<Int> = _countOfItemInLine
 
     private val _imageDocumentList = MutableLiveData<MutableList<ImageDocument>>()
-    val imageDocumentList: LiveData<List<ImageDocument>> = Transformations.map(_imageDocumentList) { it.toList() }
+    val imageDocumentList: LiveData<List<ImageDocument>> = Transformations.map(_imageDocumentList) { it?.toList() }
 
-    private val _imageSearchState = MutableLiveData<ImageSearchState>().apply { value = ImageSearchState.NONE }
+    private val _imageSearchState = MutableLiveData<ImageSearchState>(ImageSearchState.NONE)
     val imageSearchState: LiveData<ImageSearchState> = _imageSearchState
+
+    private val _moveToDetailScreenEvent = SingleLiveEvent<ImageDocument>()
+    val moveToDetailScreenEvent: LiveData<ImageDocument> = _moveToDetailScreenEvent
 
     private val isNotRemainingMoreData
         get() = isRemainingMoreData.not()
 
     private val isRemainingMoreData
-        get() = searchMeta?.isEnd ?: true
+        get() = searchMeta?.isEnd?.not() ?: true
 
     private var searchMeta: SearchMetaInfo? = null
 
@@ -82,6 +86,10 @@ class ImageListViewModel(
                 _countOfItemInLine.value
             )
         }
+    }
+
+    fun onClickImage(imageDocument: ImageDocument) {
+        _moveToDetailScreenEvent.value = imageDocument
     }
 
     private fun observePageLoadInspector() {

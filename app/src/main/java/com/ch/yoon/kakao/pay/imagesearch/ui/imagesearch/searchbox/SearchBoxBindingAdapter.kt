@@ -24,3 +24,10 @@ fun hideKeyboard(editText: EditText, isFocus: Boolean?) {
         editText.hideKeyboard()
     }
 }
+
+@BindingAdapter("setText")
+fun setText(editText: EditText, text: String?) {
+    if(editText.text.toString() != text) {
+        editText.setText(text ?: "")
+    }
+}

@@ -15,7 +15,7 @@ val helperModule = module {
     }
 
     factory {
-        PageLoadConfiguration(1, 50, 50, 10)
+        PageLoadConfiguration(1, 50, 50, 5)
     }
 
 }

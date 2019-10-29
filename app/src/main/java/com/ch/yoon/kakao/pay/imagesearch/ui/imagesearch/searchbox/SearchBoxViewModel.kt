@@ -23,10 +23,10 @@ class SearchBoxViewModel(
     private val imageSearchRepository: ImageSearchRepository
 ) : KBaseViewModel (application) {
 
-    private val _searchLogList = MutableLiveData<MutableList<SearchLog>>().apply { value = mutableListOf() }
-    val searchLogList: LiveData<List<SearchLog>> = Transformations.map(_searchLogList) { it.toList() }
+    private val _searchLogList = MutableLiveData<MutableList<SearchLog>>(mutableListOf())
+    val searchLogList: LiveData<List<SearchLog>> = Transformations.map(_searchLogList) { it?.toList() }
 
-    private val _searchBoxFocus = MutableLiveData<Boolean>().apply { value = false }
+    private val _searchBoxFocus = MutableLiveData<Boolean>(false)
     val searchBoxFocus: LiveData<Boolean> = _searchBoxFocus
 
     private val _searchKeyword = SingleLiveEvent<String>()
@@ -34,6 +34,9 @@ class SearchBoxViewModel(
 
     private val _searchBoxFinishEvent = SingleLiveEvent<Unit>()
     val searchBoxFinishEvent: LiveData<Unit> = _searchBoxFinishEvent
+
+    private val _searchEvent = SingleLiveEvent<String>()
+    val searchEvent: LiveData<String> = _searchEvent
 
     private val notHasFocus
         get() = hasFocus.not()
@@ -58,22 +61,17 @@ class SearchBoxViewModel(
         }
     }
 
-    fun onClickSearchButton(keyword: String) {
-        if (TextUtils.isEmpty(keyword)) {
-            updateShowMessage(R.string.empty_keyword_guide)
-        } else {
-            _searchKeyword.value = keyword
-            _searchBoxFocus.value = false
+    fun onChangeKeyword(keyword: String) {
+        _searchKeyword.value = keyword
+    }
 
-            imageSearchRepository.insertOrUpdateSearchLog(keyword)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ updatedSearchLog ->
-                    updateSearchLogList(updatedSearchLog)
-                }, { throwable ->
-                    Log.d(TAG, throwable.message)
-                })
-                .register()
-        }
+    fun onClickSearchButton() {
+        checkSearchKeywordValidation()
+    }
+
+    fun onClickSearchButton(keyword: String) {
+        _searchKeyword.value = keyword
+        checkSearchKeywordValidation()
     }
 
     fun onClickSearchLogDeleteButton(targetSearchLog: SearchLog) {
@@ -96,6 +94,25 @@ class SearchBoxViewModel(
             _searchBoxFocus.value = false
         } else {
             _searchBoxFinishEvent.call()
+        }
+    }
+
+    private fun checkSearchKeywordValidation() {
+        val keyword = _searchKeyword.value ?: ""
+        if (keyword.isEmpty()) {
+            updateShowMessage(R.string.empty_keyword_guide)
+        } else {
+            _searchEvent.value = keyword
+            _searchBoxFocus.value = false
+
+            imageSearchRepository.insertOrUpdateSearchLog(keyword)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ updatedSearchLog ->
+                    updateSearchLogList(updatedSearchLog)
+                }, { throwable ->
+                    Log.d(TAG, throwable.message)
+                })
+                .register()
         }
     }
 

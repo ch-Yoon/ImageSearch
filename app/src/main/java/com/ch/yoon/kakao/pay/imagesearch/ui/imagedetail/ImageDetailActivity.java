@@ -10,8 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
-import com.ch.yoon.kakao.pay.imagesearch.databinding.ActivityImageDetailBinding;
 import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageDocument;
+import com.ch.yoon.kakao.pay.imagesearch.databinding.ActivityImageDetailBinding;
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseActivity;
 
 import java.util.Optional;

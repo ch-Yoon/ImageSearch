@@ -6,7 +6,11 @@
     <data>
 
         <variable
-            name="imageInfo"
+            name="viewModel"
+            type="com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.ImageListViewModel" />
+
+        <variable
+            name="imageDocument"
             type="com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageDocument" />
 
     </data>
@@ -21,12 +25,13 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="1dp"
+            android:onClick="@{() -> viewModel.onClickImage(imageDocument)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:loadImageWithCenterCrop="@{imageInfo.getThumbnailUrl()}"/>
+            app:loadImageWithCenterCrop="@{imageDocument.getThumbnailUrl()}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

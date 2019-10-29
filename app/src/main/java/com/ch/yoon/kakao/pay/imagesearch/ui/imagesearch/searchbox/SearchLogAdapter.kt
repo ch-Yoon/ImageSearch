@@ -16,7 +16,7 @@ import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchLogAdapt
  */
 class SearchLogAdapter(
     private val searchLogViewModel: SearchBoxViewModel
-) : ListAdapter<SearchLog, SearchLogViewHolder>(SearchLogDiffCallback()) {
+) : ListAdapter<SearchLog, SearchLogViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchLogViewHolder {
         return SearchLogViewHolder(searchLogViewModel, R.layout.item_search_history, parent)
@@ -42,7 +42,7 @@ class SearchLogAdapter(
         }
     }
 
-    class SearchLogDiffCallback : DiffUtil.ItemCallback<SearchLog>() {
+    class DiffCallback : DiffUtil.ItemCallback<SearchLog>() {
         override fun areItemsTheSame(oldItem: SearchLog, newItem: SearchLog): Boolean {
             return oldItem.keyword == newItem.keyword
         }
