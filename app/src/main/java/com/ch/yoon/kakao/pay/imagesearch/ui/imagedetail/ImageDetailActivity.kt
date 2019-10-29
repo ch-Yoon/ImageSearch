@@ -23,7 +23,7 @@ class ImageDetailActivity : BaseActivity<ActivityImageDetailBinding>() {
 
         fun getImageDetailActivityIntent(context: Context, imageDocument: ImageDocument): Intent {
             return Intent(context, ImageDetailActivity::class.java).apply {
-                putExtra(ImageDetailActivity.EXTRA_IMAGE_DOCUMENT_KEY, imageDocument)
+                putExtra(EXTRA_IMAGE_DOCUMENT_KEY, imageDocument)
             }
         }
     }
@@ -67,24 +67,24 @@ class ImageDetailActivity : BaseActivity<ActivityImageDetailBinding>() {
     }
 
     private fun observeImageDetailViewModel() {
-        binding.imageDetailViewModel
-            .observeShowMessage()
-            .observe(this, Observer { this.showToast(it) })
+        val owner = this
+        imageDetailViewModel.run {
+            showMessageEvent.observe(owner, Observer { message ->
+                showToast(message)
+            })
 
-        binding.imageDetailViewModel
-            .observeMoveWebEvent()
-            .observe(this, Observer { url ->
-                val webUri = Uri.parse(url)
-                val movieWebIntent = Intent(Intent.ACTION_VIEW, webUri)
-                startActivity(movieWebIntent) })
+            moveToWebEvent.observe(owner, Observer { url ->
+                val movieWebIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                startActivity(movieWebIntent)
+            })
 
-        binding.imageDetailViewModel
-            .observeFinishEvent()
-            .observe(this, Observer { finish() })
+            finishEvent.observe(owner, Observer {
+                finish()
+            })
+        }
     }
 
     override fun onBackPressed() {
-        binding.imageDetailViewModel.onClickBackPress()
+        imageDetailViewModel.onClickBackPress()
     }
-
 }

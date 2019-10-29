@@ -151,7 +151,7 @@ public class ImageDetailViewModelTest {
         return new ImageDocument(
             "collection" + id,
             "thumbnailUrl" + id,
-            "imageUrl" + id,
+            "imageUrlInfo" + id,
             id,
             id,
             "displaySiteName" + id,
@@ -164,7 +164,7 @@ public class ImageDetailViewModelTest {
         return new ImageDocument(
             "collection" + id,
             "thumbnailUrl" + id,
-            "imageUrl" + id,
+            "imageUrlInfo" + id,
             id,
             id,
             "displaySiteName" + id,
