@@ -7,10 +7,7 @@
     <data>
 
         <import type="android.view.View" />
-        <import type="com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil" />
-        <import type="com.ch.yoon.kakao.pay.imagesearch.utils.BooleanUtil" />
-        <import type="com.ch.yoon.kakao.pay.imagesearch.utils.IntegerUtil" />
-        <import type="com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSortType" />
+        <import type="com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSortType" />
 
         <variable
             name="searchBoxViewModel"
@@ -104,8 +101,7 @@
             android:layout_marginTop="@dimen/count_in_line_icon_side_margin"
             android:layout_marginEnd="@dimen/count_in_line_icon_side_margin"
             android:onClick="@{() -> imageListViewModel.changeCountOfItemInLine(4)}"
-            app:inputtedCountOfItemInLine="@{imageListViewModel.countOfItemInLine}"
-            app:expectedCountOfItemInLine="@{4}"
+            app:applySelectedState="@{imageListViewModel.countOfItemInLine == 4}"
             app:layout_constraintEnd_toEndOf="@+id/mainToolbar"
             app:layout_constraintTop_toBottomOf="@+id/mainToolbar"
             app:srcCompat="@drawable/ic_four_image_in_line_selector" />
@@ -116,8 +112,7 @@
             android:layout_height="@dimen/count_in_line_icon_size"
             android:layout_marginEnd="@dimen/count_in_line_icon_side_margin"
             android:onClick="@{() -> imageListViewModel.changeCountOfItemInLine(3)}"
-            app:inputtedCountOfItemInLine="@{imageListViewModel.countOfItemInLine}"
-            app:expectedCountOfItemInLine="@{3}"
+            app:applySelectedState="@{imageListViewModel.countOfItemInLine == 3}"
             app:layout_constraintBottom_toBottomOf="@+id/fourImageInLineButton"
             app:layout_constraintEnd_toStartOf="@+id/fourImageInLineButton"
             app:layout_constraintTop_toTopOf="@+id/fourImageInLineButton"
@@ -129,8 +124,7 @@
             android:layout_height="@dimen/count_in_line_icon_size"
             android:layout_marginEnd="@dimen/count_in_line_icon_side_margin"
             android:onClick="@{() -> imageListViewModel.changeCountOfItemInLine(2)}"
-            app:inputtedCountOfItemInLine="@{imageListViewModel.countOfItemInLine}"
-            app:expectedCountOfItemInLine="@{2}"
+            app:applySelectedState="@{imageListViewModel.countOfItemInLine == 2}"
             app:layout_constraintBottom_toBottomOf="@+id/threeImageInLineButton"
             app:layout_constraintEnd_toStartOf="@+id/threeImageInLineButton"
             app:layout_constraintTop_toTopOf="@+id/threeImageInLineButton"
@@ -170,7 +164,6 @@
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/count_in_line_icon_side_margin"
             android:scrollbars="vertical"
-            android:visibility="@{CollectionUtil.isEmpty(imageListViewModel.imageDocumentList) ? View.INVISIBLE : View.VISIBLE}"
             app:countOfItemInLine="@{imageListViewModel.countOfItemInLine}"
             app:imageSearchState="@{imageListViewModel.imageSearchState}"
             app:searchImageInfoList="@{imageListViewModel.imageDocumentList}"
@@ -186,7 +179,7 @@
             android:layout_height="0dp"
             android:background="@color/colorDarkGrayTransparent"
             android:onClick="@{() -> searchBoxViewModel.onClickBackground()}"
-            android:visibility="@{BooleanUtil.isTrue(searchBoxViewModel.searchBoxFocus) ? View.VISIBLE : View.INVISIBLE}"
+            android:visibility="@{searchBoxViewModel.searchBoxFocus ? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -199,7 +192,7 @@
             android:layout_marginStart="@dimen/image_search_box_side_margin"
             android:layout_marginEnd="@dimen/image_search_box_side_margin"
             android:background="@color/colorLightGray"
-            android:visibility="@{BooleanUtil.isTrue(searchBoxViewModel.searchBoxFocus) ? View.VISIBLE : View.INVISIBLE}"
+            android:visibility="@{searchBoxViewModel.searchBoxFocus ? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintBottom_toBottomOf="@+id/searchHistoryBackground"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_default="wrap"

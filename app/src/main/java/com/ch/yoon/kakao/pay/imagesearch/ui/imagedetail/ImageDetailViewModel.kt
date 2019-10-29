@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ch.yoon.kakao.pay.imagesearch.R
-import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageDocument
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.ImageDocument
 import com.ch.yoon.kakao.pay.imagesearch.extention.TAG
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel
 import com.ch.yoon.kakao.pay.imagesearch.ui.common.livedata.SingleLiveEvent
@@ -26,7 +26,6 @@ class ImageDetailViewModel(application: Application) : BaseViewModel(application
     val finishEvent: LiveData<Unit> = _finishEvent
 
     private var imageDocument: ImageDocument? = null
-
 
     fun showImageDetailInfo(receivedImageDocument: ImageDocument?) {
         receivedImageDocument?.run {

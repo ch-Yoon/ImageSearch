@@ -10,7 +10,7 @@ import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLog
  * Date : 2019-10-28
  **/
 @Database(entities = [SearchLog::class], version = 1, exportSchema = false)
-abstract class AppDatabase : RoomDatabase() {
+abstract class ImageDatabase : RoomDatabase() {
 
     abstract fun searchLogDao(): SearchLogDAO
 

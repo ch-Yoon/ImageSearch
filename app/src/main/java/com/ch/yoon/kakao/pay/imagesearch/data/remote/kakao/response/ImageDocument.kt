@@ -1,4 +1,4 @@
-package com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response
+package com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response
 
 import android.os.Parcel
 import android.os.Parcelable
@@ -18,6 +18,7 @@ data class ImageDocument(
     @SerializedName("doc_url") val docUrl: String,
     @SerializedName("dateTime") val dateTime: String
 ) : Parcelable {
+
     constructor(source: Parcel) : this(
         source.readString() ?: "",
         source.readString() ?: "",
@@ -49,4 +50,5 @@ data class ImageDocument(
             override fun newArray(size: Int): Array<ImageDocument?> = arrayOfNulls(size)
         }
     }
+
 }

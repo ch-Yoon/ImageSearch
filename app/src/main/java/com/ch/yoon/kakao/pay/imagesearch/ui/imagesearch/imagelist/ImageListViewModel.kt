@@ -6,17 +6,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.ch.yoon.kakao.pay.imagesearch.R
-import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSearchRequest
-import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSortType
-import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageDocument
-import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageSearchResult
-import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.SearchMetaInfo
-import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.error.ImageSearchException
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageSearchRepository
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSearchRequest
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSortType
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.ImageDocument
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.ImageSearchResponse
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.SearchMetaInfo
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.error.ImageSearchException
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepository
 import com.ch.yoon.kakao.pay.imagesearch.extention.TAG
+import com.ch.yoon.kakao.pay.imagesearch.extention.safeLet
 import com.ch.yoon.kakao.pay.imagesearch.extention.updateOnMainThread
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel
-import com.ch.yoon.kakao.pay.imagesearch.ui.common.livedata.NotNullMutableLiveData
 import com.ch.yoon.kakao.pay.imagesearch.ui.common.livedata.SingleLiveEvent
 import com.ch.yoon.kakao.pay.imagesearch.ui.common.pageload.PageLoadHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -28,7 +28,7 @@ import java.util.ArrayList
  **/
 class ImageListViewModel(
     application: Application,
-    private val imageSearchRepository: ImageSearchRepository,
+    private val imageRepository: ImageRepository,
     private val pageLoadHelper: PageLoadHelper<String>
 ) : BaseViewModel(application) {
 
@@ -36,10 +36,10 @@ class ImageListViewModel(
         observePageLoadInspector()
     }
 
-    private val _imageSortType = NotNullMutableLiveData(ImageSortType.ACCURACY)
+    private val _imageSortType = MutableLiveData(ImageSortType.ACCURACY)
     val imageSortType: LiveData<ImageSortType> = _imageSortType
 
-    private val _countOfItemInLine = NotNullMutableLiveData(2)
+    private val _countOfItemInLine = MutableLiveData(2)
     val countOfItemInLine: LiveData<Int> = _countOfItemInLine
 
     private val _imageDocumentList = MutableLiveData<MutableList<ImageDocument>>()
@@ -80,11 +80,9 @@ class ImageListViewModel(
 
     fun loadMoreImageListIfPossible(displayPosition: Int) {
         if (isRemainingMoreData) {
-            pageLoadHelper.requestPreloadIfPossible(
-                displayPosition,
-                _imageDocumentList.value?.size ?: 0,
-                _countOfItemInLine.value
-            )
+            safeLet(_countOfItemInLine.value, _imageDocumentList.value) { count, documents ->
+                pageLoadHelper.requestPreloadIfPossible(displayPosition, documents.size, count)
+            }
         }
     }
 
@@ -93,20 +91,23 @@ class ImageListViewModel(
     }
 
     private fun observePageLoadInspector() {
-        pageLoadHelper.onPageLoadApprove = { key, pageNumber, dataSize ->
-            val request = ImageSearchRequest(key, _imageSortType.value, pageNumber, dataSize, pageNumber == 1)
-            requestImageSearchToRepository(request)
+        pageLoadHelper.onPageLoadApprove = { key, pageNumber, dataSize, isFirstPage ->
+            _imageSortType.value?.let { sortType ->
+                val request = ImageSearchRequest(key, sortType, pageNumber, dataSize, isFirstPage)
+                requestImageSearchToRepository(request)
+            }
         }
     }
 
     private fun requestImageSearchToRepository(imageSearchRequest: ImageSearchRequest) {
         _imageSearchState.value = ImageSearchState.NONE
 
-        imageSearchRepository.requestImageList(imageSearchRequest)
+        imageRepository.requestImageList(imageSearchRequest)
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ imageSearchResult ->
+            .subscribe({ imageSearchResponse ->
                 _imageSearchState.value = ImageSearchState.SUCCESS
-                handlingImageSearchResult(imageSearchResult)
+                clearBeforeDocumentListIfFirstRequest(imageSearchRequest)
+                handlingImageSearchResult(imageSearchResponse)
             }, { throwable ->
                 _imageSearchState.value = ImageSearchState.FAIL
                 handlingImageSearchError(throwable)
@@ -114,9 +115,8 @@ class ImageListViewModel(
             .register()
     }
 
-    private fun handlingImageSearchResult(imageSearchResult: ImageSearchResult) {
-        imageSearchResult.run {
-            clearBeforeDocumentListIfFirstRequest(imageSearchRequest)
+    private fun handlingImageSearchResult(imageSearchResponse: ImageSearchResponse) {
+        with(imageSearchResponse) {
             updateSearchMetaInfo(searchMetaInfo)
             updateImageDocumentList(imageDocumentList)
         }
@@ -148,7 +148,8 @@ class ImageListViewModel(
     private fun handlingImageSearchError(throwable: Throwable) {
         when(throwable) {
             is ImageSearchException -> {
-                updateShowMessage(throwable.errorMessageResourceId)
+                val errorType = throwable.imageSearchError
+                updateShowMessage(errorType.errorMessageResId)
             }
             else -> {
                 Log.d(TAG, throwable.message)

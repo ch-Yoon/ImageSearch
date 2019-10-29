@@ -1,14 +1,13 @@
 package com.ch.yoon.kakao.pay.imagesearch.di
 
 import com.ch.yoon.kakao.pay.imagesearch.BuildConfig
-import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.ImageSearchApi
-import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.ImageSearchRemoteDataSource
-import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.ImageSearchRemoteDataSourceImpl
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.SearchApi
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRemoteDataSource
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.ImageRemoteDataSourceImpl
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module.module
-import org.koin.experimental.builder.single
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -19,15 +18,15 @@ import retrofit2.converter.gson.GsonConverterFactory
  **/
 val networkModule = module {
 
-    single<ImageSearchRemoteDataSource> {
-        ImageSearchRemoteDataSourceImpl(get())
+    single<ImageRemoteDataSource> {
+        ImageRemoteDataSourceImpl(get())
     }
 
     single {
-        get<Retrofit>().create(ImageSearchApi::class.java)
+        get<Retrofit>().create(SearchApi::class.java)
     }
 
-    single() {
+    single {
         Retrofit.Builder()
             .baseUrl("https://dapi.kakao.com/v2/")
             .addConverterFactory(GsonConverterFactory.create())

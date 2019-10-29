@@ -1,7 +1,7 @@
 package com.ch.yoon.kakao.pay.imagesearch.di
 
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageSearchRepository
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageSearchRepositoryImpl
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepository
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepositoryImpl
 import org.koin.dsl.module.module
 
 /**
@@ -10,8 +10,8 @@ import org.koin.dsl.module.module
  **/
 val repositoryModule = module {
 
-    single<ImageSearchRepository> {
-        ImageSearchRepositoryImpl(get(), get())
+    single<ImageRepository> {
+        ImageRepositoryImpl(get(), get())
     }
 
 }

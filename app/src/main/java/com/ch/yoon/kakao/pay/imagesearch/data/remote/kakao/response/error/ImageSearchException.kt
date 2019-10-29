@@ -1,4 +1,4 @@
-package com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.error
+package com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.error
 
 /**
  * Creator : ch-yoon

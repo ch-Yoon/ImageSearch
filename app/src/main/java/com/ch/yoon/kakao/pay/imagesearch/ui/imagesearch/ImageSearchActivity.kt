@@ -74,7 +74,7 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
 
     private fun observeSearchBoxViewModel() {
         val owner = this
-        searchBoxViewModel.run {
+        with(searchBoxViewModel) {
             searchEvent.observe(owner, Observer { keyword ->
                 imageListViewModel.loadImageList(keyword)
             })
@@ -102,7 +102,7 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
 
     private fun observeImageListViewModel() {
         val owner = this
-        imageListViewModel.run {
+        with(imageListViewModel) {
             showMessageEvent.observe(owner, Observer { message ->
                 showToast(message)
             })
@@ -122,15 +122,13 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
                 }
             }
 
-            layoutManager = layoutManager?.apply {
-                if (this is GridLayoutManager) {
-                    spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-                        override fun getSpanSize(position: Int): Int {
-                            return if ((adapter as ImageListAdapter).isFooterViewPosition(position)) {
-                                spanCount
-                            } else {
-                                1
-                            }
+            layoutManager = (layoutManager as GridLayoutManager).apply {
+                spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                    override fun getSpanSize(position: Int): Int {
+                        return if ((adapter as ImageListAdapter).isFooterViewPosition(position)) {
+                            spanCount
+                        } else {
+                            1
                         }
                     }
                 }

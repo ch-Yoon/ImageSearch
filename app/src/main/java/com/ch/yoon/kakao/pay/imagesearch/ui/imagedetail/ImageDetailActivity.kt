@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.lifecycle.Observer
 import com.ch.yoon.kakao.pay.imagesearch.R
-import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageDocument
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.ImageDocument
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ActivityImageDetailBinding
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -68,7 +68,7 @@ class ImageDetailActivity : BaseActivity<ActivityImageDetailBinding>() {
 
     private fun observeImageDetailViewModel() {
         val owner = this
-        imageDetailViewModel.run {
+        with(imageDetailViewModel) {
             showMessageEvent.observe(owner, Observer { message ->
                 showToast(message)
             })

@@ -6,11 +6,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ch.yoon.kakao.pay.imagesearch.R
-import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageDocument
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.ImageDocument
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ItemImageListBinding
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ItemRetryFooterBinding
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewHolder
-import com.ch.yoon.kakao.pay.imagesearch.utils.GlideUtil
+import com.ch.yoon.kakao.pay.imagesearch.utils.cancelImageLoad
 
 /**
  * Creator : ch-yoon
@@ -101,7 +101,7 @@ class ImageListAdapter(
         }
 
         fun clear() {
-            GlideUtil.cancel(binding.imageView)
+            cancelImageLoad(binding.imageView)
         }
     }
 

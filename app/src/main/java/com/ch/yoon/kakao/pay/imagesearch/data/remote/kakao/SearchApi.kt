@@ -1,6 +1,6 @@
 package com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao
 
-import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageSearchResponse
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.ImageSearchResponse
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -9,7 +9,7 @@ import retrofit2.http.Query
  * Creator : ch-yoon
  * Date : 2019-10-28
  **/
-interface ImageSearchApi {
+interface SearchApi {
 
     @GET("search/image.json")
     fun searchImageList(

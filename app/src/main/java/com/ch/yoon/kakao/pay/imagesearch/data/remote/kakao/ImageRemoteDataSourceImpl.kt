@@ -1,9 +1,10 @@
 package com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao
 
-import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSearchRequest
-import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageSearchResponse
-import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.error.ImageSearchError
-import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.error.ImageSearchException
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSearchRequest
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.ImageSearchResponse
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.error.ImageSearchError
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.error.ImageSearchException
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRemoteDataSource
 import io.reactivex.Single
 import retrofit2.HttpException
 import java.net.UnknownHostException
@@ -12,13 +13,13 @@ import java.net.UnknownHostException
  * Creator : ch-yoon
  * Date : 2019-10-28
  **/
-class ImageSearchRemoteDataSourceImpl(
-    private val imageSearchApi: ImageSearchApi
-) : ImageSearchRemoteDataSource {
+class ImageRemoteDataSourceImpl(
+    private val searchApi: SearchApi
+) : ImageRemoteDataSource {
 
     override fun requestImageList(imageSearchRequest: ImageSearchRequest): Single<ImageSearchResponse> {
         return imageSearchRequest.run {
-            imageSearchApi.searchImageList(keyword, imageSortType.type, pageNumber, requiredSize)
+            searchApi.searchImageList(keyword, imageSortType.type, pageNumber, requiredSize)
                 .onErrorResumeNext { throwable ->
                     val errorMessage: String
                     val imageSearchError: ImageSearchError

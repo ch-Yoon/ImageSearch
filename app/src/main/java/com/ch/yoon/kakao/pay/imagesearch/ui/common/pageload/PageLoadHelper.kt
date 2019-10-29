@@ -1,16 +1,19 @@
 package com.ch.yoon.kakao.pay.imagesearch.ui.common.pageload
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import com.ch.yoon.kakao.pay.imagesearch.extention.safeLet
 
 /**
  * Creator : ch-yoon
  * Date : 2019-10-28.
  */
-class PageLoadHelper<T>(private val pageLoadConfiguration: PageLoadConfiguration) {
+class PageLoadHelper<T>(private val config: PageLoadConfiguration) {
 
     private val previousApproveLog = PageLoadApproveLog<T>()
 
-    var onPageLoadApprove: ((key: T, pageNumber: Int, dataSize: Int) -> Unit)? = null
+    var onPageLoadApprove: ((key: T, pageNumber: Int, dataSize: Int, isFirstPage: Boolean) -> Unit)? = null
 
     fun requestFirstLoad(key: T) {
         approveFirstImageSearch(key)
@@ -40,20 +43,20 @@ class PageLoadHelper<T>(private val pageLoadConfiguration: PageLoadConfiguration
 
     fun requestStartOverFromTheBeginning() {
         previousApproveLog.key?.let { currentKey ->
-            approveImageSearch(currentKey, pageLoadConfiguration.startPageNumber, 0)
+            approveImageSearch(currentKey, config.startPageNumber, 0)
         }
     }
 
     private fun approveFirstImageSearch(key: T) {
         initApproveRequestLog()
-        approveImageSearch(key, pageLoadConfiguration.startPageNumber, 0)
+        approveImageSearch(key, config.startPageNumber, 0)
     }
 
     private fun initApproveRequestLog() {
         previousApproveLog.apply {
             key = null
             dataTotalSize = null
-            pageNumber = pageLoadConfiguration.startPageNumber-1
+            pageNumber = config.startPageNumber-1
         }
     }
 
@@ -67,7 +70,7 @@ class PageLoadHelper<T>(private val pageLoadConfiguration: PageLoadConfiguration
 
     private fun isNotMaxPage(): Boolean {
         return previousApproveLog.pageNumber?.let { previousPageNumber ->
-            previousPageNumber < pageLoadConfiguration.maxPageNumber
+            previousPageNumber < config.maxPageNumber
         } ?: false
     }
 
@@ -77,14 +80,14 @@ class PageLoadHelper<T>(private val pageLoadConfiguration: PageLoadConfiguration
         countOfItemInLine: Int
     ): Boolean {
         return previousApproveLog.dataTotalSize?.let { previousDataTotalSize ->
-            val preloadAllowLimit = dataTotalSize - (countOfItemInLine * pageLoadConfiguration.preloadAllowLineMultiple)
+            val preloadAllowLimit = dataTotalSize - (countOfItemInLine * config.preloadAllowLineMultiple)
             (dataTotalSize > previousDataTotalSize) && (displayPosition > preloadAllowLimit)
         } ?: false
     }
 
     private fun approveImageSearch(key: T, pageNumber: Int, dataTotalSize: Int) {
         recordApproveRequest(key, dataTotalSize, pageNumber)
-        onPageLoadApprove?.invoke(key, pageNumber, pageLoadConfiguration.requiredDataSize)
+        onPageLoadApprove?.invoke(key, pageNumber, config.requiredDataSize, pageNumber == config.startPageNumber)
     }
 
     private fun recordApproveRequest(key: T, dataTotalSize: Int, pageNumber: Int) {

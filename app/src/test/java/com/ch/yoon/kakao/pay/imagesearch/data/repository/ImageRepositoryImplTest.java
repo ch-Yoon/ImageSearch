@@ -1,13 +1,11 @@
 package com.ch.yoon.kakao.pay.imagesearch.data.repository;
 
 import com.ch.yoon.kakao.pay.imagesearch.RxSchedulerRule;
-import com.ch.yoon.kakao.pay.imagesearch.data.local.room.ImageSearchLocalDataSource;
 import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLog;
-import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSearchRequest;
-import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request.ImageSortType;
-import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageSearchResponse;
-import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.SearchMetaInfo;
-import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.ImageSearchRemoteDataSource;
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSearchRequest;
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSortType;
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.ImageSearchResponse;
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.SearchMetaInfo;
 
 import org.junit.After;
 import org.junit.Before;
@@ -28,17 +26,17 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class ImageSearchRepositoryImplTest {
+public class ImageRepositoryImplTest {
 
     @Rule
     public RxSchedulerRule rxSchedulerRule = new RxSchedulerRule();
 
     @Mock
-    private ImageSearchRemoteDataSource mockImageRemoteDataSource;
+    private ImageRemoteDataSource mockImageRemoteDataSource;
     @Mock
-    private ImageSearchLocalDataSource mockImageLocalDataSource;
+    private ImageLocalDataSource mockImageLocalDataSource;
 
-    private ImageSearchRepository imageSearchRepository;
+    private ImageRepository imageRepository;
     private CompositeDisposable compositeDisposable;
 
     @Before
@@ -54,7 +52,7 @@ public class ImageSearchRepositoryImplTest {
     }
 
     private void initImageRepository() {
-        imageSearchRepository = new ImageSearchRepositoryImpl(mockImageRemoteDataSource, mockImageLocalDataSource);
+        imageRepository = new ImageRepositoryImpl(mockImageRemoteDataSource, mockImageLocalDataSource);
     }
 
     private void initCompositeDisposable() {
@@ -68,7 +66,7 @@ public class ImageSearchRepositoryImplTest {
             .thenReturn(Single.just(emptyImageSearchResponse()));
 
         // when
-        imageSearchRepository.requestImageList(emptyImageSearchRequest());
+        imageRepository.requestImageList(emptyImageSearchRequest());
 
         // then
         verify(mockImageRemoteDataSource, times(1)).requestImageList(any(ImageSearchRequest.class));
@@ -81,7 +79,7 @@ public class ImageSearchRepositoryImplTest {
             .thenReturn(Single.just(emptySearchLog()));
 
         // when
-        imageSearchRepository.insertOrUpdateSearchLog("테스트");
+        imageRepository.insertOrUpdateSearchLog("테스트");
 
         // then
         verify(mockImageLocalDataSource, times(1)).insertOrUpdateSearchLog("테스트");
@@ -94,7 +92,7 @@ public class ImageSearchRepositoryImplTest {
             .thenReturn(Single.just(emptySearchLogList()));
 
         // when
-        imageSearchRepository.requestSearchLogList();
+        imageRepository.requestSearchLogList();
 
         // then
         verify(mockImageLocalDataSource, times(1)).selectAllSearchLog();
@@ -107,7 +105,7 @@ public class ImageSearchRepositoryImplTest {
             .thenReturn(Completable.complete());
 
         // when
-        imageSearchRepository.deleteSearchLog("테스트");
+        imageRepository.deleteSearchLog("테스트");
 
         // then
         verify(mockImageLocalDataSource, times(1)).deleteSearchLog("테스트");

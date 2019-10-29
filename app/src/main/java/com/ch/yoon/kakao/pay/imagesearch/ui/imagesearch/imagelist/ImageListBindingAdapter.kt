@@ -5,9 +5,8 @@ import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response.ImageDocument
-import com.ch.yoon.kakao.pay.imagesearch.utils.CollectionUtil
-import com.ch.yoon.kakao.pay.imagesearch.utils.GlideUtil
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.ImageDocument
+import com.ch.yoon.kakao.pay.imagesearch.utils.loadImageWithCenterCrop
 import java.util.ArrayList
 
 /**
@@ -25,7 +24,7 @@ fun setItems(recyclerView: RecyclerView, imageDocumentList: List<ImageDocument>?
     val adapter = recyclerView.adapter as ImageListAdapter?
     adapter?.run {
         submitList(if(imageDocumentList == null) null else ArrayList(imageDocumentList))
-        if(CollectionUtil.isEmpty(imageDocumentList)) {
+        if(imageDocumentList == null || imageDocumentList.isEmpty()) {
             notifyDataSetChanged()
         }
     }
@@ -48,12 +47,7 @@ fun setImageSearchState(recyclerView: RecyclerView, imageSearchState: ImageSearc
 
 @BindingAdapter("loadImageWithCenterCrop")
 fun loadImageWithCenterCrop(imageView: ImageView, imageUrl: String?) {
-    GlideUtil.loadWithCenterCrop(imageView, imageUrl)
-}
-
-@BindingAdapter("inputtedCountOfItemInLine", "expectedCountOfItemInLine")
-fun applySelectedState(view: View, inputtedCountOfItemInLine: Int, expectedCountOfItemInLine: Int) {
-    view.isSelected = inputtedCountOfItemInLine == expectedCountOfItemInLine
+    loadImageWithCenterCrop(imageView, imageUrl)
 }
 
 @BindingAdapter("applySelectedState")

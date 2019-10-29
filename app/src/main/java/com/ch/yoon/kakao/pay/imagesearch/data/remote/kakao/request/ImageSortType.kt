@@ -1,4 +1,4 @@
-package com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.request
+package com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request
 
 /**
  * Creator : ch-yoon

@@ -1,4 +1,4 @@
-package com.ch.yoon.kakao.pay.imagesearch.data.model.imagesearch.response
+package com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response
 
 import com.google.gson.annotations.SerializedName
 
