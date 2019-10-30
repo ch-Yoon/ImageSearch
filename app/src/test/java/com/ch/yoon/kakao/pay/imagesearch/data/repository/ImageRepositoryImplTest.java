@@ -1,11 +1,15 @@
 package com.ch.yoon.kakao.pay.imagesearch.data.repository;
 
 import com.ch.yoon.kakao.pay.imagesearch.RxSchedulerRule;
-import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLog;
-import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSearchRequest;
-import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSortType;
-import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.ImageSearchResponse;
-import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.SearchMetaInfo;
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.image.ImageLocalDataSource;
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.image.ImageRemoteDataSource;
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.image.ImageRepository;
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.image.ImageRepositoryImpl;
+import com.ch.yoon.kakao.pay.imagesearch.data.source.local.room.entity.SearchLogModel;
+import com.ch.yoon.kakao.pay.imagesearch.data.source.remote.kakao.request.ImageSearchRequest;
+import com.ch.yoon.kakao.pay.imagesearch.data.source.remote.kakao.request.ImageSortType;
+import com.ch.yoon.kakao.pay.imagesearch.data.source.remote.kakao.response.KakaoImageSearchResponse;
+import com.ch.yoon.kakao.pay.imagesearch.data.source.remote.kakao.response.KakaoImageSearchMetaInfo;
 
 import org.junit.After;
 import org.junit.Before;
@@ -111,21 +115,21 @@ public class ImageRepositoryImplTest {
         verify(mockImageLocalDataSource, times(1)).deleteSearchLog("테스트");
     }
 
-    private ImageSearchResponse emptyImageSearchResponse() {
-        SearchMetaInfo emptySearchMetaInfo = new SearchMetaInfo(false);
-        return new ImageSearchResponse(emptySearchMetaInfo, new ArrayList<>());
+    private KakaoImageSearchResponse emptyImageSearchResponse() {
+        KakaoImageSearchMetaInfo emptyKakaoImageSearchMetaInfo = new KakaoImageSearchMetaInfo(false);
+        return new KakaoImageSearchResponse(emptyKakaoImageSearchMetaInfo, new ArrayList<>());
     }
 
     private ImageSearchRequest emptyImageSearchRequest() {
         return new ImageSearchRequest("", ImageSortType.ACCURACY, 0, 0, true);
     }
 
-    private List<SearchLog> emptySearchLogList() {
+    private List<SearchLogModel> emptySearchLogList() {
         return new ArrayList<>();
     }
 
-    private SearchLog emptySearchLog() {
-        return new SearchLog("", 0);
+    private SearchLogModel emptySearchLog() {
+        return new SearchLogModel("", 0);
     }
 
 }

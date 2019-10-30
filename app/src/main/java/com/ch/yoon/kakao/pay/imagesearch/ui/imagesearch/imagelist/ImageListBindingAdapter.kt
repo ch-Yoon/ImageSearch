@@ -5,7 +5,7 @@ import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.ImageDocument
+import com.ch.yoon.kakao.pay.imagesearch.data.source.remote.kakao.response.KakaoImageDocument
 import com.ch.yoon.kakao.pay.imagesearch.utils.loadImageWithCenterCrop
 import java.util.ArrayList
 
@@ -20,11 +20,11 @@ fun setSpanCount(recyclerView: RecyclerView, countOfItemInLine: Int) {
 }
 
 @BindingAdapter("searchImageInfoList")
-fun setItems(recyclerView: RecyclerView, imageDocumentList: List<ImageDocument>?) {
+fun setItems(recyclerView: RecyclerView, kakaoImageDocumentList: List<KakaoImageDocument>?) {
     val adapter = recyclerView.adapter as ImageListAdapter?
     adapter?.run {
-        submitList(if(imageDocumentList == null) null else ArrayList(imageDocumentList))
-        if(imageDocumentList == null || imageDocumentList.isEmpty()) {
+        submitList(if(kakaoImageDocumentList == null) null else ArrayList(kakaoImageDocumentList))
+        if(kakaoImageDocumentList == null || kakaoImageDocumentList.isEmpty()) {
             notifyDataSetChanged()
         }
     }

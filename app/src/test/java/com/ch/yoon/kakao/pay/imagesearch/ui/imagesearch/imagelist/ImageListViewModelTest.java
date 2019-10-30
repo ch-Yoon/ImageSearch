@@ -10,12 +10,12 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.RxSchedulerRule;
-import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSortType;
-import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.ImageSearchResult;
-import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSearchRequest;
-import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.SearchMetaInfo;
-import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.error.ImageSearchError;
-import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.error.ImageSearchException;
+import com.ch.yoon.kakao.pay.imagesearch.data.source.remote.kakao.request.ImageSortType;
+import com.ch.yoon.kakao.pay.imagesearch.data.source.remote.kakao.response.ImageSearchResult;
+import com.ch.yoon.kakao.pay.imagesearch.data.source.remote.kakao.request.ImageSearchRequest;
+import com.ch.yoon.kakao.pay.imagesearch.data.source.remote.kakao.response.KakaoImageSearchMetaInfo;
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.error.ImageSearchError;
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.error.ImageSearchException;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.helper.ImageSearchInspector;
 
 import org.junit.Before;
@@ -333,9 +333,9 @@ public class ImageListViewModelTest {
 
     private ImageSearchResult createEmptyImageSearchResult(boolean isLastData) {
         ArrayList<ImageDocument> simpleImageInfoList = new ArrayList<>();
-        SearchMetaInfo searchMetaInfo = new SearchMetaInfo(true);
+        KakaoImageSearchMetaInfo kakaoImageSearchMetaInfo = new KakaoImageSearchMetaInfo(true);
         ImageSearchRequest imageSearchRequest = new ImageSearchRequest("", ImageSortType.ACCURACY, 0, 0, isLastData);
-        return new ImageSearchResult(imageSearchRequest, searchMetaInfo, simpleImageInfoList);
+        return new ImageSearchResult(imageSearchRequest, kakaoImageSearchMetaInfo, simpleImageInfoList);
     }
 
     private ImageSearchResult createVirtualImageSearchResult(ImageSearchRequest imageSearchRequest,
@@ -351,8 +351,8 @@ public class ImageListViewModelTest {
             simpleImageInfoList.add(createVirtualImageDocument(itemNumber));
         }
 
-        SearchMetaInfo searchMetaInfo = new SearchMetaInfo(isLastData);
-        return new ImageSearchResult(imageSearchRequest, searchMetaInfo, simpleImageInfoList);
+        KakaoImageSearchMetaInfo kakaoImageSearchMetaInfo = new KakaoImageSearchMetaInfo(isLastData);
+        return new ImageSearchResult(imageSearchRequest, kakaoImageSearchMetaInfo, simpleImageInfoList);
     }
 
     private ImageDocument createVirtualImageDocument(int id) {

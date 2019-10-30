@@ -6,13 +6,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.ch.yoon.kakao.pay.imagesearch.R
-import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSearchRequest
-import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSortType
-import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.ImageDocument
-import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.ImageSearchResponse
-import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.SearchMetaInfo
-import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.error.ImageSearchException
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepository
+import com.ch.yoon.kakao.pay.imagesearch.data.source.remote.kakao.request.ImageSearchRequest
+import com.ch.yoon.kakao.pay.imagesearch.data.source.remote.kakao.request.ImageSortType
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.image.ImageRepository
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.image.model.ImageDocument
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.image.model.ImageSearchMeta
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.image.model.ImageSearchResponse
 import com.ch.yoon.kakao.pay.imagesearch.extention.TAG
 import com.ch.yoon.kakao.pay.imagesearch.extention.safeLet
 import com.ch.yoon.kakao.pay.imagesearch.extention.updateOnMainThread
@@ -43,7 +42,7 @@ class ImageListViewModel(
     val countOfItemInLine: LiveData<Int> = _countOfItemInLine
 
     private val _imageDocumentList = MutableLiveData<MutableList<ImageDocument>>()
-    val imageDocumentList: LiveData<List<ImageDocument>> = Transformations.map(_imageDocumentList) { it?.toList() }
+    val kakaoImageDocumentList: LiveData<List<ImageDocument>> = Transformations.map(_imageDocumentList) { it?.toList() }
 
     private val _imageSearchState = MutableLiveData<ImageSearchState>(ImageSearchState.NONE)
     val imageSearchState: LiveData<ImageSearchState> = _imageSearchState
@@ -57,7 +56,7 @@ class ImageListViewModel(
     private val isRemainingMoreData
         get() = searchMeta?.isEnd?.not() ?: true
 
-    private var searchMeta: SearchMetaInfo? = null
+    private var searchMeta: ImageSearchMeta? = null
 
     fun changeImageSortType(imageSortType: ImageSortType) {
         _imageDocumentList.value = null
@@ -86,8 +85,8 @@ class ImageListViewModel(
         }
     }
 
-    fun onClickImage(imageDocument: ImageDocument) {
-        _moveToDetailScreenEvent.value = imageDocument
+    fun onClickImage(kakaoImageDocument: ImageDocument) {
+        _moveToDetailScreenEvent.value = kakaoImageDocument
     }
 
     private fun observePageLoadInspector() {
@@ -117,7 +116,7 @@ class ImageListViewModel(
 
     private fun handlingImageSearchResult(imageSearchResponse: ImageSearchResponse) {
         with(imageSearchResponse) {
-            updateSearchMetaInfo(searchMetaInfo)
+            updateSearchMetaInfo(imageSearchMeta)
             updateImageDocumentList(imageDocumentList)
         }
     }
@@ -128,8 +127,8 @@ class ImageListViewModel(
         }
     }
 
-    private fun updateSearchMetaInfo(searchMetaInfo: SearchMetaInfo?) {
-        searchMeta = searchMetaInfo
+    private fun updateSearchMetaInfo(kakaoImageSearchMetaInfo: ImageSearchMeta) {
+        searchMeta = kakaoImageSearchMetaInfo
     }
 
     private fun updateImageDocumentList(receivedImageDocumentList: List<ImageDocument>) {

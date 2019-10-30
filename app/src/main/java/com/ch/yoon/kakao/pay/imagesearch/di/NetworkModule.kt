@@ -1,9 +1,9 @@
 package com.ch.yoon.kakao.pay.imagesearch.di
 
 import com.ch.yoon.kakao.pay.imagesearch.BuildConfig
-import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.SearchApi
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRemoteDataSource
-import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.ImageRemoteDataSourceImpl
+import com.ch.yoon.kakao.pay.imagesearch.data.source.remote.kakao.KakaoSearchService
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.image.ImageRemoteDataSource
+import com.ch.yoon.kakao.pay.imagesearch.data.source.remote.kakao.ImageRemoteDataSourceImpl
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -23,7 +23,7 @@ val networkModule = module {
     }
 
     single {
-        get<Retrofit>().create(SearchApi::class.java)
+        get<Retrofit>().create(KakaoSearchService::class.java)
     }
 
     single {

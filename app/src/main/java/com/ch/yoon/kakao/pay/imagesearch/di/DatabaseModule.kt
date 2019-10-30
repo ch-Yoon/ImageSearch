@@ -1,9 +1,9 @@
 package com.ch.yoon.kakao.pay.imagesearch.di
 
 import androidx.room.Room
-import com.ch.yoon.kakao.pay.imagesearch.data.local.room.ImageDatabase
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageLocalDataSource
-import com.ch.yoon.kakao.pay.imagesearch.data.local.room.ImageLocalDataSourceImpl
+import com.ch.yoon.kakao.pay.imagesearch.data.source.local.room.AppDatabase
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.image.ImageLocalDataSource
+import com.ch.yoon.kakao.pay.imagesearch.data.source.local.room.ImageLocalDataSourceImpl
 import org.koin.dsl.module.module
 
 /**
@@ -17,11 +17,11 @@ val databaseModule = module {
     }
 
     single {
-        Room.databaseBuilder(get(), ImageDatabase::class.java, "image_database").build()
+        Room.databaseBuilder(get(), AppDatabase::class.java, "app_database").build()
     }
 
     single {
-        get<ImageDatabase>().searchLogDao()
+        get<AppDatabase>().searchLogDao()
     }
 
 }

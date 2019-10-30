@@ -1,7 +1,7 @@
 package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.helper;
 
-import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSearchRequest;
-import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSortType;
+import com.ch.yoon.kakao.pay.imagesearch.data.source.remote.kakao.request.ImageSearchRequest;
+import com.ch.yoon.kakao.pay.imagesearch.data.source.remote.kakao.request.ImageSortType;
 
 import org.junit.Assert;
 import org.junit.Test;

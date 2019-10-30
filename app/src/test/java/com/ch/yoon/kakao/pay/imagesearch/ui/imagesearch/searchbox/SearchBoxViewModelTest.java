@@ -120,7 +120,7 @@ public class SearchBoxViewModelTest {
         searchBoxViewModel.loadSearchLogList();
 
         // then
-        searchBoxViewModel.getSearchLogList().observeForever(receivedList -> {
+        searchBoxViewModel.getSearchLogModelList().observeForever(receivedList -> {
             assertEquals(receivedList.size(), 3);
         });
     }
@@ -139,7 +139,7 @@ public class SearchBoxViewModelTest {
         searchBoxViewModel.loadSearchLogList();
 
         // then
-        searchBoxViewModel.getSearchLogList().observeForever(receivedList -> {
+        searchBoxViewModel.getSearchLogModelList().observeForever(receivedList -> {
             assertEquals(receivedList, expectedList);
         });
 
@@ -286,7 +286,7 @@ public class SearchBoxViewModelTest {
         searchBoxViewModel.onClickSearchLogDeleteButton(searchLogList.get(0));
 
         // then
-        searchBoxViewModel.getSearchLogList().observeForever(receivedList -> {
+        searchBoxViewModel.getSearchLogModelList().observeForever(receivedList -> {
             assertEquals(expectedList, receivedList);
         });
     }
@@ -305,7 +305,7 @@ public class SearchBoxViewModelTest {
         searchBoxViewModel.onClickSearchButton("테스트0");
 
         // then
-        searchBoxViewModel.getSearchLogList().observeForever(searchLogs -> {
+        searchBoxViewModel.getSearchLogModelList().observeForever(searchLogs -> {
             assertEquals(searchLogs.get(0).getKeyword(), "테스트0");
             assertEquals(searchLogs.size(), 3);
         });

@@ -166,7 +166,7 @@
             android:scrollbars="vertical"
             app:countOfItemInLine="@{imageListViewModel.countOfItemInLine}"
             app:imageSearchState="@{imageListViewModel.imageSearchState}"
-            app:searchImageInfoList="@{imageListViewModel.imageDocumentList}"
+            app:searchImageInfoList="@{imageListViewModel.kakaoImageDocumentList}"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -200,7 +200,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/searchHistoryBackground"
             app:layout_constraintVertical_bias="0.0"
-            app:searchLogList="@{searchBoxViewModel.searchLogList}" />
+            app:searchLogModelList="@{searchBoxViewModel.searchLogModelList}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
