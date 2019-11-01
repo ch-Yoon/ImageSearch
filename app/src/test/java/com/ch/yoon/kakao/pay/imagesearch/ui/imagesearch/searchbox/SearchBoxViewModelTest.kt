@@ -303,6 +303,22 @@ class SearchBoxViewModelTest {
         }
     }
 
+    @Test
+    fun `실시간으로 키워드 변경 후 검색 버튼 클릭 시 검색 로그 저장 요청이 이루어지는지 테스트`() {
+        // given
+        every { mockImageSearchRepository.requestSearchLogList() } returns (Single.just(createVirtualSearchLogList(0)))
+        every { mockImageSearchRepository.insertOrUpdateSearchLog("가나다") } returns (Single.just(SearchLog("가나다", 1)))
+
+        // when
+        searchBoxViewModel.onChangeKeyword("가")
+        searchBoxViewModel.onChangeKeyword("가나")
+        searchBoxViewModel.onChangeKeyword("가나다")
+        searchBoxViewModel.onClickSearchButton()
+
+        // then
+        verify(exactly = 1) { mockImageSearchRepository.insertOrUpdateSearchLog("가나다") }
+    }
+
     private fun createVirtualSearchLogList(size: Int): MutableList<SearchLog>  {
         val searchLogList = mutableListOf<SearchLog>()
         for(i in 0 until size) {
