@@ -1,6 +1,7 @@
 package com.ch.yoon.kakao.pay.imagesearch.ui.imagedetail
 
 import android.app.Application
+import android.text.TextUtils
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -31,22 +32,24 @@ class ImageDetailViewModel(application: Application) : BaseViewModel(application
         receivedImageDocument?.run {
             imageDocument = this
             _imageUrlInfo.value = imageUrl
-        } ?: finish()
+        } ?: run {
+            updateShowMessage(R.string.unknown_error)
+            _finishEvent.call()
+        }
     }
 
     fun onClickWebButton() {
         imageDocument?.run {
-            _moveToWebEvent.value = docUrl
-        } ?: finish()
+            if(TextUtils.isEmpty(docUrl)) {
+                updateShowMessage(R.string.non_existent_url_error)
+            } else {
+                _moveToWebEvent.value = docUrl
+            }
+        }
     }
 
     fun onClickBackPress() {
         _finishEvent.call()
     }
 
-    private fun finish() {
-        updateShowMessage(R.string.unknown_error)
-        _finishEvent.call()
-        Log.d(TAG, "image document is null")
-    }
 }

@@ -15,11 +15,9 @@ import io.mockk.verify
 import io.reactivex.Completable
 import io.reactivex.Single
 import junit.framework.Assert.assertEquals
-import net.bytebuddy.matcher.ElementMatchers.returns
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.util.*
 
 /**
  * Creator : ch-yoon
@@ -268,7 +266,7 @@ class SearchBoxViewModelTest {
     }
 
     @Test
-    fun `키워드 삭제 버튼 클릭시 보유하던 검색 기록_목록에서 제거하는지 테스트`() {
+    fun `키워드 삭제 버튼 클릭시 보유하던 검색 기록 목록에서 제거하는지 테스트`() {
         // given
         val searchLogList = createVirtualSearchLogList(3)
         val expectedList = createVirtualSearchLogList(3).apply { removeAt(0) }.sorted()
@@ -287,7 +285,7 @@ class SearchBoxViewModelTest {
     }
 
     @Test
-    fun `키워드_검색_버튼_클릭시_기존에_검색했던_키워드라면_목록의_가장_앞쪽으로_이동시키는지_테스트`() {
+    fun `키워드 검색 버튼 클릭시 기존에 검색했던 키워드라면 목록의 가장 앞쪽으로 이동시키는지 테스트`() {
         // given
         every { mockImageSearchRepository.requestSearchLogList() } returns (Single.just(createVirtualSearchLogList(3)))
         every { mockImageSearchRepository.insertOrUpdateSearchLog("테스트0") } returns (Single.just(SearchLog("테스트0", 4)))

@@ -1,4 +1,4 @@
-//package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.helper;
+//package com.ch.yoon.kakao.pay.imagesearch.ui.common.helper;
 //
 //import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSearchRequest;
 //import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSortType;

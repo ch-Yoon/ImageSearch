@@ -93,7 +93,7 @@ class ImageListViewModelTest {
     }
 
     @Test
-    fun `최초_이미지_목록_요청시_수신한_이미지_목록이_반영되는지_테스트`() {
+    fun `최초 이미지 목록 요청시 수신한 이미지 목록이 반영되는지 테스트`() {
         // given
         val expect = createVirtualImageSearchResponse(3, true)
         every { mockRepository.requestImageList(any()) } returns (Single.just(expect))
@@ -109,7 +109,7 @@ class ImageListViewModelTest {
     }
 
     @Test
-    fun `최초 이미지 목록_요청시_수신한_리스트의_사이즈가_0이어도_반영되는지_테스트`() {
+    fun `최초 이미지 목록 요청시 수신한 리스트의 사이즈가 0이어도 반영되는지 테스트`() {
         // given
         val expect = createVirtualImageSearchResponse(0, true)
         every { mockRepository.requestImageList(any()) } returns (Single.just(expect))
@@ -125,7 +125,7 @@ class ImageListViewModelTest {
     }
 
     @Test
-    fun `최초_이미지_목록_요청시_수신한_리스트의_사이즈가_0이라면_검색결과가_없다는_메시지가_반영되는지_테스트`() {
+    fun `최초 이미지 목록 요청시 수신한 리스트의 사이즈가 0이라면 검색결과가 없다는 메시지가 반영되는지 테스트`() {
         // given
         val expect = createVirtualImageSearchResponse(0, true)
         every { mockRepository.requestImageList(any()) } returns (Single.just(expect))
@@ -141,7 +141,7 @@ class ImageListViewModelTest {
     }
 
     @Test
-    fun `최초_이미지_목록_요청시_네트워크 연결 에러가_수신된다면_에러_메시지가_반영되는지_테스트`() {
+    fun `최초 이미지 목록 요청시 네트워크 연결 에러가 수신된다면 에러 메시지가 반영되는지 테스트`() {
         // given
         every { mockRepository.requestImageList(any()) } returns (Single.error(RepositoryException.NetworkNotConnectingException("network error")))
         every { mockPageLoadHelper.requestFirstLoad(any()) } answers { capturedPageLoadApprove?.invoke("", 1, 1, false) }
@@ -156,7 +156,7 @@ class ImageListViewModelTest {
     }
 
     @Test
-    fun `마지막_데이터라면_마지막을_뜻하는_메시지가_반영되는지_테스트`() {
+    fun `마지막 데이터라면 마지막을 뜻하는 메시지가 반영되는지 테스트`() {
         // given
         every { mockRepository.requestImageList(any()) } returns (Single.just(createVirtualImageSearchResponse(1, true)))
 
@@ -170,7 +170,7 @@ class ImageListViewModelTest {
     }
 
     @Test
-    fun `추가_이미지_목록_요청시_수신된_추가_이미지_목록이_반영되는지_테스트`() {
+    fun `추가 이미지 목록 요청시 수신된 추가 이미지 목록이 반영되는지 테스트`() {
         // given
         var isFirst = true
         val firstValue = createVirtualImageSearchResponse(3, false)
@@ -201,7 +201,7 @@ class ImageListViewModelTest {
     }
 
     @Test
-    fun `추가_이미지_목록_요청시_마지막_데이터였다면_레파지토리에_요청을_안하는지_테스트`() {
+    fun `추가 이미지 목록 요청시 마지막 데이터였다면 레파지토리에 요청을 안하는지 테스트`() {
         // given
         every { mockRepository.requestImageList(any()) } returns (Single.just(createVirtualImageSearchResponse(1, true)))
         every { mockPageLoadHelper.requestFirstLoad(any()) } answers { capturedPageLoadApprove?.invoke("", 1, 1, true) }
@@ -218,7 +218,7 @@ class ImageListViewModelTest {
     }
 
     @Test
-    fun `재시도_요청시_레파지토리에_요청을_하는지_테스트`() {
+    fun `재시도 요청시 레파지토리에 요청을 하는지 테스트`() {
         // given
         every { mockRepository.requestImageList(any()) } returns (Single.just(createVirtualImageSearchResponse(1, true)))
         every { mockPageLoadHelper.requestRetryAsPreviousValue() } answers { capturedPageLoadApprove?.invoke("", 1, 1, false) }
@@ -231,7 +231,7 @@ class ImageListViewModelTest {
     }
 
     @Test
-    fun `이미지_검색_타입_변경시_반영되는지_테스트`() {
+    fun `이미지 검색 타입 변경시 반영되는지 테스트`() {
         // given
         every { mockRepository.requestImageList(any()) } returns (Single.just(createVirtualImageSearchResponse(1, true)))
         every { mockPageLoadHelper.requestRetryAsPreviousValue() } answers { capturedPageLoadApprove?.invoke("", 1, 1, false) }
@@ -284,5 +284,5 @@ class ImageListViewModelTest {
     private fun createVirtualImageDocument(id: Int): ImageDocument {
         return ImageDocument("thumbnailUrl$id", "imageUrlInfo$id", "docUrl$id")
     }
-    
+
 }
