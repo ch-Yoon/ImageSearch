@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.ch.yoon.kakao.pay.imagesearch.R
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.error.RepositoryException
 import com.ch.yoon.kakao.pay.imagesearch.data.source.remote.kakao.request.ImageSearchRequest
 import com.ch.yoon.kakao.pay.imagesearch.data.source.remote.kakao.request.ImageSortType
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.image.ImageRepository
@@ -85,8 +86,8 @@ class ImageListViewModel(
         }
     }
 
-    fun onClickImage(kakaoImageDocument: ImageDocument) {
-        _moveToDetailScreenEvent.value = kakaoImageDocument
+    fun onClickImage(imageDocument: ImageDocument) {
+        _moveToDetailScreenEvent.value = imageDocument
     }
 
     private fun observePageLoadInspector() {
@@ -145,14 +146,11 @@ class ImageListViewModel(
     }
 
     private fun handlingImageSearchError(throwable: Throwable) {
-        when(throwable) {
-            is ImageSearchException -> {
-                val errorType = throwable.imageSearchError
-                updateShowMessage(errorType.errorMessageResId)
-            }
-            else -> {
-                Log.d(TAG, throwable.message)
-            }
+        if(throwable is RepositoryException.NetworkNotConnectingException) {
+            updateShowMessage(R.string.network_not_connecting_error)
+        } else {
+            updateShowMessage(R.string.unknown_error)
+            Log.d(TAG, throwable.message ?: "unknown error")
         }
     }
 

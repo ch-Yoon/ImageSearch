@@ -5,6 +5,7 @@ import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.ch.yoon.kakao.pay.imagesearch.R
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.image.model.SearchLog
 import com.ch.yoon.kakao.pay.imagesearch.data.source.local.room.entity.SearchLogModel
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ItemSearchHistoryBinding
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewHolder
@@ -16,7 +17,7 @@ import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchLogAdapt
  */
 class SearchLogAdapter(
     private val searchLogViewModel: SearchBoxViewModel
-) : ListAdapter<SearchLogModel, SearchLogViewHolder>(DiffCallback()) {
+) : ListAdapter<SearchLog, SearchLogViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchLogViewHolder {
         return SearchLogViewHolder(searchLogViewModel, R.layout.item_search_history, parent)
@@ -36,18 +37,18 @@ class SearchLogAdapter(
             binding.viewModel = viewModel
         }
 
-        fun setSearchLog(searchLogModel: SearchLogModel) {
-            binding.searchLog = searchLogModel
+        fun setSearchLog(searchLog: SearchLog) {
+            binding.searchLog = searchLog
             binding.executePendingBindings()
         }
     }
 
-    class DiffCallback : DiffUtil.ItemCallback<SearchLogModel>() {
-        override fun areItemsTheSame(oldItem: SearchLogModel, newItem: SearchLogModel): Boolean {
+    class DiffCallback : DiffUtil.ItemCallback<SearchLog>() {
+        override fun areItemsTheSame(oldItem: SearchLog, newItem: SearchLog): Boolean {
             return oldItem.keyword == newItem.keyword
         }
 
-        override fun areContentsTheSame(oldItem: SearchLogModel, newItem: SearchLogModel): Boolean {
+        override fun areContentsTheSame(oldItem: SearchLog, newItem: SearchLog): Boolean {
             return oldItem == newItem
         }
     }

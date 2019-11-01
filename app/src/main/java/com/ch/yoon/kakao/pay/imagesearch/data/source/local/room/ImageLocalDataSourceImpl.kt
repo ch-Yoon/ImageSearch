@@ -5,8 +5,8 @@ import com.ch.yoon.kakao.pay.imagesearch.data.source.local.room.entity.SearchLog
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.image.ImageLocalDataSource
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.image.model.SearchLog
 import com.ch.yoon.kakao.pay.imagesearch.data.source.local.room.entity.SearchLogEntityMapper
-import com.ch.yoon.kakao.pay.imagesearch.data.source.local.room.transformer.CompletableExceptionTransformer
-import com.ch.yoon.kakao.pay.imagesearch.data.source.local.room.transformer.SingleExceptionTransformer
+import com.ch.yoon.kakao.pay.imagesearch.data.source.local.room.error.CompletableExceptionTransformer
+import com.ch.yoon.kakao.pay.imagesearch.data.source.local.room.error.SingleExceptionTransformer
 import io.reactivex.Completable
 import io.reactivex.Single
 

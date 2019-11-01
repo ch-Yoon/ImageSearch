@@ -1,7 +1,5 @@
 package com.ch.yoon.kakao.pay.imagesearch.data.repository.image.model
 
-import com.ch.yoon.kakao.pay.imagesearch.data.source.local.room.entity.SearchLogModel
-
 /**
  * Creator : ch-yoon
  * Date : 2019-10-30
@@ -9,9 +7,9 @@ import com.ch.yoon.kakao.pay.imagesearch.data.source.local.room.entity.SearchLog
 data class SearchLog(
     val keyword: String,
     val time: Long
-) : Comparable<SearchLogModel> {
+) : Comparable<SearchLog> {
 
-    override fun compareTo(other: SearchLogModel): Int {
+    override fun compareTo(other: SearchLog): Int {
         return when {
             time < other.time -> 1
             time > other.time -> -1

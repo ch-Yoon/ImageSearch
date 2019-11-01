@@ -10,8 +10,8 @@
             type="com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewModel" />
 
         <variable
-            name="searchLogModel"
-            type="com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLogModel" />
+            name="searchLog"
+            type="com.ch.yoon.kakao.pay.imagesearch.data.repository.image.model.SearchLog" />
 
     </data>
 
@@ -26,7 +26,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="@{searchLogModel.getKeyword()}"
-            android:onClick="@{() -> viewModel.onClickSearchButton(searchLogModel.keyword)}"
+            android:onClick="@{() -> viewModel.onClickSearchButton(searchLog.keyword)}"
             android:padding="10dp" />
 
         <ImageView
@@ -34,7 +34,7 @@
             android:layout_width="44dp"
             android:layout_height="44dp"
             android:padding="10dp"
-            android:onClick="@{() -> viewModel.onClickSearchLogDeleteButton(searchLogModel)}"
+            android:onClick="@{() -> viewModel.onClickSearchLogDeleteButton(searchLog)}"
             app:srcCompat="@drawable/ic_action_clear" />
 
     </LinearLayout>

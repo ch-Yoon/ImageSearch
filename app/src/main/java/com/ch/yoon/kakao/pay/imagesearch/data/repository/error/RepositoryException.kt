@@ -8,8 +8,11 @@ import java.lang.Exception
  **/
 sealed class RepositoryException(errorMessage: String) : Exception(errorMessage) {
 
-    // 찾을 수 없는 error
+    // 찾을 수 없는 오류
     class NotFoundException(errorMessage: String): RepositoryException(errorMessage)
+
+    // 잘못된 요청 오류(잘못된 파라미터)
+    class WrongRequestException(errorMessage: String) : RepositoryException(errorMessage)
 
     // 사용자 인증 오류
     class AuthenticationException(errorMessage: String): RepositoryException(errorMessage)
