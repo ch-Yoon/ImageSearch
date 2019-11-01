@@ -10,10 +10,10 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 
 import com.ch.yoon.kakao.pay.imagesearch.R;
 import com.ch.yoon.kakao.pay.imagesearch.RxSchedulerRule;
-import com.ch.yoon.kakao.pay.imagesearch.data.source.remote.kakao.request.ImageSortType;
-import com.ch.yoon.kakao.pay.imagesearch.data.source.remote.kakao.response.ImageSearchResult;
-import com.ch.yoon.kakao.pay.imagesearch.data.source.remote.kakao.request.ImageSearchRequest;
-import com.ch.yoon.kakao.pay.imagesearch.data.source.remote.kakao.response.KakaoImageSearchMetaInfo;
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSortType;
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.ImageSearchResult;
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSearchRequest;
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.KakaoImageSearchMetaInfo;
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.error.ImageSearchError;
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.error.ImageSearchException;
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.helper.ImageSearchInspector;

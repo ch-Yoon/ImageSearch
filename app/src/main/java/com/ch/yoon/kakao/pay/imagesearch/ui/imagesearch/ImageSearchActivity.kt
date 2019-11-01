@@ -16,7 +16,6 @@ import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.ImageListViewM
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.ImageListAdapter
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewModel
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchLogAdapter
-import kotlinx.android.synthetic.main.activity_image_search.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**

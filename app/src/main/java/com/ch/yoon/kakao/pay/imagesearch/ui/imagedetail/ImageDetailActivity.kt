@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.lifecycle.Observer
 import com.ch.yoon.kakao.pay.imagesearch.R
-import com.ch.yoon.kakao.pay.imagesearch.data.source.remote.kakao.response.KakaoImageDocument
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.ImageDocument
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ActivityImageDetailBinding
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -21,9 +21,9 @@ class ImageDetailActivity : BaseActivity<ActivityImageDetailBinding>() {
     companion object {
         const val EXTRA_IMAGE_DOCUMENT_KEY = "EXTRA_IMAGE_DOCUMENT_KEY"
 
-        fun getImageDetailActivityIntent(context: Context, kakaoImageDocument: KakaoImageDocument): Intent {
+        fun getImageDetailActivityIntent(context: Context, imageDocument: ImageDocument): Intent {
             return Intent(context, ImageDetailActivity::class.java).apply {
-                putExtra(EXTRA_IMAGE_DOCUMENT_KEY, kakaoImageDocument)
+                putExtra(EXTRA_IMAGE_DOCUMENT_KEY, imageDocument)
             }
         }
     }
@@ -37,7 +37,7 @@ class ImageDetailActivity : BaseActivity<ActivityImageDetailBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val passedImageDocument = intent.getParcelableExtra<KakaoImageDocument>(EXTRA_IMAGE_DOCUMENT_KEY)
+        val passedImageDocument = intent.getParcelableExtra<ImageDocument>(EXTRA_IMAGE_DOCUMENT_KEY)
 
         initBackArrow()
         initImageDetailViewModel(passedImageDocument)
@@ -59,10 +59,10 @@ class ImageDetailActivity : BaseActivity<ActivityImageDetailBinding>() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    private fun initImageDetailViewModel(kakaoImageDocument: KakaoImageDocument) {
+    private fun initImageDetailViewModel(imageDocument: ImageDocument) {
         binding.imageDetailViewModel = imageDetailViewModel
         if(isActivityFirstCreate) {
-            imageDetailViewModel.showImageDetailInfo(kakaoImageDocument)
+            imageDetailViewModel.showImageDetailInfo(imageDocument)
         }
     }
 

@@ -3,7 +3,7 @@ package com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox
 import android.widget.EditText
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.ch.yoon.kakao.pay.imagesearch.data.source.local.room.entity.SearchLogModel
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.SearchLog
 import com.ch.yoon.kakao.pay.imagesearch.extention.hideKeyboard
 import java.util.ArrayList
 
@@ -12,10 +12,10 @@ import java.util.ArrayList
  * Date : 2019-10-27.
  */
 
-@BindingAdapter("searchLogModelList")
-fun setItems(recyclerView: RecyclerView, searchLogModelList: List<SearchLogModel>?) {
+@BindingAdapter("searchLogList")
+fun setItems(recyclerView: RecyclerView, searchLogList: List<SearchLog>?) {
     val adapter = recyclerView.adapter as SearchLogAdapter?
-    adapter?.submitList(if (searchLogModelList == null) null else ArrayList(searchLogModelList))
+    adapter?.submitList(if (searchLogList == null) null else ArrayList(searchLogList))
 }
 
 @BindingAdapter("hideKeyboard")

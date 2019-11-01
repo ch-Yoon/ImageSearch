@@ -11,7 +11,7 @@
 
         <variable
             name="searchLog"
-            type="com.ch.yoon.kakao.pay.imagesearch.data.repository.image.model.SearchLog" />
+            type="com.ch.yoon.kakao.pay.imagesearch.data.repository.model.SearchLog" />
 
     </data>
 
@@ -25,7 +25,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@{searchLogModel.getKeyword()}"
+            android:text="@{searchLog.getKeyword()}"
             android:onClick="@{() -> viewModel.onClickSearchButton(searchLog.keyword)}"
             android:padding="10dp" />
 

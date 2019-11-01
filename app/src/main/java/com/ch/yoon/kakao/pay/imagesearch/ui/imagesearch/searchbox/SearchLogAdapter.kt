@@ -5,8 +5,7 @@ import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.ch.yoon.kakao.pay.imagesearch.R
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.image.model.SearchLog
-import com.ch.yoon.kakao.pay.imagesearch.data.source.local.room.entity.SearchLogModel
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.SearchLog
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ItemSearchHistoryBinding
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewHolder
 import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchLogAdapter.SearchLogViewHolder

@@ -1,7 +1,7 @@
 package com.ch.yoon.kakao.pay.imagesearch.di
 
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.image.ImageRepository
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.image.ImageRepositoryImpl
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepository
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepositoryImpl
 import org.koin.dsl.module.module
 
 /**

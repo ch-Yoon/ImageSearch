@@ -6,9 +6,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.ch.yoon.kakao.pay.imagesearch.R
-import com.ch.yoon.kakao.pay.imagesearch.data.source.local.room.entity.SearchLogModel
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.image.ImageRepository
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.image.model.SearchLog
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepository
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.SearchLog
 import com.ch.yoon.kakao.pay.imagesearch.extention.*
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel
 import com.ch.yoon.kakao.pay.imagesearch.ui.common.livedata.SingleLiveEvent
@@ -24,7 +23,7 @@ class SearchBoxViewModel(
 ) : BaseViewModel (application) {
 
     private val _searchLogList = MutableLiveData<MutableList<SearchLog>>(mutableListOf())
-    val searchLogModelList: LiveData<List<SearchLog>> = Transformations.map(_searchLogList) { it?.toList() }
+    val searchLogList: LiveData<List<SearchLog>> = Transformations.map(_searchLogList) { it?.toList() }
 
     private val _searchBoxFocus = MutableLiveData<Boolean>(false)
     val searchBoxFocus: LiveData<Boolean> = _searchBoxFocus

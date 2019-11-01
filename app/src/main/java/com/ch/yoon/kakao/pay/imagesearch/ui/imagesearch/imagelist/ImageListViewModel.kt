@@ -7,12 +7,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.ch.yoon.kakao.pay.imagesearch.R
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.error.RepositoryException
-import com.ch.yoon.kakao.pay.imagesearch.data.source.remote.kakao.request.ImageSearchRequest
-import com.ch.yoon.kakao.pay.imagesearch.data.source.remote.kakao.request.ImageSortType
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.image.ImageRepository
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.image.model.ImageDocument
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.image.model.ImageSearchMeta
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.image.model.ImageSearchResponse
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSearchRequest
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSortType
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepository
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.ImageDocument
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.ImageSearchMeta
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.ImageSearchResponse
 import com.ch.yoon.kakao.pay.imagesearch.extention.TAG
 import com.ch.yoon.kakao.pay.imagesearch.extention.safeLet
 import com.ch.yoon.kakao.pay.imagesearch.extention.updateOnMainThread
@@ -43,7 +43,7 @@ class ImageListViewModel(
     val countOfItemInLine: LiveData<Int> = _countOfItemInLine
 
     private val _imageDocumentList = MutableLiveData<MutableList<ImageDocument>>()
-    val kakaoImageDocumentList: LiveData<List<ImageDocument>> = Transformations.map(_imageDocumentList) { it?.toList() }
+    val imageDocumentList: LiveData<List<ImageDocument>> = Transformations.map(_imageDocumentList) { it?.toList() }
 
     private val _imageSearchState = MutableLiveData<ImageSearchState>(ImageSearchState.NONE)
     val imageSearchState: LiveData<ImageSearchState> = _imageSearchState
@@ -146,11 +146,14 @@ class ImageListViewModel(
     }
 
     private fun handlingImageSearchError(throwable: Throwable) {
-        if(throwable is RepositoryException.NetworkNotConnectingException) {
-            updateShowMessage(R.string.network_not_connecting_error)
-        } else {
-            updateShowMessage(R.string.unknown_error)
-            Log.d(TAG, throwable.message ?: "unknown error")
+        when(throwable) {
+            is RepositoryException.NetworkNotConnectingException -> {
+                updateShowMessage(R.string.network_not_connecting_error)
+            }
+            else -> {
+                updateShowMessage(R.string.unknown_error)
+                Log.d(TAG, throwable.message ?: "unknown error")
+            }
         }
     }
 

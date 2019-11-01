@@ -1,15 +1,11 @@
 package com.ch.yoon.kakao.pay.imagesearch.data.repository;
 
 import com.ch.yoon.kakao.pay.imagesearch.RxSchedulerRule;
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.image.ImageLocalDataSource;
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.image.ImageRemoteDataSource;
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.image.ImageRepository;
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.image.ImageRepositoryImpl;
-import com.ch.yoon.kakao.pay.imagesearch.data.source.local.room.entity.SearchLogModel;
-import com.ch.yoon.kakao.pay.imagesearch.data.source.remote.kakao.request.ImageSearchRequest;
-import com.ch.yoon.kakao.pay.imagesearch.data.source.remote.kakao.request.ImageSortType;
-import com.ch.yoon.kakao.pay.imagesearch.data.source.remote.kakao.response.KakaoImageSearchResponse;
-import com.ch.yoon.kakao.pay.imagesearch.data.source.remote.kakao.response.KakaoImageSearchMetaInfo;
+import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLogModel;
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSearchRequest;
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSortType;
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.KakaoImageSearchResponse;
+import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.KakaoImageSearchMetaInfo;
 
 import org.junit.After;
 import org.junit.Before;
