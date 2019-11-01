@@ -8,10 +8,6 @@ import io.reactivex.android.plugins.RxAndroidPlugins;
 import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
 
-/**
- * Creator : ch-yoon
- * Date : 2019-08-12.
- */
 public class RxSchedulerRule implements TestRule {
     @Override
     public Statement apply(Statement base, Description description) {
