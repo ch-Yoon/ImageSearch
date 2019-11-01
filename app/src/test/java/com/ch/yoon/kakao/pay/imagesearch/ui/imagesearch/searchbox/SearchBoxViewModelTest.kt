@@ -33,9 +33,9 @@ class SearchBoxViewModelTest {
     }
 
     @get:Rule
-    var instantTaskExecutorRule = InstantTaskExecutorRule()
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
     @get:Rule
-    var rxSchedulerRule = RxSchedulerRule()
+    val rxSchedulerRule = RxSchedulerRule()
 
     @MockK
     lateinit var mockApplication: Application
