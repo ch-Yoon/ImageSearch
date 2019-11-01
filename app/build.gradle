@@ -46,9 +46,7 @@ dependencies {
     androidTestImplementation "androidx.test:runner:$runner_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"
     testImplementation "android.arch.core:core-testing:$arch_core_version"
-    testImplementation "org.mockito:mockito-core:$mockito_version"
-    testImplementation "org.powermock:powermock-module-junit4:$power_mock_version"
-    testImplementation "org.powermock:powermock-api-mockito2:$power_mock_version"
+    testImplementation "io.mockk:mockk:$mockk_version"
 
     // recyclerView
     implementation "androidx.recyclerview:recyclerview:$recycler_view_version"

@@ -1,30 +1,30 @@
 package com.ch.yoon.kakao.pay.imagesearch.data.repository;
-
-import com.ch.yoon.kakao.pay.imagesearch.RxSchedulerRule;
-import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLogModel;
-import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSearchRequest;
-import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSortType;
-import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.KakaoImageSearchResponse;
-import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.KakaoImageSearchMetaInfo;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import io.reactivex.Completable;
-import io.reactivex.Single;
-import io.reactivex.disposables.CompositeDisposable;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+//
+//import com.ch.yoon.kakao.pay.imagesearch.RxSchedulerRule;
+//import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLogModel;
+//import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSearchRequest;
+//import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSortType;
+//import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.KakaoImageSearchResponse;
+//import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.KakaoImageSearchMetaInfo;
+//
+//import org.junit.After;
+//import org.junit.Before;
+//import org.junit.Rule;
+//import org.junit.Test;
+//import org.mockito.Mock;
+//import org.mockito.MockitoAnnotations;
+//
+//import java.util.ArrayList;
+//import java.util.List;
+//
+//import io.reactivex.Completable;
+//import io.reactivex.Single;
+//import io.reactivex.disposables.CompositeDisposable;
+//
+//import static org.mockito.ArgumentMatchers.any;
+//import static org.mockito.Mockito.times;
+//import static org.mockito.Mockito.verify;
+//import static org.mockito.Mockito.when;
 
 public class ImageRepositoryImplTest {
 
