@@ -4,8 +4,9 @@
 ![app_demo](https://user-images.githubusercontent.com/20294749/67322924-b5ec6980-f54c-11e9-96f3-f2394375aab2.png)
 
 ## 개요
-- Kotlin과 Java 버전 개발
+- Kotlin version
   - [Kotlin + RxJava + MVVM + LiveData + Retrofit2 + Room + UnitTest(mockk)](https://github.com/ch-Yoon/ImageSearch/tree/kotlin-rx-mvvm-retrofit2-room)
+- Java version
   - [Java + RxJava + MVVM + LiveData + Retrofit2 + Room + UnitTest(mockto, powermock)](https://github.com/ch-Yoon/ImageSearch/tree/java-rx-mvvm-retrofit2-room)
 
 ## 구현 기능
