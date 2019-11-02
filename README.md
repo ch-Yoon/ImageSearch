@@ -1,10 +1,10 @@
 
-## Kakao 이미지 검색 API 활용 이미지 검색 앱
+# Kakao 이미지 검색 API 활용 이미지 검색 앱
 
-### Now : Kotlin version
+## Now : Kotlin version
 `Kotlin`  `Koin`  `RxJava`  `MVVM`  `LiveData`  `Retrofit2`  `Room`  `Unit Test(mockk)`
 
-### Other : Java version
+## Other : Java version
 -> [Java + RxJava + MVVM + LiveData + Retrofit2 + Room + UnitTest(mockto, powermock)](https://github.com/ch-Yoon/ImageSearch/tree/java-rx-mvvm-retrofit2-room)
 
 ![app_demo](https://user-images.githubusercontent.com/20294749/67322924-b5ec6980-f54c-11e9-96f3-f2394375aab2.png)
