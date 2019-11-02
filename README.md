@@ -5,7 +5,7 @@
 
 ## 개요
 - Kotlin version
-  - [Kotlin + RxJava + MVVM + LiveData + Retrofit2 + Room + UnitTest(mockk)](https://github.com/ch-Yoon/ImageSearch/tree/kotlin-rx-mvvm-retrofit2-room)
+  - [Kotlin + Koin + RxJava + MVVM + LiveData + Retrofit2 + Room + UnitTest(mockk)](https://github.com/ch-Yoon/ImageSearch/tree/kotlin-rx-mvvm-retrofit2-room)
 - Java version
   - [Java + RxJava + MVVM + LiveData + Retrofit2 + Room + UnitTest(mockto, powermock)](https://github.com/ch-Yoon/ImageSearch/tree/java-rx-mvvm-retrofit2-room)
 
