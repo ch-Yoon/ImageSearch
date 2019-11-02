@@ -5,7 +5,7 @@
 
 ## 개요
 - **현재 Branch - Java version**
-  - Java + RxJava + MVVM + LiveData + Retrofit2 + Room + UnitTest(mockto, powermock)
+  - **Java + RxJava + MVVM + LiveData + Retrofit2 + Room + UnitTest(mockto, powermock)**
 - 다른 Branch - Kotlin version
   - [Kotlin + RxJava + MVVM + LiveData + Retrofit2 + Room + UnitTest(mockk)](https://github.com/ch-Yoon/ImageSearch/tree/kotlin-rx-mvvm-retrofit2-room)
   
