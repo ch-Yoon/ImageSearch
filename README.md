@@ -4,7 +4,7 @@
 ![app_demo](https://user-images.githubusercontent.com/20294749/67322924-b5ec6980-f54c-11e9-96f3-f2394375aab2.png)
 
 ## 개요
-- 현재 Branch - kotlin version
+- **현재 Branch - kotlin version**
   - kotlin + RxJava + MVVM + LiveData + Retrofit2 + Room + Unit Test(mockk)
 - 다른 Branch - Java version
   - [Java + RxJava + MVVM + LiveData + Retrofit2 + Room + UnitTest(mockto, powermock)](https://github.com/ch-Yoon/ImageSearch/tree/java-rx-mvvm-retrofit2-room)
