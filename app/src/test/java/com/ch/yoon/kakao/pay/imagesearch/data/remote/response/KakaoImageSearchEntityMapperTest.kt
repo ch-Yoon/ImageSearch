@@ -1,6 +1,5 @@
 package com.ch.yoon.kakao.pay.imagesearch.data.remote.response
 
-import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSearchRequest
 import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.KakaoImageDocument
 import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.KakaoImageSearchEntityMapper
 import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.KakaoImageSearchMetaInfo

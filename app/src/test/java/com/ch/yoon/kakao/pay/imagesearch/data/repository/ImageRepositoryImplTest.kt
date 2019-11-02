@@ -13,8 +13,6 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.verify
 import io.reactivex.Completable
 import io.reactivex.Single
-import io.reactivex.disposables.CompositeDisposable
-import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
