@@ -14,7 +14,6 @@ import io.mockk.verify
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
-import net.bytebuddy.matcher.ElementMatchers.any
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -35,19 +34,12 @@ class ImageRepositoryImplTest {
     private lateinit var mockImageLocalDataSource: ImageLocalDataSource
 
     private lateinit var imageRepository: ImageRepository
-    private lateinit var compositeDisposable: CompositeDisposable
 
     @Before
     fun init() {
         MockKAnnotations.init(this, relaxUnitFun = true)
 
         imageRepository = ImageRepositoryImpl(mockImageRemoteDataSource, mockImageLocalDataSource)
-        compositeDisposable = CompositeDisposable()
-    }
-
-    @After
-    fun clear() {
-        compositeDisposable.clear()
     }
 
     @Test
