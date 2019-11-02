@@ -11,6 +11,7 @@ import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.KakaoImageSe
 import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.response.KakaoImageSearchResponse
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRemoteDataSource
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.error.RepositoryException
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.ImageSearchResponse
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -65,6 +66,25 @@ class ImageRemoteDataSourceImplTest {
 
         // then
         verify(exactly = 1) { mockKakaoSearchApi.searchImageList(any(), any(), any(), any()) }
+    }
+
+    @Test
+    fun `이미지 요청이 들어왔을 때 KakaoSearchAPI로부터 수신한 데이터를 반환하는지 테스트`() {
+        // given
+        val emptyResponse = createEmptyKakaoImageSearchResponse()
+        every { mockKakaoSearchApi.searchImageList(any(), any(), any(), any()) } returns Single.just(emptyResponse)
+
+        // when
+        var response: ImageSearchResponse? = null
+        imageRemoteDataSource.requestImageList(createEmptyImageSearchRequest())
+            .subscribe({ imageSearchResponse ->
+                response = imageSearchResponse
+            }, { throwable ->
+                response = null
+            })
+
+        // then
+        assertEquals(true, response != null)
     }
 
     @Test
