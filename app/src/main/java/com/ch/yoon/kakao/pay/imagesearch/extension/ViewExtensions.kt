@@ -1,4 +1,4 @@
-package com.ch.yoon.kakao.pay.imagesearch.extention
+package com.ch.yoon.kakao.pay.imagesearch.extension
 
 import android.content.Context
 import android.view.View

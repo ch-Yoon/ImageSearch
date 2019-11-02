@@ -4,7 +4,7 @@ import android.widget.EditText
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.SearchLog
-import com.ch.yoon.kakao.pay.imagesearch.extention.hideKeyboard
+import com.ch.yoon.kakao.pay.imagesearch.extension.hideKeyboard
 import java.util.ArrayList
 
 /**

@@ -2,12 +2,10 @@ package com.ch.yoon.kakao.pay.imagesearch.ui.imagedetail
 
 import android.app.Application
 import android.text.TextUtils
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ch.yoon.kakao.pay.imagesearch.R
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.ImageDocument
-import com.ch.yoon.kakao.pay.imagesearch.extention.TAG
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel
 import com.ch.yoon.kakao.pay.imagesearch.ui.common.livedata.SingleLiveEvent
 

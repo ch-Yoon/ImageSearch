@@ -1,6 +1,6 @@
 package com.ch.yoon.kakao.pay.imagesearch.ui.common.pageload
 
-import com.ch.yoon.kakao.pay.imagesearch.extention.safeLet
+import com.ch.yoon.kakao.pay.imagesearch.extension.safeLet
 
 /**
  * Creator : ch-yoon

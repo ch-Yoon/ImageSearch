@@ -8,7 +8,7 @@ import androidx.lifecycle.Transformations
 import com.ch.yoon.kakao.pay.imagesearch.R
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepository
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.SearchLog
-import com.ch.yoon.kakao.pay.imagesearch.extention.*
+import com.ch.yoon.kakao.pay.imagesearch.extension.*
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel
 import com.ch.yoon.kakao.pay.imagesearch.ui.common.livedata.SingleLiveEvent
 import io.reactivex.android.schedulers.AndroidSchedulers

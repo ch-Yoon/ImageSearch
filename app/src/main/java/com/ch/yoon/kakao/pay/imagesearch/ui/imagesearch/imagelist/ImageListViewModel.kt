@@ -13,9 +13,9 @@ import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepository
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.ImageDocument
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.ImageSearchMeta
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.ImageSearchResponse
-import com.ch.yoon.kakao.pay.imagesearch.extention.TAG
-import com.ch.yoon.kakao.pay.imagesearch.extention.safeLet
-import com.ch.yoon.kakao.pay.imagesearch.extention.updateOnMainThread
+import com.ch.yoon.kakao.pay.imagesearch.extension.TAG
+import com.ch.yoon.kakao.pay.imagesearch.extension.safeLet
+import com.ch.yoon.kakao.pay.imagesearch.extension.updateOnMainThread
 import com.ch.yoon.kakao.pay.imagesearch.ui.base.BaseViewModel
 import com.ch.yoon.kakao.pay.imagesearch.ui.common.livedata.SingleLiveEvent
 import com.ch.yoon.kakao.pay.imagesearch.ui.common.pageload.PageLoadHelper

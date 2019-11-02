@@ -1,4 +1,4 @@
-package com.ch.yoon.kakao.pay.imagesearch.extention
+package com.ch.yoon.kakao.pay.imagesearch.extension
 
 /**
  * Creator : ch-yoon
