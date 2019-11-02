@@ -6,7 +6,7 @@
 ## 개요
 - Kotlin과 Java 버전 개발
   - [Kotlin + RxJava + MVVM + LiveData + Retrofit2 + Room + UnitTest(mockk)](https://github.com/ch-Yoon/ImageSearch/tree/kotlin-rx-mvvm-retrofit2-room)
-  - Java + RxJava + MVVM + LiveData + Retrofit2 + Room + UnitTest(mockto, powermock)
+  - [Java + RxJava + MVVM + LiveData + Retrofit2 + Room + UnitTest(mockto, powermock)](https://github.com/ch-Yoon/ImageSearch/tree/java-rx-mvvm-retrofit2-room)
 
 ## 구현 기능
 - 카카오 이미지 검색 API를 활용하여 검색한 Grid로 구성
