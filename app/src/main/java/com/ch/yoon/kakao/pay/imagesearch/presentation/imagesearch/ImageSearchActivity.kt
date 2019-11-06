@@ -1,6 +1,7 @@
 package com.ch.yoon.kakao.pay.imagesearch.presentation.imagesearch
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.MotionEvent
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ch.yoon.kakao.pay.imagesearch.R
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ActivityImageSearchBinding
+import com.ch.yoon.kakao.pay.imagesearch.presentation.SearchViewTestActivity
 import com.ch.yoon.kakao.pay.imagesearch.presentation.base.BaseActivity
 import com.ch.yoon.kakao.pay.imagesearch.presentation.imagedetail.ImageDetailActivity
 import com.ch.yoon.kakao.pay.imagesearch.presentation.imagesearch.imagelist.ImageListViewModel
@@ -34,7 +36,6 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initSearchBoxViewModel()
-        initSearchKeywordEditText()
         observeSearchBoxViewModel()
 
         initImageListViewModel()
@@ -49,25 +50,6 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
 
         if (isActivityFirstCreate) {
             searchBoxViewModel.loadSearchLogList()
-        }
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    private fun initSearchKeywordEditText() {
-        binding.keywordEditText.setOnEditorActionListener{ v, actionId, _ ->
-            if (actionId == KeyEvent.KEYCODE_ENDCALL) {
-                searchBoxViewModel.onClickSearchButton(v.text.toString())
-                true
-            } else {
-                false
-            }
-        }
-
-        binding.keywordEditText.setOnTouchListener { _, event ->
-            if (MotionEvent.ACTION_UP == event.action) {
-                searchBoxViewModel.onClickSearchBox()
-            }
-            false
         }
     }
 

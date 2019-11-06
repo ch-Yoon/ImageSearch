@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ClearSearchView">
+        <attr name="text" format="reference|string"/>
+        <attr name="background" format="reference"/>
+        <attr name="textSize" format="reference|dimension"/>
+        <attr name="textColor" format="reference|color"/>
+        <attr name="clearButtonIcon" format="reference"/>
+        <attr name="searchButtonIcon" format="reference"/>
+    </declare-styleable>
+</resources>
