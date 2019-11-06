@@ -18,7 +18,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".ui.imagesearch.ImageSearchActivity"
+            android:name=".presentation.imagesearch.ImageSearchActivity"
             android:windowSoftInputMode="stateAlwaysHidden"
             android:theme="@style/ImageSearchAppTheme">
             <intent-filter>
@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.imagedetail.ImageDetailActivity"
+            android:name=".presentation.imagedetail.ImageDetailActivity"
             android:theme="@style/ImageSearchAppTheme" />
     </application>
 

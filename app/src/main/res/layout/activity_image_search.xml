@@ -11,11 +11,11 @@
 
         <variable
             name="searchBoxViewModel"
-            type="com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewModel" />
+            type="com.ch.yoon.kakao.pay.imagesearch.presentation.imagesearch.searchbox.SearchBoxViewModel" />
 
         <variable
             name="imageListViewModel"
-            type="com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.ImageListViewModel" />
+            type="com.ch.yoon.kakao.pay.imagesearch.presentation.imagesearch.imagelist.ImageListViewModel" />
 
     </data>
 
@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorWhite"
-        tools:context=".ui.imagesearch.ImageSearchActivity">
+        tools:context=".presentation.imagesearch.ImageSearchActivity">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/mainToolbar"

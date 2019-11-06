@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewModel" />
+            type="com.ch.yoon.kakao.pay.imagesearch.presentation.imagesearch.searchbox.SearchBoxViewModel" />
 
         <variable
             name="searchLog"

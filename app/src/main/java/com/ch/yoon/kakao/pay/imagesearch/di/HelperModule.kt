@@ -1,7 +1,7 @@
 package com.ch.yoon.kakao.pay.imagesearch.di
 
-import com.ch.yoon.kakao.pay.imagesearch.ui.common.pageload.PageLoadConfiguration
-import com.ch.yoon.kakao.pay.imagesearch.ui.common.pageload.PageLoadHelper
+import com.ch.yoon.kakao.pay.imagesearch.presentation.common.pageload.PageLoadConfiguration
+import com.ch.yoon.kakao.pay.imagesearch.presentation.common.pageload.PageLoadHelper
 import org.koin.dsl.module.module
 
 /**

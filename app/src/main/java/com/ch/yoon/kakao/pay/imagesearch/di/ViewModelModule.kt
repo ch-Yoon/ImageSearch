@@ -1,8 +1,8 @@
 package com.ch.yoon.kakao.pay.imagesearch.di
 
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagedetail.ImageDetailViewModel
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.ImageListViewModel
-import com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.searchbox.SearchBoxViewModel
+import com.ch.yoon.kakao.pay.imagesearch.presentation.imagedetail.ImageDetailViewModel
+import com.ch.yoon.kakao.pay.imagesearch.presentation.imagesearch.imagelist.ImageListViewModel
+import com.ch.yoon.kakao.pay.imagesearch.presentation.imagesearch.searchbox.SearchBoxViewModel
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 

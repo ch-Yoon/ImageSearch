@@ -8,7 +8,7 @@
 
         <variable
             name="imageDetailViewModel"
-            type="com.ch.yoon.kakao.pay.imagesearch.ui.imagedetail.ImageDetailViewModel" />
+            type="com.ch.yoon.kakao.pay.imagesearch.presentation.imagedetail.ImageDetailViewModel" />
 
     </data>
 
@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorWhite"
-        tools:context=".ui.imagedetail.ImageDetailActivity">
+        tools:context=".presentation.imagedetail.ImageDetailActivity">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/mainToolbar"

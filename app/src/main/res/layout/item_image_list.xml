@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.ch.yoon.kakao.pay.imagesearch.ui.imagesearch.imagelist.ImageListViewModel" />
+            type="com.ch.yoon.kakao.pay.imagesearch.presentation.imagesearch.imagelist.ImageListViewModel" />
 
         <variable
             name="imageDocument"
