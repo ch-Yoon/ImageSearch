@@ -39,24 +39,34 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <com.ch.yoon.kakao.pay.imagesearch.presentation.common.customview.searchview.ClearSearchView
-                    android:id="@+id/clearSearchView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/image_search_box_side_margin"
-                    android:layout_marginTop="@dimen/image_search_box_top_bottom_margin"
-                    android:layout_marginEnd="@dimen/image_search_box_side_margin"
-                    android:layout_marginBottom="@dimen/image_search_box_top_bottom_margin"
-                    app:textSize="14dp"
-                    app:setText="@{searchBoxViewModel.searchKeyword}"
-                    app:onTextChangeListener="@{(changedText) -> searchBoxViewModel.onChangeKeyword(changedText)}"
-                    app:onSearchButtonClickListener="@{(inputtedText) -> searchBoxViewModel.onClickSearchButton()}"
-                    app:onSearchViewEditTextClickListener="@{() -> searchBoxViewModel.onClickSearchBox()}"
-                    app:background="@drawable/search_box_border"
+                <ImageView
+                    android:id="@+id/searchButton"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="15dp"
+                    app:srcCompat="@drawable/ic_action_search"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+<!--                <com.ch.yoon.kakao.pay.imagesearch.presentation.common.customview.searchview.ClearSearchView-->
+<!--                    android:id="@+id/clearSearchView"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_marginStart="@dimen/image_search_box_side_margin"-->
+<!--                    android:layout_marginTop="@dimen/image_search_box_top_bottom_margin"-->
+<!--                    android:layout_marginEnd="@dimen/image_search_box_side_margin"-->
+<!--                    android:layout_marginBottom="@dimen/image_search_box_top_bottom_margin"-->
+<!--                    app:textSize="14dp"-->
+<!--                    app:setText="@{searchBoxViewModel.searchKeyword}"-->
+<!--                    app:onTextChangeListener="@{(changedText) -> searchBoxViewModel.onChangeKeyword(changedText)}"-->
+<!--                    app:onSearchButtonClickListener="@{(inputtedText) -> searchBoxViewModel.onClickSearchButton()}"-->
+<!--                    app:onSearchViewEditTextClickListener="@{() -> searchBoxViewModel.onClickSearchBox()}"-->
+<!--                    app:background="@drawable/search_box_border"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -141,34 +151,50 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fourImageInLineButton" />
 
-        <View
-            android:id="@+id/searchHistoryBackground"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/colorDarkGrayTransparent"
-            android:onClick="@{() -> searchBoxViewModel.onClickBackground()}"
-            android:visibility="@{searchBoxViewModel.searchBoxFocus ? View.VISIBLE : View.INVISIBLE}"
+<!--        <View-->
+<!--            android:id="@+id/searchHistoryBackground"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:background="@color/colorDarkGrayTransparent"-->
+<!--            android:onClick="@{() -> searchBoxViewModel.onClickBackground()}"-->
+<!--            android:visibility="@{searchBoxViewModel.searchBoxFocus ? View.VISIBLE : View.INVISIBLE}"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/mainToolbar" />-->
+
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/searchLogRecyclerView"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:layout_marginStart="@dimen/image_search_box_side_margin"-->
+<!--            android:layout_marginEnd="@dimen/image_search_box_side_margin"-->
+<!--            android:background="@color/colorLightGray"-->
+<!--            android:visibility="@{searchBoxViewModel.searchBoxFocus ? View.VISIBLE : View.INVISIBLE}"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/searchHistoryBackground"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHeight_default="wrap"-->
+<!--            app:layout_constraintHeight_max="@dimen/search_box_recycler_view_max_height"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/searchHistoryBackground"-->
+<!--            app:layout_constraintVertical_bias="0.0"-->
+<!--            app:searchLogList="@{searchBoxViewModel.searchLogList}" />-->
+
+        <com.ch.yoon.kakao.pay.imagesearch.presentation.common.customview.searchview.SuggestionSearchView
+            android:id="@+id/suggestionSearchView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+            app:textSize="14dp"
+            app:setText="@{searchBoxViewModel.searchKeyword}"
+            app:onTextChangeListener="@{(changedText) -> searchBoxViewModel.onChangeKeyword(changedText)}"
+            app:onSearchButtonClickListener="@{(inputtedText) -> searchBoxViewModel.onClickSearchButton()}"
+            app:onSearchViewEditTextClickListener="@{() -> searchBoxViewModel.onClickSearchBox()}"
+            app:searchLogList="@{searchBoxViewModel.searchLogList}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mainToolbar" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/searchLogRecyclerView"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="@dimen/image_search_box_side_margin"
-            android:layout_marginEnd="@dimen/image_search_box_side_margin"
-            android:background="@color/colorLightGray"
-            android:visibility="@{searchBoxViewModel.searchBoxFocus ? View.VISIBLE : View.INVISIBLE}"
-            app:layout_constraintBottom_toBottomOf="@+id/searchHistoryBackground"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_default="wrap"
-            app:layout_constraintHeight_max="@dimen/search_box_recycler_view_max_height"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/searchHistoryBackground"
-            app:layout_constraintVertical_bias="0.0"
-            app:searchLogList="@{searchBoxViewModel.searchLogList}" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -6,8 +6,8 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
 import android.util.TypedValue
-import android.view.KeyEvent
 import android.view.MotionEvent
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
@@ -20,6 +20,7 @@ import com.ch.yoon.kakao.pay.imagesearch.util.extension.hideKeyboard
 import com.ch.yoon.kakao.pay.imagesearch.util.extension.invisible
 import com.ch.yoon.kakao.pay.imagesearch.util.extension.visible
 import kotlinx.android.synthetic.main.suggestion_search_view.view.*
+import com.ch.yoon.kakao.pay.imagesearch.util.extension.showKeyboard
 
 
 /**
@@ -41,7 +42,6 @@ class SuggestionSearchView @JvmOverloads constructor(
     private val searchView: LinearLayoutCompat
     private val searchViewEditText: EditText
     private val searchViewClearButton: ImageView
-    private val searchViewSearchButton: ImageView
 
     private val suggestionView: LinearLayoutCompat
     private val suggestionRecycler: RecyclerView
@@ -58,7 +58,6 @@ class SuggestionSearchView @JvmOverloads constructor(
             searchView = searchViewRootLayout
             searchViewEditText = editText
             searchViewClearButton = clearButton
-            searchViewSearchButton = searchButton
 
             suggestionView = suggestionViewRootLayout
             suggestionRecycler = suggestionRecyclerView
@@ -66,7 +65,7 @@ class SuggestionSearchView @JvmOverloads constructor(
 
         initSearchViewEditText()
         initSearchViewClearButton()
-        initSearchViewSearchButton()
+        initSuggestionView()
         initAttrs(attrs, defStyle)
     }
 
@@ -87,13 +86,21 @@ class SuggestionSearchView @JvmOverloads constructor(
         })
 
         searchViewEditText.setOnEditorActionListener{ _, actionId, _ ->
-            if (actionId == KeyEvent.KEYCODE_ENDCALL) {
-                searchViewEditText.hideKeyboard()
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                searchViewEditText.clearFocus()
                 hideSuggestionView()
                 onSearchButtonClickListener?.onClick(searchViewEditText.text.toString())
                 true
             } else {
                 false
+            }
+        }
+
+        searchViewEditText.setOnFocusChangeListener { v, hasFocus ->
+            if(hasFocus) {
+                searchViewEditText.showKeyboard()
+            } else {
+                searchViewEditText.hideKeyboard()
             }
         }
 
@@ -109,13 +116,15 @@ class SuggestionSearchView @JvmOverloads constructor(
     private fun initSearchViewClearButton() {
         searchViewClearButton.setOnClickListener {
             searchViewEditText.setText("")
+            searchViewEditText.requestFocus()
+            showSuggestionView()
         }
     }
 
-    private fun initSearchViewSearchButton() {
-        searchViewSearchButton.setOnClickListener {
-            val inputtedText = searchViewEditText.text.toString()
-            onSearchButtonClickListener?.onClick(inputtedText)
+    private fun initSuggestionView() {
+        suggestionView.setOnClickListener {
+            searchViewEditText.clearFocus()
+            hideSuggestionView()
         }
     }
 
@@ -145,15 +154,17 @@ class SuggestionSearchView @JvmOverloads constructor(
     }
 
     fun showSuggestionSearchView() {
-        suggestionSearchView.visible()
+        visible()
         searchView.visible()
         showSuggestionView()
+        searchViewEditText.requestFocus()
     }
 
     fun hideSuggestionSearchView() {
-        suggestionSearchView.invisible()
+        invisible()
         searchView.invisible()
         hideSuggestionView()
+        searchViewEditText.clearFocus()
     }
 
     fun showSuggestionView() {
@@ -188,7 +199,7 @@ class SuggestionSearchView @JvmOverloads constructor(
     }
 
     fun setSearchButtonIconResource(@DrawableRes drawableResId: Int) {
-        searchViewSearchButton.setImageResource(drawableResId)
+//        searchViewSearchButton.setImageResource(drawableResId)
     }
 
     fun setOnTextChangeListener(onTextChangeListener: OnTextChangeListener?) {

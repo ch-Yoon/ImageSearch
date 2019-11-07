@@ -4,7 +4,9 @@ import android.widget.EditText
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.SearchLog
+import com.ch.yoon.kakao.pay.imagesearch.presentation.common.customview.searchview.SuggestionSearchView
 import com.ch.yoon.kakao.pay.imagesearch.util.extension.hideKeyboard
+import kotlinx.android.synthetic.main.suggestion_search_view.view.*
 import java.util.ArrayList
 
 /**
@@ -13,8 +15,8 @@ import java.util.ArrayList
  */
 
 @BindingAdapter("searchLogList")
-fun setItems(recyclerView: RecyclerView, searchLogList: List<SearchLog>?) {
-    val adapter = recyclerView.adapter as SearchLogAdapter?
+fun setItems(suggestionSearchView: SuggestionSearchView, searchLogList: List<SearchLog>?) {
+    val adapter = suggestionSearchView.suggestionRecyclerView.adapter as SearchLogAdapter?
     adapter?.submitList(if (searchLogList == null) null else ArrayList(searchLogList))
 }
 

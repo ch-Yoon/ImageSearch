@@ -9,12 +9,14 @@ import android.view.inputmethod.InputMethodManager
  * Date : 2019-10-27.
  */
 fun View.hideKeyboard() {
-    if(isFocusable) {
-        val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
-    }
+    val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
 }
 
+fun View.showKeyboard() {
+    val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.showSoftInput(this, 0)
+}
 fun View.visible() {
     if(visibility != View.VISIBLE) {
         visibility = View.VISIBLE

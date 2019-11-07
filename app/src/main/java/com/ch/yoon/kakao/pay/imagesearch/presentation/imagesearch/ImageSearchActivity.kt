@@ -14,6 +14,8 @@ import com.ch.yoon.kakao.pay.imagesearch.presentation.imagesearch.imagelist.Imag
 import com.ch.yoon.kakao.pay.imagesearch.presentation.imagesearch.imagelist.ImageListAdapter
 import com.ch.yoon.kakao.pay.imagesearch.presentation.imagesearch.searchbox.SearchBoxViewModel
 import com.ch.yoon.kakao.pay.imagesearch.presentation.imagesearch.searchbox.SearchLogAdapter
+import kotlinx.android.synthetic.main.activity_image_search.*
+import kotlinx.android.synthetic.main.suggestion_search_view.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
@@ -39,6 +41,10 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
 
         initSearchLogRecyclerView()
         initImageRecyclerView()
+
+        searchButton.setOnClickListener {
+            binding.suggestionSearchView.showSuggestionSearchView()
+        }
     }
 
     private fun initSearchBoxViewModel() {
@@ -67,10 +73,16 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
     }
 
     private fun initSearchLogRecyclerView() {
-        binding.searchLogRecyclerView.apply {
-            layoutManager = LinearLayoutManager(this@ImageSearchActivity, RecyclerView.VERTICAL, false)
-            adapter = SearchLogAdapter(searchBoxViewModel)
+        binding.suggestionSearchView.apply {
+            suggestionRecyclerView.apply {
+                layoutManager = LinearLayoutManager(this@ImageSearchActivity, RecyclerView.VERTICAL, false)
+                adapter = SearchLogAdapter(searchBoxViewModel)
+            }
         }
+//        binding.searchLogRecyclerView.apply {
+////            layoutManager = LinearLayoutManager(this@ImageSearchActivity, RecyclerView.VERTICAL, false)
+////            adapter = SearchLogAdapter(searchBoxViewModel)
+////        }
     }
 
     private fun initImageListViewModel() {
@@ -114,6 +126,7 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
     }
 
     override fun onBackPressed() {
-        searchBoxViewModel.onClickBackPressButton()
+//        searchBoxViewModel.onClickBackPressButton()
+        binding.suggestionSearchView.hideSuggestionSearchView()
     }
 }
