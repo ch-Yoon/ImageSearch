@@ -6,20 +6,17 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
 import android.util.TypedValue
-import android.view.KeyEvent
 import android.view.MotionEvent
+import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.LinearLayoutCompat
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.ch.yoon.suggetionsearchview.extension.invisible
-import com.ch.yoon.suggetionsearchview.extension.hideKeyboard
-import com.ch.yoon.suggetionsearchview.extension.visible
 import kotlinx.android.synthetic.main.suggestion_search_view.view.*
-
 
 /**
  * Creator : ch-yoon
@@ -31,90 +28,102 @@ class SuggestionSearchView @JvmOverloads constructor(
     defStyle: Int = 0
 ): LinearLayoutCompat(context, attrs, defStyle) {
 
-    companion object {
-        private const val DEFAULT_TEXT_SIZE_PX = 50f
-    }
+    private val suggestionSearchViewContainer: LinearLayoutCompat
 
-    private val suggestionSearchView: ConstraintLayout
+    private val searchViewContainer: LinearLayoutCompat
+    private val closeButton: ImageView
+    private val inputEditText: EditText
+    private val clearButton: ImageView
 
-    private val searchView: LinearLayoutCompat
-    private val searchViewEditText: EditText
-    private val searchViewClearButton: ImageView
-    private val searchViewSearchButton: ImageView
-
-    private val suggestionView: LinearLayoutCompat
-    private val suggestionRecycler: RecyclerView
+    private val suggestionViewContainer: LinearLayoutCompat
+    private val suggestionRecyclerView: RecyclerView
 
     private var onTextChangeListener: OnTextChangeListener? = null
     private var onSearchButtonClickListener: OnSearchButtonClickListener? = null
     private var onSearchViewEditTextClickListener: OnSearchViewEditTextClickListener? = null
 
     init {
-        val view = inflate(context, R.layout.suggestion_search_view, this)
-        with(view) {
-            suggestionSearchView = suggestionSearchViewRootLayout
+        inflate(context, R.layout.suggestion_search_view, this)
 
-            searchView = searchViewRootLayout
-            searchViewEditText = editText
-            searchViewClearButton = clearButton
-            searchViewSearchButton = searchButton
+        suggestionSearchViewContainer = this
 
-            suggestionView = suggestionViewRootLayout
-            suggestionRecycler = suggestionRecyclerView
-        }
+        searchViewContainer = search_view_container
+        closeButton = close_button
+        inputEditText = input_edit_text
+        clearButton = clear_button
 
-        initSearchViewEditText()
-        initSearchViewClearButton()
-        initSearchViewSearchButton()
+        suggestionViewContainer = suggestion_view_container
+        suggestionRecyclerView = suggestion_recyclerview
+
         initAttrs(attrs, defStyle)
+        initCloseButton()
+        initInputEditText()
+        initClearButton()
+        initSuggestionContainer()
+    }
+
+    private fun initCloseButton() {
+        closeButton.setOnClickListener {
+            hideSuggestionSearchView()
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private fun initSearchViewEditText() {
-        refreshClearButtonVisibility(searchViewEditText.text.length)
+    private fun initInputEditText() {
+        with(inputEditText) {
+            refreshClearButtonVisibility(text.length)
 
-        searchViewEditText.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {}
+            addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) {}
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val textLength = s?.length ?: 0
-                refreshClearButtonVisibility(textLength)
-                onTextChangeListener?.onTextChange(s.toString())
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    (s?.toString())?.let { changedText ->
+                        refreshClearButtonVisibility(changedText.length)
+                        onTextChangeListener?.onTextChange(changedText)
+                    }
+                }
+            })
+
+            setOnEditorActionListener{ _, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    confirmSearch()
+                    true
+                } else {
+                    false
+                }
             }
-        })
 
-        searchViewEditText.setOnEditorActionListener{ _, actionId, _ ->
-            if (actionId == KeyEvent.KEYCODE_ENDCALL) {
-                searchViewEditText.hideKeyboard()
-                hideSuggestionView()
-                onSearchButtonClickListener?.onClick(searchViewEditText.text.toString())
-                true
-            } else {
+            setOnFocusChangeListener { _, hasFocus ->
+                if(hasFocus) {
+                    showKeyboard()
+                } else {
+                    hideKeyboard()
+                }
+            }
+
+            setOnTouchListener { v, event ->
+                if (MotionEvent.ACTION_UP == event.action) {
+                    showSuggestionView()
+                    onSearchViewEditTextClickListener?.onClick(v)
+                }
                 false
             }
         }
+    }
 
-        searchViewEditText.setOnTouchListener { _, event ->
-            if (MotionEvent.ACTION_UP == event.action) {
-                showSuggestionView()
-                onSearchViewEditTextClickListener?.onClick(searchViewEditText)
-            }
-            false
+    private fun initClearButton() {
+        clearButton.setOnClickListener {
+            inputEditText.setText("")
+            inputEditText.requestFocus()
+            suggestionViewContainer.show()
         }
     }
 
-    private fun initSearchViewClearButton() {
-        searchViewClearButton.setOnClickListener {
-            searchViewEditText.setText("")
-        }
-    }
-
-    private fun initSearchViewSearchButton() {
-        searchViewSearchButton.setOnClickListener {
-            val inputtedText = searchViewEditText.text.toString()
-            onSearchButtonClickListener?.onClick(inputtedText)
+    private fun initSuggestionContainer() {
+        suggestionViewContainer.setOnClickListener {
+            hideSuggestionView()
         }
     }
 
@@ -126,7 +135,7 @@ class SuggestionSearchView @JvmOverloads constructor(
                 val text = getString(R.styleable.SuggestionSearchView_text) ?: ""
                 setText(text)
 
-                val textSize = getDimension(R.styleable.SuggestionSearchView_textSize, DEFAULT_TEXT_SIZE_PX)
+                val textSize = getDimension(R.styleable.SuggestionSearchView_textSize, 50f)
                 setTextSize(textSize)
 
                 val textColor = getColor(R.styleable.SuggestionSearchView_textColor, ContextCompat.getColor(context, android.R.color.black))
@@ -135,59 +144,53 @@ class SuggestionSearchView @JvmOverloads constructor(
                 val clearButtonIconResId = getResourceId(R.styleable.SuggestionSearchView_clearButtonIcon, R.drawable.ic_action_cancel)
                 setClearButtonIconResource(clearButtonIconResId)
 
-                val searchButtonIconResId = getResourceId(R.styleable.SuggestionSearchView_searchButtonIcon, R.drawable.ic_action_search)
-                setSearchButtonIconResource(searchButtonIconResId)
+                val closeButtonIconResId = getResourceId(R.styleable.SuggestionSearchView_closeButtonIcon, R.drawable.ic_action_back)
+                setCloseButtonIconResource(closeButtonIconResId)
             }
 
             typedArray.recycle()
         }
     }
 
-    fun showSuggestionSearchView() {
-        suggestionSearchView.visible()
-        searchView.visible()
+    fun show() {
+        showSuggestionSearchView()
+    }
+
+    fun hide() {
+        hideSuggestionSearchView()
+    }
+
+    fun showSuggestions() {
         showSuggestionView()
     }
 
-    fun hideSuggestionSearchView() {
-        suggestionSearchView.invisible()
-        searchView.invisible()
+    fun hideSuggestions() {
         hideSuggestionView()
-    }
-
-    fun showSuggestionView() {
-        suggestionView.visible()
-    }
-
-    fun hideSuggestionView() {
-        suggestionView.invisible()
     }
 
     fun setText(text: String?) {
         text?.let { inputtedText ->
-            with(searchViewEditText) {
-                val beforeText = searchViewEditText.text.toString()
-                if(inputtedText != beforeText) {
-                    setText(inputtedText)
-                }
+            val beforeText = inputEditText.text.toString()
+            if(beforeText != inputtedText) {
+                inputEditText.setText(inputtedText)
             }
         }
     }
 
     fun setTextSize(textSize: Float) {
-        searchViewEditText.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
+        inputEditText.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
     }
 
     fun setTextColor(textColor: Int) {
-        searchViewEditText.setTextColor(textColor)
+        inputEditText.setTextColor(textColor)
     }
 
     fun setClearButtonIconResource(@DrawableRes drawableResId: Int) {
-        searchViewClearButton.setImageResource(drawableResId)
+        clearButton.setImageResource(drawableResId)
     }
 
-    fun setSearchButtonIconResource(@DrawableRes drawableResId: Int) {
-        searchViewSearchButton.setImageResource(drawableResId)
+    fun setCloseButtonIconResource(@DrawableRes drawableResId: Int) {
+        closeButton.setImageResource(drawableResId)
     }
 
     fun setOnTextChangeListener(onTextChangeListener: OnTextChangeListener?) {
@@ -202,16 +205,68 @@ class SuggestionSearchView @JvmOverloads constructor(
         this.onSearchViewEditTextClickListener = onSearchViewEditTextClickListener
     }
 
-    fun getSuggentionRecyclerView(): RecyclerView {
-        return suggestionRecycler
+    fun getSuggestionRecyclerView(): RecyclerView {
+        return suggestionRecyclerView
+    }
+
+    fun <VH: RecyclerView.ViewHolder> setAdapter(adapter: RecyclerView.Adapter<VH>) {
+        suggestionRecyclerView.adapter = adapter
+    }
+
+    fun getAdapter(): RecyclerView.Adapter<*>? {
+        return suggestionRecyclerView.adapter
     }
 
     private fun refreshClearButtonVisibility(textLength: Int) {
         if(0 < textLength) {
-            searchViewClearButton.visible()
+            clearButton.show()
         } else {
-            searchViewClearButton.invisible()
+            clearButton.hide()
         }
+    }
+
+    private fun confirmSearch() {
+        hideSuggestionView()
+        onSearchButtonClickListener?.onClick(inputEditText.text.toString())
+    }
+
+    private fun showSuggestionSearchView() {
+        suggestionSearchViewContainer.show()
+        showSuggestionView()
+    }
+
+    private fun hideSuggestionSearchView() {
+        suggestionSearchViewContainer.hide()
+        inputEditText.setText("")
+        hideSuggestionView()
+    }
+
+    private fun showSuggestionView() {
+        inputEditText.requestFocus()
+        suggestionViewContainer.show()
+    }
+
+    private fun hideSuggestionView() {
+        inputEditText.clearFocus()
+        suggestionViewContainer.hide()
+    }
+
+    private fun showKeyboard() {
+        val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.showSoftInput(this, 0)
+    }
+
+    private fun hideKeyboard() {
+        val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
+    }
+
+    private fun View.show() {
+        visibility = View.VISIBLE
+    }
+
+    private fun View.hide() {
+        visibility = View.INVISIBLE
     }
 
 }

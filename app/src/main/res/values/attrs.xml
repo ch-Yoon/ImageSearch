@@ -6,7 +6,7 @@
         <attr name="textSize" format="reference|dimension"/>
         <attr name="textColor" format="reference|color"/>
         <attr name="clearButtonIcon" format="reference"/>
-        <attr name="searchButtonIcon" format="reference"/>
+        <attr name="backButtonIcon" format="reference"/>
     </declare-styleable>
 
 </resources>

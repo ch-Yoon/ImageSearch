@@ -18,13 +18,9 @@ fun View.showKeyboard() {
     inputMethodManager.showSoftInput(this, 0)
 }
 fun View.visible() {
-    if(visibility != View.VISIBLE) {
-        visibility = View.VISIBLE
-    }
+    visibility = View.VISIBLE
 }
 
 fun View.invisible() {
-    if(visibility != View.INVISIBLE) {
-        visibility = View.INVISIBLE
-    }
+    visibility = View.INVISIBLE
 }

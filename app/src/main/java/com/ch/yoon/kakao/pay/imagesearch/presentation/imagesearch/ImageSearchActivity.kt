@@ -1,11 +1,8 @@
 package com.ch.yoon.kakao.pay.imagesearch.presentation.imagesearch
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.ch.yoon.kakao.pay.imagesearch.R
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ActivityImageSearchBinding
 import com.ch.yoon.kakao.pay.imagesearch.presentation.base.BaseActivity
@@ -15,7 +12,6 @@ import com.ch.yoon.kakao.pay.imagesearch.presentation.imagesearch.imagelist.Imag
 import com.ch.yoon.kakao.pay.imagesearch.presentation.imagesearch.searchbox.SearchBoxViewModel
 import com.ch.yoon.kakao.pay.imagesearch.presentation.imagesearch.searchbox.SearchLogAdapter
 import kotlinx.android.synthetic.main.activity_image_search.*
-import kotlinx.android.synthetic.main.suggestion_search_view.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
@@ -43,7 +39,7 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
         initImageRecyclerView()
 
         searchButton.setOnClickListener {
-            binding.suggestionSearchView.showSuggestionSearchView()
+            binding.suggestionSearchView.show()
         }
     }
 
@@ -73,16 +69,7 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
     }
 
     private fun initSearchLogRecyclerView() {
-        binding.suggestionSearchView.apply {
-            suggestionRecyclerView.apply {
-                layoutManager = LinearLayoutManager(this@ImageSearchActivity, RecyclerView.VERTICAL, false)
-                adapter = SearchLogAdapter(searchBoxViewModel)
-            }
-        }
-//        binding.searchLogRecyclerView.apply {
-////            layoutManager = LinearLayoutManager(this@ImageSearchActivity, RecyclerView.VERTICAL, false)
-////            adapter = SearchLogAdapter(searchBoxViewModel)
-////        }
+        binding.suggestionSearchView.setAdapter(SearchLogAdapter(searchBoxViewModel))
     }
 
     private fun initImageListViewModel() {
@@ -127,6 +114,6 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
 
     override fun onBackPressed() {
 //        searchBoxViewModel.onClickBackPressButton()
-        binding.suggestionSearchView.hideSuggestionSearchView()
+        binding.suggestionSearchView.hide()
     }
 }
