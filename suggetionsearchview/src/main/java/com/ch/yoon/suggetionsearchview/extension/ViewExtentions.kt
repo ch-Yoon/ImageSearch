@@ -1,13 +1,14 @@
-package com.ch.yoon.kakao.pay.imagesearch.util.extension
+package com.ch.yoon.suggetionsearchview.extension
 
 import android.content.Context
 import android.view.View
+import android.view.View.*
 import android.view.inputmethod.InputMethodManager
 
 /**
  * Creator : ch-yoon
- * Date : 2019-10-27.
- */
+ * Date : 2019-11-07
+ **/
 fun View.hideKeyboard() {
     if(isFocusable) {
         val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -16,13 +17,13 @@ fun View.hideKeyboard() {
 }
 
 fun View.visible() {
-    if(visibility != View.VISIBLE) {
-        visibility = View.VISIBLE
+    if(visibility != VISIBLE) {
+        visibility = VISIBLE
     }
 }
 
 fun View.invisible() {
-    if(visibility != View.INVISIBLE) {
-        visibility = View.INVISIBLE
+    if(visibility != INVISIBLE) {
+        visibility = INVISIBLE
     }
 }

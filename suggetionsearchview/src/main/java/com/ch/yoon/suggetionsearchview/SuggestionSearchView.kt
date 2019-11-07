@@ -1,4 +1,4 @@
-package com.ch.yoon.kakao.pay.imagesearch.presentation.common.customview.searchview
+package com.ch.yoon.suggetionsearchview
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -8,20 +8,24 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.MotionEvent
-import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import com.ch.yoon.kakao.pay.imagesearch.R
-import kotlinx.android.synthetic.main.custom_clear_search_view.view.*
+import androidx.recyclerview.widget.RecyclerView
+import com.ch.yoon.suggetionsearchview.extension.invisible
+import com.ch.yoon.suggetionsearchview.extension.hideKeyboard
+import com.ch.yoon.suggetionsearchview.extension.visible
+import kotlinx.android.synthetic.main.suggestion_search_view.view.*
+
 
 /**
  * Creator : ch-yoon
  * Date : 2019-11-06.
  */
-class ClearSearchView @JvmOverloads constructor(
+class SuggestionSearchView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyle: Int = 0
@@ -31,22 +35,32 @@ class ClearSearchView @JvmOverloads constructor(
         private const val DEFAULT_TEXT_SIZE_PX = 50f
     }
 
-    private val searchViewLayout: LinearLayoutCompat
+    private val suggestionSearchView: ConstraintLayout
+
+    private val searchView: LinearLayoutCompat
     private val searchViewEditText: EditText
     private val searchViewClearButton: ImageView
     private val searchViewSearchButton: ImageView
+
+    private val suggestionView: LinearLayoutCompat
+    private val suggestionRecycler: RecyclerView
 
     private var onTextChangeListener: OnTextChangeListener? = null
     private var onSearchButtonClickListener: OnSearchButtonClickListener? = null
     private var onSearchViewEditTextClickListener: OnSearchViewEditTextClickListener? = null
 
     init {
-        val view = inflate(context, R.layout.custom_clear_search_view, this)
+        val view = inflate(context, R.layout.suggestion_search_view, this)
         with(view) {
-            searchViewLayout = root
+            suggestionSearchView = suggestionSearchViewRootLayout
+
+            searchView = searchViewRootLayout
             searchViewEditText = editText
             searchViewClearButton = clearButton
             searchViewSearchButton = searchButton
+
+            suggestionView = suggestionViewRootLayout
+            suggestionRecycler = suggestionRecyclerView
         }
 
         initSearchViewEditText()
@@ -73,6 +87,8 @@ class ClearSearchView @JvmOverloads constructor(
 
         searchViewEditText.setOnEditorActionListener{ _, actionId, _ ->
             if (actionId == KeyEvent.KEYCODE_ENDCALL) {
+                searchViewEditText.hideKeyboard()
+                hideSuggestionView()
                 onSearchButtonClickListener?.onClick(searchViewEditText.text.toString())
                 true
             } else {
@@ -82,6 +98,7 @@ class ClearSearchView @JvmOverloads constructor(
 
         searchViewEditText.setOnTouchListener { _, event ->
             if (MotionEvent.ACTION_UP == event.action) {
+                showSuggestionView()
                 onSearchViewEditTextClickListener?.onClick(searchViewEditText)
             }
             false
@@ -103,34 +120,47 @@ class ClearSearchView @JvmOverloads constructor(
 
     private fun initAttrs(attrs: AttributeSet?, defStyle: Int) {
         attrs?.let { attributeSet ->
-//            val typedArray = context.obtainStyledAttributes(attributeSet, R.styleable.ClearSearchView, defStyle, 0)
-//
-//            with(typedArray) {
-//                val backgroundResId = getResourceId(R.styleable.ClearSearchView_background, R.color.colorBasicGray)
-//                setBackground(backgroundResId)
-//
-//                val text = getString(R.styleable.ClearSearchView_text) ?: ""
-//                setText(text)
-//
-//                val textSize = getDimension(R.styleable.ClearSearchView_textSize, DEFAULT_TEXT_SIZE_PX)
-//                setTextSize(textSize)
-//
-//                val textColor = getColor(R.styleable.ClearSearchView_textColor, ContextCompat.getColor(context, android.R.color.black))
-//                setTextColor(textColor)
-//
-//                val clearButtonIconResId = getResourceId(R.styleable.ClearSearchView_clearButtonIcon, R.drawable.ic_action_cancel)
-//                setClearButtonIconResource(clearButtonIconResId)
-//
-//                val searchButtonIconResId = getResourceId(R.styleable.ClearSearchView_searchButtonIcon, R.drawable.ic_action_search)
-//                setSearchButtonIconResource(searchButtonIconResId)
-//            }
-//
-//            typedArray.recycle()
+            val typedArray = context.obtainStyledAttributes(attributeSet, R.styleable.SuggestionSearchView, defStyle, 0)
+
+            with(typedArray) {
+                val text = getString(R.styleable.SuggestionSearchView_text) ?: ""
+                setText(text)
+
+                val textSize = getDimension(R.styleable.SuggestionSearchView_textSize, DEFAULT_TEXT_SIZE_PX)
+                setTextSize(textSize)
+
+                val textColor = getColor(R.styleable.SuggestionSearchView_textColor, ContextCompat.getColor(context, android.R.color.black))
+                setTextColor(textColor)
+
+                val clearButtonIconResId = getResourceId(R.styleable.SuggestionSearchView_clearButtonIcon, R.drawable.ic_action_cancel)
+                setClearButtonIconResource(clearButtonIconResId)
+
+                val searchButtonIconResId = getResourceId(R.styleable.SuggestionSearchView_searchButtonIcon, R.drawable.ic_action_search)
+                setSearchButtonIconResource(searchButtonIconResId)
+            }
+
+            typedArray.recycle()
         }
     }
 
-    fun setBackground(@DrawableRes drawableResId: Int) {
-        searchViewLayout.setBackgroundResource(drawableResId)
+    fun showSuggestionSearchView() {
+        suggestionSearchView.visible()
+        searchView.visible()
+        showSuggestionView()
+    }
+
+    fun hideSuggestionSearchView() {
+        suggestionSearchView.invisible()
+        searchView.invisible()
+        hideSuggestionView()
+    }
+
+    fun showSuggestionView() {
+        suggestionView.visible()
+    }
+
+    fun hideSuggestionView() {
+        suggestionView.invisible()
     }
 
     fun setText(text: String?) {
@@ -172,15 +202,15 @@ class ClearSearchView @JvmOverloads constructor(
         this.onSearchViewEditTextClickListener = onSearchViewEditTextClickListener
     }
 
-    private fun refreshClearButtonVisibility(textLength: Int) {
-        val visibility = if(textLength > 0) {
-            View.VISIBLE
-        } else {
-            View.GONE
-        }
+    fun getSuggentionRecyclerView(): RecyclerView {
+        return suggestionRecycler
+    }
 
-        if(searchViewClearButton.visibility != visibility) {
-            searchViewClearButton.visibility = visibility
+    private fun refreshClearButtonVisibility(textLength: Int) {
+        if(0 < textLength) {
+            searchViewClearButton.visible()
+        } else {
+            searchViewClearButton.invisible()
         }
     }
 

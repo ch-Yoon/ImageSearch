@@ -17,7 +17,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".presentation.SearchViewTestActivity"></activity>
+
+        <activity android:name=".presentation.SearchViewTestActivity"
+            android:theme="@style/ImageSearchAppTheme"/>
+
         <activity
             android:name=".presentation.imagesearch.ImageSearchActivity"
             android:theme="@style/ImageSearchAppTheme"

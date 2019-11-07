@@ -1,17 +1,13 @@
 package com.ch.yoon.kakao.pay.imagesearch.presentation.imagesearch
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.view.KeyEvent
-import android.view.MotionEvent
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ch.yoon.kakao.pay.imagesearch.R
 import com.ch.yoon.kakao.pay.imagesearch.databinding.ActivityImageSearchBinding
-import com.ch.yoon.kakao.pay.imagesearch.presentation.SearchViewTestActivity
 import com.ch.yoon.kakao.pay.imagesearch.presentation.base.BaseActivity
 import com.ch.yoon.kakao.pay.imagesearch.presentation.imagedetail.ImageDetailActivity
 import com.ch.yoon.kakao.pay.imagesearch.presentation.imagesearch.imagelist.ImageListViewModel
