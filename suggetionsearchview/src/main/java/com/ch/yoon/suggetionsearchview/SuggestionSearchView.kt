@@ -95,11 +95,11 @@ class SuggestionSearchView @JvmOverloads constructor(
                 }
             }
 
-            setOnFocusChangeListener { _, hasFocus ->
+            setOnFocusChangeListener { v, hasFocus ->
                 if(hasFocus) {
-                    showKeyboard()
+                    v.showKeyboard()
                 } else {
-                    hideKeyboard()
+                    v.hideKeyboard()
                 }
             }
 
@@ -251,12 +251,12 @@ class SuggestionSearchView @JvmOverloads constructor(
         suggestionViewContainer.hide()
     }
 
-    private fun showKeyboard() {
+    private fun View.showKeyboard() {
         val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.showSoftInput(this, 0)
     }
 
-    private fun hideKeyboard() {
+    private fun View.hideKeyboard() {
         val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
     }
