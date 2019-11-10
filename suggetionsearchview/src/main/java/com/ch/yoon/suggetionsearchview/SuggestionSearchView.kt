@@ -6,7 +6,6 @@ import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
-import android.util.Log
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
@@ -276,7 +275,7 @@ class SuggestionSearchView @JvmOverloads constructor(
     }
 
     override fun onSaveInstanceState(): Parcelable? {
-        return SaveItem(super.onSaveInstanceState()).apply {
+        return SavedState(super.onSaveInstanceState()).apply {
             suggestionSearchViewContainerVisibility = suggestionSearchViewContainer.visibility
             suggestionViewContainer.visibility = suggestionViewContainer.visibility
         }
@@ -284,13 +283,13 @@ class SuggestionSearchView @JvmOverloads constructor(
 
     override fun onRestoreInstanceState(state: Parcelable?) {
         super.onRestoreInstanceState(state)
-        if(state is SaveItem) {
+        if(state is SavedState) {
             suggestionSearchViewContainer.visibility = state.suggestionSearchViewContainerVisibility
             suggestionViewContainer.visibility = state.suggestionViewContainerVisibility
         }
     }
 
-    private class SaveItem : BaseSavedState {
+    private class SavedState : BaseSavedState {
 
         var suggestionSearchViewContainerVisibility: Int = 0
         var suggestionViewContainerVisibility: Int = 0
@@ -314,9 +313,9 @@ class SuggestionSearchView @JvmOverloads constructor(
 
         companion object {
             @JvmField
-            val CREATOR: Parcelable.Creator<SaveItem> = object : Parcelable.Creator<SaveItem> {
-                override fun createFromParcel(source: Parcel): SaveItem = SaveItem(source)
-                override fun newArray(size: Int): Array<SaveItem?> = arrayOfNulls(size)
+            val CREATOR: Parcelable.Creator<SavedState> = object : Parcelable.Creator<SavedState> {
+                override fun createFromParcel(source: Parcel): SavedState = SavedState(source)
+                override fun newArray(size: Int): Array<SavedState?> = arrayOfNulls(size)
             }
         }
     }
