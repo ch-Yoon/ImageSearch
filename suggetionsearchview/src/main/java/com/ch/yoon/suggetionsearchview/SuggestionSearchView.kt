@@ -51,12 +51,10 @@ class SuggestionSearchView @JvmOverloads constructor(
         inflate(context, R.layout.suggestion_search_view, this)
 
         suggestionSearchViewContainer = this
-
         searchViewContainer = search_view_container
         closeButton = close_button
         inputEditText = input_edit_text
         clearButton = clear_button
-
         suggestionViewContainer = suggestion_view_container
         suggestionRecyclerView = suggestion_recyclerview
 
@@ -138,6 +136,9 @@ class SuggestionSearchView @JvmOverloads constructor(
                 val text = getString(R.styleable.SuggestionSearchView_text) ?: ""
                 setText(text)
 
+                val hint = getString(R.styleable.SuggestionSearchView_hint) ?: ""
+                setHint(hint)
+
                 val textSize = getDimension(R.styleable.SuggestionSearchView_textSize, 50f)
                 setTextSize(textSize)
 
@@ -184,6 +185,10 @@ class SuggestionSearchView @JvmOverloads constructor(
         inputEditText.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
     }
 
+    fun setHint(hint: String) {
+        inputEditText.hint = hint
+    }
+
     fun setTextColor(textColor: Int) {
         inputEditText.setTextColor(textColor)
     }
@@ -206,10 +211,6 @@ class SuggestionSearchView @JvmOverloads constructor(
 
     fun setOnStateChangeListener(onStateChangeListener: OnStateChangeListener?) {
         this.onStateChangeListener = onStateChangeListener
-    }
-
-    fun getSuggestionRecyclerView(): RecyclerView {
-        return suggestionRecyclerView
     }
 
     fun setAdapter(adapter: RecyclerView.Adapter<*>) {

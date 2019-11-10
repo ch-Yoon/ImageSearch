@@ -139,6 +139,7 @@
             android:layout_height="match_parent"
             android:visibility="invisible"
             app:textSize="14dp"
+            app:hint="@string/suggestion_search_view_guide_message"
             app:setText="@{searchBoxViewModel.searchKeyword}"
             app:onTextChangeListener="@{(changedText) -> searchBoxViewModel.onChangeKeyword(changedText)}"
             app:onSearchButtonClickListener="@{(inputtedText) -> searchBoxViewModel.onClickSearchButton()}"

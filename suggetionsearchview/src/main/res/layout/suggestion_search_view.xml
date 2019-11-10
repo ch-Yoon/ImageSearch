@@ -44,7 +44,6 @@
                 android:layout_margin="@dimen/suggestion_search_view_side_margin"
                 android:layout_marginTop="@dimen/suggestion_search_view_side_margin"
                 android:layout_weight="1"
-                android:hint="@string/suggestion_search_view_guide_message"
                 android:singleLine="true"
                 android:imeOptions="actionSearch"
                 android:inputType="text"

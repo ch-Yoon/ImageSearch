@@ -2,6 +2,7 @@
 <resources>
     <declare-styleable name="SuggestionSearchView">
         <attr name="text" format="reference|string"/>
+        <attr name="hint" format="reference|string"/>
         <attr name="textSize" format="reference|dimension"/>
         <attr name="textColor" format="reference|color"/>
         <attr name="clearButtonIcon" format="reference"/>
