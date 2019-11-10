@@ -8,6 +8,7 @@
 
         <import type="android.view.View" />
         <import type="com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSortType" />
+        <import type="com.ch.yoon.suggetionsearchview.SuggestionSearchView.State" />
 
         <variable
             name="searchBoxViewModel"
@@ -141,8 +142,9 @@
             app:setText="@{searchBoxViewModel.searchKeyword}"
             app:onTextChangeListener="@{(changedText) -> searchBoxViewModel.onChangeKeyword(changedText)}"
             app:onSearchButtonClickListener="@{(inputtedText) -> searchBoxViewModel.onClickSearchButton()}"
-            app:onSearchViewEditTextClickListener="@{() -> searchBoxViewModel.onClickSearchBox()}"
+            app:onStateChangeListener="@{(state) -> searchBoxViewModel.onStateChange(state == State.OPEN)}"
             app:searchLogList="@{searchBoxViewModel.searchLogList}"
+            app:close="@{searchBoxViewModel.searchBoxCloseEvent}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

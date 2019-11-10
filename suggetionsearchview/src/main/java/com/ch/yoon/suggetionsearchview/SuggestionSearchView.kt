@@ -1,10 +1,12 @@
 package com.ch.yoon.suggetionsearchview
 
-import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Parcel
+import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
+import android.util.Log
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
@@ -44,7 +46,6 @@ class SuggestionSearchView @JvmOverloads constructor(
 
     private var onTextChangeListener: OnTextChangeListener? = null
     private var onSearchButtonClickListener: OnSearchButtonClickListener? = null
-    private var onSearchViewEditTextClickListener: OnSearchViewEditTextClickListener? = null
     private var onStateChangeListener: OnStateChangeListener? = null
 
     init {
@@ -73,7 +74,6 @@ class SuggestionSearchView @JvmOverloads constructor(
         }
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     private fun initInputEditText() {
         with(inputEditText) {
             refreshClearButtonVisibility(text.length)
@@ -108,10 +108,9 @@ class SuggestionSearchView @JvmOverloads constructor(
                 }
             }
 
-            setOnTouchListener { v, event ->
+            setOnTouchListener { _, event ->
                 if (MotionEvent.ACTION_UP == event.action) {
                     showSuggestionView()
-                    onSearchViewEditTextClickListener?.onClick(v)
                 }
                 false
             }
@@ -206,8 +205,8 @@ class SuggestionSearchView @JvmOverloads constructor(
         this.onSearchButtonClickListener = onSearchButtonClickListener
     }
 
-    fun setOnSearchViewEditTextClickListener(onSearchViewEditTextClickListener: OnSearchViewEditTextClickListener?) {
-        this.onSearchViewEditTextClickListener = onSearchViewEditTextClickListener
+    fun setOnStateChangeListener(onStateChangeListener: OnStateChangeListener?) {
+        this.onStateChangeListener = onStateChangeListener
     }
 
     fun getSuggestionRecyclerView(): RecyclerView {
@@ -276,4 +275,49 @@ class SuggestionSearchView @JvmOverloads constructor(
         visibility = View.INVISIBLE
     }
 
+    override fun onSaveInstanceState(): Parcelable? {
+        return SaveItem(super.onSaveInstanceState()).apply {
+            suggestionSearchViewContainerVisibility = suggestionSearchViewContainer.visibility
+            suggestionViewContainer.visibility = suggestionViewContainer.visibility
+        }
+    }
+
+    override fun onRestoreInstanceState(state: Parcelable?) {
+        super.onRestoreInstanceState(state)
+        if(state is SaveItem) {
+            suggestionSearchViewContainer.visibility = state.suggestionSearchViewContainerVisibility
+            suggestionViewContainer.visibility = state.suggestionViewContainerVisibility
+        }
+    }
+
+    private class SaveItem : BaseSavedState {
+
+        var suggestionSearchViewContainerVisibility: Int = 0
+        var suggestionViewContainerVisibility: Int = 0
+
+        constructor(parcelable: Parcelable?) : super(parcelable)
+
+        constructor(source: Parcel) : super(source) {
+            suggestionSearchViewContainerVisibility = source.readInt()
+            suggestionViewContainerVisibility = source.readInt()
+        }
+
+        override fun describeContents() = 0
+
+        override fun writeToParcel(dest: Parcel, flags: Int) {
+            super.writeToParcel(dest, flags)
+            with(dest) {
+                writeInt(suggestionSearchViewContainerVisibility)
+                writeInt(suggestionViewContainerVisibility)
+            }
+        }
+
+        companion object {
+            @JvmField
+            val CREATOR: Parcelable.Creator<SaveItem> = object : Parcelable.Creator<SaveItem> {
+                override fun createFromParcel(source: Parcel): SaveItem = SaveItem(source)
+                override fun newArray(size: Int): Array<SaveItem?> = arrayOfNulls(size)
+            }
+        }
+    }
 }

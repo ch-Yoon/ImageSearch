@@ -25,26 +25,21 @@ class SearchBoxViewModel(
     private val _searchLogList = MutableLiveData<MutableList<SearchLog>>(mutableListOf())
     val searchLogList: LiveData<List<SearchLog>> = Transformations.map(_searchLogList) { it?.toList() }
 
-    private val _searchBoxFocus = MutableLiveData<Boolean>(false)
-    val searchBoxFocus: LiveData<Boolean> = _searchBoxFocus
-
     private val _searchKeyword = SingleLiveEvent<String>()
     val searchKeyword: LiveData<String> = _searchKeyword
-
-    private val _searchBoxFinishEvent = SingleLiveEvent<Unit>()
-    val searchBoxFinishEvent: LiveData<Unit> = _searchBoxFinishEvent
 
     private val _searchEvent = SingleLiveEvent<String>()
     val searchEvent: LiveData<String> = _searchEvent
 
-    private val notHasFocus
-        get() = hasFocus.not()
+    private val _searchBoxCloseEvent = SingleLiveEvent<Unit>()
+    val searchBoxCloseEvent: LiveData<Unit> = _searchBoxCloseEvent
 
-    private val hasFocus
-        get() = _searchBoxFocus.value ?: false
+    private val _searchBoxFinishEvent = SingleLiveEvent<Unit>()
+    val searchBoxFinishEvent: LiveData<Unit> = _searchBoxFinishEvent
 
-    private val currentKeyword
-        get() = _searchKeyword.value ?: ""
+    private var currentKeyword: String = ""
+
+    private var isOpen = false
 
     fun loadSearchLogList() {
         imageRepository.requestSearchLogList()
@@ -55,12 +50,6 @@ class SearchBoxViewModel(
                 Log.d(TAG, throwable.message)
             })
             .register()
-    }
-
-    fun onClickSearchBox() {
-        if(notHasFocus) {
-            _searchBoxFocus.value = true
-        }
     }
 
     fun onClickSearchLogDeleteButton(targetSearchLog: SearchLog) {
@@ -74,53 +63,56 @@ class SearchBoxViewModel(
             .register()
     }
 
-    fun onClickBackground() {
-        _searchBoxFocus.value = false
-    }
-
     fun onClickBackPressButton() {
-        if(hasFocus) {
-            _searchBoxFocus.value = false
+        if(isOpen) {
+            _searchBoxCloseEvent.call()
         } else {
             _searchBoxFinishEvent.call()
         }
     }
 
+    fun onStateChange(isOpen: Boolean) {
+        this.isOpen = isOpen
+    }
+
     fun onChangeKeyword(keyword: String) {
-        changeKeyword(keyword)
+        currentKeyword = keyword
     }
 
     fun onClickSearchButton() {
-        validationSearchKeyword()
+        processingSearchApproval()
     }
 
-    fun onClickSearchButton(keyword: String) {
-        changeKeyword(keyword)
-        validationSearchKeyword()
+    fun onClickSearchLog(searchLog: SearchLog) {
+        currentKeyword = searchLog.keyword
+        processingSearchApproval()
     }
 
-    private fun changeKeyword(keyword: String) {
-        if(currentKeyword != keyword) {
-            _searchKeyword.value = keyword
-        }
-    }
-
-    private fun validationSearchKeyword() {
-        if (currentKeyword.isEmpty()) {
-            updateShowMessage(R.string.empty_keyword_guide)
-        } else {
+    private fun processingSearchApproval() {
+        if(checkSearchPossibility()) {
             _searchEvent.value = currentKeyword
-            _searchBoxFocus.value = false
-
-            imageRepository.insertOrUpdateSearchLog(currentKeyword)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ updatedSearchLog ->
-                    updateSearchLogList(updatedSearchLog)
-                }, { throwable ->
-                    Log.d(TAG, throwable.message)
-                })
-                .register()
+            saveKeywordToRepository()
         }
+    }
+
+    private fun checkSearchPossibility(): Boolean {
+        return if (currentKeyword.isEmpty()) {
+            updateShowMessage(R.string.empty_keyword_guide)
+            false
+        } else {
+            true
+        }
+    }
+
+    private fun saveKeywordToRepository() {
+        imageRepository.insertOrUpdateSearchLog(currentKeyword)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ updatedSearchLog ->
+                updateSearchLogList(updatedSearchLog)
+            }, { throwable ->
+                Log.d(TAG, throwable.message)
+            })
+            .register()
     }
 
     private fun updateSearchLogList(newSearchLog: SearchLog) {
@@ -136,5 +128,4 @@ class SearchBoxViewModel(
             currentSearchLogList?.removeFirstIf { oldLog -> oldLog.keyword == targetSearchLog.keyword }
         }
     }
-
 }

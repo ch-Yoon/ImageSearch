@@ -26,7 +26,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="@{searchLog.getKeyword()}"
-            android:onClick="@{() -> viewModel.onClickSearchButton(searchLog.keyword)}"
+            android:onClick="@{() -> viewModel.onClickSearchLog(searchLog)}"
             android:padding="10dp" />
 
         <ImageView

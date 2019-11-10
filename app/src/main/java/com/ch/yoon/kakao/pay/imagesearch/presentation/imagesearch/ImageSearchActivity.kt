@@ -113,7 +113,6 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
     }
 
     override fun onBackPressed() {
-//        searchBoxViewModel.onClickBackPressButton()
-        binding.suggestionSearchView.hide()
+        searchBoxViewModel.onClickBackPressButton()
     }
 }

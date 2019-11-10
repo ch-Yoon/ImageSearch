@@ -86,7 +86,7 @@ class SearchBoxViewModelTest {
         every { mockImageSearchRepository.insertOrUpdateSearchLog(any()) } returns (Single.just(SearchLog("테스트", 1)))
 
         // when
-        searchBoxViewModel.onClickSearchButton("테스트")
+        searchBoxViewModel.onClickSearchLog("테스트")
 
         // then
         searchBoxViewModel.searchKeyword.observeForever { keyword ->
@@ -97,7 +97,7 @@ class SearchBoxViewModelTest {
     @Test
     fun `키워드 검색 버튼 클릭시 키워드가 비어있다면 거절 메시지가 반영되는지 테스트`() {
         // when
-        searchBoxViewModel.onClickSearchButton("")
+        searchBoxViewModel.onClickSearchLog("")
 
         // then
         searchBoxViewModel.showMessageEvent.observeForever { message ->
@@ -144,7 +144,7 @@ class SearchBoxViewModelTest {
         // when
         searchBoxViewModel.loadSearchLogList()
         searchBoxViewModel.onClickSearchBox()
-        searchBoxViewModel.onClickSearchButton("테스트")
+        searchBoxViewModel.onClickSearchLog("테스트")
 
         // then
         searchBoxViewModel.searchBoxFocus.observeForever { focus ->
@@ -160,7 +160,7 @@ class SearchBoxViewModelTest {
         // when
         searchBoxViewModel.loadSearchLogList()
         searchBoxViewModel.onClickSearchBox()
-        searchBoxViewModel.onClickSearchButton("")
+        searchBoxViewModel.onClickSearchLog("")
 
         //then
         searchBoxViewModel.searchBoxFocus.observeForever { focus ->
@@ -292,7 +292,7 @@ class SearchBoxViewModelTest {
 
         // when
         searchBoxViewModel.loadSearchLogList()
-        searchBoxViewModel.onClickSearchButton("테스트0")
+        searchBoxViewModel.onClickSearchLog("테스트0")
 
         // then
         searchBoxViewModel.searchLogList.observeForever{ searchLogs ->

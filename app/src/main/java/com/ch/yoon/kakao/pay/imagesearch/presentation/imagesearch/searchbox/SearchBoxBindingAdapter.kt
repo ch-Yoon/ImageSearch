@@ -14,3 +14,8 @@ fun setItems(suggestionSearchView: SuggestionSearchView, searchLogList: List<Sea
     val adapter = suggestionSearchView.getAdapter() as SearchLogAdapter?
     adapter?.submitList(if (searchLogList == null) null else ArrayList(searchLogList))
 }
+
+@BindingAdapter("close")
+fun close(suggestionSearchView: SuggestionSearchView, closeEvent: Unit?) {
+    suggestionSearchView.hide()
+}
