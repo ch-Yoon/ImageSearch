@@ -28,6 +28,10 @@ class SuggestionSearchView @JvmOverloads constructor(
     defStyle: Int = 0
 ): LinearLayoutCompat(context, attrs, defStyle) {
 
+    enum class State {
+        OPEN, CLOSE
+    }
+
     private val suggestionSearchViewContainer: LinearLayoutCompat
 
     private val searchViewContainer: LinearLayoutCompat
@@ -41,6 +45,7 @@ class SuggestionSearchView @JvmOverloads constructor(
     private var onTextChangeListener: OnTextChangeListener? = null
     private var onSearchButtonClickListener: OnSearchButtonClickListener? = null
     private var onSearchViewEditTextClickListener: OnSearchViewEditTextClickListener? = null
+    private var onStateChangeListener: OnStateChangeListener? = null
 
     init {
         inflate(context, R.layout.suggestion_search_view, this)
@@ -209,7 +214,7 @@ class SuggestionSearchView @JvmOverloads constructor(
         return suggestionRecyclerView
     }
 
-    fun <VH: RecyclerView.ViewHolder> setAdapter(adapter: RecyclerView.Adapter<VH>) {
+    fun setAdapter(adapter: RecyclerView.Adapter<*>) {
         suggestionRecyclerView.adapter = adapter
     }
 
@@ -233,12 +238,14 @@ class SuggestionSearchView @JvmOverloads constructor(
     private fun showSuggestionSearchView() {
         suggestionSearchViewContainer.show()
         showSuggestionView()
+        onStateChangeListener?.onChange(State.OPEN)
     }
 
     private fun hideSuggestionSearchView() {
         suggestionSearchViewContainer.hide()
         inputEditText.setText("")
         hideSuggestionView()
+        onStateChangeListener?.onChange(State.CLOSE)
     }
 
     private fun showSuggestionView() {
