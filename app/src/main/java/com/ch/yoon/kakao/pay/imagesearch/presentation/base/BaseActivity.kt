@@ -46,12 +46,6 @@ abstract class BaseActivity<B : ViewDataBinding> : AppCompatActivity() {
         isActivityFirstCreate = savedInstanceState?.run { !getBoolean(ARGUMENT_ACTIVITY_IS_CREATED) } ?: true
     }
 
-    protected fun binding(@LayoutRes layoutId: Int): B {
-        return DataBindingUtil.setContentView<B>(this, layoutId).apply {
-            lifecycleOwner = this@BaseActivity
-        }
-    }
-
     protected fun showToast(message: String?) {
         message?.let { Toast.makeText(applicationContext, it, Toast.LENGTH_SHORT).show() }
     }

@@ -1,9 +1,9 @@
 package com.ch.yoon.kakao.pay.imagesearch.data.local.room
 
 import com.ch.yoon.kakao.pay.imagesearch.data.local.room.dao.SearchLogDAO
-import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLogModel
+import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLogEntity
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageLocalDataSource
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.SearchLog
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.SearchLogModel
 import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLogEntityMapper
 import com.ch.yoon.kakao.pay.imagesearch.data.local.room.error.CompletableExceptionTransformer
 import com.ch.yoon.kakao.pay.imagesearch.data.local.room.error.SingleExceptionTransformer
@@ -18,22 +18,22 @@ class ImageLocalDataSourceImpl(
     private val searchLogDAO: SearchLogDAO
 ) : ImageLocalDataSource {
 
-    override fun insertOrUpdateSearchLog(keyword: String): Single<SearchLog> {
-        val newSearchLogModel = SearchLogModel(keyword, System.currentTimeMillis())
-        return searchLogDAO.insertOrUpdateSearchLog(newSearchLogModel)
-            .toSingle { newSearchLogModel }
+    override fun insertOrUpdateSearchLog(keyword: String): Single<SearchLogModel> {
+        val newSearchLogEntity = SearchLogEntity(keyword, System.currentTimeMillis())
+        return searchLogDAO.insertOrUpdateSearchLog(newSearchLogEntity)
+            .toSingle { newSearchLogEntity }
             .map { searchLogModel -> SearchLogEntityMapper.toEntity(searchLogModel) }
             .compose(SingleExceptionTransformer())
     }
 
-    override fun selectAllSearchLog(): Single<List<SearchLog>> {
+    override fun selectAllSearchLog(): Single<List<SearchLogModel>> {
         return searchLogDAO.selectAllSearchLog()
             .map { searchLogModeList -> SearchLogEntityMapper.toEntityList(searchLogModeList) }
             .compose(SingleExceptionTransformer())
     }
 
-    override fun deleteSearchLog(searchLog: SearchLog): Completable {
-        return searchLogDAO.deleteSearchLog(searchLog.keyword, searchLog.time)
+    override fun deleteSearchLog(searchLogModel: SearchLogModel): Completable {
+        return searchLogDAO.deleteSearchLog(searchLogModel.keyword, searchLogModel.time)
             .compose(CompletableExceptionTransformer())
     }
 

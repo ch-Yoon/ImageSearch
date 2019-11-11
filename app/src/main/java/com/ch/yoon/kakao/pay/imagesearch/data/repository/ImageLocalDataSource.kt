@@ -1,6 +1,6 @@
 package com.ch.yoon.kakao.pay.imagesearch.data.repository
 
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.SearchLog
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.SearchLogModel
 import io.reactivex.Completable
 import io.reactivex.Single
 
@@ -10,10 +10,10 @@ import io.reactivex.Single
  **/
 interface ImageLocalDataSource {
 
-    fun insertOrUpdateSearchLog(keyword: String): Single<SearchLog>
+    fun insertOrUpdateSearchLog(keyword: String): Single<SearchLogModel>
 
-    fun selectAllSearchLog(): Single<List<SearchLog>>
+    fun selectAllSearchLog(): Single<List<SearchLogModel>>
 
-    fun deleteSearchLog(searchLog: SearchLog): Completable
+    fun deleteSearchLog(searchLogModel: SearchLogModel): Completable
 
 }

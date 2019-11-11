@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLogModel
+import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLogEntity
 import io.reactivex.Completable
 import io.reactivex.Single
 
@@ -16,10 +16,10 @@ import io.reactivex.Single
 interface SearchLogDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertOrUpdateSearchLog(searchLogModel: SearchLogModel): Completable
+    fun insertOrUpdateSearchLog(searchLogEntity: SearchLogEntity): Completable
 
     @Query("SELECT * FROM searchLogs")
-    fun selectAllSearchLog(): Single<List<SearchLogModel>>
+    fun selectAllSearchLog(): Single<List<SearchLogEntity>>
 
     @Query("DELETE FROM searchLogs WHERE keyword = :keyword AND time = :time")
     fun deleteSearchLog(keyword: String, time: Long): Completable

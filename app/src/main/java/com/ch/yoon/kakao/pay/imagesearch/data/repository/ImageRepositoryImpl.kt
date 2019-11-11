@@ -2,7 +2,7 @@ package com.ch.yoon.kakao.pay.imagesearch.data.repository
 
 import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSearchRequest
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.ImageSearchResponse
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.SearchLog
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.SearchLogModel
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
@@ -16,7 +16,7 @@ class ImageRepositoryImpl(
     private val imageLocalDataSource: ImageLocalDataSource
 ) : ImageRepository {
 
-    override fun requestSearchLogList(): Single<List<SearchLog>> {
+    override fun requestSearchLogList(): Single<List<SearchLogModel>> {
         return imageLocalDataSource.selectAllSearchLog()
             .subscribeOn(Schedulers.io())
     }
@@ -26,12 +26,12 @@ class ImageRepositoryImpl(
             .subscribeOn(Schedulers.io())
     }
 
-    override fun deleteSearchLog(searchLog: SearchLog): Completable {
-        return imageLocalDataSource.deleteSearchLog(searchLog)
+    override fun deleteSearchLog(searchLogModel: SearchLogModel): Completable {
+        return imageLocalDataSource.deleteSearchLog(searchLogModel)
             .subscribeOn(Schedulers.io())
     }
 
-    override fun insertOrUpdateSearchLog(keyword: String): Single<SearchLog> {
+    override fun insertOrUpdateSearchLog(keyword: String): Single<SearchLogModel> {
         return imageLocalDataSource.insertOrUpdateSearchLog(keyword)
             .subscribeOn(Schedulers.io())
     }

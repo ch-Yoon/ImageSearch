@@ -6,17 +6,20 @@ import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.ch.yoon.suggetionsearchview.adapter.SearchLogAdapter
+import com.ch.yoon.suggetionsearchview.adapter.SuggestionAdapter
+import com.ch.yoon.suggetionsearchview.extention.*
 import kotlinx.android.synthetic.main.suggestion_search_view.view.*
 
 /**
@@ -33,8 +36,11 @@ class SuggestionSearchView @JvmOverloads constructor(
         OPEN, CLOSE
     }
 
-    private val suggestionSearchViewContainer: LinearLayoutCompat
+    private val root: LinearLayoutCompat
 
+    private val backgroundView: View
+
+    private val suggestionSearchViewContainer: CardView
     private val searchViewContainer: LinearLayoutCompat
     private val closeButton: ImageView
     private val inputEditText: EditText
@@ -46,15 +52,22 @@ class SuggestionSearchView @JvmOverloads constructor(
     private var onTextChangeListener: OnTextChangeListener? = null
     private var onSearchButtonClickListener: OnSearchButtonClickListener? = null
     private var onStateChangeListener: OnStateChangeListener? = null
+    private var onSuggestionItemClickListener: OnSuggestionItemClickListener? = null
+    private var onSuggestionDeleteClickListener: OnSuggestionDeleteClickListener? = null
 
     init {
         inflate(context, R.layout.suggestion_search_view, this)
 
-        suggestionSearchViewContainer = this
+        root = this
+
+        backgroundView = background_view
+
+        suggestionSearchViewContainer = suggestion_search_view_container
         searchViewContainer = search_view_container
         closeButton = close_button
         inputEditText = input_edit_text
         clearButton = clear_button
+
         suggestionViewContainer = suggestion_view_container
         suggestionRecyclerView = suggestion_recyclerview
 
@@ -62,7 +75,45 @@ class SuggestionSearchView @JvmOverloads constructor(
         initCloseButton()
         initInputEditText()
         initClearButton()
-        initSuggestionContainer()
+        initBackgroundView()
+        initDefaultAdapter()
+    }
+
+    private fun initAttrs(attrs: AttributeSet?, defStyle: Int) {
+        attrs?.let { attributeSet ->
+            val typedArray = context.obtainStyledAttributes(attributeSet, R.styleable.SuggestionSearchView, defStyle, 0)
+
+            with(typedArray) {
+                val radius = getDimension(R.styleable.SuggestionSearchView_radius, 0f)
+                setRadius(radius)
+
+                val margin = getDimension(R.styleable.SuggestionSearchView_margin, 0f)
+                setMargin(margin)
+
+                val searchViewBackgroundColor = getColor(R.styleable.SuggestionSearchView_searchViewBackgroundColor, ContextCompat.getColor(context, R.color.colorLightGray))
+                setSearchViewBackgroundColor(searchViewBackgroundColor)
+
+                val text = getString(R.styleable.SuggestionSearchView_text) ?: ""
+                setText(text)
+
+                val textSize = getDimension(R.styleable.SuggestionSearchView_textSize, 50f)
+                setTextSize(textSize)
+
+                val textColor = getColor(R.styleable.SuggestionSearchView_textColor, ContextCompat.getColor(context, R.color.colorBlack))
+                setTextColor(textColor)
+
+                val hint = getString(R.styleable.SuggestionSearchView_hint) ?: ""
+                setHint(hint)
+
+                val clearButtonIconResId = getResourceId(R.styleable.SuggestionSearchView_clearButtonIcon, R.drawable.ic_action_cancel)
+                setClearButtonIconResource(clearButtonIconResId)
+
+                val closeButtonIconResId = getResourceId(R.styleable.SuggestionSearchView_closeButtonIcon, R.drawable.ic_action_back)
+                setCloseButtonIconResource(closeButtonIconResId)
+            }
+
+            typedArray.recycle()
+        }
     }
 
     private fun initCloseButton() {
@@ -118,42 +169,18 @@ class SuggestionSearchView @JvmOverloads constructor(
         clearButton.setOnClickListener {
             inputEditText.setText("")
             inputEditText.requestFocus()
-            suggestionViewContainer.show()
+            suggestionViewContainer.visible()
         }
     }
 
-    private fun initSuggestionContainer() {
-        suggestionViewContainer.setOnClickListener {
-            hideSuggestionView()
+    private fun initBackgroundView() {
+        backgroundView.setOnClickListener {
+            hideSuggestionSearchView()
         }
     }
 
-    private fun initAttrs(attrs: AttributeSet?, defStyle: Int) {
-        attrs?.let { attributeSet ->
-            val typedArray = context.obtainStyledAttributes(attributeSet, R.styleable.SuggestionSearchView, defStyle, 0)
-
-            with(typedArray) {
-                val text = getString(R.styleable.SuggestionSearchView_text) ?: ""
-                setText(text)
-
-                val hint = getString(R.styleable.SuggestionSearchView_hint) ?: ""
-                setHint(hint)
-
-                val textSize = getDimension(R.styleable.SuggestionSearchView_textSize, 50f)
-                setTextSize(textSize)
-
-                val textColor = getColor(R.styleable.SuggestionSearchView_textColor, ContextCompat.getColor(context, android.R.color.black))
-                setTextColor(textColor)
-
-                val clearButtonIconResId = getResourceId(R.styleable.SuggestionSearchView_clearButtonIcon, R.drawable.ic_action_cancel)
-                setClearButtonIconResource(clearButtonIconResId)
-
-                val closeButtonIconResId = getResourceId(R.styleable.SuggestionSearchView_closeButtonIcon, R.drawable.ic_action_back)
-                setCloseButtonIconResource(closeButtonIconResId)
-            }
-
-            typedArray.recycle()
-        }
+    private fun initDefaultAdapter() {
+        setAdapter(SearchLogAdapter())
     }
 
     fun show() {
@@ -181,16 +208,32 @@ class SuggestionSearchView @JvmOverloads constructor(
         }
     }
 
-    fun setTextSize(textSize: Float) {
-        inputEditText.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
+    fun setRadius(pixel: Float) {
+        suggestionSearchViewContainer.radius = pixel.toDP()
+    }
+
+    fun setMargin(pixel: Float) {
+        with(pixel.toInt()) {
+            val layoutParams = (suggestionSearchViewContainer.layoutParams as ViewGroup.MarginLayoutParams)
+            layoutParams.setMargins(this, this, this, this)
+            suggestionSearchViewContainer.layoutParams = layoutParams
+        }
+    }
+
+    fun setSearchViewBackgroundColor(color: Int) {
+        searchViewContainer.setBackgroundColor(color)
+    }
+
+    fun setTextSize(pixel: Float) {
+        inputEditText.textSize = pixel.toDP()
+    }
+
+    fun setTextColor(color: Int) {
+        inputEditText.setTextColor(color)
     }
 
     fun setHint(hint: String) {
         inputEditText.hint = hint
-    }
-
-    fun setTextColor(textColor: Int) {
-        inputEditText.setTextColor(textColor)
     }
 
     fun setClearButtonIconResource(@DrawableRes drawableResId: Int) {
@@ -213,19 +256,36 @@ class SuggestionSearchView @JvmOverloads constructor(
         this.onStateChangeListener = onStateChangeListener
     }
 
-    fun setAdapter(adapter: RecyclerView.Adapter<*>) {
-        suggestionRecyclerView.adapter = adapter
+    fun setOnSuggestionItemClickListener(onSuggestionItemClickListener: OnSuggestionItemClickListener?) {
+        this.onSuggestionItemClickListener = onSuggestionItemClickListener
     }
 
-    fun getAdapter(): RecyclerView.Adapter<*>? {
-        return suggestionRecyclerView.adapter
+    fun setOnSuggestionDeleteClickListener(onSuggestionDeleteClickListener: OnSuggestionDeleteClickListener?) {
+        this.onSuggestionDeleteClickListener = onSuggestionDeleteClickListener
+    }
+
+    fun setAdapter(adapter: SuggestionAdapter<*, *>) {
+        suggestionRecyclerView.adapter = adapter.apply {
+            onSuggestionItemClick = { text, position ->
+                onSuggestionItemClickListener?.onClick(text, position)
+                inputEditText.setText(text)
+                hideSuggestionView()
+            }
+            onSuggestionDeleteClick = { text, position ->
+                onSuggestionDeleteClickListener?.onClick(text, position)
+            }
+        }
+    }
+
+    fun getAdapter(): SuggestionAdapter<*, *>? {
+        return suggestionRecyclerView.adapter as SuggestionAdapter<*, *>
     }
 
     private fun refreshClearButtonVisibility(textLength: Int) {
         if(0 < textLength) {
-            clearButton.show()
+            clearButton.visible()
         } else {
-            clearButton.hide()
+            clearButton.gone()
         }
     }
 
@@ -235,49 +295,35 @@ class SuggestionSearchView @JvmOverloads constructor(
     }
 
     private fun showSuggestionSearchView() {
-        suggestionSearchViewContainer.show()
+        backgroundView.visible()
+        root.visible()
         showSuggestionView()
         onStateChangeListener?.onChange(State.OPEN)
     }
 
     private fun hideSuggestionSearchView() {
-        suggestionSearchViewContainer.hide()
+        backgroundView.gone()
+        root.gone()
         inputEditText.setText("")
         hideSuggestionView()
         onStateChangeListener?.onChange(State.CLOSE)
     }
 
     private fun showSuggestionView() {
+        backgroundView.visible()
         inputEditText.requestFocus()
-        suggestionViewContainer.show()
+        suggestionViewContainer.visible()
     }
 
     private fun hideSuggestionView() {
+        backgroundView.gone()
         inputEditText.clearFocus()
-        suggestionViewContainer.hide()
-    }
-
-    private fun View.showKeyboard() {
-        val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.showSoftInput(this, 0)
-    }
-
-    private fun View.hideKeyboard() {
-        val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
-    }
-
-    private fun View.show() {
-        visibility = View.VISIBLE
-    }
-
-    private fun View.hide() {
-        visibility = View.INVISIBLE
+        suggestionViewContainer.gone()
     }
 
     override fun onSaveInstanceState(): Parcelable? {
         return SavedState(super.onSaveInstanceState()).apply {
-            suggestionSearchViewContainerVisibility = suggestionSearchViewContainer.visibility
+            suggestionSearchViewContainerVisibility = root.visibility
             suggestionViewContainer.visibility = suggestionViewContainer.visibility
         }
     }
@@ -285,7 +331,7 @@ class SuggestionSearchView @JvmOverloads constructor(
     override fun onRestoreInstanceState(state: Parcelable?) {
         super.onRestoreInstanceState(state)
         if(state is SavedState) {
-            suggestionSearchViewContainer.visibility = state.suggestionSearchViewContainerVisibility
+            root.visibility = state.suggestionSearchViewContainerVisibility
             suggestionViewContainer.visibility = state.suggestionViewContainerVisibility
         }
     }

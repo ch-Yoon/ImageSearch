@@ -1,6 +1,6 @@
 package com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity
 
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.SearchLog
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.SearchLogModel
 
 /**
  * Creator : ch-yoon
@@ -8,8 +8,8 @@ import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.SearchLog
  **/
 object SearchLogEntityMapper {
 
-    fun toEntity(searchLogModel: SearchLogModel): SearchLog = searchLogModel.run { SearchLog(keyword, time) }
+    fun toEntity(searchLogEntity: SearchLogEntity): SearchLogModel = searchLogEntity.run { SearchLogModel(keyword, time) }
 
-    fun toEntityList(searchLogModelList: List<SearchLogModel>) = searchLogModelList.map { SearchLog(it.keyword, it.time) }
+    fun toEntityList(searchLogEntityList: List<SearchLogEntity>) = searchLogEntityList.map { SearchLogModel(it.keyword, it.time) }
 
 }

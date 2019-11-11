@@ -1,8 +1,9 @@
 package com.ch.yoon.kakao.pay.imagesearch.presentation.imagesearch.searchbox
 
 import androidx.databinding.BindingAdapter
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.SearchLog
 import com.ch.yoon.suggetionsearchview.SuggestionSearchView
+import com.ch.yoon.suggetionsearchview.adapter.SearchLogAdapter
+import com.ch.yoon.suggetionsearchview.model.SearchLog
 import java.util.ArrayList
 
 /**

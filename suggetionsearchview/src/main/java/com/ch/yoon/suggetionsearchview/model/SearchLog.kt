@@ -1,8 +1,8 @@
-package com.ch.yoon.kakao.pay.imagesearch.data.repository.model
+package com.ch.yoon.suggetionsearchview.model
 
 /**
  * Creator : ch-yoon
- * Date : 2019-10-30
+ * Date : 2019-11-12
  **/
 data class SearchLog(
     val keyword: String,

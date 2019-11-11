@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
  * Date : 2019-10-28
  **/
 @Entity(tableName = "searchLogs")
-data class SearchLogModel(
+data class SearchLogEntity(
     @PrimaryKey val keyword: String,
     val time: Long
 )

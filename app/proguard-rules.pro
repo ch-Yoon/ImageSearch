@@ -17,5 +17,5 @@
 #-keepattributes SourceFile,LineNumberTable
 
 # If you keep the line itemNumber information, uncomment this to
-# hide the original source file name.
+# gone the original source file name.
 #-renamesourcefileattribute SourceFile

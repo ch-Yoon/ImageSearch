@@ -10,7 +10,6 @@ import com.ch.yoon.kakao.pay.imagesearch.presentation.imagedetail.ImageDetailAct
 import com.ch.yoon.kakao.pay.imagesearch.presentation.imagesearch.imagelist.ImageListViewModel
 import com.ch.yoon.kakao.pay.imagesearch.presentation.imagesearch.imagelist.ImageListAdapter
 import com.ch.yoon.kakao.pay.imagesearch.presentation.imagesearch.searchbox.SearchBoxViewModel
-import com.ch.yoon.kakao.pay.imagesearch.presentation.imagesearch.searchbox.SearchLogAdapter
 import kotlinx.android.synthetic.main.activity_image_search.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -69,7 +68,7 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
     }
 
     private fun initSearchLogRecyclerView() {
-        binding.suggestionSearchView.setAdapter(SearchLogAdapter(searchBoxViewModel))
+//        binding.suggestionSearchView.setAdapter(SearchLogAdapter(searchBoxViewModel))
     }
 
     private fun initImageListViewModel() {

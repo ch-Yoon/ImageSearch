@@ -6,7 +6,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.belongings.bag.belongingsbag.RxSchedulerRule
 import com.ch.yoon.kakao.pay.imagesearch.R
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepository
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.SearchLog
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.SearchLogModel
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -98,10 +98,10 @@ class SearchBoxViewModelTest {
     @Test
     fun `검색 기록 클릭 시 검색 키워드로 설정되는지 테스트`() {
         // given
-        every { mockImageSearchRepository.insertOrUpdateSearchLog("테스트") } returns (Single.just(SearchLog("테스트", 1)))
+        every { mockImageSearchRepository.insertOrUpdateSearchLog("테스트") } returns (Single.just(SearchLogModel("테스트", 1)))
 
         // when
-        searchBoxViewModel.onClickSearchLog(SearchLog("테스트", 1))
+        searchBoxViewModel.onClickSearchLog(SearchLogModel("테스트", 1))
 
         // then
         searchBoxViewModel.searchKeyword.observeForever { keyword ->
@@ -150,7 +150,7 @@ class SearchBoxViewModelTest {
         every { mockImageSearchRepository.deleteSearchLog(any()) } returns (Completable.complete())
 
         // when
-        val target = SearchLog("테스트", 1)
+        val target = SearchLogModel("테스트", 1)
         searchBoxViewModel.onClickSearchLogDeleteButton(target)
 
         // then
@@ -180,7 +180,7 @@ class SearchBoxViewModelTest {
     fun `키워드 검색 버튼 클릭시 기존에 검색했던 키워드라면 목록의 가장 앞쪽으로 이동시키는지 테스트`() {
         // given
         every { mockImageSearchRepository.requestSearchLogList() } returns (Single.just(createVirtualSearchLogList(3)))
-        every { mockImageSearchRepository.insertOrUpdateSearchLog("테스트0") } returns (Single.just(SearchLog("테스트0", 4)))
+        every { mockImageSearchRepository.insertOrUpdateSearchLog("테스트0") } returns (Single.just(SearchLogModel("테스트0", 4)))
 
         // when
         searchBoxViewModel.loadSearchLogList()
@@ -198,7 +198,7 @@ class SearchBoxViewModelTest {
     fun `실시간으로 키워드 변경 후 검색 버튼 클릭 시 검색 로그 저장 요청이 이루어지는지 테스트`() {
         // given
         every { mockImageSearchRepository.requestSearchLogList() } returns (Single.just(createVirtualSearchLogList(0)))
-        every { mockImageSearchRepository.insertOrUpdateSearchLog("가나다") } returns (Single.just(SearchLog("가나다", 1)))
+        every { mockImageSearchRepository.insertOrUpdateSearchLog("가나다") } returns (Single.just(SearchLogModel("가나다", 1)))
 
         // when
         searchBoxViewModel.onChangeKeyword("가")
@@ -210,10 +210,10 @@ class SearchBoxViewModelTest {
         verify(exactly = 1) { mockImageSearchRepository.insertOrUpdateSearchLog("가나다") }
     }
 
-    private fun createVirtualSearchLogList(size: Int): MutableList<SearchLog> {
-        val searchLogList = mutableListOf<SearchLog>()
+    private fun createVirtualSearchLogList(size: Int): MutableList<SearchLogModel> {
+        val searchLogList = mutableListOf<SearchLogModel>()
         for (i in 0 until size) {
-            searchLogList.add(SearchLog("테스트$i", i.toLong()))
+            searchLogList.add(SearchLogModel("테스트$i", i.toLong()))
         }
 
         return searchLogList

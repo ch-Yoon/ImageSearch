@@ -7,10 +7,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.ch.yoon.kakao.pay.imagesearch.R
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepository
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.SearchLog
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.SearchLogModel
+
 import com.ch.yoon.kakao.pay.imagesearch.util.extension.*
 import com.ch.yoon.kakao.pay.imagesearch.presentation.base.BaseViewModel
 import com.ch.yoon.kakao.pay.imagesearch.presentation.common.livedata.SingleLiveEvent
+import com.ch.yoon.suggetionsearchview.model.SearchLog
 import io.reactivex.android.schedulers.AndroidSchedulers
 
 /**
@@ -25,9 +27,6 @@ class SearchBoxViewModel(
     private val _searchLogList = MutableLiveData<MutableList<SearchLog>>(mutableListOf())
     val searchLogList: LiveData<List<SearchLog>> = Transformations.map(_searchLogList) { it?.toList() }
 
-    private val _searchKeyword = SingleLiveEvent<String>()
-    val searchKeyword: LiveData<String> = _searchKeyword
-
     private val _searchEvent = SingleLiveEvent<String>()
     val searchEvent: LiveData<String> = _searchEvent
 
@@ -37,30 +36,33 @@ class SearchBoxViewModel(
     private val _searchBoxFinishEvent = SingleLiveEvent<Unit>()
     val searchBoxFinishEvent: LiveData<Unit> = _searchBoxFinishEvent
 
-    private var currentKeyword: String = ""
-
     private var isOpen = false
 
     fun loadSearchLogList() {
         imageRepository.requestSearchLogList()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ receivedSearchLogList ->
-                _searchLogList.value = receivedSearchLogList.sorted().toMutableList()
+                _searchLogList.value = receivedSearchLogList.map { SearchLog(it.keyword, it.time) }
+                    .sortedByDescending { it.time }
+                    .toMutableList()
             }, { throwable ->
                 Log.d(TAG, throwable.message)
             })
             .register()
     }
 
-    fun onClickSearchLogDeleteButton(targetSearchLog: SearchLog) {
-        imageRepository.deleteSearchLog(targetSearchLog)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                removeFromSearchLogList(targetSearchLog)
-            }, { throwable ->
-                Log.d(TAG, throwable.message)
-            })
-            .register()
+    fun onClickSearchLogDeleteButton(keyword: String) {
+        _searchLogList.value?.find { it.keyword == keyword }
+            ?.let { targetSearchLog ->
+                imageRepository.deleteSearchLog(SearchLogModel(targetSearchLog.keyword, targetSearchLog.time))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        removeFromSearchLogList(targetSearchLog)
+                    }, { throwable ->
+                        Log.d(TAG, throwable.message)
+                    })
+                    .register()
+            }
     }
 
     fun onClickBackPressButton() {
@@ -75,28 +77,19 @@ class SearchBoxViewModel(
         this.isOpen = isOpen
     }
 
-    fun onChangeKeyword(keyword: String) {
-        currentKeyword = keyword
+    fun onClickSearchButton(keyword: String) {
+        processingSearchApproval(keyword)
     }
 
-    fun onClickSearchButton() {
-        processingSearchApproval()
-    }
-
-    fun onClickSearchLog(searchLog: SearchLog) {
-        currentKeyword = searchLog.keyword
-        processingSearchApproval()
-    }
-
-    private fun processingSearchApproval() {
-        if(checkSearchPossibility()) {
-            _searchEvent.value = currentKeyword
-            saveKeywordToRepository()
+    private fun processingSearchApproval(keyword: String) {
+        if(checkSearchPossibility(keyword)) {
+            _searchEvent.value = keyword
+            saveKeywordToRepository(keyword)
         }
     }
 
-    private fun checkSearchPossibility(): Boolean {
-        return if (currentKeyword.isEmpty()) {
+    private fun checkSearchPossibility(keyword: String): Boolean {
+        return if (keyword.isEmpty()) {
             updateShowMessage(R.string.empty_keyword_guide)
             false
         } else {
@@ -104,11 +97,11 @@ class SearchBoxViewModel(
         }
     }
 
-    private fun saveKeywordToRepository() {
-        imageRepository.insertOrUpdateSearchLog(currentKeyword)
+    private fun saveKeywordToRepository(keyword: String) {
+        imageRepository.insertOrUpdateSearchLog(keyword)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ updatedSearchLog ->
-                updateSearchLogList(updatedSearchLog)
+                updateSearchLogList(SearchLog(updatedSearchLog.keyword, updatedSearchLog.time))
             }, { throwable ->
                 Log.d(TAG, throwable.message)
             })

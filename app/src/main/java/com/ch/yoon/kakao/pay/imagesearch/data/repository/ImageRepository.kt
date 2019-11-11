@@ -2,7 +2,7 @@ package com.ch.yoon.kakao.pay.imagesearch.data.repository
 
 import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSearchRequest
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.ImageSearchResponse
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.SearchLog
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.SearchLogModel
 import io.reactivex.Completable
 import io.reactivex.Single
 
@@ -14,10 +14,10 @@ interface ImageRepository {
 
     fun requestImageList(imageSearchRequest: ImageSearchRequest): Single<ImageSearchResponse>
 
-    fun deleteSearchLog(searchLog: SearchLog): Completable
+    fun deleteSearchLog(searchLogModel: SearchLogModel): Completable
 
-    fun requestSearchLogList(): Single<List<SearchLog>>
+    fun requestSearchLogList(): Single<List<SearchLogModel>>
 
-    fun insertOrUpdateSearchLog(keyword: String): Single<SearchLog>
+    fun insertOrUpdateSearchLog(keyword: String): Single<SearchLogModel>
 
 }

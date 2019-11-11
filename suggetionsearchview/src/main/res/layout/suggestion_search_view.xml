@@ -2,85 +2,106 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/suggestionSearchViewRootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="horizontal">
+    android:gravity="center">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/search_view_container"
+    <View
+        android:id="@+id/background_view"
+        android:background="@color/colorDarkGrayTransparent"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:orientation="vertical"
-        android:padding="@dimen/suggestion_search_view_side_margin"
-        android:background="@color/colorWhite"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/suggestion_search_view_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:cardElevation="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintVertical_bias="0.0">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/search_box_border"
-            android:gravity="center"
-            android:orientation="horizontal"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/close_button"
-                android:layout_width="@dimen/suggestion_search_view_icon_size"
-                android:layout_height="@dimen/suggestion_search_view_icon_size"
-                android:layout_marginStart="@dimen/suggestion_search_view_icon_side_margin"
-                android:layout_marginEnd="@dimen/suggestion_search_view_icon_side_margin"
-                app:srcCompat="@drawable/ic_action_back"/>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/search_view_container"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:background="@color/colorLightGray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <EditText
-                android:id="@+id/input_edit_text"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="@dimen/suggestion_search_view_side_margin"
-                android:layout_marginTop="@dimen/suggestion_search_view_side_margin"
-                android:layout_weight="1"
-                android:singleLine="true"
-                android:imeOptions="actionSearch"
-                android:inputType="text"
-                android:background="@null" />
+                <ImageView
+                    android:id="@+id/close_button"
+                    android:layout_width="@dimen/suggestion_search_view_icon_size"
+                    android:layout_height="@dimen/suggestion_search_view_icon_size"
+                    android:layout_marginStart="@dimen/suggestion_search_view_icon_side_margin"
+                    android:layout_marginEnd="@dimen/suggestion_search_view_icon_side_margin"
+                    app:srcCompat="@drawable/ic_action_back" />
 
-            <ImageView
-                android:id="@+id/clear_button"
-                android:layout_width="@dimen/suggestion_search_view_icon_size"
-                android:layout_height="@dimen/suggestion_search_view_icon_size"
-                android:layout_marginStart="@dimen/suggestion_search_view_icon_side_margin"
-                android:layout_marginEnd="@dimen/suggestion_search_view_icon_side_margin"
-                app:srcCompat="@drawable/ic_action_cancel" />
+                <EditText
+                    android:id="@+id/input_edit_text"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/suggestion_search_input_edit_text_side_margin"
+                    android:layout_marginTop="@dimen/suggestion_search_input_edit_text_side_margin"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:singleLine="true" />
+
+                <ImageView
+                    android:id="@+id/clear_button"
+                    android:layout_width="@dimen/suggestion_search_view_icon_size"
+                    android:layout_height="@dimen/suggestion_search_view_icon_size"
+                    android:layout_marginStart="@dimen/suggestion_search_view_icon_side_margin"
+                    android:layout_marginEnd="@dimen/suggestion_search_view_icon_side_margin"
+                    app:srcCompat="@drawable/ic_action_cancel" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/suggestion_view_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorLightGray"
+                android:orientation="vertical">
+
+                <View
+                    android:id="@+id/suggestion_division_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="@dimen/suggestion_division_side_margin"
+                    android:layout_marginEnd="@dimen/suggestion_division_side_margin"
+                    android:background="@color/colorBasicGray" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/suggestion_recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
-
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/suggestion_view_container"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@color/colorDarkGrayTransparent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_view_container">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/suggestion_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/suggestion_search_view_side_margin"
-            android:layout_marginEnd="@dimen/suggestion_search_view_side_margin"
-            android:layout_marginBottom="@dimen/suggestion_search_view_side_margin"
-            android:background="@color/colorLightGray"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

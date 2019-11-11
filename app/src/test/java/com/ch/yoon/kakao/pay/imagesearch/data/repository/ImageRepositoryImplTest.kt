@@ -6,7 +6,7 @@ import com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSortType
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.ImageDocument
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.ImageSearchMeta
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.ImageSearchResponse
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.SearchLog
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.SearchLogModel
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -90,8 +90,8 @@ class ImageRepositoryImplTest {
         verify(exactly = 1) { mockImageLocalDataSource.deleteSearchLog(targetSearchLog) }
     }
 
-    private fun emptySearchLog(): SearchLog {
-        return SearchLog("", 0)
+    private fun emptySearchLog(): SearchLogModel {
+        return SearchLogModel("", 0)
     }
 
     private fun emptyImageSearchRequest(): ImageSearchRequest {

@@ -3,14 +3,13 @@ package com.ch.yoon.kakao.pay.imagesearch.data.local
 import com.belongings.bag.belongingsbag.RxSchedulerRule
 import com.ch.yoon.kakao.pay.imagesearch.data.local.room.ImageLocalDataSourceImpl
 import com.ch.yoon.kakao.pay.imagesearch.data.local.room.dao.SearchLogDAO
-import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLogModel
+import com.ch.yoon.kakao.pay.imagesearch.data.local.room.entity.SearchLogEntity
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageLocalDataSource
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.error.RepositoryException
-import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.SearchLog
+import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.SearchLogModel
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.mockkStatic
 import io.mockk.verify
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -57,16 +56,16 @@ class ImageLocalDataSourceImplTest {
         every { mockSearchLogDao.insertOrUpdateSearchLog(any()) } returns Completable.complete()
 
         // when
-        var searchLog: SearchLog? = null
+        var searchLogModel: SearchLogModel? = null
         imageLocalDataSource.insertOrUpdateSearchLog("테스트")
             .subscribe({ receivedSearchLog ->
-                searchLog = receivedSearchLog
+                searchLogModel = receivedSearchLog
             }, { throwable ->
-                searchLog = null
+                searchLogModel = null
             })
 
         // then
-        assertEquals("테스트", searchLog?.keyword ?: "")
+        assertEquals("테스트", searchLogModel?.keyword ?: "")
     }
 
     @Test
@@ -96,7 +95,7 @@ class ImageLocalDataSourceImplTest {
         every { mockSearchLogDao.selectAllSearchLog() } returns Single.just(emptyList())
 
         // when
-        var list: List<SearchLog>? = null
+        var list: List<SearchLogModel>? = null
         imageLocalDataSource.selectAllSearchLog()
             .subscribe({ receivedList ->
                 list = receivedList
@@ -115,7 +114,7 @@ class ImageLocalDataSourceImplTest {
         every { mockSearchLogDao.selectAllSearchLog() } returns Single.just(searchLogModelList)
 
         // when
-        var actualList: List<SearchLog>? = null
+        var actualList: List<SearchLogModel>? = null
         imageLocalDataSource.selectAllSearchLog()
             .subscribe({ list ->
                 actualList = list
@@ -124,7 +123,7 @@ class ImageLocalDataSourceImplTest {
             })
 
         // then
-        val expectedList = searchLogModelList.map { SearchLog(it.keyword, it.time) }
+        val expectedList = searchLogModelList.map { SearchLogModel(it.keyword, it.time) }
         assertEquals(expectedList, actualList)
     }
 
@@ -134,7 +133,7 @@ class ImageLocalDataSourceImplTest {
         every { mockSearchLogDao.deleteSearchLog(any(), any()) } returns Completable.complete()
 
         // when
-        val searchLog = SearchLog("테스트", 1)
+        val searchLog = SearchLogModel("테스트", 1)
         imageLocalDataSource.deleteSearchLog(searchLog)
 
         // then
@@ -148,7 +147,7 @@ class ImageLocalDataSourceImplTest {
 
         // when
         var actualException: RepositoryException? = null
-        val searchLog = SearchLog("테스트", 1)
+        val searchLog = SearchLogModel("테스트", 1)
         imageLocalDataSource.deleteSearchLog(searchLog)
             .subscribe({
                 actualException = null
@@ -167,10 +166,10 @@ class ImageLocalDataSourceImplTest {
         assertEquals(true, actualException is RepositoryException)
     }
 
-    private fun createSearchLogModelList(size: Int): List<SearchLogModel> {
-        val list = mutableListOf<SearchLogModel>()
+    private fun createSearchLogModelList(size: Int): List<SearchLogEntity> {
+        val list = mutableListOf<SearchLogEntity>()
         for(i in 0 until size) {
-            list.add(SearchLogModel("테스트$i", i.toLong()))
+            list.add(SearchLogEntity("테스트$i", i.toLong()))
         }
         return list
     }
