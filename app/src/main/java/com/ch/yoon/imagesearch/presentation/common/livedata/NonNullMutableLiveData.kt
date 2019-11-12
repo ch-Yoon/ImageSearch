@@ -18,13 +18,13 @@ class NonNullMutableLiveData<T>(private val defaultValue: T): MutableLiveData<T>
         super.postValue(value)
     }
 
-    fun NonNullObserve(owner: LifecycleOwner, observer: Observer<T>) {
+    override fun getValue(): T {
+        return super.getValue() ?: defaultValue
+    }
+
+    override fun observe(owner: LifecycleOwner, observer: Observer<in T>) {
         super.observe(owner, Observer<T> { value ->
             observer.onChanged(value ?: defaultValue)
         })
-    }
-
-    override fun getValue(): T {
-        return super.getValue() ?: defaultValue
     }
 }

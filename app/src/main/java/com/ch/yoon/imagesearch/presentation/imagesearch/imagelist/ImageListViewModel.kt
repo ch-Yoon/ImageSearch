@@ -13,6 +13,7 @@ import com.ch.yoon.imagesearch.data.repository.image.ImageRepository
 import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
 import com.ch.yoon.imagesearch.data.repository.image.model.ImageSearchMeta
 import com.ch.yoon.imagesearch.presentation.base.BaseViewModel
+import com.ch.yoon.imagesearch.presentation.common.livedata.NonNullMutableLiveData
 import com.ch.yoon.imagesearch.presentation.common.livedata.SingleLiveEvent
 import com.ch.yoon.imagesearch.presentation.common.pageload.PageLoadHelper
 import com.ch.yoon.imagesearch.util.extension.*
@@ -32,7 +33,7 @@ class ImageListViewModel(
         observePageLoadInspector()
     }
 
-    private val _imageSortType = MutableLiveData(ImageSortType.ACCURACY)
+    private val _imageSortType = NonNullMutableLiveData(ImageSortType.ACCURACY)
     val imageSortType: LiveData<ImageSortType> = _imageSortType
 
     private val _countOfItemInLine = MutableLiveData(2)
@@ -46,9 +47,6 @@ class ImageListViewModel(
 
     private val _moveToDetailScreenEvent = SingleLiveEvent<ImageDocument>()
     val moveToDetailScreenEvent: LiveData<ImageDocument> = _moveToDetailScreenEvent
-
-    private val isNotRemainingMoreData
-        get() = isRemainingMoreData.not()
 
     private val isRemainingMoreData
         get() = searchMeta?.isEnd?.not() ?: true
@@ -88,35 +86,42 @@ class ImageListViewModel(
 
     private fun observePageLoadInspector() {
         pageLoadHelper.onPageLoadApprove = { key, pageNumber, dataSize, isFirstPage ->
-            _imageSearchState.value = ImageSearchState.NONE
-
-            val request = ImageSearchRequest(key, _imageSortType.value!!, pageNumber, dataSize, isFirstPage)
-            imageRepository.requestImageList(request)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ imageSearchResponse ->
-                    _imageSearchState.value = ImageSearchState.SUCCESS
-
-                    if (request.isFirstRequest) {
-                        _imageDocumentList.clear()
-                    }
-
-                    with(imageSearchResponse) {
-                        searchMeta = imageSearchMeta
-                        updateImageDocumentList(imageDocumentList)
-                    }
-                }, { throwable ->
-                    _imageSearchState.value = ImageSearchState.FAIL
-                    handlingImageSearchError(throwable)
-                })
-                .register()
+            val request = ImageSearchRequest(key, _imageSortType.value, pageNumber, dataSize, isFirstPage)
+            requestImageListToRepository(request)
         }
+    }
+
+    private fun requestImageListToRepository(request: ImageSearchRequest) {
+        _imageSearchState.value = ImageSearchState.NONE
+
+        imageRepository.requestImageList(request)
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSuccess { _imageSearchState.value = ImageSearchState.SUCCESS }
+            .doOnError { _imageSearchState.value = ImageSearchState.FAIL }
+            .subscribe({ imageSearchResponse ->
+                if (request.isFirstRequest) {
+                    _imageDocumentList.clear()
+                }
+                with(imageSearchResponse) {
+                    updateImageDocumentList(imageDocumentList)
+                    updateSearchMeta(imageSearchMeta)
+                }
+            }, { throwable ->
+                handlingImageSearchError(throwable)
+            })
+            .register()
     }
 
     private fun updateImageDocumentList(receivedImageDocumentList: List<ImageDocument>) {
         _imageDocumentList.addAll(receivedImageDocumentList)
         if(_imageDocumentList.isEmpty()) {
             updateShowMessage(R.string.success_image_search_no_result)
-        } else if(isNotRemainingMoreData) {
+        }
+    }
+
+    private fun updateSearchMeta(searchMeta: ImageSearchMeta) {
+        this.searchMeta = searchMeta
+        if(searchMeta.isEnd) {
             updateShowMessage(R.string.success_image_search_last_data)
         }
     }
