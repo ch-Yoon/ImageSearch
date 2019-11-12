@@ -89,31 +89,33 @@ class SearchBoxViewModelTest {
         searchBoxViewModel.loadSearchLogList()
 
         // then
-        val expectedList = createVirtualSearchLogList(3).sorted()
+        val expectedList = createVirtualSearchLogList(3).sorted().map { it.keyword }
         searchBoxViewModel.searchLogList.observeForever { receivedList ->
             assertEquals(expectedList, receivedList)
         }
     }
 
     @Test
-    fun `검색 기록 클릭 시 검색 키워드로 설정되는지 테스트`() {
+    fun `키워드 검색 버튼 클릭시 기존에 검색했던 키워드라면 목록의 가장 앞쪽으로 이동시키는지 테스트`() {
         // given
-        every { mockImageSearchRepository.insertOrUpdateSearchLog("테스트") } returns (Single.just(SearchLogModel("테스트", 1)))
+        every { mockImageSearchRepository.requestSearchLogList() } returns (Single.just(createVirtualSearchLogList(3)))
+        every { mockImageSearchRepository.insertOrUpdateSearchLog("테스트0") } returns (Single.just(SearchLogModel("테스트0", 4)))
 
         // when
-        searchBoxViewModel.onClickSearchLog(SearchLogModel("테스트", 1))
+        searchBoxViewModel.loadSearchLogList()
+        searchBoxViewModel.onClickSearchButton("테스트0")
 
         // then
-        searchBoxViewModel.searchKeyword.observeForever { keyword ->
-            assertEquals("테스트", keyword)
+        searchBoxViewModel.searchLogList.observeForever{ searchLogs ->
+            assertEquals("테스트0", searchLogs[0])
+            assertEquals(3, searchLogs.size)
         }
     }
 
     @Test
     fun `키워드가 비어있다면 검색 거절 메시지가 반영되는지 테스트`() {
         // when
-        searchBoxViewModel.onChangeKeyword("")
-        searchBoxViewModel.onClickSearchButton()
+        searchBoxViewModel.onClickSearchButton("")
 
         // then
         searchBoxViewModel.showMessageEvent.observeForever { message ->
@@ -134,6 +136,18 @@ class SearchBoxViewModelTest {
     }
 
     @Test
+    fun `검색상자가 열려있을 때 뒤로가기 클릭 시 검색상자 닫기 이벤트가 호출되는지 테스트`() {
+// when
+        var closeEventCount = 0
+        searchBoxViewModel.searchBoxCloseEvent.observeForever { closeEventCount++ }
+        searchBoxViewModel.onStateChange(true)
+        searchBoxViewModel.onClickBackPressButton()
+
+        // then
+        assertEquals(1, closeEventCount)
+    }
+
+    @Test
     fun `검색상자가 닫혀 있을 때 뒤로가기 클릭시 종료 이벤트가 호출되는지 테스트`() {
         // when
         var finishEventCount = 0
@@ -147,67 +161,53 @@ class SearchBoxViewModelTest {
     @Test
     fun `키워드 삭제 버튼 클릭시 레파지토리에 삭제 요청을 하는지 테스트`() {
         // given
+        val targetList = mutableListOf(SearchLogModel("테스트", 0))
+        every { mockImageSearchRepository.requestSearchLogList() } returns (Single.just(targetList))
         every { mockImageSearchRepository.deleteSearchLog(any()) } returns (Completable.complete())
 
         // when
-        val target = SearchLogModel("테스트", 1)
-        searchBoxViewModel.onClickSearchLogDeleteButton(target)
+        searchBoxViewModel.loadSearchLogList()
+        searchBoxViewModel.onClickSearchLogDeleteButton(targetList[0].keyword)
 
         // then
-        verify(exactly = 1) { mockImageSearchRepository.deleteSearchLog(target) }
+        verify(exactly = 1) { mockImageSearchRepository.deleteSearchLog(targetList[0]) }
     }
 
     @Test
     fun `키워드 삭제 버튼 클릭시 보유하던 검색 기록 목록에서 제거하는지 테스트`() {
         // given
         val searchLogList = createVirtualSearchLogList(3)
-        val expectedList = createVirtualSearchLogList(3).apply { removeAt(0) }.sorted()
+        val expectedList = createVirtualSearchLogList(3).apply { removeAt(0) }.sorted().map { it.keyword }
 
         every { mockImageSearchRepository.requestSearchLogList() } returns (Single.just(searchLogList))
         every { mockImageSearchRepository.deleteSearchLog(any()) } returns(Completable.complete())
 
         // when
         searchBoxViewModel.loadSearchLogList()
-        searchBoxViewModel.onClickSearchLogDeleteButton(searchLogList[0])
+        searchBoxViewModel.onClickSearchLogDeleteButton(searchLogList[0].keyword)
 
         // then
         searchBoxViewModel.searchLogList.observeForever{ receivedList ->
-            assertEquals(expectedList, receivedList);
+            assertEquals(expectedList, receivedList)
         }
     }
 
     @Test
-    fun `키워드 검색 버튼 클릭시 기존에 검색했던 키워드라면 목록의 가장 앞쪽으로 이동시키는지 테스트`() {
+    fun `키워드 전체 삭제 버튼 클릭시 보유하던 검색 기록 목록이 전부 제거되는지 테스트`() {
         // given
-        every { mockImageSearchRepository.requestSearchLogList() } returns (Single.just(createVirtualSearchLogList(3)))
-        every { mockImageSearchRepository.insertOrUpdateSearchLog("테스트0") } returns (Single.just(SearchLogModel("테스트0", 4)))
+        val searchLogList = createVirtualSearchLogList(3)
+
+        every { mockImageSearchRepository.requestSearchLogList() } returns (Single.just(searchLogList))
+        every { mockImageSearchRepository.deleteAllSearchLog() } returns(Completable.complete())
 
         // when
         searchBoxViewModel.loadSearchLogList()
-        searchBoxViewModel.onChangeKeyword("테스트0")
-        searchBoxViewModel.onClickSearchButton()
+        searchBoxViewModel.onClickSearchLogAllDelete()
 
         // then
-        searchBoxViewModel.searchLogList.observeForever{ searchLogs ->
-            assertEquals("테스트0", searchLogs[0].keyword)
-            assertEquals(3, searchLogs.size)
+        searchBoxViewModel.searchLogList.observeForever{ receivedList ->
+            assertEquals(0, receivedList.size)
         }
-    }
-
-    @Test
-    fun `실시간으로 키워드 변경 후 검색 버튼 클릭 시 검색 로그 저장 요청이 이루어지는지 테스트`() {
-        // given
-        every { mockImageSearchRepository.requestSearchLogList() } returns (Single.just(createVirtualSearchLogList(0)))
-        every { mockImageSearchRepository.insertOrUpdateSearchLog("가나다") } returns (Single.just(SearchLogModel("가나다", 1)))
-
-        // when
-        searchBoxViewModel.onChangeKeyword("가")
-        searchBoxViewModel.onChangeKeyword("가나")
-        searchBoxViewModel.onChangeKeyword("가나다")
-        searchBoxViewModel.onClickSearchButton()
-
-        // then
-        verify(exactly = 1) { mockImageSearchRepository.insertOrUpdateSearchLog("가나다") }
     }
 
     private fun createVirtualSearchLogList(size: Int): MutableList<SearchLogModel> {
