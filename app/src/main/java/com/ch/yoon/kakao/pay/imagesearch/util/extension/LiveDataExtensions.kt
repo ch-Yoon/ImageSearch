@@ -6,11 +6,6 @@ import androidx.lifecycle.MutableLiveData
  * Creator : ch-yoon
  * Date : 2019-10-25
  **/
-
-inline fun <T> MutableLiveData<T>.updateOnMainThread(block:(T?) -> T?) {
-    value = block(value)
-}
-
 inline fun <T> MutableLiveData<MutableList<T>>.removeFirstAndAddFirst(insertValue: T, predicate: (T) -> Boolean) {
     value?.let { list ->
         for(i in 0 until list.size) {
