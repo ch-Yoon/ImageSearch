@@ -7,16 +7,16 @@
     <data>
 
         <import type="android.view.View" />
-        <import type="com.ch.yoon.kakao.pay.imagesearch.data.remote.kakao.request.ImageSortType" />
+        <import type="com.ch.yoon.imagesearch.data.remote.kakao.request.ImageSortType" />
         <import type="com.ch.yoon.suggetionsearchview.SuggestionSearchView.State" />
 
         <variable
             name="searchBoxViewModel"
-            type="com.ch.yoon.kakao.pay.imagesearch.presentation.imagesearch.searchbox.SearchBoxViewModel" />
+            type="com.ch.yoon.imagesearch.presentation.imagesearch.searchbox.SearchBoxViewModel" />
 
         <variable
             name="imageListViewModel"
-            type="com.ch.yoon.kakao.pay.imagesearch.presentation.imagesearch.imagelist.ImageListViewModel" />
+            type="com.ch.yoon.imagesearch.presentation.imagesearch.imagelist.ImageListViewModel" />
 
     </data>
 

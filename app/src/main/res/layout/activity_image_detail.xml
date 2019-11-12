@@ -8,7 +8,7 @@
 
         <variable
             name="imageDetailViewModel"
-            type="com.ch.yoon.kakao.pay.imagesearch.presentation.imagedetail.ImageDetailViewModel" />
+            type="com.ch.yoon.imagesearch.presentation.imagedetail.ImageDetailViewModel" />
 
     </data>
 

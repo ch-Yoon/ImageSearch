@@ -7,11 +7,11 @@
 
         <variable
             name="viewModel"
-            type="com.ch.yoon.kakao.pay.imagesearch.presentation.imagesearch.searchbox.SearchBoxViewModel" />
+            type="com.ch.yoon.imagesearch.presentation.imagesearch.searchbox.SearchBoxViewModel" />
 
         <variable
             name="searchLogModel"
-            type="com.ch.yoon.kakao.pay.imagesearch.data.repository.model.SearchLogModel" />
+            type="com.ch.yoon.imagesearch.data.repository.model.SearchLogModel" />
 
     </data>
 
