@@ -2,7 +2,7 @@ package com.ch.yoon.imagesearch.di
 
 import com.ch.yoon.imagesearch.BuildConfig
 import com.ch.yoon.imagesearch.data.remote.kakao.KakaoSearchApi
-import com.ch.yoon.imagesearch.data.repository.ImageRemoteDataSource
+import com.ch.yoon.imagesearch.data.repository.image.ImageRemoteDataSource
 import com.ch.yoon.imagesearch.data.remote.kakao.ImageRemoteDataSourceImpl
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient

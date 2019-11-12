@@ -1,7 +1,7 @@
-package com.ch.yoon.imagesearch.data.repository
+package com.ch.yoon.imagesearch.data.repository.image
 
 import com.ch.yoon.imagesearch.data.remote.kakao.request.ImageSearchRequest
-import com.ch.yoon.imagesearch.data.repository.model.ImageSearchResponse
+import com.ch.yoon.imagesearch.data.repository.image.model.ImageSearchResponse
 import io.reactivex.Single
 
 /**

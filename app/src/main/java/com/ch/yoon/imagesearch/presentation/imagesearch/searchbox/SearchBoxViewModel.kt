@@ -6,8 +6,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.ch.yoon.imagesearch.R
-import com.ch.yoon.imagesearch.data.repository.ImageRepository
-import com.ch.yoon.imagesearch.data.repository.model.SearchLogModel
+import com.ch.yoon.imagesearch.data.repository.searchlog.SearchLogRepository
+import com.ch.yoon.imagesearch.data.repository.searchlog.model.SearchLogModel
 
 import com.ch.yoon.imagesearch.util.extension.*
 import com.ch.yoon.imagesearch.presentation.base.BaseViewModel
@@ -20,7 +20,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
  */
 class SearchBoxViewModel(
     application: Application,
-    private val imageRepository: ImageRepository
+    private val searchLogRepository: SearchLogRepository
 ) : BaseViewModel (application) {
 
     private val _searchLogList = MutableLiveData<MutableList<SearchLogModel>>(mutableListOf())
@@ -38,7 +38,7 @@ class SearchBoxViewModel(
     private var isOpen = false
 
     fun loadSearchLogList() {
-        imageRepository.requestSearchLogList()
+        searchLogRepository.requestSearchLogList()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ receivedSearchLogList ->
                 _searchLogList.value = receivedSearchLogList.sorted().toMutableList()
@@ -51,7 +51,7 @@ class SearchBoxViewModel(
     fun onClickSearchLogDeleteButton(keyword: String) {
         val targetLog = _searchLogList.find { it.keyword == keyword }
         if(targetLog != null) {
-            imageRepository.deleteSearchLog(targetLog)
+            searchLogRepository.deleteSearchLog(targetLog)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     _searchLogList.removeFirst { it.keyword == keyword }
@@ -63,7 +63,7 @@ class SearchBoxViewModel(
     }
 
     fun onClickSearchLogAllDelete() {
-        imageRepository.deleteAllSearchLog()
+        searchLogRepository.deleteAllSearchLog()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 _searchLogList.clear()
@@ -106,7 +106,7 @@ class SearchBoxViewModel(
     }
 
     private fun saveKeywordToRepository(keyword: String) {
-        imageRepository.insertOrUpdateSearchLog(keyword)
+        searchLogRepository.insertOrUpdateSearchLog(keyword)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ newLog ->
                 _searchLogList.removeFirstAndAddFirst(newLog) { it.keyword == keyword }

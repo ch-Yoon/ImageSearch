@@ -4,9 +4,9 @@ import com.ch.yoon.imagesearch.data.remote.kakao.response.KakaoImageDocument
 import com.ch.yoon.imagesearch.data.remote.kakao.response.KakaoImageSearchEntityMapper
 import com.ch.yoon.imagesearch.data.remote.kakao.response.KakaoImageSearchMetaInfo
 import com.ch.yoon.imagesearch.data.remote.kakao.response.KakaoImageSearchResponse
-import com.ch.yoon.imagesearch.data.repository.model.ImageDocument
-import com.ch.yoon.imagesearch.data.repository.model.ImageSearchMeta
-import com.ch.yoon.imagesearch.data.repository.model.ImageSearchResponse
+import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
+import com.ch.yoon.imagesearch.data.repository.image.model.ImageSearchMeta
+import com.ch.yoon.imagesearch.data.repository.image.model.ImageSearchResponse
 import junit.framework.Assert.assertEquals
 import org.junit.Test
 

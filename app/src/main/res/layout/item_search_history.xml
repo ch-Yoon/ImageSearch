@@ -11,7 +11,7 @@
 
         <variable
             name="searchLogModel"
-            type="com.ch.yoon.imagesearch.data.repository.model.SearchLogModel" />
+            type="com.ch.yoon.imagesearch.data.repository.searchlog.model.SearchLogModel" />
 
     </data>
 

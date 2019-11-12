@@ -12,7 +12,7 @@ import org.junit.Before
 import org.junit.Rule
 import android.text.TextUtils
 import com.ch.yoon.imagesearch.R
-import com.ch.yoon.imagesearch.data.repository.model.ImageDocument
+import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
 import junit.framework.Assert.assertEquals
 import org.junit.Test
 

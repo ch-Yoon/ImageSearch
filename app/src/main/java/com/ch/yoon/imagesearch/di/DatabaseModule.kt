@@ -2,8 +2,8 @@ package com.ch.yoon.imagesearch.di
 
 import androidx.room.Room
 import com.ch.yoon.imagesearch.data.local.room.AppDatabase
-import com.ch.yoon.imagesearch.data.repository.ImageLocalDataSource
-import com.ch.yoon.imagesearch.data.local.room.ImageLocalDataSourceImpl
+import com.ch.yoon.imagesearch.data.repository.searchlog.SearchLogLocalDataSource
+import com.ch.yoon.imagesearch.data.local.room.SearchLogLocalDataSourceImpl
 import org.koin.dsl.module.module
 
 /**
@@ -12,8 +12,8 @@ import org.koin.dsl.module.module
  **/
 val databaseModule = module {
 
-    single<ImageLocalDataSource> {
-        ImageLocalDataSourceImpl(get())
+    single<SearchLogLocalDataSource> {
+        SearchLogLocalDataSourceImpl(get())
     }
 
     single {

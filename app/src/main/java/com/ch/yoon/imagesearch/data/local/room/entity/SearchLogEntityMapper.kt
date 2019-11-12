@@ -1,6 +1,6 @@
 package com.ch.yoon.imagesearch.data.local.room.entity
 
-import com.ch.yoon.imagesearch.data.repository.model.SearchLogModel
+import com.ch.yoon.imagesearch.data.repository.searchlog.model.SearchLogModel
 
 /**
  * Creator : ch-yoon

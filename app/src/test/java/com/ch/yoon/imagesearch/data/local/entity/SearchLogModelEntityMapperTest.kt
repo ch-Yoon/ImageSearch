@@ -2,7 +2,7 @@ package com.ch.yoon.imagesearch.data.local.entity
 
 import com.ch.yoon.imagesearch.data.local.room.entity.SearchLogEntityMapper
 import com.ch.yoon.imagesearch.data.local.room.entity.SearchLogEntity
-import com.ch.yoon.imagesearch.data.repository.model.SearchLogModel
+import com.ch.yoon.imagesearch.data.repository.searchlog.model.SearchLogModel
 import junit.framework.Assert.assertEquals
 import org.junit.Test
 

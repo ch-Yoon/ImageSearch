@@ -6,11 +6,11 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.belongings.bag.belongingsbag.RxSchedulerRule
 import com.ch.yoon.imagesearch.R
 import com.ch.yoon.imagesearch.data.remote.kakao.request.ImageSortType
-import com.ch.yoon.imagesearch.data.repository.ImageRepository
+import com.ch.yoon.imagesearch.data.repository.image.ImageRepository
 import com.ch.yoon.imagesearch.data.repository.error.RepositoryException
-import com.ch.yoon.imagesearch.data.repository.model.ImageDocument
-import com.ch.yoon.imagesearch.data.repository.model.ImageSearchMeta
-import com.ch.yoon.imagesearch.data.repository.model.ImageSearchResponse
+import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
+import com.ch.yoon.imagesearch.data.repository.image.model.ImageSearchMeta
+import com.ch.yoon.imagesearch.data.repository.image.model.ImageSearchResponse
 import com.ch.yoon.imagesearch.presentation.common.pageload.PageLoadHelper
 import io.mockk.*
 import io.mockk.impl.annotations.MockK

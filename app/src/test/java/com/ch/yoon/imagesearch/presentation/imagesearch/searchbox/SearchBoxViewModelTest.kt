@@ -5,8 +5,8 @@ import android.util.Log
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.belongings.bag.belongingsbag.RxSchedulerRule
 import com.ch.yoon.imagesearch.R
-import com.ch.yoon.imagesearch.data.repository.ImageRepository
-import com.ch.yoon.imagesearch.data.repository.model.SearchLogModel
+import com.ch.yoon.imagesearch.data.repository.searchlog.SearchLogRepository
+import com.ch.yoon.imagesearch.data.repository.searchlog.model.SearchLogModel
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -38,7 +38,7 @@ class SearchBoxViewModelTest {
     @MockK
     lateinit var mockApplication: Application
     @MockK
-    lateinit var mockImageSearchRepository: ImageRepository
+    lateinit var mockSearchLogRepository: SearchLogRepository
 
     private lateinit var searchBoxViewModel: SearchBoxViewModel
 
@@ -62,13 +62,13 @@ class SearchBoxViewModelTest {
     }
 
     private fun initSearchBoxViewModel() {
-        searchBoxViewModel = SearchBoxViewModel(mockApplication, mockImageSearchRepository)
+        searchBoxViewModel = SearchBoxViewModel(mockApplication, mockSearchLogRepository)
     }
 
     @Test
     fun `검색 기록 로드가 되는지 테스트`() {
         // given
-        every {mockImageSearchRepository.requestSearchLogList() } returns (Single.just(createVirtualSearchLogList(3)))
+        every {mockSearchLogRepository.requestSearchLogList() } returns (Single.just(createVirtualSearchLogList(3)))
 
         // when
         searchBoxViewModel.loadSearchLogList()
@@ -83,7 +83,7 @@ class SearchBoxViewModelTest {
     fun `검색 기록 로드시 내림차순으로 정렬되는지 테스트`() {
         // given
         val searchLogList = createVirtualSearchLogList(3)
-        every { mockImageSearchRepository.requestSearchLogList() } returns (Single.just(searchLogList))
+        every { mockSearchLogRepository.requestSearchLogList() } returns (Single.just(searchLogList))
 
         // when
         searchBoxViewModel.loadSearchLogList()
@@ -98,8 +98,8 @@ class SearchBoxViewModelTest {
     @Test
     fun `키워드 검색 버튼 클릭시 기존에 검색했던 키워드라면 목록의 가장 앞쪽으로 이동시키는지 테스트`() {
         // given
-        every { mockImageSearchRepository.requestSearchLogList() } returns (Single.just(createVirtualSearchLogList(3)))
-        every { mockImageSearchRepository.insertOrUpdateSearchLog("테스트0") } returns (Single.just(SearchLogModel("테스트0", 4)))
+        every { mockSearchLogRepository.requestSearchLogList() } returns (Single.just(createVirtualSearchLogList(3)))
+        every { mockSearchLogRepository.insertOrUpdateSearchLog("테스트0") } returns (Single.just(SearchLogModel("테스트0", 4)))
 
         // when
         searchBoxViewModel.loadSearchLogList()
@@ -162,15 +162,15 @@ class SearchBoxViewModelTest {
     fun `키워드 삭제 버튼 클릭시 레파지토리에 삭제 요청을 하는지 테스트`() {
         // given
         val targetList = mutableListOf(SearchLogModel("테스트", 0))
-        every { mockImageSearchRepository.requestSearchLogList() } returns (Single.just(targetList))
-        every { mockImageSearchRepository.deleteSearchLog(any()) } returns (Completable.complete())
+        every { mockSearchLogRepository.requestSearchLogList() } returns (Single.just(targetList))
+        every { mockSearchLogRepository.deleteSearchLog(any()) } returns (Completable.complete())
 
         // when
         searchBoxViewModel.loadSearchLogList()
         searchBoxViewModel.onClickSearchLogDeleteButton(targetList[0].keyword)
 
         // then
-        verify(exactly = 1) { mockImageSearchRepository.deleteSearchLog(targetList[0]) }
+        verify(exactly = 1) { mockSearchLogRepository.deleteSearchLog(targetList[0]) }
     }
 
     @Test
@@ -179,8 +179,8 @@ class SearchBoxViewModelTest {
         val searchLogList = createVirtualSearchLogList(3)
         val expectedList = createVirtualSearchLogList(3).apply { removeAt(0) }.sorted().map { it.keyword }
 
-        every { mockImageSearchRepository.requestSearchLogList() } returns (Single.just(searchLogList))
-        every { mockImageSearchRepository.deleteSearchLog(any()) } returns(Completable.complete())
+        every { mockSearchLogRepository.requestSearchLogList() } returns (Single.just(searchLogList))
+        every { mockSearchLogRepository.deleteSearchLog(any()) } returns(Completable.complete())
 
         // when
         searchBoxViewModel.loadSearchLogList()
@@ -197,8 +197,8 @@ class SearchBoxViewModelTest {
         // given
         val searchLogList = createVirtualSearchLogList(3)
 
-        every { mockImageSearchRepository.requestSearchLogList() } returns (Single.just(searchLogList))
-        every { mockImageSearchRepository.deleteAllSearchLog() } returns(Completable.complete())
+        every { mockSearchLogRepository.requestSearchLogList() } returns (Single.just(searchLogList))
+        every { mockSearchLogRepository.deleteAllSearchLog() } returns(Completable.complete())
 
         // when
         searchBoxViewModel.loadSearchLogList()

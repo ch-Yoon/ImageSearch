@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.lifecycle.Observer
 import com.ch.yoon.imagesearch.R
-import com.ch.yoon.imagesearch.data.repository.model.ImageDocument
+import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
 import com.ch.yoon.imagesearch.databinding.ActivityImageDetailBinding
 import com.ch.yoon.imagesearch.presentation.base.BaseActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel

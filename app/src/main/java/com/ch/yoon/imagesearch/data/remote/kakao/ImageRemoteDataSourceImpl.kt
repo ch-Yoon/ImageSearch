@@ -1,8 +1,8 @@
 package com.ch.yoon.imagesearch.data.remote.kakao
 
 import com.ch.yoon.imagesearch.data.remote.kakao.request.ImageSearchRequest
-import com.ch.yoon.imagesearch.data.repository.ImageRemoteDataSource
-import com.ch.yoon.imagesearch.data.repository.model.ImageSearchResponse
+import com.ch.yoon.imagesearch.data.repository.image.ImageRemoteDataSource
+import com.ch.yoon.imagesearch.data.repository.image.model.ImageSearchResponse
 import com.ch.yoon.imagesearch.data.remote.kakao.response.KakaoImageSearchEntityMapper
 import com.ch.yoon.imagesearch.data.remote.kakao.error.SingleExceptionTransformer
 import io.reactivex.Single

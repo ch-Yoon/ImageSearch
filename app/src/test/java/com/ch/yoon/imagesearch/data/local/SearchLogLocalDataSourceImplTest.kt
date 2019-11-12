@@ -1,12 +1,12 @@
 package com.ch.yoon.imagesearch.data.local
 
 import com.belongings.bag.belongingsbag.RxSchedulerRule
-import com.ch.yoon.imagesearch.data.local.room.ImageLocalDataSourceImpl
+import com.ch.yoon.imagesearch.data.local.room.SearchLogLocalDataSourceImpl
 import com.ch.yoon.imagesearch.data.local.room.dao.SearchLogDAO
 import com.ch.yoon.imagesearch.data.local.room.entity.SearchLogEntity
-import com.ch.yoon.imagesearch.data.repository.ImageLocalDataSource
+import com.ch.yoon.imagesearch.data.repository.searchlog.SearchLogLocalDataSource
 import com.ch.yoon.imagesearch.data.repository.error.RepositoryException
-import com.ch.yoon.imagesearch.data.repository.model.SearchLogModel
+import com.ch.yoon.imagesearch.data.repository.searchlog.model.SearchLogModel
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -22,7 +22,7 @@ import org.junit.Test
  * Creator : ch-yoon
  * Date : 2019-11-02
  **/
-class ImageLocalDataSourceImplTest {
+class SearchLogLocalDataSourceImplTest {
 
     @get:Rule
     val rxSchedulerRule = RxSchedulerRule()
@@ -30,12 +30,12 @@ class ImageLocalDataSourceImplTest {
     @MockK
     lateinit var mockSearchLogDao: SearchLogDAO
 
-    private lateinit var imageLocalDataSource: ImageLocalDataSource
+    private lateinit var searchLogLocalDataSource: SearchLogLocalDataSource
 
     @Before
     fun init() {
         MockKAnnotations.init(this, relaxUnitFun = true)
-        imageLocalDataSource = ImageLocalDataSourceImpl(mockSearchLogDao)
+        searchLogLocalDataSource = SearchLogLocalDataSourceImpl(mockSearchLogDao)
     }
 
     @Test
@@ -44,7 +44,7 @@ class ImageLocalDataSourceImplTest {
         every { mockSearchLogDao.insertOrUpdateSearchLog(any()) } returns Completable.complete()
 
         // when
-        imageLocalDataSource.insertOrUpdateSearchLog("테스트")
+        searchLogLocalDataSource.insertOrUpdateSearchLog("테스트")
 
         // then
         verify(exactly = 1) { mockSearchLogDao.insertOrUpdateSearchLog(any()) }
@@ -57,7 +57,7 @@ class ImageLocalDataSourceImplTest {
 
         // when
         var searchLogModel: SearchLogModel? = null
-        imageLocalDataSource.insertOrUpdateSearchLog("테스트")
+        searchLogLocalDataSource.insertOrUpdateSearchLog("테스트")
             .subscribe({ receivedSearchLog ->
                 searchLogModel = receivedSearchLog
             }, { throwable ->
@@ -75,7 +75,7 @@ class ImageLocalDataSourceImplTest {
 
         // when
         var exception: RepositoryException? = null
-        imageLocalDataSource.insertOrUpdateSearchLog("테스트")
+        searchLogLocalDataSource.insertOrUpdateSearchLog("테스트")
             .subscribe({ receivedSearchLog ->
                 exception = null
             }, { throwable ->
@@ -96,7 +96,7 @@ class ImageLocalDataSourceImplTest {
 
         // when
         var list: List<SearchLogModel>? = null
-        imageLocalDataSource.selectAllSearchLog()
+        searchLogLocalDataSource.selectAllSearchLog()
             .subscribe({ receivedList ->
                 list = receivedList
             }, { throwable ->
@@ -115,7 +115,7 @@ class ImageLocalDataSourceImplTest {
 
         // when
         var actualList: List<SearchLogModel>? = null
-        imageLocalDataSource.selectAllSearchLog()
+        searchLogLocalDataSource.selectAllSearchLog()
             .subscribe({ list ->
                 actualList = list
             }, { throwable ->
@@ -134,7 +134,7 @@ class ImageLocalDataSourceImplTest {
 
         // when
         val searchLog = SearchLogModel("테스트", 1)
-        imageLocalDataSource.deleteSearchLog(searchLog)
+        searchLogLocalDataSource.deleteSearchLog(searchLog)
 
         // then
         verify(exactly = 1) { mockSearchLogDao.deleteSearchLog("테스트", 1) }
@@ -148,7 +148,7 @@ class ImageLocalDataSourceImplTest {
         // when
         var actualException: RepositoryException? = null
         val searchLog = SearchLogModel("테스트", 1)
-        imageLocalDataSource.deleteSearchLog(searchLog)
+        searchLogLocalDataSource.deleteSearchLog(searchLog)
             .subscribe({
                 actualException = null
             }) { throwable ->

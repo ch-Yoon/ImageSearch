@@ -1,4 +1,4 @@
-package com.ch.yoon.imagesearch.data.repository.model
+package com.ch.yoon.imagesearch.data.repository.searchlog.model
 
 /**
  * Creator : ch-yoon

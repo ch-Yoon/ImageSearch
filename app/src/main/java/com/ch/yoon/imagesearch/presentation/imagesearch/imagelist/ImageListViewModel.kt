@@ -9,9 +9,9 @@ import com.ch.yoon.imagesearch.R
 import com.ch.yoon.imagesearch.data.repository.error.RepositoryException
 import com.ch.yoon.imagesearch.data.remote.kakao.request.ImageSearchRequest
 import com.ch.yoon.imagesearch.data.remote.kakao.request.ImageSortType
-import com.ch.yoon.imagesearch.data.repository.ImageRepository
-import com.ch.yoon.imagesearch.data.repository.model.ImageDocument
-import com.ch.yoon.imagesearch.data.repository.model.ImageSearchMeta
+import com.ch.yoon.imagesearch.data.repository.image.ImageRepository
+import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
+import com.ch.yoon.imagesearch.data.repository.image.model.ImageSearchMeta
 import com.ch.yoon.imagesearch.presentation.base.BaseViewModel
 import com.ch.yoon.imagesearch.presentation.common.livedata.SingleLiveEvent
 import com.ch.yoon.imagesearch.presentation.common.pageload.PageLoadHelper

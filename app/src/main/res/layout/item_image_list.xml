@@ -11,7 +11,7 @@
 
         <variable
             name="imageDocument"
-            type="com.ch.yoon.imagesearch.data.repository.model.ImageDocument" />
+            type="com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument" />
 
     </data>
 

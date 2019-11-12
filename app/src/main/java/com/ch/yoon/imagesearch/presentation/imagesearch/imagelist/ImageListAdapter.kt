@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ch.yoon.imagesearch.R
-import com.ch.yoon.imagesearch.data.repository.model.ImageDocument
+import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
 import com.ch.yoon.imagesearch.databinding.ItemImageListBinding
 import com.ch.yoon.imagesearch.databinding.ItemRetryFooterBinding
 import com.ch.yoon.imagesearch.presentation.base.BaseViewHolder

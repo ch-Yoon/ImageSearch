@@ -9,9 +9,9 @@ import com.ch.yoon.imagesearch.data.remote.kakao.request.ImageSortType
 import com.ch.yoon.imagesearch.data.remote.kakao.response.KakaoImageDocument
 import com.ch.yoon.imagesearch.data.remote.kakao.response.KakaoImageSearchMetaInfo
 import com.ch.yoon.imagesearch.data.remote.kakao.response.KakaoImageSearchResponse
-import com.ch.yoon.imagesearch.data.repository.ImageRemoteDataSource
+import com.ch.yoon.imagesearch.data.repository.image.ImageRemoteDataSource
 import com.ch.yoon.imagesearch.data.repository.error.RepositoryException
-import com.ch.yoon.imagesearch.data.repository.model.ImageSearchResponse
+import com.ch.yoon.imagesearch.data.repository.image.model.ImageSearchResponse
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
