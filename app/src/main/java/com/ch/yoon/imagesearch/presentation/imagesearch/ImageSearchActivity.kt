@@ -34,10 +34,6 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
         initImageListViewModel()
         observeImageListViewModel()
         initImageRecyclerView()
-
-        searchButton.setOnClickListener {
-            binding.suggestionSearchView.show()
-        }
     }
 
     private fun initSearchBoxViewModel() {

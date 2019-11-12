@@ -26,7 +26,11 @@ fun setItems(suggestionSearchView: SuggestionSearchView, searchLogList: List<Str
     }
 }
 
-@BindingAdapter("close")
-fun close(suggestionSearchView: SuggestionSearchView, closeEvent: Unit?) {
-    suggestionSearchView.hide()
+@BindingAdapter("enable")
+fun enable(suggestionSearchView: SuggestionSearchView, enable: Boolean) {
+    if(enable) {
+        suggestionSearchView.show()
+    } else {
+        suggestionSearchView.hide()
+    }
 }

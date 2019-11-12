@@ -139,7 +139,7 @@ class SearchBoxViewModelTest {
     fun `검색상자가 열려있을 때 뒤로가기 클릭 시 검색상자 닫기 이벤트가 호출되는지 테스트`() {
 // when
         var closeEventCount = 0
-        searchBoxViewModel.searchBoxCloseEvent.observeForever { closeEventCount++ }
+        searchBoxViewModel.searchEnableEvent.observeForever { closeEventCount++ }
         searchBoxViewModel.onStateChange(true)
         searchBoxViewModel.onClickBackPressButton()
 

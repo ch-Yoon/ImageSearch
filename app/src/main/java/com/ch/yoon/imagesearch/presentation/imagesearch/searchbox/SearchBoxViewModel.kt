@@ -29,8 +29,8 @@ class SearchBoxViewModel(
     private val _searchEvent = SingleLiveEvent<String>()
     val searchEvent: LiveData<String> = _searchEvent
 
-    private val _searchBoxCloseEvent = SingleLiveEvent<Unit>()
-    val searchBoxCloseEvent: LiveData<Unit> = _searchBoxCloseEvent
+    private val _searchEnableEvent = SingleLiveEvent<Boolean>()
+    val searchEnableEvent: LiveData<Boolean> = _searchEnableEvent
 
     private val _searchBoxFinishEvent = SingleLiveEvent<Unit>()
     val searchBoxFinishEvent: LiveData<Unit> = _searchBoxFinishEvent
@@ -73,9 +73,15 @@ class SearchBoxViewModel(
             .register()
     }
 
+    fun onClickShowButton() {
+        if(!isOpen) {
+            _searchEnableEvent.value = true
+        }
+    }
+
     fun onClickBackPressButton() {
         if(isOpen) {
-            _searchBoxCloseEvent.call()
+            _searchEnableEvent.value = false
         } else {
             _searchBoxFinishEvent.call()
         }
