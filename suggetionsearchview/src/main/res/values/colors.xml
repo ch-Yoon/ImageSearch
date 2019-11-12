@@ -5,4 +5,5 @@
     <color name="colorWhite">#FFFFFFFF</color>
     <color name="colorBlack">#000000</color>
     <color name="colorDarkGrayTransparent">#80000000</color>
+    <color name="colorGreen">#0A7700</color>
 </resources>

@@ -68,7 +68,7 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
     }
 
     private fun initSearchLogRecyclerView() {
-//        binding.suggestionSearchView.setAdapter(SearchLogAdapter(searchBoxViewModel))
+//        binding.suggestionSearchView.setAdapter(DefaultSuggestionAdapter(searchBoxViewModel))
     }
 
     private fun initImageListViewModel() {

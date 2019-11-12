@@ -13,14 +13,19 @@ abstract class SuggestionAdapter<T, VH: RecyclerView.ViewHolder>(
 ) : ListAdapter<T, VH>(diffCallback){
 
     internal var onSuggestionItemClick: ((text: String, position: Int) -> Unit)? = null
-    internal var onSuggestionDeleteClick: ((text: String, position: Int) -> Unit)? = null
+    internal var onSuggestionSubButtonClick: ((text: String, position: Int) -> Unit)? = null
+    internal var onSuggestionFooterClick: (() -> Unit)? = null
 
     protected fun onSuggestionItemClick(text:String, position: Int) {
         onSuggestionItemClick?.invoke(text, position)
     }
 
-    protected fun onSuggestionDeleteClick(text:String, position: Int) {
-        onSuggestionDeleteClick?.invoke(text, position)
+    protected fun onSuggestionSubButtonClick(text:String, position: Int) {
+        onSuggestionSubButtonClick?.invoke(text, position)
+    }
+
+    protected fun onSuggestionFooterClick() {
+        onSuggestionFooterClick?.invoke()
     }
 
 }

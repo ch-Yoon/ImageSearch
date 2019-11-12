@@ -146,7 +146,7 @@
             app:onSearchButtonClickListener="@{(inputtedText) -> searchBoxViewModel.onClickSearchButton(inputtedText)}"
             app:onStateChangeListener="@{(state) -> searchBoxViewModel.onStateChange(state == State.OPEN)}"
             app:onSuggestionItemClickListener="@{(keyword, position) -> searchBoxViewModel.onClickSearchButton(keyword)}"
-            app:onSuggestionDeleteClickListener="@{(keyword, position) -> searchBoxViewModel.onClickSearchLogDeleteButton(keyword)}"
+            app:onSuggestionSubButtonClickListener="@{(keyword, position) -> searchBoxViewModel.onClickSearchLogDeleteButton(keyword)}"
             app:searchLogList="@{searchBoxViewModel.searchLogList}"
             app:close="@{searchBoxViewModel.searchBoxCloseEvent}"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -17,7 +17,7 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.ch.yoon.suggetionsearchview.adapter.SearchLogAdapter
+import com.ch.yoon.suggetionsearchview.adapter.DefaultSuggestionAdapter
 import com.ch.yoon.suggetionsearchview.adapter.SuggestionAdapter
 import com.ch.yoon.suggetionsearchview.extention.*
 import kotlinx.android.synthetic.main.suggestion_search_view.view.*
@@ -39,13 +39,11 @@ class SuggestionSearchView @JvmOverloads constructor(
     private val root: LinearLayoutCompat
 
     private val backgroundView: View
-
     private val suggestionSearchViewContainer: CardView
     private val searchViewContainer: LinearLayoutCompat
     private val closeButton: ImageView
     private val inputEditText: EditText
     private val clearButton: ImageView
-
     private val suggestionViewContainer: LinearLayoutCompat
     private val suggestionRecyclerView: RecyclerView
 
@@ -53,21 +51,19 @@ class SuggestionSearchView @JvmOverloads constructor(
     private var onSearchButtonClickListener: OnSearchButtonClickListener? = null
     private var onStateChangeListener: OnStateChangeListener? = null
     private var onSuggestionItemClickListener: OnSuggestionItemClickListener? = null
-    private var onSuggestionDeleteClickListener: OnSuggestionDeleteClickListener? = null
+    private var onSuggestionSubButtonClickListener: OnSuggestionSubButtonClickListener? = null
+    private var onSuggestionFooterClickListener: OnSuggestionFooterClickListener? = null
 
     init {
         inflate(context, R.layout.suggestion_search_view, this)
 
         root = this
-
         backgroundView = background_view
-
         suggestionSearchViewContainer = suggestion_search_view_container
         searchViewContainer = search_view_container
         closeButton = close_button
         inputEditText = input_edit_text
         clearButton = clear_button
-
         suggestionViewContainer = suggestion_view_container
         suggestionRecyclerView = suggestion_recyclerview
 
@@ -96,7 +92,7 @@ class SuggestionSearchView @JvmOverloads constructor(
                 val text = getString(R.styleable.SuggestionSearchView_text) ?: ""
                 setText(text)
 
-                val textSize = getDimension(R.styleable.SuggestionSearchView_textSize, 50f)
+                val textSize = getDimension(R.styleable.SuggestionSearchView_textSize, resources.getDimension(R.dimen.suggestion_search_input_edit_text_default_text_size))
                 setTextSize(textSize)
 
                 val textColor = getColor(R.styleable.SuggestionSearchView_textColor, ContextCompat.getColor(context, R.color.colorBlack))
@@ -118,7 +114,7 @@ class SuggestionSearchView @JvmOverloads constructor(
 
     private fun initCloseButton() {
         closeButton.setOnClickListener {
-            hideSuggestionSearchView()
+            hide()
         }
     }
 
@@ -158,7 +154,7 @@ class SuggestionSearchView @JvmOverloads constructor(
 
             setOnTouchListener { _, event ->
                 if (MotionEvent.ACTION_UP == event.action) {
-                    showSuggestionView()
+                    showSuggestions()
                 }
                 false
             }
@@ -168,35 +164,45 @@ class SuggestionSearchView @JvmOverloads constructor(
     private fun initClearButton() {
         clearButton.setOnClickListener {
             inputEditText.setText("")
-            inputEditText.requestFocus()
-            suggestionViewContainer.visible()
+            showSuggestions()
         }
     }
 
     private fun initBackgroundView() {
         backgroundView.setOnClickListener {
-            hideSuggestionSearchView()
+            hide()
         }
     }
 
     private fun initDefaultAdapter() {
-        setAdapter(SearchLogAdapter())
+        setAdapter(DefaultSuggestionAdapter())
     }
 
     fun show() {
-        showSuggestionSearchView()
+        backgroundView.visible()
+        root.visible()
+        showSuggestions()
+        onStateChangeListener?.onChange(State.OPEN)
     }
 
     fun hide() {
-        hideSuggestionSearchView()
+        backgroundView.gone()
+        root.gone()
+        inputEditText.setText("")
+        hideSuggestions()
+        onStateChangeListener?.onChange(State.CLOSE)
     }
 
     fun showSuggestions() {
-        showSuggestionView()
+        backgroundView.visible()
+        inputEditText.requestFocus()
+        suggestionViewContainer.visible()
     }
 
     fun hideSuggestions() {
-        hideSuggestionView()
+        backgroundView.gone()
+        inputEditText.clearFocus()
+        suggestionViewContainer.gone()
     }
 
     fun setText(text: String?) {
@@ -260,8 +266,12 @@ class SuggestionSearchView @JvmOverloads constructor(
         this.onSuggestionItemClickListener = onSuggestionItemClickListener
     }
 
-    fun setOnSuggestionDeleteClickListener(onSuggestionDeleteClickListener: OnSuggestionDeleteClickListener?) {
-        this.onSuggestionDeleteClickListener = onSuggestionDeleteClickListener
+    fun setOnSuggestionDeleteClickListener(onSuggestionSubButtonClickListener: OnSuggestionSubButtonClickListener?) {
+        this.onSuggestionSubButtonClickListener = onSuggestionSubButtonClickListener
+    }
+
+    fun setOnSuggestionFooterClickListener(onSuggestionFooterClickListener: OnSuggestionFooterClickListener?) {
+        this.onSuggestionFooterClickListener = onSuggestionFooterClickListener
     }
 
     fun setAdapter(adapter: SuggestionAdapter<*, *>) {
@@ -269,10 +279,13 @@ class SuggestionSearchView @JvmOverloads constructor(
             onSuggestionItemClick = { text, position ->
                 onSuggestionItemClickListener?.onClick(text, position)
                 inputEditText.setText(text)
-                hideSuggestionView()
+                hideSuggestions()
             }
-            onSuggestionDeleteClick = { text, position ->
-                onSuggestionDeleteClickListener?.onClick(text, position)
+            onSuggestionSubButtonClick = { text, position ->
+                onSuggestionSubButtonClickListener?.onClick(text, position)
+            }
+            onSuggestionFooterClick = {
+                onSuggestionFooterClickListener?.onClick()
             }
         }
     }
@@ -290,35 +303,8 @@ class SuggestionSearchView @JvmOverloads constructor(
     }
 
     private fun confirmSearch() {
-        hideSuggestionView()
+        hideSuggestions()
         onSearchButtonClickListener?.onClick(inputEditText.text.toString())
-    }
-
-    private fun showSuggestionSearchView() {
-        backgroundView.visible()
-        root.visible()
-        showSuggestionView()
-        onStateChangeListener?.onChange(State.OPEN)
-    }
-
-    private fun hideSuggestionSearchView() {
-        backgroundView.gone()
-        root.gone()
-        inputEditText.setText("")
-        hideSuggestionView()
-        onStateChangeListener?.onChange(State.CLOSE)
-    }
-
-    private fun showSuggestionView() {
-        backgroundView.visible()
-        inputEditText.requestFocus()
-        suggestionViewContainer.visible()
-    }
-
-    private fun hideSuggestionView() {
-        backgroundView.gone()
-        inputEditText.clearFocus()
-        suggestionViewContainer.gone()
     }
 
     override fun onSaveInstanceState(): Parcelable? {
