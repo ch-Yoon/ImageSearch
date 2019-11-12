@@ -35,4 +35,9 @@ class ImageRepositoryImpl(
         return imageLocalDataSource.insertOrUpdateSearchLog(keyword)
             .subscribeOn(Schedulers.io())
     }
+
+    override fun deleteAllSearchLog(): Completable {
+        return imageLocalDataSource.deleteAllSearchLog()
+            .subscribeOn(Schedulers.io())
+    }
 }

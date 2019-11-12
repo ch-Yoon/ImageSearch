@@ -16,4 +16,6 @@ interface ImageLocalDataSource {
 
     fun deleteSearchLog(searchLogModel: SearchLogModel): Completable
 
+    fun deleteAllSearchLog(): Completable
+
 }

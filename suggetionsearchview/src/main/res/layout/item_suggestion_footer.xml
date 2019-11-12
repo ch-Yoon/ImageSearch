@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorLightGray"
     android:orientation="vertical">
 
     <TextView
@@ -10,7 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/default_suggestion_item_text_size"
-        android:textColor="@color/colorGreen"
         android:padding="@dimen/default_suggestion_item_padding"
         android:gravity="center" />
 

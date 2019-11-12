@@ -37,4 +37,8 @@ class ImageLocalDataSourceImpl(
             .compose(CompletableExceptionTransformer())
     }
 
+    override fun deleteAllSearchLog(): Completable {
+        return searchLogDAO.deleteAllSearchLog()
+            .compose(CompletableExceptionTransformer())
+    }
 }

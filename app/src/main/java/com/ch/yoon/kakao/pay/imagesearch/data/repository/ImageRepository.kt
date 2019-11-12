@@ -20,4 +20,6 @@ interface ImageRepository {
 
     fun insertOrUpdateSearchLog(keyword: String): Single<SearchLogModel>
 
+    fun deleteAllSearchLog(): Completable
+
 }

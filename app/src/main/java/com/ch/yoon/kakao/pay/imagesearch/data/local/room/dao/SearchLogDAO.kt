@@ -24,4 +24,7 @@ interface SearchLogDAO {
     @Query("DELETE FROM searchLogs WHERE keyword = :keyword AND time = :time")
     fun deleteSearchLog(keyword: String, time: Long): Completable
 
+    @Query("DELETE FROM searchLogs")
+    fun deleteAllSearchLog(): Completable
+
 }

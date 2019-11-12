@@ -24,6 +24,7 @@
     <string name="success_image_search_last_data">마지막 검색 페이지입니다</string>
     <string name="empty_keyword_guide">검색어를 입력해주세요</string>
     <string name="success_all_image_info_delete_by_keyword">삭제 완료</string>
+    <string name="success_delete_all_search_log">전체 삭제 완료</string>
 
     <!-- suggestion_search_view-->
     <string name="suggestion_search_view_hint">검색</string>

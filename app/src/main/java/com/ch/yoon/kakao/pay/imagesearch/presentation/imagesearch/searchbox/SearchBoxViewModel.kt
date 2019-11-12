@@ -62,6 +62,17 @@ class SearchBoxViewModel(
             }
     }
 
+    fun onClickSearchLogAllDelete() {
+        imageRepository.deleteAllSearchLog()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                removeAllSearchLogList()
+            }, { throwable ->
+                Log.d(TAG, throwable.message)
+            })
+            .register()
+    }
+
     fun onClickBackPressButton() {
         if(isOpen) {
             _searchBoxCloseEvent.call()
@@ -116,6 +127,13 @@ class SearchBoxViewModel(
     private fun removeFromSearchLogList(targetSearchLog: SearchLogModel) {
         _searchLogList.updateOnMainThread { currentSearchLogList ->
             currentSearchLogList?.removeFirstIf { oldLog -> oldLog.keyword == targetSearchLog.keyword }
+        }
+    }
+
+    private fun removeAllSearchLogList() {
+        _searchLogList.updateOnMainThread { currentSearchLogList ->
+            currentSearchLogList?.clear()
+            currentSearchLogList
         }
     }
 }

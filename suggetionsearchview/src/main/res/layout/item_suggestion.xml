@@ -19,8 +19,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="15dp"
-            android:textColor="@color/colorBlack" />
+            android:padding="15dp"/>
 
         <ImageView
             android:id="@+id/suggestion_sub_button_image_view"

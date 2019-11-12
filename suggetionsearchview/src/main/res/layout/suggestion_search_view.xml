@@ -81,11 +81,10 @@
                 android:id="@+id/suggestion_view_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorLightGray"
                 android:orientation="vertical">
 
                 <View
-                    android:id="@+id/suggestion_division_line"
+                    android:id="@+id/search_view_division_line"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginStart="@dimen/suggestion_division_side_margin"

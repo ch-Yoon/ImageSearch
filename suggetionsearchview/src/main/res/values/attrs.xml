@@ -13,8 +13,10 @@
         <attr name="hint" format="reference|string"/>
         <attr name="closeButtonIcon" format="reference"/>
         <attr name="clearButtonIcon" format="reference"/>
+        <attr name="searchViewDivisionLineColor" format="reference|color"/>
 
         <!-- default suggestion view option -->
+        <attr name="suggestionBackgroundColor" format="reference|color"/>
         <attr name="suggestionAccessoryIcon" format="reference"/>
         <attr name="suggestionTextSize" format="reference|dimension"/>
         <attr name="suggestionTextColor" format="reference|color"/>
