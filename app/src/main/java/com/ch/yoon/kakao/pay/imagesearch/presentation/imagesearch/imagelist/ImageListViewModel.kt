@@ -13,12 +13,10 @@ import com.ch.yoon.kakao.pay.imagesearch.data.repository.ImageRepository
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.ImageDocument
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.ImageSearchMeta
 import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.ImageSearchResponse
-import com.ch.yoon.kakao.pay.imagesearch.util.extension.TAG
-import com.ch.yoon.kakao.pay.imagesearch.util.extension.safeLet
-import com.ch.yoon.kakao.pay.imagesearch.util.extension.updateOnMainThread
 import com.ch.yoon.kakao.pay.imagesearch.presentation.base.BaseViewModel
 import com.ch.yoon.kakao.pay.imagesearch.presentation.common.livedata.SingleLiveEvent
 import com.ch.yoon.kakao.pay.imagesearch.presentation.common.pageload.PageLoadHelper
+import com.ch.yoon.kakao.pay.imagesearch.util.extension.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import java.util.ArrayList
 
@@ -60,7 +58,7 @@ class ImageListViewModel(
     private var searchMeta: ImageSearchMeta? = null
 
     fun changeImageSortType(imageSortType: ImageSortType) {
-        _imageDocumentList.value = null
+        _imageDocumentList.clear()
         _imageSortType.value = imageSortType
         pageLoadHelper.requestStartOverFromTheBeginning()
     }
@@ -106,8 +104,15 @@ class ImageListViewModel(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ imageSearchResponse ->
                 _imageSearchState.value = ImageSearchState.SUCCESS
-                clearBeforeDocumentListIfFirstRequest(imageSearchRequest)
-                handlingImageSearchResult(imageSearchResponse)
+
+                if (imageSearchRequest.isFirstRequest) {
+                    _imageDocumentList.clear()
+                }
+
+                with(imageSearchResponse) {
+                    searchMeta = imageSearchMeta
+                    updateImageDocumentList(imageDocumentList)
+                }
             }, { throwable ->
                 _imageSearchState.value = ImageSearchState.FAIL
                 handlingImageSearchError(throwable)
@@ -115,33 +120,12 @@ class ImageListViewModel(
             .register()
     }
 
-    private fun handlingImageSearchResult(imageSearchResponse: ImageSearchResponse) {
-        with(imageSearchResponse) {
-            updateSearchMetaInfo(imageSearchMeta)
-            updateImageDocumentList(imageDocumentList)
-        }
-    }
-
-    private fun clearBeforeDocumentListIfFirstRequest(imageSearchRequest: ImageSearchRequest) {
-        if (imageSearchRequest.isFirstRequest) {
-            _imageDocumentList.value = null
-        }
-    }
-
-    private fun updateSearchMetaInfo(kakaoImageSearchMetaInfo: ImageSearchMeta) {
-        searchMeta = kakaoImageSearchMetaInfo
-    }
-
     private fun updateImageDocumentList(receivedImageDocumentList: List<ImageDocument>) {
-        _imageDocumentList.updateOnMainThread { oldList ->
-            val newList = oldList ?: ArrayList()
-            newList.addAll(receivedImageDocumentList)
-            if(newList.isEmpty()) {
-                updateShowMessage(R.string.success_image_search_no_result)
-            } else if(isNotRemainingMoreData) {
-                updateShowMessage(R.string.success_image_search_last_data)
-            }
-            newList
+        _imageDocumentList.addAll(receivedImageDocumentList)
+        if(_imageDocumentList.isEmpty()) {
+            updateShowMessage(R.string.success_image_search_no_result)
+        } else if(isNotRemainingMoreData) {
+            updateShowMessage(R.string.success_image_search_last_data)
         }
     }
 

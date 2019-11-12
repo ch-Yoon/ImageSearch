@@ -24,7 +24,7 @@ class SearchBoxViewModel(
 ) : BaseViewModel (application) {
 
     private val _searchLogList = MutableLiveData<MutableList<SearchLogModel>>(mutableListOf())
-    val searchLogList: LiveData<List<String>> = Transformations.map(_searchLogList) { it?.map { log -> log.keyword }?.toList() }
+    val searchLogList: LiveData<List<String>> = Transformations.map(_searchLogList) { list -> list?.map { it.keyword }?.toList() }
 
     private val _searchEvent = SingleLiveEvent<String>()
     val searchEvent: LiveData<String> = _searchEvent
@@ -49,24 +49,24 @@ class SearchBoxViewModel(
     }
 
     fun onClickSearchLogDeleteButton(keyword: String) {
-        _searchLogList.value?.find { it.keyword == keyword }
-            ?.let { targetSearchLog ->
-                imageRepository.deleteSearchLog(SearchLogModel(targetSearchLog.keyword, targetSearchLog.time))
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({
-                        removeFromSearchLogList(targetSearchLog)
-                    }, { throwable ->
-                        Log.d(TAG, throwable.message)
-                    })
-                    .register()
-            }
+        val targetLog = _searchLogList.find { it.keyword == keyword }
+        if(targetLog != null) {
+            imageRepository.deleteSearchLog(targetLog)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    _searchLogList.removeFirst { it.keyword == keyword }
+                }, { throwable ->
+                    Log.d(TAG, throwable.message)
+                })
+                .register()
+        }
     }
 
     fun onClickSearchLogAllDelete() {
         imageRepository.deleteAllSearchLog()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                removeAllSearchLogList()
+                _searchLogList.clear()
             }, { throwable ->
                 Log.d(TAG, throwable.message)
             })
@@ -108,32 +108,11 @@ class SearchBoxViewModel(
     private fun saveKeywordToRepository(keyword: String) {
         imageRepository.insertOrUpdateSearchLog(keyword)
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ updatedSearchLog ->
-                updateSearchLogList(updatedSearchLog)
+            .subscribe({ newLog ->
+                _searchLogList.removeFirstAndAddFirst(newLog) { it.keyword == keyword }
             }, { throwable ->
                 Log.d(TAG, throwable.message)
             })
             .register()
-    }
-
-    private fun updateSearchLogList(newSearchLog: SearchLogModel) {
-        _searchLogList.updateOnMainThread { currentSearchLogList ->
-            currentSearchLogList?.removeFirstIf { oldLog -> oldLog.keyword == newSearchLog.keyword }
-                ?.addFirst(newSearchLog)
-                ?: mutableListOf()
-        }
-    }
-
-    private fun removeFromSearchLogList(targetSearchLog: SearchLogModel) {
-        _searchLogList.updateOnMainThread { currentSearchLogList ->
-            currentSearchLogList?.removeFirstIf { oldLog -> oldLog.keyword == targetSearchLog.keyword }
-        }
-    }
-
-    private fun removeAllSearchLogList() {
-        _searchLogList.updateOnMainThread { currentSearchLogList ->
-            currentSearchLogList?.clear()
-            currentSearchLogList
-        }
     }
 }

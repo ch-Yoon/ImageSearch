@@ -27,9 +27,9 @@ class ImageDetailViewModel(application: Application) : BaseViewModel(application
     private var imageDocument: ImageDocument? = null
 
     fun showImageDetailInfo(receivedImageDocument: ImageDocument?) {
-        receivedImageDocument?.run {
-            imageDocument = this
-            _imageUrlInfo.value = imageUrl
+        receivedImageDocument?.let { document ->
+            imageDocument = document
+            _imageUrlInfo.value = document.imageUrl
         } ?: run {
             updateShowMessage(R.string.unknown_error)
             _finishEvent.call()
@@ -37,11 +37,11 @@ class ImageDetailViewModel(application: Application) : BaseViewModel(application
     }
 
     fun onClickWebButton() {
-        imageDocument?.run {
-            if(TextUtils.isEmpty(docUrl)) {
+        imageDocument?.let { document ->
+            if(TextUtils.isEmpty(document.docUrl)) {
                 updateShowMessage(R.string.non_existent_url_error)
             } else {
-                _moveToWebEvent.value = docUrl
+                _moveToWebEvent.value = document.docUrl
             }
         }
     }
