@@ -12,7 +12,6 @@ import com.ch.yoon.kakao.pay.imagesearch.data.repository.model.SearchLogModel
 import com.ch.yoon.kakao.pay.imagesearch.util.extension.*
 import com.ch.yoon.kakao.pay.imagesearch.presentation.base.BaseViewModel
 import com.ch.yoon.kakao.pay.imagesearch.presentation.common.livedata.SingleLiveEvent
-import com.ch.yoon.suggetionsearchview.model.SearchLog
 import io.reactivex.android.schedulers.AndroidSchedulers
 
 /**
@@ -24,8 +23,8 @@ class SearchBoxViewModel(
     private val imageRepository: ImageRepository
 ) : BaseViewModel (application) {
 
-    private val _searchLogList = MutableLiveData<MutableList<SearchLog>>(mutableListOf())
-    val searchLogList: LiveData<List<SearchLog>> = Transformations.map(_searchLogList) { it?.toList() }
+    private val _searchLogList = MutableLiveData<MutableList<SearchLogModel>>(mutableListOf())
+    val searchLogList: LiveData<List<String>> = Transformations.map(_searchLogList) { it?.map { log -> log.keyword }?.toList() }
 
     private val _searchEvent = SingleLiveEvent<String>()
     val searchEvent: LiveData<String> = _searchEvent
@@ -42,9 +41,7 @@ class SearchBoxViewModel(
         imageRepository.requestSearchLogList()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ receivedSearchLogList ->
-                _searchLogList.value = receivedSearchLogList.map { SearchLog(it.keyword, it.time) }
-                    .sortedByDescending { it.time }
-                    .toMutableList()
+                _searchLogList.value = receivedSearchLogList.sorted().toMutableList()
             }, { throwable ->
                 Log.d(TAG, throwable.message)
             })
@@ -101,14 +98,14 @@ class SearchBoxViewModel(
         imageRepository.insertOrUpdateSearchLog(keyword)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ updatedSearchLog ->
-                updateSearchLogList(SearchLog(updatedSearchLog.keyword, updatedSearchLog.time))
+                updateSearchLogList(updatedSearchLog)
             }, { throwable ->
                 Log.d(TAG, throwable.message)
             })
             .register()
     }
 
-    private fun updateSearchLogList(newSearchLog: SearchLog) {
+    private fun updateSearchLogList(newSearchLog: SearchLogModel) {
         _searchLogList.updateOnMainThread { currentSearchLogList ->
             currentSearchLogList?.removeFirstIf { oldLog -> oldLog.keyword == newSearchLog.keyword }
                 ?.addFirst(newSearchLog)
@@ -116,7 +113,7 @@ class SearchBoxViewModel(
         }
     }
 
-    private fun removeFromSearchLogList(targetSearchLog: SearchLog) {
+    private fun removeFromSearchLogList(targetSearchLog: SearchLogModel) {
         _searchLogList.updateOnMainThread { currentSearchLogList ->
             currentSearchLogList?.removeFirstIf { oldLog -> oldLog.keyword == targetSearchLog.keyword }
         }

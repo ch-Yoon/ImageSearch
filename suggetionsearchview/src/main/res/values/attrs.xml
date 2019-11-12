@@ -14,5 +14,15 @@
         <attr name="closeButtonIcon" format="reference"/>
         <attr name="clearButtonIcon" format="reference"/>
 
+        <!-- default suggestion view option -->
+        <attr name="suggestionAccessoryIcon" format="reference"/>
+        <attr name="suggestionTextSize" format="reference|dimension"/>
+        <attr name="suggestionTextColor" format="reference|color"/>
+        <attr name="suggestionSubButtonIcon" format="reference"/>
+        <attr name="suggestionFooterText" format="reference|string"/>
+        <attr name="suggestionFooterEnable" format="boolean"/>
+        <attr name="suggestionFooterTextSize" format="reference|dimension"/>
+        <attr name="suggestionFooterTextColor" format="reference|color"/>
     </declare-styleable>
+
 </resources>

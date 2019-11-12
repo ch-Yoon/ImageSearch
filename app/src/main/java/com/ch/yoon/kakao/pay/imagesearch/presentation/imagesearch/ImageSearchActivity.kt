@@ -33,8 +33,6 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
 
         initImageListViewModel()
         observeImageListViewModel()
-
-        initSearchLogRecyclerView()
         initImageRecyclerView()
 
         searchButton.setOnClickListener {
@@ -65,10 +63,6 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
                 showToast(message)
             })
         }
-    }
-
-    private fun initSearchLogRecyclerView() {
-//        binding.suggestionSearchView.setAdapter(DefaultSuggestionAdapter(searchBoxViewModel))
     }
 
     private fun initImageListViewModel() {

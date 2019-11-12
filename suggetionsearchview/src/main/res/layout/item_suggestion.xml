@@ -12,8 +12,7 @@
             android:id="@+id/suggestion_accessory_image_view"
             android:layout_width="@dimen/default_suggestion_item_icon_size"
             android:layout_height="@dimen/default_suggestion_item_icon_size"
-            android:padding="@dimen/default_suggestion_item_icon_padding"
-            app:srcCompat="@drawable/ic_action_time" />
+            android:padding="@dimen/default_suggestion_item_icon_padding" />
 
         <TextView
             android:id="@+id/suggestion_text_view"
@@ -27,8 +26,7 @@
             android:id="@+id/suggestion_sub_button_image_view"
             android:layout_width="@dimen/default_suggestion_item_icon_size"
             android:layout_height="@dimen/default_suggestion_item_icon_size"
-            android:padding="@dimen/default_suggestion_item_icon_padding"
-            app:srcCompat="@drawable/ic_action_delete" />
+            android:padding="@dimen/default_suggestion_item_icon_padding" />
 
     </LinearLayout>
 

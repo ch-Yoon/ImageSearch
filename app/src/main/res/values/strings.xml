@@ -25,6 +25,7 @@
     <string name="empty_keyword_guide">검색어를 입력해주세요</string>
     <string name="success_all_image_info_delete_by_keyword">삭제 완료</string>
 
-    <!-- suggestion_search_view_aa -->
-    <string name="suggestion_search_view_guide_message">검색</string>
+    <!-- suggestion_search_view-->
+    <string name="suggestion_search_view_hint">검색</string>
+    <string name="suggestion_search_view_footer_text">검색 기록 전체 삭제</string>
 </resources>

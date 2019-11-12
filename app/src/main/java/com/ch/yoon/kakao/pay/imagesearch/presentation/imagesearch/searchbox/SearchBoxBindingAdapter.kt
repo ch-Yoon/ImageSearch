@@ -3,7 +3,6 @@ package com.ch.yoon.kakao.pay.imagesearch.presentation.imagesearch.searchbox
 import androidx.databinding.BindingAdapter
 import com.ch.yoon.suggetionsearchview.SuggestionSearchView
 import com.ch.yoon.suggetionsearchview.adapter.DefaultSuggestionAdapter
-import com.ch.yoon.suggetionsearchview.model.SearchLog
 import java.util.ArrayList
 
 /**
@@ -11,9 +10,20 @@ import java.util.ArrayList
  * Date : 2019-10-27.
  */
 @BindingAdapter("searchLogList")
-fun setItems(suggestionSearchView: SuggestionSearchView, searchLogList: List<SearchLog>?) {
-    val adapter = suggestionSearchView.getAdapter() as DefaultSuggestionAdapter?
-    adapter?.submitList(if (searchLogList == null) null else ArrayList(searchLogList))
+fun setItems(suggestionSearchView: SuggestionSearchView, searchLogList: List<String>?) {
+    (suggestionSearchView.getAdapter() as DefaultSuggestionAdapter?)?.let { adapter ->
+        val newList = if(searchLogList == null || searchLogList.isEmpty()) {
+            null
+        } else {
+            ArrayList(searchLogList)
+        }
+
+        adapter.submitList(newList)
+
+        if(newList == null) {
+            adapter.notifyDataSetChanged()
+        }
+    }
 }
 
 @BindingAdapter("close")
