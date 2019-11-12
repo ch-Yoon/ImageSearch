@@ -88,34 +88,28 @@ class ImageListViewModel(
 
     private fun observePageLoadInspector() {
         pageLoadHelper.onPageLoadApprove = { key, pageNumber, dataSize, isFirstPage ->
-            _imageSortType.value?.let { sortType ->
-                val request = ImageSearchRequest(key, sortType, pageNumber, dataSize, isFirstPage)
-                requestImageSearchToRepository(request)
-            }
+            _imageSearchState.value = ImageSearchState.NONE
+
+            val request = ImageSearchRequest(key, _imageSortType.value!!, pageNumber, dataSize, isFirstPage)
+            imageRepository.requestImageList(request)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ imageSearchResponse ->
+                    _imageSearchState.value = ImageSearchState.SUCCESS
+
+                    if (request.isFirstRequest) {
+                        _imageDocumentList.clear()
+                    }
+
+                    with(imageSearchResponse) {
+                        searchMeta = imageSearchMeta
+                        updateImageDocumentList(imageDocumentList)
+                    }
+                }, { throwable ->
+                    _imageSearchState.value = ImageSearchState.FAIL
+                    handlingImageSearchError(throwable)
+                })
+                .register()
         }
-    }
-
-    private fun requestImageSearchToRepository(imageSearchRequest: ImageSearchRequest) {
-        _imageSearchState.value = ImageSearchState.NONE
-
-        imageRepository.requestImageList(imageSearchRequest)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ imageSearchResponse ->
-                _imageSearchState.value = ImageSearchState.SUCCESS
-
-                if (imageSearchRequest.isFirstRequest) {
-                    _imageDocumentList.clear()
-                }
-
-                with(imageSearchResponse) {
-                    searchMeta = imageSearchMeta
-                    updateImageDocumentList(imageDocumentList)
-                }
-            }, { throwable ->
-                _imageSearchState.value = ImageSearchState.FAIL
-                handlingImageSearchError(throwable)
-            })
-            .register()
     }
 
     private fun updateImageDocumentList(receivedImageDocumentList: List<ImageDocument>) {
