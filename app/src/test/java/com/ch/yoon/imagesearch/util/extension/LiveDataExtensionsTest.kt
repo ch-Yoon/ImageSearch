@@ -67,7 +67,7 @@ class LiveDataExtensionsTest {
     }
 
     @Test
-    fun `empty 유무를 확인하는지 테스트`() {
+    fun `empty 테스트`() {
         // given
         val nonEmptyLiveData = MutableLiveData<MutableList<Int>>(mutableListOf(1, 2, 2, 3, 4))
         val emptyLiveData = MutableLiveData<MutableList<Int>>()
@@ -75,6 +75,17 @@ class LiveDataExtensionsTest {
         // when && then
         assertEquals(false, nonEmptyLiveData.isEmpty())
         assertEquals(true, emptyLiveData.isEmpty())
+    }
+
+    @Test
+    fun `notEmpty 테스트`() {
+        // given
+        val nonEmptyLiveData = MutableLiveData<MutableList<Int>>(mutableListOf(1, 2, 2, 3, 4))
+        val emptyLiveData = MutableLiveData<MutableList<Int>>()
+
+        // when && then
+        assertEquals(true, nonEmptyLiveData.isNotEmpty())
+        assertEquals(false, emptyLiveData.isNotEmpty())
     }
 
     @Test

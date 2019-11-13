@@ -125,7 +125,7 @@ class ImageListViewModel(
 
     private fun updateSearchMeta(searchMeta: ImageSearchMeta) {
         this.searchMeta = searchMeta
-        if(searchMeta.isEnd) {
+        if(_imageDocumentList.isNotEmpty() && searchMeta.isEnd) {
             updateShowMessage(R.string.success_image_search_last_data)
         }
     }

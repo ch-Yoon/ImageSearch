@@ -136,7 +136,7 @@ class ImageListViewModelTest {
 
         // then
         imageListViewModel.showMessageEvent.observeForever { message ->
-            assertEquals(message, SUCCESS_NO_RESULT)
+            assertEquals(SUCCESS_NO_RESULT, message)
         }
     }
 
@@ -282,7 +282,18 @@ class ImageListViewModelTest {
     }
 
     private fun createVirtualImageDocument(id: Int): ImageDocument {
-        return ImageDocument("thumbnailUrl$id", "imageUrlInfo$id", "docUrl$id")
+        return ImageDocument(
+            "id$id",
+            "collection$id",
+            "thumbnailUrl$id",
+            "imageUrlInfo$id",
+            0,
+            0,
+            "displaySiteName$id",
+            "docUrl$id",
+            "dateTime$id",
+            false
+        )
     }
 
 }

@@ -25,6 +25,8 @@ class ImageRepositoryImplTest {
     val rxSchedulerRule = RxSchedulerRule()
 
     @MockK
+    private lateinit var mockImageLocalDataSource: ImageLocalDataSource
+    @MockK
     private lateinit var mockImageRemoteDataSource: ImageRemoteDataSource
 
     private lateinit var imageRepository: ImageRepository
@@ -33,14 +35,14 @@ class ImageRepositoryImplTest {
     fun init() {
         MockKAnnotations.init(this, relaxUnitFun = true)
 
-        imageRepository = ImageRepositoryImpl(mockImageRemoteDataSource)
+        imageRepository = ImageRepositoryImpl(mockImageLocalDataSource, mockImageRemoteDataSource)
     }
 
     @Test
     fun `리모트 데이터소스에 이미지 요청을 전달하는지 테스트`() {
         // given
+        every { mockImageLocalDataSource.selectAllFavoriteImageDocumentList() } returns Single.just(mutableListOf())
         every { mockImageRemoteDataSource.requestImageList(any()) } returns Single.just(emptyImageSearchResponse())
-
         // when
         val request = emptyImageSearchRequest()
         imageRepository.requestImageList(request)

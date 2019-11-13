@@ -44,6 +44,10 @@ fun <T> MutableLiveData<MutableList<T>>.clear() {
     }
 }
 
+fun <T> MutableLiveData<MutableList<T>>.isNotEmpty(): Boolean {
+    return isEmpty().not()
+}
+
 fun <T> MutableLiveData<MutableList<T>>.isEmpty(): Boolean {
     return value?.isEmpty() ?: true
 }

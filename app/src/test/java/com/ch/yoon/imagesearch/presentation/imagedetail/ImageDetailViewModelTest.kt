@@ -12,6 +12,7 @@ import org.junit.Before
 import org.junit.Rule
 import android.text.TextUtils
 import com.ch.yoon.imagesearch.R
+import com.ch.yoon.imagesearch.data.repository.image.ImageRepository
 import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
 import junit.framework.Assert.assertEquals
 import org.junit.Test
@@ -35,6 +36,8 @@ class ImageDetailViewModelTest {
 
     @MockK
     private lateinit var mockApplication: Application
+    @MockK
+    private lateinit var mockImageRepository: ImageRepository
 
     private lateinit var imageDetailViewModel: ImageDetailViewModel
 
@@ -53,7 +56,7 @@ class ImageDetailViewModelTest {
     }
 
     private fun initImageDetailViewModel() {
-        imageDetailViewModel = ImageDetailViewModel(mockApplication)
+        imageDetailViewModel = ImageDetailViewModel(mockApplication, mockImageRepository)
     }
 
     private fun initUtils() {
@@ -151,17 +154,31 @@ class ImageDetailViewModelTest {
 
     private fun createVirtualImageDocument(id: Int): ImageDocument {
         return ImageDocument(
+            "id$id",
+            "collection$id",
             "thumbnailUrl$id",
             "imageUrlInfo$id",
-            "docUrl$id"
+            0,
+            0,
+            "displaySiteName$id",
+            "docUrl$id",
+            "dateTime$id",
+            false
         )
     }
 
     private fun createVirtualImageDocumentWithEmptyDocUrl(id: Int): ImageDocument {
         return ImageDocument(
+            "id$id",
+            "collection$id",
             "thumbnailUrl$id",
             "imageUrlInfo$id",
-            ""
+            0,
+            0,
+            "displaySiteName$id",
+            "",
+            "dateTime$id",
+            false
         )
     }
 }

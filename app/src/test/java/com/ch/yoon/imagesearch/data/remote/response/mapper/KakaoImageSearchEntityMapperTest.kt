@@ -27,7 +27,18 @@ class KakaoImageSearchEntityMapperTest {
         // then
         val meta = ImageSearchMeta(kakaoImaggSearchResponse.kakaoImageSearchMeta.isEnd)
         val list = kakaoImaggSearchResponse.kakaoImageDocumentList.map {
-            ImageDocument(it.thumbnailUrl, it.imageUrl, it.docUrl)
+            ImageDocument(
+                "${it.thumbnailUrl}&${it.imageUrl}",
+                it.collection,
+                it.thumbnailUrl,
+                it.imageUrl,
+                it.width,
+                it.height,
+                it.displaySiteName,
+                it.docUrl,
+                it.dateTime,
+                false
+            )
         }
         val expectedResponse = ImageSearchResponse(meta, list)
         assertEquals(expectedResponse, convertedResponse)
