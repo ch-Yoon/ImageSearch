@@ -67,7 +67,7 @@ class ImageListViewModelTest {
     private fun initImageListViewModel() {
         val lambdaSlot = slot<(key: String, pageNumber: Int, dataSize: Int, isFirstPage: Boolean) -> Unit>()
         every {
-            mockPageLoadHelper.onPageLoadApprove = capture(lambdaSlot)
+            mockPageLoadHelper.onPageLoadApproveCallback = capture(lambdaSlot)
         } answers {
             capturedPageLoadApprove = lambdaSlot.captured
         }

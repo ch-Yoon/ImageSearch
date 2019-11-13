@@ -36,7 +36,7 @@ class ImageListViewModel(
     private val _imageSortType = NonNullMutableLiveData(ImageSortType.ACCURACY)
     val imageSortType: LiveData<ImageSortType> = _imageSortType
 
-    private val _countOfItemInLine = MutableLiveData(2)
+    private val _countOfItemInLine = NonNullMutableLiveData(2)
     val countOfItemInLine: LiveData<Int> = _countOfItemInLine
 
     private val _imageDocumentList = MutableLiveData<MutableList<ImageDocument>>()
@@ -72,11 +72,9 @@ class ImageListViewModel(
         pageLoadHelper.requestRetryAsPreviousValue()
     }
 
-    fun loadMoreImageListIfPossible(displayPosition: Int) {
+    fun loadMoreImageListIfPossible(position: Int) {
         if (isRemainingMoreData) {
-            safeLet(_countOfItemInLine.value, _imageDocumentList.value) { count, documents ->
-                pageLoadHelper.requestPreloadIfPossible(displayPosition, documents.size, count)
-            }
+            pageLoadHelper.requestPreloadIfPossible(position, _imageDocumentList.size(), _countOfItemInLine.value)
         }
     }
 
@@ -89,7 +87,7 @@ class ImageListViewModel(
     }
 
     private fun observePageLoadInspector() {
-        pageLoadHelper.onPageLoadApprove = { key, pageNumber, dataSize, isFirstPage ->
+        pageLoadHelper.onPageLoadApproveCallback = { key, pageNumber, dataSize, isFirstPage ->
             val request = ImageSearchRequest(key, _imageSortType.value, pageNumber, dataSize, isFirstPage)
             requestImageListToRepository(request)
         }

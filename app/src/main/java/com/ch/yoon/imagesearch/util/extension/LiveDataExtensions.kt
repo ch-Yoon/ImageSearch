@@ -69,3 +69,7 @@ inline fun <T> MutableLiveData<MutableList<T>>.replace(replaceValue: T, predicat
         value = list
     }
 }
+
+fun <T> MutableLiveData<MutableList<T>>.size(): Int {
+    return value?.size ?: 0
+}

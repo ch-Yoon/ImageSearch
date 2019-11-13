@@ -10,7 +10,7 @@ class PageLoadHelper<T>(private val config: PageLoadConfiguration) {
 
     private val previousApproveLog = PageLoadApproveLog<T>()
 
-    var onPageLoadApprove: ((key: T, pageNumber: Int, dataSize: Int, isFirstPage: Boolean) -> Unit)? = null
+    var onPageLoadApproveCallback: ((key: T, pageNumber: Int, dataSize: Int, isFirstPage: Boolean) -> Unit)? = null
 
     fun requestFirstLoad(key: T) {
         approveFirstImageSearch(key)
@@ -84,7 +84,7 @@ class PageLoadHelper<T>(private val config: PageLoadConfiguration) {
 
     private fun approveImageSearch(key: T, pageNumber: Int, dataTotalSize: Int) {
         recordApproveRequest(key, dataTotalSize, pageNumber)
-        onPageLoadApprove?.invoke(key, pageNumber, config.requiredDataSize, pageNumber == config.startPageNumber)
+        onPageLoadApproveCallback?.invoke(key, pageNumber, config.requiredDataSize, pageNumber == config.startPageNumber)
     }
 
     private fun recordApproveRequest(key: T, dataTotalSize: Int, pageNumber: Int) {

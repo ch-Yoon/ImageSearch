@@ -22,7 +22,7 @@ class PageLoadHelperTest {
         var actualPageNumber: Int? = null
         var actualDataSize: Int? = null
         var actualIsFirstPage: Boolean? = null
-        pageLoadHelper.onPageLoadApprove = { key, pageNumber, dataSize, isFirstPage ->
+        pageLoadHelper.onPageLoadApproveCallback = { key, pageNumber, dataSize, isFirstPage ->
             actualKey = key
             actualPageNumber = pageNumber
             actualDataSize = dataSize
@@ -48,7 +48,7 @@ class PageLoadHelperTest {
         var actualPageNumber: Int? = null
         var actualDataSize: Int? = null
         var actualIsFirstPage: Boolean? = null
-        pageLoadHelper.onPageLoadApprove = { key, pageNumber, dataSize, isFirstPage ->
+        pageLoadHelper.onPageLoadApproveCallback = { key, pageNumber, dataSize, isFirstPage ->
             actualKey = key
             actualPageNumber = pageNumber
             actualDataSize = dataSize
@@ -74,7 +74,7 @@ class PageLoadHelperTest {
         var actualPageNumber: Int? = null
         var actualDataSize: Int? = null
         var actualIsFirstPage: Boolean? = null
-        pageLoadHelper.onPageLoadApprove = { key, pageNumber, dataSize, isFirstPage ->
+        pageLoadHelper.onPageLoadApproveCallback = { key, pageNumber, dataSize, isFirstPage ->
             actualKey = key
             actualPageNumber = pageNumber
             actualDataSize = dataSize
@@ -97,7 +97,7 @@ class PageLoadHelperTest {
 
         // when
         var approveCount = 0
-        pageLoadHelper.onPageLoadApprove = { _, _, _, _ ->
+        pageLoadHelper.onPageLoadApproveCallback = { _, _, _, _ ->
             approveCount++
         }
         pageLoadHelper.requestFirstLoad("테스트")
@@ -117,7 +117,7 @@ class PageLoadHelperTest {
         var firstPageNumber: Int? = null
         var firstDataSize: Int? = null
         var firstIsFirstPage: Boolean? = null
-        pageLoadHelper.onPageLoadApprove = { key, pageNumber, dataSize, isFirstPage ->
+        pageLoadHelper.onPageLoadApproveCallback = { key, pageNumber, dataSize, isFirstPage ->
             firstKey = key
             firstPageNumber = pageNumber
             firstDataSize = dataSize
@@ -129,7 +129,7 @@ class PageLoadHelperTest {
         var targetPageNumber: Int? = null
         var targetDataSize: Int? = null
         var targetIsFirstPage: Boolean? = null
-        pageLoadHelper.onPageLoadApprove = { key, pageNumber, dataSize, isFirstPage ->
+        pageLoadHelper.onPageLoadApproveCallback = { key, pageNumber, dataSize, isFirstPage ->
             targetKey = key
             targetPageNumber = pageNumber
             targetDataSize = dataSize
@@ -155,7 +155,7 @@ class PageLoadHelperTest {
         var basePageNumber: Int? = null
         var baseDataSize: Int? = null
         var baseIsFirstPage: Boolean? = null
-        pageLoadHelper.onPageLoadApprove = { key, pageNumber, dataSize, isFirstPage ->
+        pageLoadHelper.onPageLoadApproveCallback = { key, pageNumber, dataSize, isFirstPage ->
             baseKey = key
             basePageNumber = pageNumber
             baseDataSize = dataSize
@@ -169,7 +169,7 @@ class PageLoadHelperTest {
         var targetPageNumber: Int? = null
         var targetDataSize: Int? = null
         var targetIsFirstPage: Boolean? = null
-        pageLoadHelper.onPageLoadApprove = { key, pageNumber, dataSize, isFirstPage ->
+        pageLoadHelper.onPageLoadApproveCallback = { key, pageNumber, dataSize, isFirstPage ->
             targetKey = key
             targetPageNumber = pageNumber
             targetDataSize = dataSize
