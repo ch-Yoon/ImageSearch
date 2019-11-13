@@ -47,7 +47,7 @@ class SuggestionSearchView @JvmOverloads constructor(
     private val suggestionViewContainer: LinearLayoutCompat
     private val suggestionRecyclerView: RecyclerView
 
-    private var inputtedText: String? = ""
+    private var searchViewText: String? = ""
     private var radius: Float = -1f
     private var margin: Float = -1f
     private var searchViewBackgroundColor: Int = -1
@@ -239,7 +239,6 @@ class SuggestionSearchView @JvmOverloads constructor(
     fun hide() {
         backgroundView.gone()
         root.gone()
-        inputEditText.setText("")
         hideSuggestions()
         onStateChangeListener?.onChange(State.CLOSE)
     }
@@ -257,10 +256,10 @@ class SuggestionSearchView @JvmOverloads constructor(
     }
 
     fun setText(text: String?) {
-        inputtedText = text
-        inputtedText?.let { text ->
+        searchViewText = text
+        searchViewText?.let { inputtedText ->
             val beforeText = inputEditText.text.toString()
-            if(beforeText != text) {
+            if(inputtedText != beforeText) {
                 inputEditText.setText(text)
             }
         }
@@ -471,7 +470,7 @@ class SuggestionSearchView @JvmOverloads constructor(
 
     override fun onSaveInstanceState(): Parcelable? {
         val state = SavedState(super.onSaveInstanceState())
-        state.inputtedText = inputtedText
+        state.searchViewText = searchViewText
         state.suggestionSearchViewContainerVisibility = root.visibility
         state.suggestionViewContainerVisibility = suggestionViewContainer.visibility
         state.radius = radius
@@ -535,7 +534,7 @@ class SuggestionSearchView @JvmOverloads constructor(
 
         var suggestionSearchViewContainerVisibility: Int = 0
         var suggestionViewContainerVisibility: Int = 0
-        var inputtedText: String? = ""
+        var searchViewText: String? = ""
         var radius: Float = -1f
         var margin: Float = -1f
         var searchViewBackgroundColor: Int = -1
@@ -561,7 +560,7 @@ class SuggestionSearchView @JvmOverloads constructor(
             with(source) {
                 suggestionSearchViewContainerVisibility = readInt()
                 suggestionViewContainerVisibility = readInt()
-                inputtedText = readString() ?: ""
+                searchViewText = readString() ?: ""
                 radius = readFloat()
                 margin = readFloat()
                 searchViewBackgroundColor = readInt()
@@ -590,7 +589,7 @@ class SuggestionSearchView @JvmOverloads constructor(
             with(dest) {
                 writeInt(suggestionSearchViewContainerVisibility)
                 writeInt(suggestionViewContainerVisibility)
-                writeString(inputtedText ?: "")
+                writeString(searchViewText ?: "")
                 writeFloat(radius)
                 writeFloat(margin)
                 writeInt(searchViewBackgroundColor)
