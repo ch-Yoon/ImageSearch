@@ -58,9 +58,11 @@ class SuggestionSearchView @JvmOverloads constructor(
     private var closeButtonResId: Int = -1
     private var searchViewDivisionLineColor: Int = -1
     private var suggestionBackgroundColor: Int = -1
+    private var suggestionAccessoryIconEnable = true
     private var suggestionAccessoryIconResId: Int = -1
     private var suggestionTextSize: Float = -1f
     private var suggestionTextColor: Int = -1
+    private var suggestionSubButtonIconEnable = true
     private var suggestionSubButtonIconResId: Int = -1
     private var suggestionFooterEnable: Boolean = false
     private var suggestionFooterText: String = ""
@@ -200,6 +202,9 @@ class SuggestionSearchView @JvmOverloads constructor(
                 val suggestionBackgroundColor = getColor(R.styleable.SuggestionSearchView_suggestionBackgroundColor, -1)
                 setSuggestionBackgroundColor(suggestionBackgroundColor)
 
+                val suggestionAccessoryIconEnable = getBoolean(R.styleable.SuggestionSearchView_suggestionAccessoryIconEnable, true)
+                setSuggestionAccessoryIconEnable(suggestionAccessoryIconEnable)
+
                 val suggestionAccessoryIconResId = getResourceId(R.styleable.SuggestionSearchView_suggestionAccessoryIcon, -1)
                 setSuggesionAccessoryIconResource(suggestionAccessoryIconResId)
 
@@ -208,6 +213,9 @@ class SuggestionSearchView @JvmOverloads constructor(
 
                 val suggestionTextColor = getColor(R.styleable.SuggestionSearchView_suggestionTextColor, -1)
                 setSuggestionTextColor(suggestionTextColor)
+
+                val suggestionSubButtonIconEnable = getBoolean(R.styleable.SuggestionSearchView_suggestionSubButtonIconEnable, true)
+                setSuggestionSubButtonIconEnable(suggestionSubButtonIconEnable)
 
                 val suggestionSubButtonIconResId = getResourceId(R.styleable.SuggestionSearchView_suggestionSubButtonIcon, -1)
                 setSuggestionSubButtonIconResource(suggestionSubButtonIconResId)
@@ -347,6 +355,14 @@ class SuggestionSearchView @JvmOverloads constructor(
         suggestionRecyclerView.setBackgroundColor(suggestionBackgroundColor)
     }
 
+    fun setSuggestionAccessoryIconEnable(enable: Boolean) {
+        suggestionAccessoryIconEnable = enable
+        val adapter = suggestionRecyclerView.adapter
+        if(adapter is DefaultSuggestionAdapter) {
+            adapter.accessoryIconEnable = suggestionAccessoryIconEnable
+        }
+    }
+
     fun setSuggesionAccessoryIconResource(drawableResId: Int) {
         suggestionAccessoryIconResId = if(drawableResId == -1) {
             R.drawable.ic_action_time
@@ -380,6 +396,14 @@ class SuggestionSearchView @JvmOverloads constructor(
         val adapter = suggestionRecyclerView.adapter
         if(adapter is DefaultSuggestionAdapter) {
             adapter.itemTextColor = suggestionTextColor
+        }
+    }
+
+    fun setSuggestionSubButtonIconEnable(enable: Boolean) {
+        suggestionSubButtonIconEnable = enable
+        val adapter = suggestionRecyclerView.adapter
+        if(adapter is DefaultSuggestionAdapter) {
+            adapter.subButtonIconEnable = suggestionSubButtonIconEnable
         }
     }
 
@@ -483,9 +507,11 @@ class SuggestionSearchView @JvmOverloads constructor(
         state.closeButtonResId = closeButtonResId
         state.searchViewDivisionLineColor = searchViewDivisionLineColor
         state.suggestionBackgroundColor = suggestionBackgroundColor
+        state.suggestionAccessoryIconEnable = suggestionAccessoryIconEnable
         state.suggestionAccessoryIconResId = suggestionAccessoryIconResId
         state.suggestionTextSize = suggestionTextSize
         state.suggestionTextColor = suggestionTextColor
+        state.suggestionSubButtonIconEnable = suggestionSubButtonIconEnable
         state.suggestionSubButtonIconResId = suggestionSubButtonIconResId
         state.suggestionFooterEnable = suggestionFooterEnable
         state.suggestionFooterText = suggestionFooterText
@@ -545,9 +571,11 @@ class SuggestionSearchView @JvmOverloads constructor(
         var closeButtonResId: Int = -1
         var searchViewDivisionLineColor: Int = -1
         var suggestionBackgroundColor: Int = -1
+        var suggestionAccessoryIconEnable: Boolean = true
         var suggestionAccessoryIconResId: Int = -1
         var suggestionTextSize: Float = -1f
         var suggestionTextColor: Int = -1
+        var suggestionSubButtonIconEnable: Boolean = true
         var suggestionSubButtonIconResId: Int = -1
         var suggestionFooterEnable: Boolean = false
         var suggestionFooterText: String = ""
@@ -571,9 +599,11 @@ class SuggestionSearchView @JvmOverloads constructor(
                 closeButtonResId = readInt()
                 searchViewDivisionLineColor = readInt()
                 suggestionBackgroundColor = readInt()
+                suggestionAccessoryIconEnable = readInt() == 1
                 suggestionAccessoryIconResId = readInt()
                 suggestionTextSize = readFloat()
                 suggestionTextColor = readInt()
+                suggestionSubButtonIconEnable = readInt() == 1
                 suggestionSubButtonIconResId = readInt()
                 suggestionFooterEnable = readInt() == 1
                 suggestionFooterText = readString() ?: ""
@@ -600,9 +630,11 @@ class SuggestionSearchView @JvmOverloads constructor(
                 writeInt(closeButtonResId)
                 writeInt(searchViewDivisionLineColor)
                 writeInt(suggestionBackgroundColor)
+                writeInt(if(suggestionAccessoryIconEnable) 1 else 0)
                 writeInt(suggestionAccessoryIconResId)
                 writeFloat(suggestionTextSize)
                 writeInt(suggestionTextColor)
+                writeInt(if(suggestionSubButtonIconEnable) 1 else 0)
                 writeInt(suggestionSubButtonIconResId)
                 writeInt(if(suggestionFooterEnable) 1 else 0)
                 writeString(suggestionFooterText)

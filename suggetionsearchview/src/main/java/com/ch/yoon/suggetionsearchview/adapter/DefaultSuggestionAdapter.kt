@@ -24,9 +24,11 @@ class DefaultSuggestionAdapter : SuggestionAdapter<String, RecyclerView.ViewHold
     }
 
     var hasFooterView: Boolean = false
+    var accessoryIconEnable: Boolean = true
     var accessoryIconResId: Int = -1
     var itemTextSize: Float = -1f
     var itemTextColor: Int = -1
+    var subButtonIconEnable: Boolean = true
     var subButtonIconResId: Int = -1
     var footerText: String = ""
     var footerTextSize: Float = -1f
@@ -53,7 +55,7 @@ class DefaultSuggestionAdapter : SuggestionAdapter<String, RecyclerView.ViewHold
             else -> {
                 SuggestionViewHolder.create(parent).apply {
                     accessoryButton.apply {
-                        if(accessoryIconResId != -1) {
+                        if(accessoryIconEnable && accessoryIconResId != -1) {
                             setImageResource(accessoryIconResId)
                         } else {
                             gone()
@@ -73,9 +75,8 @@ class DefaultSuggestionAdapter : SuggestionAdapter<String, RecyclerView.ViewHold
                     }
 
                     subButton.apply {
-                        if(subButtonIconResId != -1) {
+                        if(subButtonIconEnable && subButtonIconResId != -1) {
                             setImageResource(subButtonIconResId)
-
                             setOnClickListener {
                                 onSuggestionSubButtonClick?.invoke(getItem(adapterPosition), adapterPosition)
                             }

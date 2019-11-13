@@ -63,8 +63,16 @@ class ImageListViewModel(
         _countOfItemInLine.value = countOfItemInLine
     }
 
+    fun onClickImage(imageDocument: ImageDocument) {
+        _moveToDetailScreenEvent.value = imageDocument
+    }
+
+    fun onUpdateImageDocument(updatedImageDocument: ImageDocument) {
+        _imageDocumentList.replace(updatedImageDocument) { it.id == updatedImageDocument.id }
+    }
+
     fun loadImageList(keyword: String) {
-        _imageDocumentList.value = null
+        _imageDocumentList.clear()
         pageLoadHelper.requestFirstLoad(keyword)
     }
 
@@ -76,14 +84,6 @@ class ImageListViewModel(
         if (isRemainingMoreData) {
             pageLoadHelper.requestPreloadIfPossible(position, _imageDocumentList.size(), _countOfItemInLine.value)
         }
-    }
-
-    fun onClickImage(imageDocument: ImageDocument) {
-        _moveToDetailScreenEvent.value = imageDocument
-    }
-
-    fun onUpdateImageDocument(updatedImageDocument: ImageDocument) {
-        _imageDocumentList.replace(updatedImageDocument) { it.id == updatedImageDocument.id }
     }
 
     private fun observePageLoadInspector() {
