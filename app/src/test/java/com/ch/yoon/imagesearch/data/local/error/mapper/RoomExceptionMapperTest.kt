@@ -1,7 +1,7 @@
-package com.ch.yoon.imagesearch.data.local.error
+package com.ch.yoon.imagesearch.data.local.error.mapper
 
 import androidx.room.EmptyResultSetException
-import com.ch.yoon.imagesearch.data.local.room.error.RoomExceptionMapper
+import com.ch.yoon.imagesearch.data.local.room.error.mapper.RoomExceptionMapper
 import com.ch.yoon.imagesearch.data.repository.error.RepositoryException
 import io.mockk.every
 import io.mockk.mockk

@@ -1,5 +1,6 @@
 package com.ch.yoon.imagesearch.data.local.room.error
 
+import com.ch.yoon.imagesearch.data.local.room.error.mapper.RoomExceptionMapper
 import io.reactivex.Completable
 import io.reactivex.CompletableSource
 import io.reactivex.CompletableTransformer

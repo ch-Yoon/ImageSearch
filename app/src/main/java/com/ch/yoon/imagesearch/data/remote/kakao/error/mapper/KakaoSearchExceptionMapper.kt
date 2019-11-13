@@ -1,4 +1,4 @@
-package com.ch.yoon.imagesearch.data.remote.kakao.error
+package com.ch.yoon.imagesearch.data.remote.kakao.error.mapper
 
 import com.ch.yoon.imagesearch.data.repository.error.RepositoryException
 import retrofit2.HttpException

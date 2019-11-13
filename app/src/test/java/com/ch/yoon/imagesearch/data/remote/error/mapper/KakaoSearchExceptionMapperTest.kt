@@ -1,6 +1,6 @@
-package com.ch.yoon.imagesearch.data.remote.error
+package com.ch.yoon.imagesearch.data.remote.error.mapper
 
-import com.ch.yoon.imagesearch.data.remote.kakao.error.KakaoSearchExceptionMapper
+import com.ch.yoon.imagesearch.data.remote.kakao.error.mapper.KakaoSearchExceptionMapper
 import com.ch.yoon.imagesearch.data.repository.error.RepositoryException
 import io.mockk.every
 import io.mockk.mockk
