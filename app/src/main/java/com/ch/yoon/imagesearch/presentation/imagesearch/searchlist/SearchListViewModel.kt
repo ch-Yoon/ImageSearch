@@ -1,4 +1,4 @@
-package com.ch.yoon.imagesearch.presentation.imagesearch.imagelist
+package com.ch.yoon.imagesearch.presentation.imagesearch.searchlist
 
 import android.app.Application
 import android.util.Log
@@ -23,7 +23,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
  * Creator : ch-yoon
  * Date : 2019-10-28
  **/
-class ImageListViewModel(
+class SearchListViewModel(
     application: Application,
     private val imageRepository: ImageRepository,
     private val pageLoadHelper: PageLoadHelper<String>
@@ -32,6 +32,10 @@ class ImageListViewModel(
     init {
         observePageLoadInspector()
         observeChangingImageDocument()
+    }
+
+    enum class ImageSearchState {
+        SUCCESS, FAIL, NONE
     }
 
     private val _imageSortType = NonNullMutableLiveData(ImageSortType.ACCURACY)

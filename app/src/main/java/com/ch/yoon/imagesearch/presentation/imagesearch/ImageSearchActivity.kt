@@ -6,16 +6,14 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.ch.yoon.imagesearch.R
 import com.ch.yoon.imagesearch.databinding.ActivityImageSearchBinding
 import com.ch.yoon.imagesearch.presentation.base.BaseActivity
 import com.ch.yoon.imagesearch.presentation.favorite.FavoriteActivity
 import com.ch.yoon.imagesearch.presentation.imagedetail.ImageDetailActivity
-import com.ch.yoon.imagesearch.presentation.imagesearch.imagelist.ImageListViewModel
-import com.ch.yoon.imagesearch.presentation.imagesearch.imagelist.ImageListAdapter
+import com.ch.yoon.imagesearch.presentation.imagesearch.searchlist.SearchListViewModel
+import com.ch.yoon.imagesearch.presentation.imagesearch.searchlist.SearchListAdapter
 import com.ch.yoon.imagesearch.presentation.imagesearch.searchbox.SearchBoxViewModel
-import kotlinx.android.synthetic.main.activity_image_search.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
@@ -25,7 +23,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
 
     private val searchBoxViewModel: SearchBoxViewModel by viewModel()
-    private val imageListViewModel: ImageListViewModel by viewModel()
+    private val searchListViewModel: SearchListViewModel by viewModel()
 
     override fun getLayoutId(): Int {
         return R.layout.activity_image_search
@@ -61,7 +59,7 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
         val owner = this
         with(searchBoxViewModel) {
             searchEvent.observe(owner, Observer { keyword ->
-                imageListViewModel.loadImageList(keyword)
+                searchListViewModel.loadImageList(keyword)
             })
 
             searchBoxFinishEvent.observe(owner, Observer {
@@ -75,12 +73,12 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
     }
 
     private fun initImageListViewModel() {
-        binding.imageListViewModel = imageListViewModel
+        binding.searchListViewModel = searchListViewModel
     }
 
     private fun observeImageListViewModel() {
         val owner = this
-        with(imageListViewModel) {
+        with(searchListViewModel) {
             showMessageEvent.observe(owner, Observer { message ->
                 showToast(message)
             })
@@ -94,16 +92,16 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
 
     private fun initImageRecyclerView() {
         binding.imageRecyclerView.apply {
-            adapter = ImageListAdapter(imageListViewModel).apply {
+            adapter = SearchListAdapter(searchListViewModel).apply {
                 onBindPosition = { position ->
-                    imageListViewModel.loadMoreImageListIfPossible(position)
+                    searchListViewModel.loadMoreImageListIfPossible(position)
                 }
             }
 
             layoutManager = (layoutManager as GridLayoutManager).apply {
                 spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                     override fun getSpanSize(position: Int): Int {
-                        return if ((adapter as ImageListAdapter).isFooterViewPosition(position)) {
+                        return if ((adapter as SearchListAdapter).isFooterViewPosition(position)) {
                             spanCount
                         } else {
                             1

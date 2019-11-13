@@ -15,8 +15,8 @@
             type="com.ch.yoon.imagesearch.presentation.imagesearch.searchbox.SearchBoxViewModel" />
 
         <variable
-            name="imageListViewModel"
-            type="com.ch.yoon.imagesearch.presentation.imagesearch.imagelist.ImageListViewModel" />
+            name="searchListViewModel"
+            type="com.ch.yoon.imagesearch.presentation.imagesearch.searchlist.SearchListViewModel" />
 
     </data>
 
@@ -44,8 +44,8 @@
             android:layout_height="@dimen/count_in_line_icon_size"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="@dimen/count_in_line_icon_side_margin"
-            android:onClick="@{() -> imageListViewModel.changeCountOfItemInLine(4)}"
-            app:isSelected="@{imageListViewModel.countOfItemInLine == 4}"
+            android:onClick="@{() -> searchListViewModel.changeCountOfItemInLine(4)}"
+            app:isSelected="@{searchListViewModel.countOfItemInLine == 4}"
             app:layout_constraintEnd_toEndOf="@+id/mainToolbar"
             app:layout_constraintTop_toBottomOf="@+id/mainToolbar"
             app:srcCompat="@drawable/ic_four_image_in_line_selector" />
@@ -55,8 +55,8 @@
             android:layout_width="@dimen/count_in_line_icon_size"
             android:layout_height="@dimen/count_in_line_icon_size"
             android:layout_marginEnd="@dimen/count_in_line_icon_side_margin"
-            android:onClick="@{() -> imageListViewModel.changeCountOfItemInLine(3)}"
-            app:isSelected="@{imageListViewModel.countOfItemInLine == 3}"
+            android:onClick="@{() -> searchListViewModel.changeCountOfItemInLine(3)}"
+            app:isSelected="@{searchListViewModel.countOfItemInLine == 3}"
             app:layout_constraintBottom_toBottomOf="@+id/fourImageInLineButton"
             app:layout_constraintEnd_toStartOf="@+id/fourImageInLineButton"
             app:layout_constraintTop_toTopOf="@+id/fourImageInLineButton"
@@ -67,8 +67,8 @@
             android:layout_width="@dimen/count_in_line_icon_size"
             android:layout_height="@dimen/count_in_line_icon_size"
             android:layout_marginEnd="@dimen/count_in_line_icon_side_margin"
-            android:onClick="@{() -> imageListViewModel.changeCountOfItemInLine(2)}"
-            app:isSelected="@{imageListViewModel.countOfItemInLine == 2}"
+            android:onClick="@{() -> searchListViewModel.changeCountOfItemInLine(2)}"
+            app:isSelected="@{searchListViewModel.countOfItemInLine == 2}"
             app:layout_constraintBottom_toBottomOf="@+id/threeImageInLineButton"
             app:layout_constraintEnd_toStartOf="@+id/threeImageInLineButton"
             app:layout_constraintTop_toTopOf="@+id/threeImageInLineButton"
@@ -82,8 +82,8 @@
             android:text="@string/image_sort_type_accuracy_text"
             android:textStyle="bold"
             android:textColor="@drawable/image_sort_type_textview_selector"
-            android:onClick="@{() -> imageListViewModel.changeImageSortType(ImageSortType.ACCURACY)}"
-            app:isSelected="@{imageListViewModel.imageSortType == ImageSortType.ACCURACY}"
+            android:onClick="@{() -> searchListViewModel.changeImageSortType(ImageSortType.ACCURACY)}"
+            app:isSelected="@{searchListViewModel.imageSortType == ImageSortType.ACCURACY}"
             app:layout_constraintBottom_toBottomOf="@+id/twoImageInLineButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/twoImageInLineButton" />
@@ -96,8 +96,8 @@
             android:text="@string/image_sort_type_recency_text"
             android:textStyle="bold"
             android:textColor="@drawable/image_sort_type_textview_selector"
-            android:onClick="@{() -> imageListViewModel.changeImageSortType(ImageSortType.RECENCY)}"
-            app:isSelected="@{imageListViewModel.imageSortType == ImageSortType.RECENCY}"
+            android:onClick="@{() -> searchListViewModel.changeImageSortType(ImageSortType.RECENCY)}"
+            app:isSelected="@{searchListViewModel.imageSortType == ImageSortType.RECENCY}"
             app:layout_constraintBottom_toBottomOf="@+id/accuracySortTextView"
             app:layout_constraintStart_toEndOf="@+id/accuracySortTextView"
             app:layout_constraintTop_toTopOf="@+id/accuracySortTextView" />
@@ -108,10 +108,10 @@
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/count_in_line_icon_side_margin"
             android:scrollbars="vertical"
-            android:visibility="@{(imageListViewModel.imageDocumentList == null || imageListViewModel.imageDocumentList.size() == 0) ? View.INVISIBLE : View.VISIBLE}"
-            app:spanCount="@{imageListViewModel.countOfItemInLine}"
-            app:imageSearchState="@{imageListViewModel.imageSearchState}"
-            app:itemsWithListAdapter="@{imageListViewModel.imageDocumentList}"
+            android:visibility="@{(searchListViewModel.imageDocumentList == null || searchListViewModel.imageDocumentList.size() == 0) ? View.INVISIBLE : View.VISIBLE}"
+            app:spanCount="@{searchListViewModel.countOfItemInLine}"
+            app:imageSearchState="@{searchListViewModel.imageSearchState}"
+            app:itemsWithListAdapter="@{searchListViewModel.imageDocumentList}"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -124,7 +124,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:text="@string/image_search_empty_view_text"
-            android:visibility="@{(imageListViewModel.imageDocumentList == null || imageListViewModel.imageDocumentList.size() == 0) ? View.VISIBLE : View.INVISIBLE}"
+            android:visibility="@{(searchListViewModel.imageDocumentList == null || searchListViewModel.imageDocumentList.size() == 0) ? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

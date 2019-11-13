@@ -1,10 +1,9 @@
 package com.ch.yoon.imagesearch.presentation.common.databinding
 
 import androidx.databinding.BindingAdapter
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ch.yoon.suggetionsearchview.SuggestionSearchView
-import com.ch.yoon.suggetionsearchview.adapter.DefaultSuggestionAdapter
+import com.ch.yoon.suggetionsearchview.adapter.SuggestionAdapter
 
 /**
  * Creator : ch-yoon
@@ -19,9 +18,10 @@ fun enable(suggestionSearchView: SuggestionSearchView, enable: Boolean) {
     }
 }
 
+@Suppress("UNCHECKED_CAST")
 @BindingAdapter("itemsWithDefaultAdapter")
-fun setItemsWithListAdapter(suggestionSearchView: SuggestionSearchView, items: List<String>?) {
-    (suggestionSearchView.getAdapter() as DefaultSuggestionAdapter?)?.let { adapter ->
+fun <T, VH : RecyclerView.ViewHolder> setItemsWithListAdapter(suggestionSearchView: SuggestionSearchView, items: List<T>?) {
+    (suggestionSearchView.getAdapter() as SuggestionAdapter<T, VH>?)?.let { adapter ->
         val newList = if(items == null || items.isEmpty()) null else ArrayList(items)
         adapter.submitList(newList)
         if(newList == null) {

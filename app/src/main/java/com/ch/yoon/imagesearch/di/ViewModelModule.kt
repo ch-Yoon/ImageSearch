@@ -2,7 +2,7 @@ package com.ch.yoon.imagesearch.di
 
 import com.ch.yoon.imagesearch.presentation.favorite.FavoriteListViewModel
 import com.ch.yoon.imagesearch.presentation.imagedetail.ImageDetailViewModel
-import com.ch.yoon.imagesearch.presentation.imagesearch.imagelist.ImageListViewModel
+import com.ch.yoon.imagesearch.presentation.imagesearch.searchlist.SearchListViewModel
 import com.ch.yoon.imagesearch.presentation.imagesearch.searchbox.SearchBoxViewModel
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
@@ -18,7 +18,7 @@ val viewModelModule = module {
     }
 
     viewModel {
-        ImageListViewModel(get(), get(), get())
+        SearchListViewModel(get(), get(), get())
     }
 
     viewModel {

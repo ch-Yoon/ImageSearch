@@ -5,7 +5,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.ch.yoon.imagesearch.data.local.room.entity.ImageDocumentEntity
-import com.ch.yoon.imagesearch.data.local.room.entity.SearchLogEntity
 import io.reactivex.Completable
 import io.reactivex.Single
 

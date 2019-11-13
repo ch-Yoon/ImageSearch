@@ -1,7 +1,8 @@
-package com.ch.yoon.imagesearch.presentation.imagesearch.imagelist
+package com.ch.yoon.imagesearch.presentation.imagesearch.searchlist
 
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.ch.yoon.imagesearch.presentation.imagesearch.searchlist.SearchListViewModel.ImageSearchState
 
 /**
  * Creator : ch-yoon
@@ -9,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
  **/
 @BindingAdapter("imageSearchState")
 fun setImageSearchState(recyclerView: RecyclerView, imageSearchState: ImageSearchState) {
-    (recyclerView.adapter as ImageListAdapter?)?.let { adapter ->
+    (recyclerView.adapter as SearchListAdapter?)?.let { adapter ->
         with(adapter) {
             when (imageSearchState) {
                 ImageSearchState.NONE, ImageSearchState.SUCCESS -> {
