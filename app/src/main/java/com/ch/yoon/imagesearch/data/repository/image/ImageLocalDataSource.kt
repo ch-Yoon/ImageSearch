@@ -2,6 +2,7 @@ package com.ch.yoon.imagesearch.data.repository.image
 
 import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
 import io.reactivex.Completable
+import io.reactivex.Single
 
 /**
  * Creator : ch-yoon
@@ -13,4 +14,5 @@ interface ImageLocalDataSource {
 
     fun deleteFavoriteImageDocument(id: String): Completable
 
+    fun selectAllFavoriteImageDocuments(): Single<List<ImageDocument>>
 }

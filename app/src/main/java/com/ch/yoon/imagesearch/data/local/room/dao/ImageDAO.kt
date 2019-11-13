@@ -19,10 +19,10 @@ interface ImageDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOrUpdateImageDocument(imageDocumentEntity: ImageDocumentEntity): Completable
 
-    @Query("SELECT * FROM imageDocuments")
-    fun selectAllImageDocument(): Single<List<ImageDocumentEntity>>
-
     @Query("DELETE FROM imageDocuments WHERE id = :id")
     fun deleteImageDocument(id: String): Completable
+
+    @Query("SELECT * FROM imageDocuments")
+    fun selectAllImageDocument(): Single<List<ImageDocumentEntity>>
 
 }

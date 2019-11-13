@@ -9,18 +9,41 @@ import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
  **/
 object ImageDocumentEntityMapper {
 
-    fun toEntity(imageDocument: ImageDocument): ImageDocumentEntity = imageDocument.run {
-        ImageDocumentEntity(
-            id,
-            collection,
-            thumbnailUrl,
-            imageUrl,
-            width,
-            height,
-            displaySiteName,
-            docUrl,
-            dateTime,
-            isFavorite)
+    fun toEntity(imageDocument: ImageDocument): ImageDocumentEntity {
+        return imageDocument.run {
+            ImageDocumentEntity(
+                id,
+                collection,
+                thumbnailUrl,
+                imageUrl,
+                width,
+                height,
+                displaySiteName,
+                docUrl,
+                dateTime,
+                isFavorite
+            )
+        }
     }
 
+    fun fromEntityList(imageDocumentEntityList: List<ImageDocumentEntity>): List<ImageDocument> {
+        return imageDocumentEntityList.map { fromEntity(it) }
+    }
+
+    fun fromEntity(imageDocumentEntity: ImageDocumentEntity): ImageDocument {
+        return imageDocumentEntity.run {
+            ImageDocument(
+                id,
+                collection,
+                thumbnailUrl,
+                imageUrl,
+                width,
+                height,
+                displaySiteName,
+                docUrl,
+                dateTime,
+                isFavorite
+            )
+        }
+    }
 }
