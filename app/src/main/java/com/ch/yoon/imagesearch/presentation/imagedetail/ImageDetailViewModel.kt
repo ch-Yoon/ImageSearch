@@ -10,7 +10,7 @@ import com.ch.yoon.imagesearch.data.repository.image.ImageRepository
 import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
 import com.ch.yoon.imagesearch.presentation.base.BaseViewModel
 import com.ch.yoon.imagesearch.presentation.common.livedata.SingleLiveEvent
-import com.ch.yoon.imagesearch.util.extension.TAG
+import com.ch.yoon.imagesearch.extension.TAG
 import io.reactivex.android.schedulers.AndroidSchedulers
 
 /**

@@ -1,4 +1,4 @@
-package com.ch.yoon.imagesearch.util.extension
+package com.ch.yoon.imagesearch.extension
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData

@@ -8,7 +8,7 @@ import com.ch.yoon.imagesearch.R
 import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
 import com.ch.yoon.imagesearch.databinding.ItemFavoriteImageListBinding
 import com.ch.yoon.imagesearch.presentation.base.BaseViewHolder
-import com.ch.yoon.imagesearch.util.common.cancelImageLoad
+import com.ch.yoon.imagesearch.extension.cancelImageLoad
 
 /**
  * Creator : ch-yoon
@@ -47,7 +47,7 @@ class FavoriteListAdapter(
         }
 
         fun clear() {
-            cancelImageLoad(binding.imageView)
+            binding.imageView.cancelImageLoad()
         }
     }
 

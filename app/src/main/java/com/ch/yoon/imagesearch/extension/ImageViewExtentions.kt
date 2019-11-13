@@ -1,4 +1,4 @@
-package com.ch.yoon.imagesearch.util.common
+package com.ch.yoon.imagesearch.extension
 
 import android.graphics.drawable.Drawable
 import android.view.View
@@ -16,7 +16,7 @@ import com.ch.yoon.imagesearch.R
 
 /**
  * Creator : ch-yoon
- * Date : 2019-10-29.
+ * Date : 2019-11-13.
  */
 private const val THUMBNAIL_VALUE = 0.1f
 
@@ -30,27 +30,26 @@ private val CENTER_INSIDE_REQUEST_OPTIONS = RequestOptions()
     .centerInside()
     .error(R.drawable.image_load_fail)
 
-fun cancelImageLoad(imageView: ImageView) {
-    Glide.with(imageView.context).clear(imageView)
+fun ImageView.cancelImageLoad() {
+    Glide.with(context).clear(this)
 }
 
-fun loadImageWithCenterCrop(imageView: ImageView, imageUrl: String?) {
-    loadImage(imageView, imageUrl, CENTER_CROP_REQUEST_OPTIONS, null)
+fun ImageView.loadImageWithCenterCrop(imageUrl: String?) {
+    loadImage(imageUrl, CENTER_CROP_REQUEST_OPTIONS, null)
 }
 
-fun loadImageWithCenterInside(imageView: ImageView, imageUrl: String?, progressBar: ProgressBar) {
-    loadImage(imageView, imageUrl, CENTER_INSIDE_REQUEST_OPTIONS, progressBar)
+fun ImageView.loadImageWithCenterInside(imageUrl: String?, progressBar: ProgressBar) {
+    loadImage(imageUrl, CENTER_INSIDE_REQUEST_OPTIONS, progressBar)
 }
 
-private fun loadImage(
-    imageView: ImageView,
+private fun ImageView.loadImage(
     imageUrl: String?,
     requestOptions: RequestOptions,
     progressBar: ProgressBar?
 ) {
     progressBar?.visibility = View.VISIBLE
 
-    Glide.with(imageView.context)
+    Glide.with(context)
         .load(imageUrl)
         .thumbnail(THUMBNAIL_VALUE)
         .transition(DrawableTransitionOptions.withCrossFade())
@@ -77,5 +76,5 @@ private fun loadImage(
                 return false
             }
         })
-        .into(imageView)
+        .into(this)
 }

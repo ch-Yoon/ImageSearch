@@ -1,4 +1,4 @@
-package com.ch.yoon.imagesearch.util.extension
+package com.ch.yoon.imagesearch.extension
 
 /**
  * Creator : ch-yoon
@@ -6,7 +6,7 @@ package com.ch.yoon.imagesearch.util.extension
  */
 
 inline fun <T> MutableList<T>.removeFirstIf(predicate: (T) -> Boolean): MutableList<T> {
-    for(i in 0 until this.size) {
+    for(i in 0 until size) {
         if(predicate(this[i])) {
             removeAt(i)
             break
@@ -14,6 +14,15 @@ inline fun <T> MutableList<T>.removeFirstIf(predicate: (T) -> Boolean): MutableL
     }
 
     return this
+}
+
+inline fun <T> MutableList<T>.replace(replaceValue: T, predicate: (T) -> Boolean) {
+    for(i in 0 until size) {
+        if(predicate(this[i])) {
+            this[i] = replaceValue
+            break
+        }
+    }
 }
 
 fun <T> MutableList<T>.addFirst(value: T): MutableList<T> {

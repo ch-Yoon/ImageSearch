@@ -1,4 +1,4 @@
-package com.ch.yoon.imagesearch.util.extension
+package com.ch.yoon.imagesearch.extension
 
 /**
  * Creator : ch-yoon

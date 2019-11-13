@@ -9,7 +9,7 @@ import com.ch.yoon.imagesearch.R
 import com.ch.yoon.imagesearch.data.repository.searchlog.SearchLogRepository
 import com.ch.yoon.imagesearch.data.repository.searchlog.model.SearchLog
 
-import com.ch.yoon.imagesearch.util.extension.*
+import com.ch.yoon.imagesearch.extension.*
 import com.ch.yoon.imagesearch.presentation.base.BaseViewModel
 import com.ch.yoon.imagesearch.presentation.common.livedata.SingleLiveEvent
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -92,22 +92,11 @@ class SearchBoxViewModel(
     }
 
     fun onClickSearchButton(keyword: String) {
-        processingSearchApproval(keyword)
-    }
-
-    private fun processingSearchApproval(keyword: String) {
-        if(checkSearchPossibility(keyword)) {
+        if (keyword.isEmpty()) {
+            updateShowMessage(R.string.empty_keyword_guide)
+        } else {
             _searchEvent.value = keyword
             saveKeywordToRepository(keyword)
-        }
-    }
-
-    private fun checkSearchPossibility(keyword: String): Boolean {
-        return if (keyword.isEmpty()) {
-            updateShowMessage(R.string.empty_keyword_guide)
-            false
-        } else {
-            true
         }
     }
 

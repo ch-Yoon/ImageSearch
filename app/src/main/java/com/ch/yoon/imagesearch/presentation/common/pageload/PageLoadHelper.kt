@@ -1,6 +1,6 @@
 package com.ch.yoon.imagesearch.presentation.common.pageload
 
-import com.ch.yoon.imagesearch.util.extension.safeLet
+import com.ch.yoon.imagesearch.extension.safeLet
 
 /**
  * Creator : ch-yoon

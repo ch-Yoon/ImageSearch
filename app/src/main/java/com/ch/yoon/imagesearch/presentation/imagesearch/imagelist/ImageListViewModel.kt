@@ -16,7 +16,7 @@ import com.ch.yoon.imagesearch.presentation.base.BaseViewModel
 import com.ch.yoon.imagesearch.presentation.common.livedata.NonNullMutableLiveData
 import com.ch.yoon.imagesearch.presentation.common.livedata.SingleLiveEvent
 import com.ch.yoon.imagesearch.presentation.common.pageload.PageLoadHelper
-import com.ch.yoon.imagesearch.util.extension.*
+import com.ch.yoon.imagesearch.extension.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 
 /**

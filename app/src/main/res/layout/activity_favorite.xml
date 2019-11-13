@@ -48,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@color/colorWhite"
-            app:favoriteImageList="@{favoriteListViewModel.favoriteImageList}"
+            app:itemsWithListAdapter="@{favoriteListViewModel.favoriteImageList}"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

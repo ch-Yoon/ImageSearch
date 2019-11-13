@@ -1,4 +1,4 @@
-package com.ch.yoon.imagesearch.util.extension
+package com.ch.yoon.imagesearch.extension
 
 import junit.framework.Assert.assertEquals
 import org.junit.Test

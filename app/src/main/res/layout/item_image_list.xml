@@ -42,7 +42,7 @@
             app:srcAlpha="@{90}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:applySelectedState="@{imageDocument.favorite}"
+            app:isSelected="@{imageDocument.favorite}"
 
             app:srcCompat="@drawable/ic_favorite_selector" />
 
