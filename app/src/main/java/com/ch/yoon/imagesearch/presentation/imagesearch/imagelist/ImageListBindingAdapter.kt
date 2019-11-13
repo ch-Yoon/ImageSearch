@@ -21,17 +21,17 @@ fun setSpanCount(recyclerView: RecyclerView, countOfItemInLine: Int) {
 
 @BindingAdapter("searchImageDocumentList")
 fun setItems(recyclerView: RecyclerView, imageDocumentList: List<ImageDocument>?) {
-    (recyclerView.adapter as ImageListAdapter?)?.let { adpater ->
+    (recyclerView.adapter as ImageListAdapter?)?.let { adapter ->
         val newList = if(imageDocumentList == null || imageDocumentList.isEmpty()) {
             null
         } else {
             ArrayList(imageDocumentList)
         }
 
-        adpater.submitList(newList)
+        adapter.submitList(newList)
 
         if(newList == null) {
-            adpater.notifyDataSetChanged()
+            adapter.notifyDataSetChanged()
         }
     }
 }

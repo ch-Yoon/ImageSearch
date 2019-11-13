@@ -1,5 +1,6 @@
 package com.ch.yoon.imagesearch.di
 
+import com.ch.yoon.imagesearch.presentation.favorite.FavoriteListViewModel
 import com.ch.yoon.imagesearch.presentation.imagedetail.ImageDetailViewModel
 import com.ch.yoon.imagesearch.presentation.imagesearch.imagelist.ImageListViewModel
 import com.ch.yoon.imagesearch.presentation.imagesearch.searchbox.SearchBoxViewModel
@@ -24,4 +25,7 @@ val viewModelModule = module {
         ImageDetailViewModel(get(), get())
     }
 
+    viewModel {
+        FavoriteListViewModel(get(), get())
+    }
 }

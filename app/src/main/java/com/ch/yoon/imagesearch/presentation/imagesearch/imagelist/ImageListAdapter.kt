@@ -119,12 +119,11 @@ class ImageListAdapter(
             binding.retryButtonVisibility = visible
             binding.executePendingBindings()
         }
-
     }
 
     class DiffCallback : DiffUtil.ItemCallback<ImageDocument>() {
         override fun areItemsTheSame(oldItem: ImageDocument, newItem: ImageDocument): Boolean {
-            return oldItem.thumbnailUrl == newItem.thumbnailUrl
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: ImageDocument, newItem: ImageDocument): Boolean {

@@ -17,7 +17,6 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-
         <activity
             android:name=".presentation.imagesearch.ImageSearchActivity"
             android:theme="@style/ImageSearchAppTheme"
@@ -28,6 +27,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".presentation.favorite.FavoriteActivity"
+            android:theme="@style/ImageSearchAppTheme"/>
         <activity
             android:name=".presentation.imagedetail.ImageDetailActivity"
             android:theme="@style/ImageSearchAppTheme" />

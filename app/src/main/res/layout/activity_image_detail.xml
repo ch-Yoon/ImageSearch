@@ -34,14 +34,11 @@
 
                 <TextView
                     android:id="@+id/toolbarTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:text="@string/image_detail_title"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/detail_image_screen_title_text_size"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    style="@style/ToolbarTitleStyle"/>
 
                 <ImageView
                     android:id="@+id/imageView2"

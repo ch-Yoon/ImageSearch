@@ -41,6 +41,16 @@
                 android:layout_height="match_parent">
 
                 <ImageView
+                    android:id="@+id/favoriteMenuButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/searchButton"
+                    app:layout_constraintEnd_toStartOf="@+id/searchButton"
+                    app:layout_constraintTop_toTopOf="@+id/searchButton"
+                    app:srcCompat="@drawable/ic_action_favorite_menu" />
+
+                <ImageView
                     android:id="@+id/searchButton"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -157,7 +167,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" >
+
+        </com.ch.yoon.suggetionsearchview.SuggestionSearchView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -9,6 +9,7 @@ import com.ch.yoon.imagesearch.R
 import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
 import com.ch.yoon.imagesearch.databinding.ActivityImageSearchBinding
 import com.ch.yoon.imagesearch.presentation.base.BaseActivity
+import com.ch.yoon.imagesearch.presentation.favorite.FavoriteActivity
 import com.ch.yoon.imagesearch.presentation.imagedetail.ImageDetailActivity
 import com.ch.yoon.imagesearch.presentation.imagesearch.imagelist.ImageListViewModel
 import com.ch.yoon.imagesearch.presentation.imagesearch.imagelist.ImageListAdapter
@@ -41,6 +42,10 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
         initImageListViewModel()
         observeImageListViewModel()
         initImageRecyclerView()
+
+        favoriteMenuButton.setOnClickListener {
+            startActivity(Intent(this, FavoriteActivity::class.java))
+        }
     }
 
     private fun initSearchBoxViewModel() {

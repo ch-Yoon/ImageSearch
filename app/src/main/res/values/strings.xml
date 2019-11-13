@@ -21,6 +21,9 @@
     <string name="success_favorite_save">좋아요 저장 성공</string>
     <string name="success_favorite_delete">좋아요 취소 저장 성공</string>
 
+    <!-- favorite activity -->
+    <string name="favorite_title">좋아요</string>
+
     <!-- error message -->
     <string name="wrong_request_error">잘못된 요청입니다</string>
     <string name="authentication_error">서버 인증 실패로 인해 요청에 실패했습니다</string>
