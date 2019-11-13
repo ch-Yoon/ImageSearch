@@ -4,7 +4,6 @@ import com.belongings.bag.belongingsbag.RxSchedulerRule
 import com.ch.yoon.imagesearch.data.remote.kakao.request.ImageSearchRequest
 import com.ch.yoon.imagesearch.data.remote.kakao.request.ImageSortType
 import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
-import com.ch.yoon.imagesearch.data.repository.image.model.ImageSearchMeta
 import com.ch.yoon.imagesearch.data.repository.image.model.ImageSearchResponse
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -72,7 +71,7 @@ class ImageRepositoryImplTest {
         every { mockImageLocalDataSource.saveFavoriteImageDocument(favoriteDocument) } returns Completable.complete()
 
         // when
-        imageRepository.saveFavoriteImageDocument(favoriteDocument)
+        imageRepository.saveFavoriteImage(favoriteDocument)
 
         // then
         verify(exactly = 1) { mockImageLocalDataSource.saveFavoriteImageDocument(favoriteDocument) }
@@ -85,7 +84,7 @@ class ImageRepositoryImplTest {
         every { mockImageLocalDataSource.deleteFavoriteImageDocument(noFavoriteDocument.id) } returns Completable.complete()
 
         // when
-        imageRepository.deleteFavoriteImageDocument(noFavoriteDocument.id)
+        imageRepository.deleteFavoriteImage(noFavoriteDocument.id)
 
         // then
         verify(exactly = 1) { mockImageLocalDataSource.deleteFavoriteImageDocument(noFavoriteDocument.id) }

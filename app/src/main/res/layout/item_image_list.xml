@@ -39,7 +39,7 @@
             android:layout_height="24dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
-            app:srcAlpha="@{90}"
+            app:srcAlpha="@{150}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:isSelected="@{imageDocument.favorite}"

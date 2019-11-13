@@ -12,6 +12,7 @@ import com.ch.yoon.imagesearch.presentation.common.livedata.SingleLiveEvent
 import com.ch.yoon.imagesearch.extension.TAG
 import com.ch.yoon.imagesearch.extension.removeFirst
 import com.ch.yoon.imagesearch.extension.removeFirstAndAddFirst
+import com.ch.yoon.imagesearch.extension.replace
 import io.reactivex.android.schedulers.AndroidSchedulers
 
 /**
@@ -22,6 +23,10 @@ class FavoriteListViewModel(
     application: Application,
     private val imageRepository: ImageRepository
 ) : BaseViewModel(application) {
+
+    init {
+        observeChangingImageDocument()
+    }
 
     private val _favoriteImageList = MutableLiveData<MutableList<ImageDocument>>()
     val favoriteImageList: LiveData<List<ImageDocument>> = Transformations.map(_favoriteImageList) { it?.toList() }
@@ -59,5 +64,18 @@ class FavoriteListViewModel(
 
     fun onClickBackPress() {
         _finishEvent.call()
+    }
+
+    private fun observeChangingImageDocument() {
+        imageRepository.observeChangingFavoriteImage()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ changedImageDocument ->
+                if(changedImageDocument.isFavorite.not()){
+                    _favoriteImageList.removeFirst { it.id == changedImageDocument.id }
+                }
+            }, {
+                Log.d(TAG, it.message)
+            })
+            .register()
     }
 }

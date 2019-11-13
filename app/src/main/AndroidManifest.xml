@@ -29,7 +29,7 @@
         </activity>
         <activity
             android:name=".presentation.favorite.FavoriteActivity"
-            android:theme="@style/ImageSearchAppTheme"/>
+            android:theme="@style/ImageSearchAppTheme" />
         <activity
             android:name=".presentation.imagedetail.ImageDetailActivity"
             android:theme="@style/ImageSearchAppTheme" />

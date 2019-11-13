@@ -4,10 +4,11 @@ import com.ch.yoon.imagesearch.data.remote.kakao.request.ImageSearchRequest
 import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
 import com.ch.yoon.imagesearch.data.repository.image.model.ImageSearchResponse
 import io.reactivex.Completable
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
-import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 
 /**
  * Creator : ch-yoon
@@ -17,6 +18,8 @@ class ImageRepositoryImpl(
     private val imageLocalDataSource: ImageLocalDataSource,
     private val imageRemoteDataSource: ImageRemoteDataSource
 ) : ImageRepository {
+
+    private val favoriteChangePublishSubject = PublishSubject.create<ImageDocument>()
 
     override fun requestImageList(imageSearchRequest: ImageSearchRequest): Single<ImageSearchResponse> {
         return Single.zip(
@@ -37,13 +40,19 @@ class ImageRepositoryImpl(
             .subscribeOn(Schedulers.io())
     }
 
-    override fun saveFavoriteImageDocument(imageDocument: ImageDocument): Completable {
+    override fun saveFavoriteImage(imageDocument: ImageDocument): Completable {
         return imageLocalDataSource.saveFavoriteImageDocument(imageDocument)
+            .doOnComplete { favoriteChangePublishSubject.onNext(imageDocument) }
             .subscribeOn(Schedulers.io())
     }
 
-    override fun deleteFavoriteImageDocument(id: String): Completable {
-        return imageLocalDataSource.deleteFavoriteImageDocument(id)
+    override fun deleteFavoriteImage(imageDocument: ImageDocument): Completable {
+        return imageLocalDataSource.deleteFavoriteImageDocument(imageDocument)
+            .doOnComplete { favoriteChangePublishSubject.onNext(imageDocument) }
             .subscribeOn(Schedulers.io())
+    }
+
+    override fun observeChangingFavoriteImage(): Observable<ImageDocument> {
+        return favoriteChangePublishSubject.subscribeOn(Schedulers.io())
     }
 }

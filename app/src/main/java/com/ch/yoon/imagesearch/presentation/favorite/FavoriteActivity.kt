@@ -1,22 +1,15 @@
 package com.ch.yoon.imagesearch.presentation.favorite
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.lifecycle.Observer
 import com.ch.yoon.imagesearch.R
-import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
 import com.ch.yoon.imagesearch.databinding.ActivityFavoriteBinding
 import com.ch.yoon.imagesearch.presentation.base.BaseActivity
 import com.ch.yoon.imagesearch.presentation.imagedetail.ImageDetailActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavoriteActivity : BaseActivity<ActivityFavoriteBinding>() {
-
-    companion object {
-        private const val REQUEST_CODE_IMAGE_DETAIL = 1
-    }
 
     private val favoriteListViewModel: FavoriteListViewModel by viewModel()
 
@@ -55,7 +48,7 @@ class FavoriteActivity : BaseActivity<ActivityFavoriteBinding>() {
 
             moveToDetailScreenEvent.observe(owner, Observer { imageDocument ->
                 val imageDetailIntent = ImageDetailActivity.getImageDetailActivityIntent(owner, imageDocument)
-                startActivityForResult(imageDetailIntent, REQUEST_CODE_IMAGE_DETAIL)
+                startActivity(imageDetailIntent)
             })
 
             finishEvent.observe(owner, Observer {
@@ -76,19 +69,6 @@ class FavoriteActivity : BaseActivity<ActivityFavoriteBinding>() {
         } else {
             super.onOptionsItemSelected(item)
         }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if(requestCode == REQUEST_CODE_IMAGE_DETAIL) {
-            if(resultCode == Activity.RESULT_OK) {
-                data?.getParcelableExtra<ImageDocument>(ImageDetailActivity.EXTRA_IMAGE_DOCUMENT_KEY)
-                    ?.let { updatedImageDocument ->
-                        favoriteListViewModel.updateFavorite(updatedImageDocument)
-                    }
-            }
-        }
-
-        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onBackPressed() {

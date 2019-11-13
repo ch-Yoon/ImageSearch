@@ -18,8 +18,8 @@
     <string name="image_detail_title">상세보기</string>
 
     <!-- image detail view model -->
-    <string name="success_favorite_save">좋아요 저장 성공</string>
-    <string name="success_favorite_delete">좋아요 취소 저장 성공</string>
+    <string name="success_favorite_save">좋아요 선택</string>
+    <string name="success_favorite_delete">좋아요 취소</string>
 
     <!-- favorite activity -->
     <string name="favorite_title">좋아요</string>

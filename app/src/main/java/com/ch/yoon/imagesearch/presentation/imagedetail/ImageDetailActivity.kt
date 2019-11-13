@@ -79,14 +79,7 @@ class ImageDetailActivity : BaseActivity<ActivityImageDetailBinding>() {
                 startActivity(movieWebIntent)
             })
 
-            finishEventWithNotUpdate.observe(owner, Observer {
-                setResult(Activity.RESULT_CANCELED)
-                finish()
-            })
-
-            finishEventWithUpdate.observe(owner, Observer { updatedImageDocument ->
-                val intent = Intent().apply { putExtra(EXTRA_IMAGE_DOCUMENT_KEY, updatedImageDocument) }
-                setResult(Activity.RESULT_OK, intent)
+            finishEvent.observe(owner, Observer {
                 finish()
             })
         }

@@ -4,6 +4,7 @@ import com.ch.yoon.imagesearch.data.remote.kakao.request.ImageSearchRequest
 import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
 import com.ch.yoon.imagesearch.data.repository.image.model.ImageSearchResponse
 import io.reactivex.Completable
+import io.reactivex.Observable
 import io.reactivex.Single
 
 /**
@@ -16,7 +17,10 @@ interface ImageRepository {
 
     fun requestFavoriteImageList(): Single<List<ImageDocument>>
 
-    fun saveFavoriteImageDocument(imageDocument: ImageDocument): Completable
+    fun saveFavoriteImage(imageDocument: ImageDocument): Completable
 
-    fun deleteFavoriteImageDocument(id: String): Completable
+    fun deleteFavoriteImage(imageDocument: ImageDocument): Completable
+
+    fun observeChangingFavoriteImage(): Observable<ImageDocument>
+
 }

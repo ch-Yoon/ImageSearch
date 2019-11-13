@@ -25,8 +25,8 @@ class ImageLocalDataSourceImpl(
             .compose(CompletableExceptionTransformer())
     }
 
-    override fun deleteFavoriteImageDocument(id: String): Completable {
-        return imageDAO.deleteImageDocument(id)
+    override fun deleteFavoriteImageDocument(imageDocument: ImageDocument): Completable {
+        return imageDAO.deleteImageDocument(imageDocument.id)
             .compose(CompletableExceptionTransformer())
     }
 

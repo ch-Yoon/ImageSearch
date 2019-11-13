@@ -1,12 +1,10 @@
 package com.ch.yoon.imagesearch.presentation.imagesearch
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.ch.yoon.imagesearch.R
-import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
 import com.ch.yoon.imagesearch.databinding.ActivityImageSearchBinding
 import com.ch.yoon.imagesearch.presentation.base.BaseActivity
 import com.ch.yoon.imagesearch.presentation.favorite.FavoriteActivity
@@ -22,10 +20,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
  * Date : 2019-10-27.
  */
 class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
-
-    companion object {
-        private const val REQUEST_CODE_IMAGE_DETAIL = 1
-    }
 
     private val searchBoxViewModel: SearchBoxViewModel by viewModel()
     private val imageListViewModel: ImageListViewModel by viewModel()
@@ -86,7 +80,7 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
 
             moveToDetailScreenEvent.observe(owner, Observer { imageDocument ->
                 val imageDetailIntent = ImageDetailActivity.getImageDetailActivityIntent(owner, imageDocument)
-                startActivityForResult(imageDetailIntent, REQUEST_CODE_IMAGE_DETAIL)
+                startActivity(imageDetailIntent)
             })
         }
     }
@@ -115,18 +109,5 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
 
     override fun onBackPressed() {
         searchBoxViewModel.onClickBackPressButton()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if(requestCode == REQUEST_CODE_IMAGE_DETAIL) {
-            if(resultCode == Activity.RESULT_OK) {
-                data?.getParcelableExtra<ImageDocument>(ImageDetailActivity.EXTRA_IMAGE_DOCUMENT_KEY)
-                    ?.let { updatedImageDocument ->
-                        imageListViewModel.onUpdateImageDocument(updatedImageDocument)
-                    }
-            }
-        }
-
-        super.onActivityResult(requestCode, resultCode, data)
     }
 }

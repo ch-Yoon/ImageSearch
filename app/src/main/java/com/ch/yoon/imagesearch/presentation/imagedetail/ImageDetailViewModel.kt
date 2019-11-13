@@ -31,14 +31,10 @@ class ImageDetailViewModel(
     private val _moveToWebEvent = SingleLiveEvent<String>()
     val moveToWebEvent: LiveData<String> = _moveToWebEvent
 
-    private val _finishEventWithNotUpdate = SingleLiveEvent<Unit>()
-    val finishEventWithNotUpdate: LiveData<Unit> = _finishEventWithNotUpdate
-
-    private val _finishEventWithUpdate = SingleLiveEvent<ImageDocument>()
-    val finishEventWithUpdate: LiveData<ImageDocument> = _finishEventWithUpdate
+    private val _finishEvent = SingleLiveEvent<Unit>()
+    val finishEvent: LiveData<Unit> = _finishEvent
 
     private var imageDocument: ImageDocument? = null
-    private var isUpdate = false
 
     fun showImageDetailInfo(receivedImageDocument: ImageDocument?) {
         receivedImageDocument?.let { document ->
@@ -47,7 +43,7 @@ class ImageDetailViewModel(
             _isFavorite.value = document.isFavorite
         } ?: run {
             updateShowMessage(R.string.unknown_error)
-            _finishEventWithNotUpdate.call()
+            _finishEvent.call()
         }
     }
 
@@ -62,11 +58,7 @@ class ImageDetailViewModel(
     }
 
     fun onClickBackPress() {
-        if(isUpdate) {
-            _finishEventWithUpdate.value = imageDocument
-        } else {
-            _finishEventWithNotUpdate.call()
-        }
+        _finishEvent.call()
     }
 
     fun onClickFavorite() {
@@ -81,7 +73,7 @@ class ImageDetailViewModel(
     }
 
     private fun saveFavoriteToRepository(target: ImageDocument) {
-        imageRepository.saveFavoriteImageDocument(target)
+        imageRepository.saveFavoriteImage(target)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 updateShowMessage(R.string.success_favorite_save)
@@ -93,7 +85,7 @@ class ImageDetailViewModel(
     }
 
     private fun deleteFavoriteFromRepository(target: ImageDocument) {
-        imageRepository.deleteFavoriteImageDocument(target.id)
+        imageRepository.deleteFavoriteImage(target)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 updateImageDocument(target)
@@ -105,7 +97,6 @@ class ImageDetailViewModel(
     }
 
     private fun updateImageDocument(target: ImageDocument) {
-        isUpdate = true
         imageDocument = target
         _isFavorite.value = target.isFavorite
     }

@@ -31,6 +31,7 @@ class ImageListViewModel(
 
     init {
         observePageLoadInspector()
+        observeChangingImageDocument()
     }
 
     private val _imageSortType = NonNullMutableLiveData(ImageSortType.ACCURACY)
@@ -65,10 +66,6 @@ class ImageListViewModel(
 
     fun onClickImage(imageDocument: ImageDocument) {
         _moveToDetailScreenEvent.value = imageDocument
-    }
-
-    fun onUpdateImageDocument(updatedImageDocument: ImageDocument) {
-        _imageDocumentList.replace(updatedImageDocument) { it.id == updatedImageDocument.id }
     }
 
     fun loadImageList(keyword: String) {
@@ -140,4 +137,14 @@ class ImageListViewModel(
         }
     }
 
+    private fun observeChangingImageDocument() {
+        imageRepository.observeChangingFavoriteImage()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ changedImageDocument ->
+                _imageDocumentList.replace(changedImageDocument) { it.id == changedImageDocument.id }
+            }, {
+                Log.d(TAG, it.message)
+            })
+            .register()
+    }
 }
