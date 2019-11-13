@@ -9,8 +9,11 @@ import com.ch.yoon.imagesearch.data.repository.image.model.ImageSearchResponse
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
 import io.mockk.verify
+import io.reactivex.Completable
 import io.reactivex.Single
+import junit.framework.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -39,25 +42,92 @@ class ImageRepositoryImplTest {
     }
 
     @Test
-    fun `리모트 데이터소스에 이미지 요청을 전달하는지 테스트`() {
+    fun `좋아요가 반영된 이미지 리스트를 반환하는지 테스트`() {
         // given
-        every { mockImageLocalDataSource.selectAllFavoriteImageDocumentList() } returns Single.just(mutableListOf())
-        every { mockImageRemoteDataSource.requestImageList(any()) } returns Single.just(emptyImageSearchResponse())
+        val favoriteList = createImageDocumentList(arrayOf("1", "3", "5"), true)
+        every { mockImageLocalDataSource.selectAllFavoriteImageDocumentList() } returns Single.just(favoriteList)
+
+        val noFavoriteList = createImageDocumentList(arrayOf("1", "2", "3", "4", "5", "6"), false)
+        val response = ImageSearchResponse(mockk(), noFavoriteList)
+        every { mockImageRemoteDataSource.requestImageList(any()) } returns Single.just(response)
+
         // when
-        val request = emptyImageSearchRequest()
-        imageRepository.requestImageList(request)
+        var result: List<ImageDocument>? = null
+        imageRepository.requestImageList(emptyImageSearchRequest())
+            .subscribe({
+                result = it.imageDocumentList
+            }, {
+                result = null
+            })
 
         // then
-        verify(exactly = 1) { mockImageRemoteDataSource.requestImageList(request) }
+        val expectedList = createImageDocumentList(arrayOf("1", "2", "3", "4", "5", "6"), arrayOf("1", "3", "5"))
+        assertEquals(expectedList, result)
     }
 
-    private fun emptyImageSearchRequest(): ImageSearchRequest {
+    @Test
+    fun `좋아요 저장 요청을 local에 전달하는지 테스트`() {
+        // given
+        val favoriteDocument = createImageDocument("1", true)
+        every { mockImageLocalDataSource.saveFavoriteImageDocument(favoriteDocument) } returns Completable.complete()
+
+        // when
+        imageRepository.saveFavoriteImageDocument(favoriteDocument)
+
+        // then
+        verify(exactly = 1) { mockImageLocalDataSource.saveFavoriteImageDocument(favoriteDocument) }
+    }
+
+    @Test
+    fun `좋아요 취소 요청을 local에 전달하는지 테스트`() {
+        // given
+        val noFavoriteDocument = createImageDocument("1", false)
+        every { mockImageLocalDataSource.deleteFavoriteImageDocument(noFavoriteDocument.id) } returns Completable.complete()
+
+        // when
+        imageRepository.deleteFavoriteImageDocument(noFavoriteDocument.id)
+
+        // then
+        verify(exactly = 1) { mockImageLocalDataSource.deleteFavoriteImageDocument(noFavoriteDocument.id) }
+    }
+
+   private fun emptyImageSearchRequest(): ImageSearchRequest {
         return ImageSearchRequest("", ImageSortType.ACCURACY, 1, 1, true)
     }
 
-    private fun emptyImageSearchResponse(): ImageSearchResponse {
-        val imageSearchMeta = ImageSearchMeta(false)
-        val imageDocumentList = mutableListOf<ImageDocument>()
-        return ImageSearchResponse(imageSearchMeta, imageDocumentList)
+    private fun createImageDocumentList(idArray: Array<String>, favoriteArray: Array<String>): List<ImageDocument> {
+        return mutableListOf<ImageDocument>().apply {
+            val favoriteSet = favoriteArray.toSet()
+            for(id in idArray) {
+                if(favoriteSet.contains(id)) {
+                    add(createImageDocument(id, true))
+                } else {
+                    add(createImageDocument(id, false))
+                }
+            }
+        }
+    }
+
+    private fun createImageDocumentList(idArray: Array<String>, isFavorite: Boolean): List<ImageDocument> {
+        return mutableListOf<ImageDocument>().apply {
+            for(id in idArray) {
+                add(createImageDocument(id, isFavorite))
+            }
+        }
+    }
+
+    private fun createImageDocument(id: String, isFavorite: Boolean): ImageDocument {
+        return ImageDocument(
+            id,
+            "collection",
+            "thumbnailUrl",
+            "imageUrlInfo",
+            0,
+            0,
+            "displaySiteName",
+            "docUrl",
+            "dateTime",
+            isFavorite
+        )
     }
 }
