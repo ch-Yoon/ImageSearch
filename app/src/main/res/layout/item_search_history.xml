@@ -10,8 +10,8 @@
             type="com.ch.yoon.imagesearch.presentation.imagesearch.searchbox.SearchBoxViewModel" />
 
         <variable
-            name="searchLogModel"
-            type="com.ch.yoon.imagesearch.data.repository.searchlog.model.SearchLogModel" />
+            name="searchLog"
+            type="com.ch.yoon.imagesearch.data.repository.searchlog.model.SearchLog" />
 
     </data>
 
@@ -25,7 +25,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@{searchLogModel.getKeyword()}"
+            android:text="@{searchLog.getKeyword()}"
             android:padding="10dp" />
 
         <ImageView

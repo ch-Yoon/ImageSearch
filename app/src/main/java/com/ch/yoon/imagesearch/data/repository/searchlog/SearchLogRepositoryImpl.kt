@@ -1,6 +1,6 @@
 package com.ch.yoon.imagesearch.data.repository.searchlog
 
-import com.ch.yoon.imagesearch.data.repository.searchlog.model.SearchLogModel
+import com.ch.yoon.imagesearch.data.repository.searchlog.model.SearchLog
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
@@ -13,17 +13,17 @@ class SearchLogRepositoryImpl(
     private val searchLogLocalDataSource: SearchLogLocalDataSource
 ) : SearchLogRepository {
 
-    override fun requestSearchLogList(): Single<List<SearchLogModel>> {
+    override fun requestSearchLogList(): Single<List<SearchLog>> {
         return searchLogLocalDataSource.selectAllSearchLog()
             .subscribeOn(Schedulers.io())
     }
 
-    override fun deleteSearchLog(searchLogModel: SearchLogModel): Completable {
-        return searchLogLocalDataSource.deleteSearchLog(searchLogModel)
+    override fun deleteSearchLog(searchLog: SearchLog): Completable {
+        return searchLogLocalDataSource.deleteSearchLog(searchLog)
             .subscribeOn(Schedulers.io())
     }
 
-    override fun insertOrUpdateSearchLog(keyword: String): Single<SearchLogModel> {
+    override fun insertOrUpdateSearchLog(keyword: String): Single<SearchLog> {
         return searchLogLocalDataSource.insertOrUpdateSearchLog(keyword)
             .subscribeOn(Schedulers.io())
     }

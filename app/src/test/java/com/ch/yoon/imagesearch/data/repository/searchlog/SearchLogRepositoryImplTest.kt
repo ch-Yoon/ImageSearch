@@ -1,7 +1,7 @@
 package com.ch.yoon.imagesearch.data.repository.searchlog
 
 import com.belongings.bag.belongingsbag.RxSchedulerRule
-import com.ch.yoon.imagesearch.data.repository.searchlog.model.SearchLogModel
+import com.ch.yoon.imagesearch.data.repository.searchlog.model.SearchLog
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -82,7 +82,7 @@ class SearchLogRepositoryImplTest {
         verify(exactly = 1) { mockSearchLogLocalDataSource.deleteAllSearchLog() }
     }
 
-    private fun emptySearchLog(): SearchLogModel {
-        return SearchLogModel("", 0)
+    private fun emptySearchLog(): SearchLog {
+        return SearchLog("", 0)
     }
 }

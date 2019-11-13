@@ -6,7 +6,7 @@ import com.ch.yoon.imagesearch.data.local.room.dao.SearchLogDAO
 import com.ch.yoon.imagesearch.data.local.room.entity.SearchLogEntity
 import com.ch.yoon.imagesearch.data.repository.searchlog.SearchLogLocalDataSource
 import com.ch.yoon.imagesearch.data.repository.error.RepositoryException
-import com.ch.yoon.imagesearch.data.repository.searchlog.model.SearchLogModel
+import com.ch.yoon.imagesearch.data.repository.searchlog.model.SearchLog
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -56,16 +56,16 @@ class SearchLogLocalDataSourceImplTest {
         every { mockSearchLogDao.insertOrUpdateSearchLog(any()) } returns Completable.complete()
 
         // when
-        var searchLogModel: SearchLogModel? = null
+        var searchLog: SearchLog? = null
         searchLogLocalDataSource.insertOrUpdateSearchLog("테스트")
             .subscribe({ receivedSearchLog ->
-                searchLogModel = receivedSearchLog
+                searchLog = receivedSearchLog
             }, { throwable ->
-                searchLogModel = null
+                searchLog = null
             })
 
         // then
-        assertEquals("테스트", searchLogModel?.keyword ?: "")
+        assertEquals("테스트", searchLog?.keyword ?: "")
     }
 
     @Test
@@ -95,7 +95,7 @@ class SearchLogLocalDataSourceImplTest {
         every { mockSearchLogDao.selectAllSearchLog() } returns Single.just(emptyList())
 
         // when
-        var list: List<SearchLogModel>? = null
+        var list: List<SearchLog>? = null
         searchLogLocalDataSource.selectAllSearchLog()
             .subscribe({ receivedList ->
                 list = receivedList
@@ -114,7 +114,7 @@ class SearchLogLocalDataSourceImplTest {
         every { mockSearchLogDao.selectAllSearchLog() } returns Single.just(searchLogModelList)
 
         // when
-        var actualList: List<SearchLogModel>? = null
+        var actualList: List<SearchLog>? = null
         searchLogLocalDataSource.selectAllSearchLog()
             .subscribe({ list ->
                 actualList = list
@@ -123,7 +123,7 @@ class SearchLogLocalDataSourceImplTest {
             })
 
         // then
-        val expectedList = searchLogModelList.map { SearchLogModel(it.keyword, it.time) }
+        val expectedList = searchLogModelList.map { SearchLog(it.keyword, it.time) }
         assertEquals(expectedList, actualList)
     }
 
@@ -133,7 +133,7 @@ class SearchLogLocalDataSourceImplTest {
         every { mockSearchLogDao.deleteSearchLog(any(), any()) } returns Completable.complete()
 
         // when
-        val searchLog = SearchLogModel("테스트", 1)
+        val searchLog = SearchLog("테스트", 1)
         searchLogLocalDataSource.deleteSearchLog(searchLog)
 
         // then
@@ -147,7 +147,7 @@ class SearchLogLocalDataSourceImplTest {
 
         // when
         var actualException: RepositoryException? = null
-        val searchLog = SearchLogModel("테스트", 1)
+        val searchLog = SearchLog("테스트", 1)
         searchLogLocalDataSource.deleteSearchLog(searchLog)
             .subscribe({
                 actualException = null

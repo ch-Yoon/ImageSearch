@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.ch.yoon.imagesearch.R
 import com.ch.yoon.imagesearch.data.repository.searchlog.SearchLogRepository
-import com.ch.yoon.imagesearch.data.repository.searchlog.model.SearchLogModel
+import com.ch.yoon.imagesearch.data.repository.searchlog.model.SearchLog
 
 import com.ch.yoon.imagesearch.util.extension.*
 import com.ch.yoon.imagesearch.presentation.base.BaseViewModel
@@ -23,7 +23,7 @@ class SearchBoxViewModel(
     private val searchLogRepository: SearchLogRepository
 ) : BaseViewModel (application) {
 
-    private val _searchLogList = MutableLiveData<MutableList<SearchLogModel>>(mutableListOf())
+    private val _searchLogList = MutableLiveData<MutableList<SearchLog>>(mutableListOf())
     val searchLogList: LiveData<List<String>> = Transformations.map(_searchLogList) { list -> list?.map { it.keyword }?.toList() }
 
     private val _searchEvent = SingleLiveEvent<String>()

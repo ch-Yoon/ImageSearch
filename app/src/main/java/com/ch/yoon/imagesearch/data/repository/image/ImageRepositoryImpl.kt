@@ -3,8 +3,6 @@ package com.ch.yoon.imagesearch.data.repository.image
 import com.ch.yoon.imagesearch.data.remote.kakao.request.ImageSearchRequest
 import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
 import com.ch.yoon.imagesearch.data.repository.image.model.ImageSearchResponse
-import com.ch.yoon.imagesearch.data.repository.searchlog.SearchLogLocalDataSource
-import com.ch.yoon.imagesearch.data.repository.searchlog.model.SearchLogModel
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers

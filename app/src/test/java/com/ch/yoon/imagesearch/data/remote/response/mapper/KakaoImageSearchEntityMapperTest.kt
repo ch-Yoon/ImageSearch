@@ -1,7 +1,7 @@
-package com.ch.yoon.imagesearch.data.remote.response
+package com.ch.yoon.imagesearch.data.remote.response.mapper
 
 import com.ch.yoon.imagesearch.data.remote.kakao.response.KakaoImageDocument
-import com.ch.yoon.imagesearch.data.remote.kakao.response.KakaoImageSearchEntityMapper
+import com.ch.yoon.imagesearch.data.remote.kakao.response.mapper.KakaoImageSearchEntityMapper
 import com.ch.yoon.imagesearch.data.remote.kakao.response.KakaoImageSearchMetaInfo
 import com.ch.yoon.imagesearch.data.remote.kakao.response.KakaoImageSearchResponse
 import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
@@ -22,7 +22,7 @@ class KakaoImageSearchEntityMapperTest {
         val kakaoImaggSearchResponse = createVritualKakaoImageResponse(10)
 
         // when
-        val convertedResponse = KakaoImageSearchEntityMapper.toEntity(kakaoImaggSearchResponse)
+        val convertedResponse = KakaoImageSearchEntityMapper.fromEntity(kakaoImaggSearchResponse)
 
         // then
         val meta = ImageSearchMeta(kakaoImaggSearchResponse.kakaoImageSearchMeta.isEnd)
