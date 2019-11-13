@@ -20,7 +20,7 @@
         <activity
             android:name=".presentation.imagesearch.ImageSearchActivity"
             android:theme="@style/ImageSearchAppTheme"
-            android:windowSoftInputMode="stateAlwaysHidden">
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

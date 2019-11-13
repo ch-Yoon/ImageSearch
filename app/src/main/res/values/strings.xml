@@ -5,6 +5,7 @@
     <!-- image search activity -->
     <string name="image_search_menu_title">검색</string>
     <string name="favorite_menu_title">좋아요</string>
+    <string name="image_search_empty_view_text">이미지 검색을 시작하세요</string>
 
     <!-- search box view model -->
     <string name="success_all_image_info_delete_by_keyword">삭제 완료</string>
@@ -27,6 +28,7 @@
 
     <!-- favorite activity -->
     <string name="favorite_title">좋아요</string>
+    <string name="favorite_empty_view_text">좋아요를 누른 이미지가 없습니다</string>
 
     <!-- error message -->
     <string name="wrong_request_error">잘못된 요청입니다</string>

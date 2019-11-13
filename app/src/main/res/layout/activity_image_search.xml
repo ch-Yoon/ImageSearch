@@ -108,6 +108,7 @@
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/count_in_line_icon_side_margin"
             android:scrollbars="vertical"
+            android:visibility="@{(imageListViewModel.imageDocumentList == null || imageListViewModel.imageDocumentList.size() == 0) ? View.INVISIBLE : View.VISIBLE}"
             app:spanCount="@{imageListViewModel.countOfItemInLine}"
             app:imageSearchState="@{imageListViewModel.imageSearchState}"
             app:itemsWithListAdapter="@{imageListViewModel.imageDocumentList}"
@@ -117,29 +118,41 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fourImageInLineButton" />
 
+        <TextView
+            android:id="@+id/emptyTextView"
+            style="@style/EmptyGuideTextViewStyle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="@string/image_search_empty_view_text"
+            android:visibility="@{(imageListViewModel.imageDocumentList == null || imageListViewModel.imageDocumentList.size() == 0) ? View.VISIBLE : View.INVISIBLE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imageRecyclerView" />
+
         <com.ch.yoon.suggetionsearchview.SuggestionSearchView
             android:id="@+id/suggestionSearchView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:visibility="invisible"
-            app:textSize="14dp"
-            app:margin="5dp"
+            app:enable="@{searchBoxViewModel.searchEnableEvent}"
             app:hint="@string/suggestion_search_view_hint"
+            app:itemsWithDefaultAdapter="@{searchBoxViewModel.searchLogList}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:margin="5dp"
+            app:onSearchButtonClickListener="@{(inputtedText) -> searchBoxViewModel.onClickSearchButton(inputtedText)}"
+            app:onStateChangeListener="@{(state) -> searchBoxViewModel.onStateChange(state == State.OPEN)}"
+            app:onSuggestionFooterClickListener="@{() -> searchBoxViewModel.onClickSearchLogAllDelete()}"
+            app:onSuggestionItemClickListener="@{(keyword, position) -> searchBoxViewModel.onClickSearchButton(keyword)}"
+            app:onSuggestionSubButtonClickListener="@{(keyword, position) -> searchBoxViewModel.onClickSearchLogDeleteButton(keyword)}"
             app:radius="10dp"
             app:suggestionFooterEnable="true"
             app:suggestionFooterText="@string/suggestion_search_view_footer_text"
             app:suggestionFooterTextColor="@color/colorGreen"
-            app:onSearchButtonClickListener="@{(inputtedText) -> searchBoxViewModel.onClickSearchButton(inputtedText)}"
-            app:onStateChangeListener="@{(state) -> searchBoxViewModel.onStateChange(state == State.OPEN)}"
-            app:onSuggestionItemClickListener="@{(keyword, position) -> searchBoxViewModel.onClickSearchButton(keyword)}"
-            app:onSuggestionSubButtonClickListener="@{(keyword, position) -> searchBoxViewModel.onClickSearchLogDeleteButton(keyword)}"
-            app:onSuggestionFooterClickListener="@{() -> searchBoxViewModel.onClickSearchLogAllDelete()}"
-            app:itemsWithDefaultAdapter="@{searchBoxViewModel.searchLogList}"
-            app:enable="@{searchBoxViewModel.searchEnableEvent}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" >
+            app:textSize="14dp">
 
         </com.ch.yoon.suggetionsearchview.SuggestionSearchView>
 
