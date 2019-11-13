@@ -8,6 +8,8 @@ import com.ch.yoon.imagesearch.data.repository.image.ImageLocalDataSource
 import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
 import io.reactivex.Completable
 import io.reactivex.Single
+import java.util.*
+import kotlin.collections.LinkedHashMap
 
 /**
  * Creator : ch-yoon
@@ -28,7 +30,7 @@ class ImageLocalDataSourceImpl(
             .compose(CompletableExceptionTransformer())
     }
 
-    override fun selectAllFavoriteImageDocuments(): Single<List<ImageDocument>> {
+    override fun selectAllFavoriteImageDocumentList(): Single<List<ImageDocument>> {
         return imageDAO.selectAllImageDocument()
             .map { ImageDocumentEntityMapper.fromEntityList(it) }
             .compose(SingleExceptionTransformer())

@@ -6,6 +6,7 @@ import com.ch.yoon.imagesearch.data.repository.image.model.ImageSearchResponse
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
 
 /**
@@ -19,13 +20,13 @@ class ImageRepositoryImpl(
 
     override fun requestImageList(imageSearchRequest: ImageSearchRequest): Single<ImageSearchResponse> {
         return Single.zip(
-            imageRemoteDataSource.requestImageList(imageSearchRequest).subscribeOn(Schedulers.io()),
-            imageLocalDataSource.selectAllFavoriteImageDocuments().subscribeOn(Schedulers.io()),
-            BiFunction<ImageSearchResponse, List<ImageDocument>, ImageSearchResponse> { response, favoriteList ->
-                val map = favoriteList.associateBy({ it.id }, { it })
-                val newList = response.imageDocumentList.map { document ->
-                    map[document.id]?.let { it } ?: document
-                }
+            imageRemoteDataSource.requestImageList(imageSearchRequest)
+                .subscribeOn(Schedulers.io()),
+            imageLocalDataSource.selectAllFavoriteImageDocumentList()
+                .flatMap { favoriteList -> Single.just(favoriteList.associateBy({ it.id }, { it })) }
+                .subscribeOn(Schedulers.io()),
+            BiFunction<ImageSearchResponse, Map<String, ImageDocument>, ImageSearchResponse> { response, favoriteMap ->
+                val newList = response.imageDocumentList.map { favoriteMap[it.id] ?: it }
                 ImageSearchResponse(response.imageSearchMeta, newList)
             }
         ).subscribeOn(Schedulers.io())
