@@ -32,6 +32,11 @@ class ImageRepositoryImpl(
         ).subscribeOn(Schedulers.io())
     }
 
+    override fun requestFavoriteImageList(): Single<List<ImageDocument>> {
+        return imageLocalDataSource.selectAllFavoriteImageDocumentList()
+            .subscribeOn(Schedulers.io())
+    }
+
     override fun saveFavoriteImageDocument(imageDocument: ImageDocument): Completable {
         return imageLocalDataSource.saveFavoriteImageDocument(imageDocument)
             .subscribeOn(Schedulers.io())

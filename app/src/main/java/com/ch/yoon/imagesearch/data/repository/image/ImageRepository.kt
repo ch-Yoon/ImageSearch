@@ -14,6 +14,8 @@ interface ImageRepository {
 
     fun requestImageList(imageSearchRequest: ImageSearchRequest): Single<ImageSearchResponse>
 
+    fun requestFavoriteImageList(): Single<List<ImageDocument>>
+
     fun saveFavoriteImageDocument(imageDocument: ImageDocument): Completable
 
     fun deleteFavoriteImageDocument(id: String): Completable
