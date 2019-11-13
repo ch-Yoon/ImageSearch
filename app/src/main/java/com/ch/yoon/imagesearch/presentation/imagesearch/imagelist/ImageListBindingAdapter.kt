@@ -60,3 +60,8 @@ fun loadImageWithCenterCrop(imageView: ImageView, imageUrl: String?) {
 fun applySelectedState(view: View, isSelected: Boolean) {
     view.isSelected = isSelected
 }
+
+@BindingAdapter("srcAlpha")
+fun setSrcAlpha(imageView: ImageView, alpha: Int) {
+    imageView.drawable.alpha = alpha
+}
