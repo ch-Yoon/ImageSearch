@@ -16,4 +16,5 @@ interface ImageRepository {
 
     fun saveFavoriteImageDocument(imageDocument: ImageDocument): Completable
 
+    fun deleteFavoriteImageDocument(id: String): Completable
 }

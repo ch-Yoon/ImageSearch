@@ -2,13 +2,24 @@
     <string name="app_name">ImageSearch</string>
     <string name="my_name">윤찬혁</string>
 
-    <!-- image search activity -->
+    <!-- search box view model -->
+    <string name="success_all_image_info_delete_by_keyword">삭제 완료</string>
+    <string name="success_delete_all_search_log">전체 삭제 완료</string>
+
+    <!-- image list view model -->
     <string name="image_search_edit_text_hint">검색어를 입력해주세요</string>
     <string name="image_sort_type_accuracy_text">정확도</string>
     <string name="image_sort_type_recency_text">최신</string>
+    <string name="success_image_search_no_result">검색 결과가 없습니다</string>
+    <string name="success_image_search_last_data">마지막 검색 페이지입니다</string>
+    <string name="empty_keyword_guide">검색어를 입력해주세요</string>
 
     <!-- image detail activity -->
     <string name="image_detail_title">상세보기</string>
+
+    <!-- image detail view model -->
+    <string name="success_favorite_save">좋아요 저장 성공</string>
+    <string name="success_favorite_delete">좋아요 취소 저장 성공</string>
 
     <!-- error message -->
     <string name="wrong_request_error">잘못된 요청입니다</string>
@@ -18,13 +29,6 @@
     <string name="network_not_connecting_error">인터넷 연결을 확인해주세요</string>
     <string name="unknown_error">알 수 없는 에러가 발생했습니다</string>
     <string name="non_existent_url_error">연결되는 사이트가 없습니다</string>
-
-    <!-- guide message -->
-    <string name="success_image_search_no_result">검색 결과가 없습니다</string>
-    <string name="success_image_search_last_data">마지막 검색 페이지입니다</string>
-    <string name="empty_keyword_guide">검색어를 입력해주세요</string>
-    <string name="success_all_image_info_delete_by_keyword">삭제 완료</string>
-    <string name="success_delete_all_search_log">전체 삭제 완료</string>
 
     <!-- suggestion_search_view-->
     <string name="suggestion_search_view_hint">검색</string>

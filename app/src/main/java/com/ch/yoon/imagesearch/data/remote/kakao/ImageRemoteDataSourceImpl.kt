@@ -18,9 +18,7 @@ class ImageRemoteDataSourceImpl(
     override fun requestImageList(imageSearchRequest: ImageSearchRequest): Single<ImageSearchResponse> {
         return imageSearchRequest.run {
             kakaoSearchApi.searchImageList(keyword, imageSortType.type, pageNumber, requiredSize)
-                .map { remoteImageSearchResponse ->
-                    KakaoImageSearchEntityMapper.fromEntity(remoteImageSearchResponse)
-                }
+                .map { KakaoImageSearchEntityMapper.fromEntity(it) }
                 .compose(SingleExceptionTransformer())
         }
     }

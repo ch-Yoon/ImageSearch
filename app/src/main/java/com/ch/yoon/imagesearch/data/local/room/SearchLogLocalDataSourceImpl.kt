@@ -22,13 +22,13 @@ class SearchLogLocalDataSourceImpl(
         val newSearchLogEntity = SearchLogEntity(keyword, System.currentTimeMillis())
         return searchLogDAO.insertOrUpdateSearchLog(newSearchLogEntity)
             .toSingle { newSearchLogEntity }
-            .map { searchLogEntity -> SearchLogEntityMapper.fromEntity(searchLogEntity) }
+            .map { SearchLogEntityMapper.fromEntity(it) }
             .compose(SingleExceptionTransformer())
     }
 
     override fun selectAllSearchLog(): Single<List<SearchLog>> {
         return searchLogDAO.selectAllSearchLog()
-            .map { searchLogEntityList -> SearchLogEntityMapper.fromEntityList(searchLogEntityList) }
+            .map { SearchLogEntityMapper.fromEntityList(it) }
             .compose(SingleExceptionTransformer())
     }
 

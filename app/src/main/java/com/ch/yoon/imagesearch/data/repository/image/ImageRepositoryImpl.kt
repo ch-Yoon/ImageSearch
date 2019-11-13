@@ -25,4 +25,9 @@ class ImageRepositoryImpl(
         return imageLocalDataSource.saveFavoriteImageDocument(imageDocument)
             .subscribeOn(Schedulers.io())
     }
+
+    override fun deleteFavoriteImageDocument(id: String): Completable {
+        return imageLocalDataSource.deleteFavoriteImageDocument(id)
+            .subscribeOn(Schedulers.io())
+    }
 }

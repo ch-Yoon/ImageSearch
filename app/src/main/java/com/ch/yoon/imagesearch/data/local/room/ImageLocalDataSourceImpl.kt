@@ -19,4 +19,7 @@ class ImageLocalDataSourceImpl(
         return imageDAO.insertOrUpdateImageDocument(imageDocumentEntity)
     }
 
+    override fun deleteFavoriteImageDocument(id: String): Completable {
+        return imageDAO.deleteImageDocument(id)
+    }
 }

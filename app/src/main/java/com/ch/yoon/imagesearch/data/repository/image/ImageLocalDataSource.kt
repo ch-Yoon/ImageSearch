@@ -11,4 +11,6 @@ interface ImageLocalDataSource {
 
     fun saveFavoriteImageDocument(imageDocument: ImageDocument): Completable
 
+    fun deleteFavoriteImageDocument(id: String): Completable
+
 }

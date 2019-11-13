@@ -51,21 +51,6 @@ class ImageDetailViewModel(
         }
     }
 
-    fun onClickFavorite() {
-        imageDocument?.let { document ->
-            document.isFavorite = true
-            imageRepository.saveFavoriteImageDocument(document)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    isUpdate = true
-                    imageDocument = document
-                    _isFavorite.value = document.isFavorite
-                }, { throwable ->
-                    Log.d(TAG, throwable.message)
-                })
-        }
-    }
-
     fun onClickWebButton() {
         imageDocument?.let { document ->
             if(TextUtils.isEmpty(document.docUrl)) {
@@ -84,4 +69,44 @@ class ImageDetailViewModel(
         }
     }
 
+    fun onClickFavorite() {
+        imageDocument?.let { document ->
+            document.isFavorite = document.isFavorite.not()
+            if(document.isFavorite) {
+                saveFavoriteToRepository(document)
+            } else {
+                deleteFavoriteFromRepository(document)
+            }
+        }
+    }
+
+    private fun saveFavoriteToRepository(target: ImageDocument) {
+        imageRepository.saveFavoriteImageDocument(target)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                updateShowMessage(R.string.success_favorite_save)
+                updateImageDocument(target)
+            }, { throwable ->
+                Log.d(TAG, throwable.message)
+            })
+            .register()
+    }
+
+    private fun deleteFavoriteFromRepository(target: ImageDocument) {
+        imageRepository.deleteFavoriteImageDocument(target.id)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                updateImageDocument(target)
+                updateShowMessage(R.string.success_favorite_delete)
+            }, { throwable ->
+                Log.d(TAG, throwable.message)
+            })
+            .register()
+    }
+
+    private fun updateImageDocument(target: ImageDocument) {
+        isUpdate = true
+        imageDocument = target
+        _isFavorite.value = target.isFavorite
+    }
 }
