@@ -26,15 +26,16 @@
             android:layout_height="0dp"
             android:layout_margin="1dp"
             android:onClick="@{() -> viewModel.onClickImage(imageDocument)}"
+            app:loadImageWithCenterCrop="@{imageDocument.thumbnailUrl}"
+            app:roundedCorners="@{30}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:loadImageWithCenterCrop="@{imageDocument.thumbnailUrl}"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/favoriteImageView"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginTop="10dp"
@@ -43,7 +44,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:isSelected="@{imageDocument.favorite}"
-
             app:srcCompat="@drawable/ic_favorite_selector" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

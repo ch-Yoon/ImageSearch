@@ -2,8 +2,11 @@ package com.ch.yoon.imagesearch.presentation.imagesearch
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.ch.yoon.imagesearch.R
 import com.ch.yoon.imagesearch.databinding.ActivityImageSearchBinding
 import com.ch.yoon.imagesearch.presentation.base.BaseActivity
@@ -30,16 +33,20 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        initActionBar()
+
         initSearchBoxViewModel()
         observeSearchBoxViewModel()
 
         initImageListViewModel()
         observeImageListViewModel()
         initImageRecyclerView()
+    }
 
-        favoriteMenuButton.setOnClickListener {
-            startActivity(Intent(this, FavoriteActivity::class.java))
-        }
+    private fun initActionBar() {
+        setSupportActionBar(binding.mainToolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
     }
 
     private fun initSearchBoxViewModel() {
@@ -105,6 +112,25 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
                 }
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.image_search_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        item?.let { menuItem ->
+            when(menuItem.itemId) {
+                R.id.action_search -> {
+                    searchBoxViewModel.onClickShowButton()
+                }
+                R.id.action_favorite -> {
+                    startActivity(Intent(this, FavoriteActivity::class.java))
+                }
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onBackPressed() {

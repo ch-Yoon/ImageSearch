@@ -1,6 +1,5 @@
 package com.ch.yoon.imagesearch.presentation.imagedetail
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -38,32 +37,22 @@ class ImageDetailActivity : BaseActivity<ActivityImageDetailBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val passedImageDocument = intent.getParcelableExtra<ImageDocument>(EXTRA_IMAGE_DOCUMENT_KEY)
+        initActionBar()
 
-        initBackArrow()
-        initImageDetailViewModel(passedImageDocument)
+        initImageDetailViewModel()
         observeImageDetailViewModel()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val itemId = item.itemId
-        return if (itemId == android.R.id.home) {
-            onBackPressed()
-            true
-        } else {
-            super.onOptionsItemSelected(item)
-        }
-    }
-
-    private fun initBackArrow() {
+    private fun initActionBar() {
         setSupportActionBar(binding.mainToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    private fun initImageDetailViewModel(imageDocument: ImageDocument) {
+    private fun initImageDetailViewModel() {
         binding.imageDetailViewModel = imageDetailViewModel
         if(isActivityFirstCreate) {
-            imageDetailViewModel.showImageDetailInfo(imageDocument)
+            val passedImageDocument = intent.getParcelableExtra<ImageDocument>(EXTRA_IMAGE_DOCUMENT_KEY)
+            imageDetailViewModel.showImageDetailInfo(passedImageDocument)
         }
     }
 
@@ -82,6 +71,16 @@ class ImageDetailActivity : BaseActivity<ActivityImageDetailBinding>() {
             finishEvent.observe(owner, Observer {
                 finish()
             })
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val itemId = item.itemId
+        return if (itemId == android.R.id.home) {
+            onBackPressed()
+            true
+        } else {
+            super.onOptionsItemSelected(item)
         }
     }
 

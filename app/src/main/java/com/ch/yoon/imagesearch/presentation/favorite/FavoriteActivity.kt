@@ -20,13 +20,14 @@ class FavoriteActivity : BaseActivity<ActivityFavoriteBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        initBackArrow()
+        initActionBar()
+
         initFavoriteListViewModel()
         observeFavoriteListViewModel()
         initFavoriteRecyclerView()
     }
 
-    private fun initBackArrow() {
+    private fun initActionBar() {
         setSupportActionBar(binding.mainToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }

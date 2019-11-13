@@ -2,6 +2,10 @@
     <string name="app_name">ImageSearch</string>
     <string name="my_name">윤찬혁</string>
 
+    <!-- image search activity -->
+    <string name="image_search_menu_title">검색</string>
+    <string name="favorite_menu_title">좋아요</string>
+
     <!-- search box view model -->
     <string name="success_all_image_info_delete_by_keyword">삭제 완료</string>
     <string name="success_delete_all_search_log">전체 삭제 완료</string>
