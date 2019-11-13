@@ -53,3 +53,15 @@ fun <T> MutableLiveData<MutableList<T>>.addAll(list: List<T>) {
     newList.addAll(list)
     value = newList
 }
+
+inline fun <T> MutableLiveData<MutableList<T>>.replace(replaceValue: T, predicate: (T) -> Boolean) {
+    value?.let { list ->
+        for(i in 0 until list.size) {
+            if(predicate(list[i])) {
+                list[i] = replaceValue
+                break
+            }
+        }
+        value = list
+    }
+}

@@ -14,5 +14,5 @@ data class KakaoImageDocument(
     @SerializedName("height") val height: Int,
     @SerializedName("display_sitename") val displaySiteName: String,
     @SerializedName("doc_url") val docUrl: String,
-    @SerializedName("dateTime") val dateTime: String
+    @SerializedName("datetime") val dateTime: String
 )

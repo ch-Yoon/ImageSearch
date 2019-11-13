@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
  * Creator : ch-yoon
  * Date : 2019-11-12
  **/
-@Entity(tableName = "imageDocument")
+@Entity(tableName = "imageDocuments")
 data class ImageDocumentEntity(
     @PrimaryKey val id: String,
     val collection: String,
@@ -17,5 +17,6 @@ data class ImageDocumentEntity(
     val height: Int,
     val displaySiteName: String,
     val docUrl: String,
-    val dateTime: String
+    val dateTime: String,
+    val isFavorite: Boolean
 )

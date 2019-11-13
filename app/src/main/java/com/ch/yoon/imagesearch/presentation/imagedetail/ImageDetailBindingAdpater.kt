@@ -1,5 +1,6 @@
 package com.ch.yoon.imagesearch.presentation.imagedetail
 
+import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.databinding.BindingAdapter
 import com.ch.yoon.imagesearch.util.common.loadImageWithCenterInside
@@ -12,4 +13,9 @@ import com.github.chrisbanes.photoview.PhotoView
 @BindingAdapter("loadImageWithCenterInside", "loadingProgressBar")
 fun loadImageWithCenterInside(photoView: PhotoView, imageUrl: String?, progressBar: ProgressBar) {
     loadImageWithCenterInside(photoView, imageUrl, progressBar)
+}
+
+@BindingAdapter("isSelected")
+fun isSelected(imageView: ImageView, isSelected: Boolean) {
+    imageView.isSelected = isSelected
 }

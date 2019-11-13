@@ -21,7 +21,7 @@ val viewModelModule = module {
     }
 
     viewModel {
-        ImageDetailViewModel(get())
+        ImageDetailViewModel(get(), get())
     }
 
 }

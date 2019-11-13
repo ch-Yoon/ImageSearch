@@ -1,6 +1,7 @@
 package com.ch.yoon.imagesearch.data.repository.image
 
 import com.ch.yoon.imagesearch.data.remote.kakao.request.ImageSearchRequest
+import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
 import com.ch.yoon.imagesearch.data.repository.image.model.ImageSearchResponse
 import com.ch.yoon.imagesearch.data.repository.searchlog.SearchLogLocalDataSource
 import com.ch.yoon.imagesearch.data.repository.searchlog.model.SearchLogModel
@@ -13,6 +14,7 @@ import io.reactivex.schedulers.Schedulers
  * Date : 2019-10-28
  **/
 class ImageRepositoryImpl(
+    private val imageLocalDataSource: ImageLocalDataSource,
     private val imageRemoteDataSource: ImageRemoteDataSource
 ) : ImageRepository {
 
@@ -21,4 +23,8 @@ class ImageRepositoryImpl(
             .subscribeOn(Schedulers.io())
     }
 
+    override fun saveFavoriteImageDocument(imageDocument: ImageDocument): Completable {
+        return imageLocalDataSource.saveFavoriteImageDocument(imageDocument)
+            .subscribeOn(Schedulers.io())
+    }
 }

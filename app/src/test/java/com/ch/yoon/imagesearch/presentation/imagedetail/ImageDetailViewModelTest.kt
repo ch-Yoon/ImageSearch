@@ -90,7 +90,7 @@ class ImageDetailViewModelTest {
 
         // then
         var count = 0
-        imageDetailViewModel.finishEvent.observeForever { count++ }
+        imageDetailViewModel.finishEventWithNotUpdate.observeForever { count++ }
         assertEquals(1, count)
     }
 
@@ -112,7 +112,7 @@ class ImageDetailViewModelTest {
     fun `뒤로가기 버튼 클릭시 종료 이벤트가 호출되는지 테스트`() {
         // when
         var finishEventCount = 0
-        imageDetailViewModel.finishEvent.observeForever { finishEventCount++ }
+        imageDetailViewModel.finishEventWithNotUpdate.observeForever { finishEventCount++ }
         imageDetailViewModel.onClickBackPress()
 
         // then

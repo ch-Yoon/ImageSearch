@@ -2,6 +2,7 @@ package com.ch.yoon.imagesearch.data.local.room
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import com.ch.yoon.imagesearch.data.local.room.dao.ImageDAO
 import com.ch.yoon.imagesearch.data.local.room.dao.SearchLogDAO
 import com.ch.yoon.imagesearch.data.local.room.entity.ImageDocumentEntity
 import com.ch.yoon.imagesearch.data.local.room.entity.SearchLogEntity
@@ -14,5 +15,7 @@ import com.ch.yoon.imagesearch.data.local.room.entity.SearchLogEntity
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun searchLogDao(): SearchLogDAO
+
+    abstract fun ImageDAO(): ImageDAO
 
 }

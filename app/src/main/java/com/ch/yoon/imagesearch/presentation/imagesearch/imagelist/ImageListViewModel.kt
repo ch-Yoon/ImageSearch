@@ -84,6 +84,10 @@ class ImageListViewModel(
         _moveToDetailScreenEvent.value = imageDocument
     }
 
+    fun onUpdateImageDocument(updatedImageDocument: ImageDocument) {
+        _imageDocumentList.replace(updatedImageDocument) { it.id == updatedImageDocument.id }
+    }
+
     private fun observePageLoadInspector() {
         pageLoadHelper.onPageLoadApprove = { key, pageNumber, dataSize, isFirstPage ->
             val request = ImageSearchRequest(key, _imageSortType.value, pageNumber, dataSize, isFirstPage)
