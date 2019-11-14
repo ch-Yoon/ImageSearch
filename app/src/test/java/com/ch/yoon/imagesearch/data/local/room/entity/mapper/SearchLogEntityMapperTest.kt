@@ -1,4 +1,4 @@
-package com.ch.yoon.imagesearch.data.local.entity.mapper
+package com.ch.yoon.imagesearch.data.local.room.entity.mapper
 
 import com.ch.yoon.imagesearch.data.local.room.entity.mapper.SearchLogEntityMapper
 import com.ch.yoon.imagesearch.data.local.room.entity.SearchLogEntity
@@ -13,7 +13,7 @@ import org.junit.Test
 class SearchLogEntityMapperTest {
 
     @Test
-    fun `SearchLog를 searchLogEntity로 맵핑하는지 테스트`() {
+    fun `SearchLogEntity를 searchLog로 맵핑하는지 테스트`() {
         // given
         val searchLog1 = SearchLogEntity("테스트1", 1)
         val expectedSearchLogEntity1 = SearchLog("테스트1", 1)
@@ -34,7 +34,7 @@ class SearchLogEntityMapperTest {
     }
 
     @Test
-    fun `SearchLogList를 SearchLogList로 맵핑하는지 테스트`() {
+    fun `SearchLogEntityList를 SearchLogList로 맵핑하는지 테스트`() {
         // given
         val searchLogList = mutableListOf<SearchLogEntity>()
         searchLogList.add(SearchLogEntity("테스트1", 1))

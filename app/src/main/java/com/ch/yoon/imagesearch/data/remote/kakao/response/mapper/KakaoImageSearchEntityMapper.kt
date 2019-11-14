@@ -19,7 +19,7 @@ object KakaoImageSearchEntityMapper {
 
             val imageDocumentList = kakaoImageDocumentList.map {
                 ImageDocument(
-                    "${it.thumbnailUrl}&${it.imageUrl}",
+                    "${it.imageUrl}&${it.docUrl}",
                     it.collection,
                     it.thumbnailUrl,
                     it.imageUrl,
