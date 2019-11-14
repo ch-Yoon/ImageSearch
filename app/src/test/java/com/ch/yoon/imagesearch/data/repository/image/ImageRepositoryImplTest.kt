@@ -81,13 +81,13 @@ class ImageRepositoryImplTest {
     fun `좋아요 취소 요청을 local에 전달하는지 테스트`() {
         // given
         val noFavoriteDocument = createImageDocument("1", false)
-        every { mockImageLocalDataSource.deleteFavoriteImageDocument(noFavoriteDocument.id) } returns Completable.complete()
+        every { mockImageLocalDataSource.deleteFavoriteImageDocument(noFavoriteDocument) } returns Completable.complete()
 
         // when
-        imageRepository.deleteFavoriteImage(noFavoriteDocument.id)
+        imageRepository.deleteFavoriteImage(noFavoriteDocument)
 
         // then
-        verify(exactly = 1) { mockImageLocalDataSource.deleteFavoriteImageDocument(noFavoriteDocument.id) }
+        verify(exactly = 1) { mockImageLocalDataSource.deleteFavoriteImageDocument(noFavoriteDocument) }
     }
 
    private fun emptyImageSearchRequest(): ImageSearchRequest {

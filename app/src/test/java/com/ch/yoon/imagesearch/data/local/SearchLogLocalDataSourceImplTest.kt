@@ -1,6 +1,7 @@
 package com.ch.yoon.imagesearch.data.local
 
 import com.belongings.bag.belongingsbag.RxSchedulerRule
+import com.ch.yoon.imagesearch.BaseRxTest
 import com.ch.yoon.imagesearch.data.local.room.SearchLogLocalDataSourceImpl
 import com.ch.yoon.imagesearch.data.local.room.dao.SearchLogDAO
 import com.ch.yoon.imagesearch.data.local.room.entity.SearchLogEntity
@@ -13,16 +14,19 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.verify
 import io.reactivex.Completable
 import io.reactivex.Single
+import io.reactivex.disposables.CompositeDisposable
 import junit.framework.Assert.assertEquals
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.lang.NullPointerException
 
 /**
  * Creator : ch-yoon
  * Date : 2019-11-02
  **/
-class SearchLogLocalDataSourceImplTest {
+class SearchLogLocalDataSourceImplTest : BaseRxTest() {
 
     @get:Rule
     val rxSchedulerRule = RxSchedulerRule()
@@ -32,83 +36,90 @@ class SearchLogLocalDataSourceImplTest {
 
     private lateinit var searchLogLocalDataSource: SearchLogLocalDataSource
 
-    @Before
-    fun init() {
+    override fun before() {
         MockKAnnotations.init(this, relaxUnitFun = true)
         searchLogLocalDataSource = SearchLogLocalDataSourceImpl(mockSearchLogDao)
     }
 
-    @Test
-    fun `키워드 업데이트 요청이 들어왔을 때 DAO로 업데이트 요청을 전달하는지 테스트`() {
-        // given
-        every { mockSearchLogDao.insertOrUpdateSearchLog(any()) } returns Completable.complete()
-
-        // when
-        searchLogLocalDataSource.insertOrUpdateSearchLog("테스트")
-
-        // then
-        verify(exactly = 1) { mockSearchLogDao.insertOrUpdateSearchLog(any()) }
+    override fun after() {
     }
 
     @Test
-    fun `키워드 업데이트 요청 시 searchLog를 반환하는지 테스트`() {
+    fun `키워드 업데이트가 성공하는지 테스트`() {
         // given
         every { mockSearchLogDao.insertOrUpdateSearchLog(any()) } returns Completable.complete()
 
         // when
-        var searchLog: SearchLog? = null
+        var isSuccess = false
         searchLogLocalDataSource.insertOrUpdateSearchLog("테스트")
-            .subscribe({ receivedSearchLog ->
-                searchLog = receivedSearchLog
-            }, { throwable ->
-                searchLog = null
+            .subscribe({
+                isSuccess = true
+            }, {
+                isSuccess = false
             })
+            .register()
 
         // then
-        assertEquals("테스트", searchLog?.keyword ?: "")
+        assertEquals(true, isSuccess)
     }
 
     @Test
-    fun `키워드 업데이트 요청 시 에러 발생되면 Repository Exception으로 반환하는지 테스트`() {
+    fun `키워드 업데이트 에러 발생시 Repository Exception 으로 반환하는지 테스트`() {
         // given
         every { mockSearchLogDao.insertOrUpdateSearchLog(any()) } returns Completable.error(Exception())
 
         // when
         var exception: RepositoryException? = null
         searchLogLocalDataSource.insertOrUpdateSearchLog("테스트")
-            .subscribe({ receivedSearchLog ->
+            .subscribe({
                 exception = null
-            }, { throwable ->
-                if(throwable is RepositoryException) {
-                    exception = throwable
-                } else {
-                    exception = null
-                }
+            }, {
+                exception = if(it is RepositoryException) it else null
             })
+            .register()
 
         assertEquals(true, exception is RepositoryException)
     }
 
     @Test
-    fun `검색 요청 시 비어있는 searchLogList를 반환하는지 테스트`() {
+    fun `키워드 업데이트시 업데이트 된 searchLog를 반환하는지 테스트`() {
+        // given
+        every { mockSearchLogDao.insertOrUpdateSearchLog(any()) } returns Completable.complete()
+
+        // when
+        var receivedSearchLog: SearchLog? = null
+        searchLogLocalDataSource.insertOrUpdateSearchLog("테스트")
+            .subscribe({
+                receivedSearchLog = it
+            }, {
+                receivedSearchLog = null
+            })
+            .register()
+
+        // then
+        assertEquals("테스트", receivedSearchLog?.keyword ?: "")
+    }
+
+    @Test
+    fun `비어있는 검색 기록을 반환하는지 테스트`() {
         // given
         every { mockSearchLogDao.selectAllSearchLog() } returns Single.just(emptyList())
 
         // when
-        var list: List<SearchLog>? = null
+        var receivedList: List<SearchLog>? = null
         searchLogLocalDataSource.selectAllSearchLog()
-            .subscribe({ receivedList ->
-                list = receivedList
-            }, { throwable ->
-                list = null
+            .subscribe({
+                receivedList = it
+            }, {
+                receivedList = null
             })
 
         // then
-        assertEquals(0, list?.size)
+        assertEquals(0, receivedList?.size)
     }
 
     @Test
-    fun `검색 요청 시 searchLogList를 반환하는지 테스트`() {
+    fun `저장된 검색 기록을 반환하는지 테스트`() {
         // given
         val searchLogModelList = createSearchLogModelList(3)
         every { mockSearchLogDao.selectAllSearchLog() } returns Single.just(searchLogModelList)
@@ -116,9 +127,9 @@ class SearchLogLocalDataSourceImplTest {
         // when
         var actualList: List<SearchLog>? = null
         searchLogLocalDataSource.selectAllSearchLog()
-            .subscribe({ list ->
-                actualList = list
-            }, { throwable ->
+            .subscribe({
+                actualList = it
+            }, {
                 actualList = null
             })
 
@@ -128,20 +139,25 @@ class SearchLogLocalDataSourceImplTest {
     }
 
     @Test
-    fun `검색 기록 삭제 요청 시 삭제 요청을 DAO로 전달하는지 테스트`() {
+    fun `검색 기록 삭제가 성공하는지 테스트`() {
         // given
         every { mockSearchLogDao.deleteSearchLog(any(), any()) } returns Completable.complete()
 
         // when
-        val searchLog = SearchLog("테스트", 1)
-        searchLogLocalDataSource.deleteSearchLog(searchLog)
+        var isSuccess = false
+        searchLogLocalDataSource.deleteSearchLog(SearchLog("테스트", 1))
+            .subscribe({
+                isSuccess = true
+            }, {
+                isSuccess = false
+            })
 
         // then
-        verify(exactly = 1) { mockSearchLogDao.deleteSearchLog("테스트", 1) }
+        assertEquals(true, isSuccess)
     }
 
     @Test
-    fun `검색 기록 삭제 요청 시 에러가 발생했다면 RepositoryException 발생하는지 테스트`() {
+    fun `검색 기록 삭제 에러 발생 시 RepositoryException 발생하는지 테스트`() {
         // given
         every { mockSearchLogDao.deleteSearchLog(any(), any()) } returns Completable.error(Exception())
 
@@ -151,16 +167,48 @@ class SearchLogLocalDataSourceImplTest {
         searchLogLocalDataSource.deleteSearchLog(searchLog)
             .subscribe({
                 actualException = null
-            }) { throwable ->
-                actualException = when (throwable) {
-                    is RepositoryException -> {
-                        throwable
-                    }
-                    else -> {
-                        null
-                    }
-                }
-            }
+            }, {
+                actualException = if(it is RepositoryException) it else null
+            })
+            .register()
+
+        // then
+        assertEquals(true, actualException is RepositoryException)
+    }
+
+    @Test
+    fun `검색 기록 전체 삭제가 성공하는지 테스트`() {
+        // given
+        every { mockSearchLogDao.deleteAllSearchLog() } returns Completable.complete()
+
+        // when
+        var isSuccess = false
+        searchLogLocalDataSource.deleteAllSearchLog()
+            .subscribe({
+                isSuccess = true
+            }, {
+                isSuccess = false
+            })
+            .register()
+
+        // then
+        assertEquals(true, isSuccess)
+    }
+
+    @Test
+    fun `검색 기록 전체 삭제 에러 발생 시 RepositoryException 발생하는지 테스트`() {
+        // given
+        every { mockSearchLogDao.deleteAllSearchLog() } returns Completable.error(Exception())
+
+        // when
+        var actualException: RepositoryException? = null
+        searchLogLocalDataSource.deleteAllSearchLog()
+            .subscribe({
+                actualException = null
+            }, {
+                actualException = if(it is RepositoryException) it else null
+            })
+            .register()
 
         // then
         assertEquals(true, actualException is RepositoryException)
