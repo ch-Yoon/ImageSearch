@@ -1,6 +1,8 @@
 package com.ch.yoon.imagesearch.data.repository.searchlog
 
 import com.belongings.bag.belongingsbag.RxSchedulerRule
+import com.ch.yoon.imagesearch.BaseRxTest
+import com.ch.yoon.imagesearch.data.repository.error.RepositoryException
 import com.ch.yoon.imagesearch.data.repository.searchlog.model.SearchLog
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -8,6 +10,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.verify
 import io.reactivex.Completable
 import io.reactivex.Single
+import junit.framework.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -16,7 +19,7 @@ import org.junit.Test
  * Creator : ch-yoon
  * Date : 2019-11-12
  **/
-class SearchLogRepositoryImplTest {
+class SearchLogRepositoryImplTest : BaseRxTest() {
 
     @get:Rule
     val rxSchedulerRule = RxSchedulerRule()
@@ -26,63 +29,170 @@ class SearchLogRepositoryImplTest {
 
     private lateinit var imageRepository: SearchLogRepository
 
-    @Before
-    fun init() {
+    override fun before() {
         MockKAnnotations.init(this, relaxUnitFun = true)
 
         imageRepository = SearchLogRepositoryImpl(mockSearchLogLocalDataSource)
     }
 
-    @Test
-    fun `로컬 데이터소스에 키워드 업데이트 요청을 전달하는지 테스트`() {
-        // given
-        every { mockSearchLogLocalDataSource.insertOrUpdateSearchLog("테스트") } returns Single.just(emptySearchLog())
-
-        // when
-        imageRepository.insertOrUpdateSearchLog("테스트")
-
-        // then
-        verify(exactly = 1) { mockSearchLogLocalDataSource.insertOrUpdateSearchLog("테스트") }
+    override fun after() {
     }
 
     @Test
-    fun `로컬 데이터소스에 검색 목록 요청을 전달하는지 테스트`() {
+    fun `업데이트 요청 성공 테스트`() {
+        // given
+        val updatedLog = SearchLog("테스트", 1)
+        every {
+            mockSearchLogLocalDataSource.insertOrUpdateSearchLog(any())
+        } returns Single.just(updatedLog)
+
+        // when
+        var actualLog: SearchLog? = null
+        imageRepository.insertOrUpdateSearchLog("테스트")
+            .subscribe({ actualLog = it }, {})
+            .register()
+
+        // then
+        assertEquals(updatedLog, actualLog)
+    }
+
+    @Test
+    fun `업데이트 실패 시 RepositoryException 반환 테스트`() {
+        // given
+        every {
+            mockSearchLogLocalDataSource.insertOrUpdateSearchLog(any())
+        } returns Single.error(RepositoryException.UnknownException(""))
+
+        // when
+        var actualException: RepositoryException? = null
+        imageRepository.insertOrUpdateSearchLog("테스트")
+            .subscribe({}, { actualException = if(it is RepositoryException) it else null })
+            .register()
+
+        // then
+        assertEquals(true, actualException is RepositoryException)
+    }
+
+    @Test
+    fun `검색 목록을 반환하는지 테스트`() {
+        // given
+        val publishSearchLogList = createSearchLogList(3)
+        every { mockSearchLogLocalDataSource.selectAllSearchLog() } returns Single.just(publishSearchLogList)
+
+        // when
+        var actualList: List<SearchLog>? = null
+        imageRepository.requestSearchLogList()
+            .subscribe({ actualList = it }, {})
+            .register()
+
+        // then
+        assertEquals(publishSearchLogList, actualList)
+    }
+
+    @Test
+    fun `비어있는 검색 목록 반환하는지 테스트`() {
         // given
         every { mockSearchLogLocalDataSource.selectAllSearchLog() } returns Single.just(emptyList())
 
         // when
+        var actualList: List<SearchLog>? = null
         imageRepository.requestSearchLogList()
+            .subscribe({ actualList = it }, {})
+            .register()
 
         // then
-        verify(exactly = 1) { mockSearchLogLocalDataSource.selectAllSearchLog() }
+        assertEquals(0, actualList?.size ?: -1)
     }
 
     @Test
-    fun `로컬 데이터소스에 키워드 데이터 삭제 요청을 전달하는지 테스트`() {
+    fun `검색 목록 에러 발생시 RepositoryException 반환 테스트`() {
         // given
-        val targetSearchLog = emptySearchLog()
-        every { mockSearchLogLocalDataSource.deleteSearchLog(targetSearchLog) } returns Completable.complete()
+        every {
+            mockSearchLogLocalDataSource.selectAllSearchLog()
+        } returns Single.error(RepositoryException.UnknownException(""))
 
         // when
-        imageRepository.deleteSearchLog(emptySearchLog())
+        var actualException: RepositoryException? = null
+        imageRepository.requestSearchLogList()
+            .subscribe({}, { actualException = if(it is RepositoryException) it else null })
+            .register()
 
         // then
-        verify(exactly = 1) { mockSearchLogLocalDataSource.deleteSearchLog(targetSearchLog) }
+        assertEquals(true, actualException is RepositoryException)
     }
 
     @Test
-    fun `로컬 데이터소스에 검색 기록 전체 삭제 요청을 전달하는지 테스트`() {
+    fun `키워드 삭제 성공 테스트`() {
+        // given
+        every { mockSearchLogLocalDataSource.deleteSearchLog(any()) } returns Completable.complete()
+
+        // when
+        var isSuccess = false
+        imageRepository.deleteSearchLog(emptySearchLog())
+            .subscribe({ isSuccess = true }, {})
+
+        // then
+        assertEquals(true, isSuccess)
+    }
+
+    @Test
+    fun `키워드 삭제 에러 발생시 RepositoryException 반환 테스트`() {
+        // given
+        every {
+            mockSearchLogLocalDataSource.deleteSearchLog(any())
+        } returns Completable.error(RepositoryException.UnknownException(""))
+
+        // when
+        var actualException: RepositoryException? = null
+        imageRepository.deleteSearchLog(SearchLog("테스트", 0))
+            .subscribe({}, { actualException = if(it is RepositoryException) it else null })
+            .register()
+
+        // then
+        assertEquals(true, actualException is RepositoryException)
+    }
+
+    @Test
+    fun `검색 기록 전체 삭제 요청 성공 테스트`() {
         // given
         every { mockSearchLogLocalDataSource.deleteAllSearchLog() } returns Completable.complete()
 
         // when
+        var isSuccess = false
         imageRepository.deleteAllSearchLog()
+            .subscribe({ isSuccess = true }, {})
+            .register()
 
         // then
-        verify(exactly = 1) { mockSearchLogLocalDataSource.deleteAllSearchLog() }
+        assertEquals(true, isSuccess)
+    }
+
+    @Test
+    fun `검색 기록 전체 삭제 실패 시 RepositoryException 반환 테스트`() {
+        // given
+        every {
+            mockSearchLogLocalDataSource.deleteAllSearchLog()
+        } returns Completable.error(RepositoryException.UnknownException(""))
+
+        // when
+        var actualException: RepositoryException? = null
+        imageRepository.deleteAllSearchLog()
+            .subscribe({}, { actualException = if(it is RepositoryException) it else null })
+            .register()
+
+        // then
+        assertEquals(true, actualException is RepositoryException)
     }
 
     private fun emptySearchLog(): SearchLog {
         return SearchLog("", 0)
+    }
+
+    private fun createSearchLogList(size: Int): List<SearchLog> {
+        val list = mutableListOf<SearchLog>()
+        for(i in 0 until size) {
+            list.add(SearchLog(i.toString(), i.toLong()))
+        }
+        return list
     }
 }
