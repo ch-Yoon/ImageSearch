@@ -3,7 +3,7 @@
 
 ![image](https://user-images.githubusercontent.com/20294749/68832388-20c83500-06f4-11ea-9b0b-7888faf6cc81.png)
 
-- 카카오 이미지 검색 API 활용한 이미지 검색 App : [Kakao Image API](https://developers.kakao.com/docs/restapi/search#%EC%9D%B4%EB%AF%B8%EC%A7%80-%EA%B2%80%EC%83%89)
+- 카카오 이미지 검색 API 활용 : [Kakao Image API](https://developers.kakao.com/docs/restapi/search#%EC%9D%B4%EB%AF%B8%EC%A7%80-%EA%B2%80%EC%83%89)
 - 검색 옵션 변경 구현(정렬 타입, Grid Span Count)
 - 무한 스크롤 구현
 - Custom Search View 구현
