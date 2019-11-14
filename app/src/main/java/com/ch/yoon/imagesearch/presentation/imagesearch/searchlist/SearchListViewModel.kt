@@ -31,7 +31,6 @@ class SearchListViewModel(
 
     init {
         observePageLoadInspector()
-        observeChangingImageDocument()
     }
 
     enum class ImageSearchState {
@@ -58,18 +57,29 @@ class SearchListViewModel(
 
     private var searchMeta: ImageSearchMeta? = null
 
-    fun changeImageSortType(imageSortType: ImageSortType) {
-        _imageDocumentList.clear()
-        _imageSortType.value = imageSortType
-        pageLoadHelper.requestStartOverFromTheBeginning()
-    }
-
     fun changeCountOfItemInLine(countOfItemInLine: Int) {
         _countOfItemInLine.value = countOfItemInLine
     }
 
     fun onClickImage(imageDocument: ImageDocument) {
         _moveToDetailScreenEvent.value = imageDocument
+    }
+
+    fun observeChangingFavoriteImage() {
+        imageRepository.observeChangingFavoriteImage()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ changedImageDocument ->
+                _imageDocumentList.replace(changedImageDocument) { it.id == changedImageDocument.id }
+            }, {
+                Log.d(TAG, it.message)
+            })
+            .register()
+    }
+
+    fun changeImageSortType(imageSortType: ImageSortType) {
+        _imageDocumentList.clear()
+        _imageSortType.value = imageSortType
+        pageLoadHelper.requestStartOverFromTheBeginning()
     }
 
     fun loadImageList(keyword: String) {
@@ -139,16 +149,5 @@ class SearchListViewModel(
                 Log.d(TAG, throwable.message ?: "unknown error")
             }
         }
-    }
-
-    private fun observeChangingImageDocument() {
-        imageRepository.observeChangingFavoriteImage()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ changedImageDocument ->
-                _imageDocumentList.replace(changedImageDocument) { it.id == changedImageDocument.id }
-            }, {
-                Log.d(TAG, it.message)
-            })
-            .register()
     }
 }

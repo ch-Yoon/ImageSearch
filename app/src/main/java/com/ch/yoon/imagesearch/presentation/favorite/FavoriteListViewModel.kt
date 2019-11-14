@@ -24,10 +24,6 @@ class FavoriteListViewModel(
     private val imageRepository: ImageRepository
 ) : BaseViewModel(application) {
 
-    init {
-        observeChangingImageDocument()
-    }
-
     private val _favoriteImageList = MutableLiveData<MutableList<ImageDocument>>()
     val favoriteImageList: LiveData<List<ImageDocument>> = Transformations.map(_favoriteImageList) { it?.toList() }
 
@@ -66,7 +62,7 @@ class FavoriteListViewModel(
         _finishEvent.call()
     }
 
-    private fun observeChangingImageDocument() {
+    fun observeChangingFavoriteImage() {
         imageRepository.observeChangingFavoriteImage()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ changedImageDocument ->

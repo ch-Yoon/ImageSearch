@@ -37,6 +37,7 @@ class FavoriteActivity : BaseActivity<ActivityFavoriteBinding>() {
 
         if(isActivityFirstCreate) {
             favoriteListViewModel.loadFavoriteImageList()
+            favoriteListViewModel.observeChangingFavoriteImage()
         }
     }
 
