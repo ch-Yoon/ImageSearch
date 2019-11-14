@@ -1,8 +1,7 @@
-package com.ch.yoon.imagesearch.data.local
+package com.ch.yoon.imagesearch.data.local.room
 
 import com.belongings.bag.belongingsbag.RxSchedulerRule
 import com.ch.yoon.imagesearch.BaseRxTest
-import com.ch.yoon.imagesearch.data.local.room.SearchLogLocalDataSourceImpl
 import com.ch.yoon.imagesearch.data.local.room.dao.SearchLogDAO
 import com.ch.yoon.imagesearch.data.local.room.entity.SearchLogEntity
 import com.ch.yoon.imagesearch.data.repository.searchlog.SearchLogLocalDataSource
@@ -11,16 +10,11 @@ import com.ch.yoon.imagesearch.data.repository.searchlog.model.SearchLog
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.verify
 import io.reactivex.Completable
 import io.reactivex.Single
-import io.reactivex.disposables.CompositeDisposable
 import junit.framework.Assert.assertEquals
-import org.junit.After
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.lang.NullPointerException
 
 /**
  * Creator : ch-yoon
