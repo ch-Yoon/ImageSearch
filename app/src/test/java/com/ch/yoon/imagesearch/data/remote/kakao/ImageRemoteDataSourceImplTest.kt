@@ -50,7 +50,9 @@ class ImageRemoteDataSourceImplTest : BaseRxTest() {
     fun `서버로부터 수신한 데이터를 반환하는지 테스트`() {
         // given
         val response = createKakaoImageSearchResponse(3)
-        every { mockKakaoSearchApi.searchImageList(any(), any(), any(), any()) } returns Single.just(response)
+        every {
+            mockKakaoSearchApi.searchImageList(any(), any(), any(), any())
+        } returns Single.just(response)
 
         // when
         var actualResponse: ImageSearchResponse? = null
@@ -70,7 +72,9 @@ class ImageRemoteDataSourceImplTest : BaseRxTest() {
     @Test
     fun `이미지 요청 후 에러가 발생했을 때, Repository Exception으로 변환하는지 테스트`() {
         // given
-        every { mockKakaoSearchApi.searchImageList(any(), any(), any(), any()) } returns Single.error(Exception())
+        every {
+            mockKakaoSearchApi.searchImageList(any(), any(), any(), any())
+        } returns Single.error(Exception())
 
         // when && then
         var throwableCount = 0
@@ -119,8 +123,8 @@ class ImageRemoteDataSourceImplTest : BaseRxTest() {
         return ImageSearchRequest("", ImageSortType.ACCURACY, 1, 1, false)
     }
 
-    private fun fromKakaiImageSearchResponse(kakaoImageSearchResponse: KakaoImageSearchResponse): ImageSearchResponse {
-        return kakaoImageSearchResponse.run {
+    private fun fromKakaiImageSearchResponse(response: KakaoImageSearchResponse): ImageSearchResponse {
+        return response.run {
             val imageSearchMeta = kakaoImageSearchMeta.run {
                 ImageSearchMeta(isEnd)
             }

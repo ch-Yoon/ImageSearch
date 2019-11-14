@@ -56,7 +56,9 @@ class ImageLocalDataSourceImplTest : BaseRxTest() {
     @Test
     fun `좋아요 저장 에러 발생 시 RepositoryException 발생하는지 테스트`() {
         // given
-        every { mockImageDAO.insertOrUpdateImageDocument(any()) } returns Completable.error(Exception())
+        every {
+            mockImageDAO.insertOrUpdateImageDocument(any())
+        } returns Completable.error(Exception())
 
         // when
         var actualException: RepositoryException? = null

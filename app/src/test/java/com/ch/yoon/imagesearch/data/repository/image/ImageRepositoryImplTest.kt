@@ -45,8 +45,13 @@ class ImageRepositoryImplTest : BaseRxTest() {
     @Test
     fun `비어있는 이미지 목록을 반환하는지 테스트`() {
         // given
-        every { mockImageLocalDataSource.selectAllFavoriteImageDocumentList() } returns Single.just(emptyList())
-        every { mockImageRemoteDataSource.requestImageList(any()) } returns Single.just(ImageSearchResponse(mockk(), emptyList()))
+        every {
+            mockImageLocalDataSource.selectAllFavoriteImageDocumentList()
+        } returns Single.just(emptyList())
+
+        every {
+            mockImageRemoteDataSource.requestImageList(any())
+        } returns Single.just(ImageSearchResponse(mockk(), emptyList()))
 
         // when
         var result: List<ImageDocument>? = null
@@ -68,7 +73,7 @@ class ImageRepositoryImplTest : BaseRxTest() {
         val favoriteList = createImageDocumentList(arrayOf("1", "3", "5"), true)
         every {
             mockImageLocalDataSource.selectAllFavoriteImageDocumentList()
-        }returns Single.just(favoriteList)
+        } returns Single.just(favoriteList)
 
         val noFavoriteList = createImageDocumentList(arrayOf("1", "2", "3", "4", "5", "6"), false)
         val response = ImageSearchResponse(mockk(), noFavoriteList)

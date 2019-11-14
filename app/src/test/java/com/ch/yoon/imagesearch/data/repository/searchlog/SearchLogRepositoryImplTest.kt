@@ -77,7 +77,9 @@ class SearchLogRepositoryImplTest : BaseRxTest() {
     fun `검색 목록을 반환하는지 테스트`() {
         // given
         val publishSearchLogList = createSearchLogList(3)
-        every { mockSearchLogLocalDataSource.selectAllSearchLog() } returns Single.just(publishSearchLogList)
+        every {
+            mockSearchLogLocalDataSource.selectAllSearchLog()
+        } returns Single.just(publishSearchLogList)
 
         // when
         var actualList: List<SearchLog>? = null
@@ -92,7 +94,9 @@ class SearchLogRepositoryImplTest : BaseRxTest() {
     @Test
     fun `비어있는 검색 목록 반환하는지 테스트`() {
         // given
-        every { mockSearchLogLocalDataSource.selectAllSearchLog() } returns Single.just(emptyList())
+        every {
+            mockSearchLogLocalDataSource.selectAllSearchLog()
+        } returns Single.just(emptyList())
 
         // when
         var actualList: List<SearchLog>? = null
@@ -124,7 +128,9 @@ class SearchLogRepositoryImplTest : BaseRxTest() {
     @Test
     fun `키워드 삭제 성공 테스트`() {
         // given
-        every { mockSearchLogLocalDataSource.deleteSearchLog(any()) } returns Completable.complete()
+        every {
+            mockSearchLogLocalDataSource.deleteSearchLog(any())
+        } returns Completable.complete()
 
         // when
         var isSuccess = false
@@ -155,7 +161,9 @@ class SearchLogRepositoryImplTest : BaseRxTest() {
     @Test
     fun `검색 기록 전체 삭제 요청 성공 테스트`() {
         // given
-        every { mockSearchLogLocalDataSource.deleteAllSearchLog() } returns Completable.complete()
+        every {
+            mockSearchLogLocalDataSource.deleteAllSearchLog()
+        } returns Completable.complete()
 
         // when
         var isSuccess = false

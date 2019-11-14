@@ -31,13 +31,13 @@ class LiveDataExtensionsTest {
     @Test
     fun `첫번째 대상을 삭제하는지 테스트`() {
         // given
-        val liveData = MutableLiveData<MutableList<Int>>(mutableListOf(1, 2, 2, 3, 4))
+        val liveData = MutableLiveData<MutableList<Int>>(mutableListOf(1, 2, 3, 2, 4))
 
         // when
         liveData.removeFirst { it == 2 }
 
         // then
-        val expected = mutableListOf(1, 2, 3, 4)
+        val expected = mutableListOf(1, 3, 2, 4)
         assertEquals(expected, liveData.value)
     }
 

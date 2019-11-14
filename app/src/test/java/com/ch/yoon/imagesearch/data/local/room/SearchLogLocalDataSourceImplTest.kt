@@ -60,7 +60,9 @@ class SearchLogLocalDataSourceImplTest : BaseRxTest() {
     @Test
     fun `키워드 업데이트 에러 발생시 Repository Exception 으로 반환하는지 테스트`() {
         // given
-        every { mockSearchLogDao.insertOrUpdateSearchLog(any()) } returns Completable.error(Exception())
+        every {
+            mockSearchLogDao.insertOrUpdateSearchLog(any())
+        } returns Completable.error(Exception())
 
         // when
         var exception: RepositoryException? = null
@@ -78,7 +80,9 @@ class SearchLogLocalDataSourceImplTest : BaseRxTest() {
     @Test
     fun `키워드 업데이트시 업데이트 된 searchLog를 반환하는지 테스트`() {
         // given
-        every { mockSearchLogDao.insertOrUpdateSearchLog(any()) } returns Completable.complete()
+        every {
+            mockSearchLogDao.insertOrUpdateSearchLog(any())
+        } returns Completable.complete()
 
         // when
         var receivedSearchLog: SearchLog? = null
@@ -153,7 +157,9 @@ class SearchLogLocalDataSourceImplTest : BaseRxTest() {
     @Test
     fun `검색 기록 삭제 에러 발생 시 RepositoryException 발생하는지 테스트`() {
         // given
-        every { mockSearchLogDao.deleteSearchLog(any(), any()) } returns Completable.error(Exception())
+        every {
+            mockSearchLogDao.deleteSearchLog(any(), any())
+        } returns Completable.error(Exception())
 
         // when
         var actualException: RepositoryException? = null

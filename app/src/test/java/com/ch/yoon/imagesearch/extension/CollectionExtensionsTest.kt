@@ -10,7 +10,7 @@ import org.junit.Test
 class CollectionExtensionsTest {
 
     @Test
-    fun `조건에 해당하는 1개의 값만을 삭제하는지 revmoeFirstIf Test`() {
+    fun `조건에 해당하는 1개의 값만을 삭제하는지 removeFirstIf Test`() {
         // given
         val list = mutableListOf(1, 1, 2, 3, 4, 5, 6, 7)
         val expectedList = mutableListOf(1, 2, 3, 4, 5, 6, 7)
