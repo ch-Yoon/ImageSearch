@@ -1,9 +1,8 @@
-package com.ch.yoon.imagesearch.data.remote
+package com.ch.yoon.imagesearch.data.remote.kakao
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.belongings.bag.belongingsbag.RxSchedulerRule
-import com.ch.yoon.imagesearch.data.remote.kakao.ImageRemoteDataSourceImpl
-import com.ch.yoon.imagesearch.data.remote.kakao.KakaoSearchApi
+import com.ch.yoon.imagesearch.BaseRxTest
 import com.ch.yoon.imagesearch.data.remote.kakao.request.ImageSearchRequest
 import com.ch.yoon.imagesearch.data.remote.kakao.request.ImageSortType
 import com.ch.yoon.imagesearch.data.remote.kakao.response.KakaoImageDocument
@@ -11,17 +10,15 @@ import com.ch.yoon.imagesearch.data.remote.kakao.response.KakaoImageSearchMetaIn
 import com.ch.yoon.imagesearch.data.remote.kakao.response.KakaoImageSearchResponse
 import com.ch.yoon.imagesearch.data.repository.image.ImageRemoteDataSource
 import com.ch.yoon.imagesearch.data.repository.error.RepositoryException
+import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
+import com.ch.yoon.imagesearch.data.repository.image.model.ImageSearchMeta
 import com.ch.yoon.imagesearch.data.repository.image.model.ImageSearchResponse
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.verify
 import io.reactivex.Single
-import io.reactivex.disposables.CompositeDisposable
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertTrue
-import org.junit.After
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
@@ -29,7 +26,7 @@ import org.junit.Test
  * Creator : ch-yoon
  * Date : 2019-11-02
  **/
-class ImageRemoteDataSourceImplTest {
+class ImageRemoteDataSourceImplTest : BaseRxTest() {
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -40,51 +37,34 @@ class ImageRemoteDataSourceImplTest {
     lateinit var mockKakaoSearchApi: KakaoSearchApi
 
     private lateinit var imageRemoteDataSource: ImageRemoteDataSource
-    private lateinit var compositeDisposable: CompositeDisposable
 
-    @Before
-    fun init() {
+    override fun before() {
         MockKAnnotations.init(this, relaxUnitFun = true)
-
         imageRemoteDataSource = ImageRemoteDataSourceImpl(mockKakaoSearchApi)
-        compositeDisposable = CompositeDisposable()
     }
 
-    @After
-    fun clear() {
-        compositeDisposable.clear()
+    override fun after() {
     }
 
     @Test
-    fun `이미지 요청이 들어왔을 떄, kakaoSearchAPI로 요청을 하는지 테스트`() {
+    fun `서버로부터 수신한 데이터를 반환하는지 테스트`() {
         // given
-        val emptyResponse = createEmptyKakaoImageSearchResponse()
-        every { mockKakaoSearchApi.searchImageList(any(), any(), any(), any()) } returns Single.just(emptyResponse)
+        val response = createKakaoImageSearchResponse(3)
+        every { mockKakaoSearchApi.searchImageList(any(), any(), any(), any()) } returns Single.just(response)
 
         // when
+        var actualResponse: ImageSearchResponse? = null
         imageRemoteDataSource.requestImageList(createEmptyImageSearchRequest())
-
-        // then
-        verify(exactly = 1) { mockKakaoSearchApi.searchImageList(any(), any(), any(), any()) }
-    }
-
-    @Test
-    fun `이미지 요청이 들어왔을 때 KakaoSearchAPI로부터 수신한 데이터를 반환하는지 테스트`() {
-        // given
-        val emptyResponse = createEmptyKakaoImageSearchResponse()
-        every { mockKakaoSearchApi.searchImageList(any(), any(), any(), any()) } returns Single.just(emptyResponse)
-
-        // when
-        var response: ImageSearchResponse? = null
-        imageRemoteDataSource.requestImageList(createEmptyImageSearchRequest())
-            .subscribe({ imageSearchResponse ->
-                response = imageSearchResponse
-            }, { throwable ->
-                response = null
+            .subscribe({
+                actualResponse = it
+            }, {
+                actualResponse = null
             })
+            .register()
 
         // then
-        assertEquals(true, response != null)
+        val expected = fromKakaiImageSearchResponse(response)
+        assertEquals(expected, actualResponse)
     }
 
     @Test
@@ -112,13 +92,55 @@ class ImageRemoteDataSourceImplTest {
         assertEquals(1, throwableCount)
     }
 
-    private fun createEmptyKakaoImageSearchResponse(): KakaoImageSearchResponse {
+    private fun createKakaoImageSearchResponse(imageDocumentSize: Int): KakaoImageSearchResponse {
         val meta = KakaoImageSearchMetaInfo(0, 0, false)
-        val list = mutableListOf<KakaoImageDocument>()
+        val list = mutableListOf<KakaoImageDocument>().apply {
+            for(i in 0 until imageDocumentSize) {
+                add(createKakaoImageDocument(i.toString()))
+            }
+        }
         return KakaoImageSearchResponse(meta, list)
+    }
+
+    private fun createKakaoImageDocument(id: String): KakaoImageDocument {
+        return KakaoImageDocument(
+            "collection$id",
+            "thumbnailUrl$id",
+            "imageUrl$id",
+            0,
+            0,
+            "displaySiteName$id",
+            "docUrl$id",
+            "dateTime$id"
+        )
     }
 
     private fun createEmptyImageSearchRequest(): ImageSearchRequest {
         return ImageSearchRequest("", ImageSortType.ACCURACY, 1, 1, false)
+    }
+
+    private fun fromKakaiImageSearchResponse(kakaoImageSearchResponse: KakaoImageSearchResponse): ImageSearchResponse {
+        return kakaoImageSearchResponse.run {
+            val imageSearchMeta = kakaoImageSearchMeta.run {
+                ImageSearchMeta(isEnd)
+            }
+
+            val imageDocumentList = kakaoImageDocumentList.map {
+                ImageDocument(
+                    "${it.imageUrl}&${it.docUrl}",
+                    it.collection,
+                    it.thumbnailUrl,
+                    it.imageUrl,
+                    it.width,
+                    it.height,
+                    it.displaySiteName,
+                    it.docUrl,
+                    it.dateTime,
+                    false
+                )
+            }
+
+            ImageSearchResponse(imageSearchMeta, imageDocumentList)
+        }
     }
 }

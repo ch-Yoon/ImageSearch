@@ -1,7 +1,6 @@
-package com.ch.yoon.imagesearch.data.remote.response.mapper
+package com.ch.yoon.imagesearch.data.remote.kakao.response.mapper
 
 import com.ch.yoon.imagesearch.data.remote.kakao.response.KakaoImageDocument
-import com.ch.yoon.imagesearch.data.remote.kakao.response.mapper.KakaoImageSearchEntityMapper
 import com.ch.yoon.imagesearch.data.remote.kakao.response.KakaoImageSearchMetaInfo
 import com.ch.yoon.imagesearch.data.remote.kakao.response.KakaoImageSearchResponse
 import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
@@ -28,7 +27,7 @@ class KakaoImageSearchEntityMapperTest {
         val meta = ImageSearchMeta(kakaoImaggSearchResponse.kakaoImageSearchMeta.isEnd)
         val list = kakaoImaggSearchResponse.kakaoImageDocumentList.map {
             ImageDocument(
-                "${it.thumbnailUrl}&${it.imageUrl}",
+                "${it.imageUrl}&${it.docUrl}",
                 it.collection,
                 it.thumbnailUrl,
                 it.imageUrl,

@@ -1,4 +1,4 @@
-package com.ch.yoon.imagesearch.data.remote.error.mapper
+package com.ch.yoon.imagesearch.data.remote.kakao.error.mapper
 
 import com.ch.yoon.imagesearch.data.remote.kakao.error.mapper.KakaoSearchExceptionMapper
 import com.ch.yoon.imagesearch.data.repository.error.RepositoryException
