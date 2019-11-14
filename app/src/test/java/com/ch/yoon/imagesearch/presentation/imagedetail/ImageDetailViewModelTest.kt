@@ -14,6 +14,8 @@ import android.text.TextUtils
 import com.ch.yoon.imagesearch.R
 import com.ch.yoon.imagesearch.data.repository.image.ImageRepository
 import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
+import io.mockk.verify
+import io.reactivex.Completable
 import junit.framework.Assert.assertEquals
 import org.junit.Test
 
@@ -152,7 +154,39 @@ class ImageDetailViewModelTest {
         }
     }
 
-    private fun createVirtualImageDocument(id: Int): ImageDocument {
+    @Test
+    fun `좋아요가 선택되어 있을 때 좋아요 버튼 클릭 시 repository 에 삭제 요청을 하는지 테스트`() {
+        // given
+        every { mockImageRepository.deleteFavoriteImage(any()) } returns Completable.complete()
+
+        // when
+        val favoriteImageDocument = createVirtualImageDocument(1, true)
+        imageDetailViewModel.showImageDetailInfo(favoriteImageDocument)
+        imageDetailViewModel.onClickFavorite()
+
+        // then
+        verify(exactly = 1) {
+            mockImageRepository.deleteFavoriteImage(any())
+        }
+    }
+
+    @Test
+    fun `좋아요가 선택되어있지 않을 때 좋아요 버튼 클릭 시 repository에 저장 요청을 하는지 테스트`() {
+        // given
+        every { mockImageRepository.saveFavoriteImage(any()) } returns Completable.complete()
+
+        // when
+        val favoriteImageDocument = createVirtualImageDocument(1, false)
+        imageDetailViewModel.showImageDetailInfo(favoriteImageDocument)
+        imageDetailViewModel.onClickFavorite()
+
+        // then
+        verify(exactly = 1) {
+            mockImageRepository.saveFavoriteImage(any())
+        }
+    }
+
+    private fun createVirtualImageDocument(id: Int, isFavorite: Boolean = false): ImageDocument {
         return ImageDocument(
             "id$id",
             "collection$id",
@@ -163,7 +197,7 @@ class ImageDetailViewModelTest {
             "displaySiteName$id",
             "docUrl$id",
             "dateTime$id",
-            false
+            isFavorite
         )
     }
 
