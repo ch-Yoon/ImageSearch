@@ -14,7 +14,9 @@ import com.ch.yoon.imagesearch.data.repository.image.model.ImageSearchResponse
 import com.ch.yoon.imagesearch.presentation.common.pageload.PageLoadHelper
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
+import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.subjects.PublishSubject
 import junit.framework.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -72,6 +74,7 @@ class SearchListViewModelTest {
             capturedPageLoadApprove = lambdaSlot.captured
         }
 
+        every { mockRepository.observeChangingFavoriteImage() } returns PublishSubject.create()
         searchListViewModel = SearchListViewModel(mockApplication, mockRepository, mockPageLoadHelper)
     }
 
@@ -128,7 +131,7 @@ class SearchListViewModelTest {
     fun `최초 이미지 목록 요청시 수신한 리스트의 사이즈가 0이라면 검색결과가 없다는 메시지가 반영되는지 테스트`() {
         // given
         val expect = createVirtualImageSearchResponse(0, true)
-        every { mockRepository.requestImageList(any()) } returns (Single.just(expect))
+        every { mockRepository.requestImageList(any()) } returns Single.just(expect)
         every { mockPageLoadHelper.requestFirstLoad(any()) } answers { capturedPageLoadApprove?.invoke("", 1, 1, false) }
 
         // when
