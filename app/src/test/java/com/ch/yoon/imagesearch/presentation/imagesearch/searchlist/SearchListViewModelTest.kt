@@ -74,7 +74,6 @@ class SearchListViewModelTest {
             capturedPageLoadApprove = lambdaSlot.captured
         }
 
-        every { mockRepository.observeChangingFavoriteImage() } returns PublishSubject.create()
         searchListViewModel = SearchListViewModel(mockApplication, mockRepository, mockPageLoadHelper)
     }
 
