@@ -124,6 +124,18 @@ class SearchBoxViewModelTest {
     }
 
     @Test
+    fun `검색 상자 여는 이벤트가 발생하는지 테스트`() {
+        // when
+        searchBoxViewModel.onStateChange(false)
+        searchBoxViewModel.onClickShowButton()
+
+        // then
+        searchBoxViewModel.searchBoxEnableEvent.observeForever {
+            assertEquals(true, it)
+        }
+    }
+
+    @Test
     fun `검색상자가 열려있을 때 뒤로가기 클릭시 종료 이벤트가 호출되는지 않는지 테스트`() {
         // when
         var finishEventCount = 0
@@ -137,9 +149,9 @@ class SearchBoxViewModelTest {
 
     @Test
     fun `검색상자가 열려있을 때 뒤로가기 클릭 시 검색상자 닫기 이벤트가 호출되는지 테스트`() {
-// when
+        // when
         var closeEventCount = 0
-        searchBoxViewModel.searchEnableEvent.observeForever { closeEventCount++ }
+        searchBoxViewModel.searchBoxEnableEvent.observeForever { closeEventCount++ }
         searchBoxViewModel.onStateChange(true)
         searchBoxViewModel.onClickBackPressButton()
 

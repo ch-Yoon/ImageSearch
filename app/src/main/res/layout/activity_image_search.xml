@@ -135,7 +135,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:visibility="invisible"
-            app:enable="@{searchBoxViewModel.searchEnableEvent}"
+            app:enable="@{searchBoxViewModel.searchBoxEnableEvent}"
             app:hint="@string/suggestion_search_view_hint"
             app:itemsWithDefaultAdapter="@{searchBoxViewModel.searchLogList}"
             app:layout_constraintBottom_toBottomOf="parent"
