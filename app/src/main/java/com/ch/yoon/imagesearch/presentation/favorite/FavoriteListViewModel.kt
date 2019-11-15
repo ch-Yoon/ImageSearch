@@ -7,12 +7,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.ch.yoon.imagesearch.data.repository.image.ImageRepository
 import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
+import com.ch.yoon.imagesearch.extension.*
 import com.ch.yoon.imagesearch.presentation.base.BaseViewModel
 import com.ch.yoon.imagesearch.presentation.common.livedata.SingleLiveEvent
-import com.ch.yoon.imagesearch.extension.TAG
-import com.ch.yoon.imagesearch.extension.removeFirst
-import com.ch.yoon.imagesearch.extension.removeFirstAndAddFirst
-import com.ch.yoon.imagesearch.extension.replace
 import io.reactivex.android.schedulers.AndroidSchedulers
 
 /**
@@ -48,16 +45,6 @@ class FavoriteListViewModel(
         _moveToDetailScreenEvent.value = imageDocument
     }
 
-    fun updateFavorite(imageDocument: ImageDocument) {
-        with(imageDocument) {
-            if(isFavorite) {
-                _favoriteImageList.removeFirstAndAddFirst(imageDocument) { it.id == id}
-            } else {
-                _favoriteImageList.removeFirst { it.id == id }
-            }
-        }
-    }
-
     fun onClickBackPress() {
         _finishEvent.call()
     }
@@ -66,8 +53,11 @@ class FavoriteListViewModel(
         imageRepository.observeChangingFavoriteImage()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ changedImageDocument ->
-                if(changedImageDocument.isFavorite.not()){
-                    _favoriteImageList.removeFirst { it.id == changedImageDocument.id }
+                with(changedImageDocument) {
+                    _favoriteImageList.removeFirst { it.id == id }
+                    if(isFavorite) {
+                        _favoriteImageList.add(this)
+                    }
                 }
             }, {
                 Log.d(TAG, it.message)

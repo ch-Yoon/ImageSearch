@@ -56,6 +56,12 @@ fun <T> MutableLiveData<MutableList<T>>.addAll(list: List<T>) {
     value = newList
 }
 
+fun <T> MutableLiveData<MutableList<T>>.add(t: T) {
+    val newList = value ?: mutableListOf()
+    newList.add(t)
+    value = newList
+}
+
 fun <T> MutableLiveData<MutableList<T>>.size(): Int {
     return value?.size ?: 0
 }
