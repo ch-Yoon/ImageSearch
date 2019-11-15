@@ -155,6 +155,30 @@ class ImageDetailViewModelTest {
     }
 
     @Test
+    fun `좋아요 이미지일 경우 좋아요 상태가 반영되는지 테스트`() {
+        // when
+        val favoriteImageDocument = createVirtualImageDocument(1, true)
+        imageDetailViewModel.showImageDetailInfo(favoriteImageDocument)
+
+        // then
+        imageDetailViewModel.isFavorite.observeForever {
+            assertEquals(true, it)
+        }
+    }
+
+    @Test
+    fun `좋아요 이미지가 아닐 경우 좋아요 아닌 상태가 반영되는지 테스트`() {
+        // when
+        val favoriteImageDocument = createVirtualImageDocument(1, false)
+        imageDetailViewModel.showImageDetailInfo(favoriteImageDocument)
+
+        // then
+        imageDetailViewModel.isFavorite.observeForever {
+            assertEquals(false, it)
+        }
+    }
+
+    @Test
     fun `좋아요가 선택되어 있을 때 좋아요 버튼 클릭 시 repository 에 삭제 요청을 하는지 테스트`() {
         // given
         every { mockImageRepository.deleteFavoriteImage(any()) } returns Completable.complete()
@@ -171,6 +195,22 @@ class ImageDetailViewModelTest {
     }
 
     @Test
+    fun `좋아요가 선택되어 있을 때 좋아요 버튼 클릭 시 좋아요가 해제되는지 repository 에 삭제 요청을 하는지 테스트`() {
+        // given
+        every { mockImageRepository.deleteFavoriteImage(any()) } returns Completable.complete()
+
+        // when
+        val favoriteImageDocument = createVirtualImageDocument(1, true)
+        imageDetailViewModel.showImageDetailInfo(favoriteImageDocument)
+        imageDetailViewModel.onClickFavorite()
+
+        // then
+        imageDetailViewModel.isFavorite.observeForever {
+            assertEquals(false, it)
+        }
+    }
+
+    @Test
     fun `좋아요가 선택되어있지 않을 때 좋아요 버튼 클릭 시 repository에 저장 요청을 하는지 테스트`() {
         // given
         every { mockImageRepository.saveFavoriteImage(any()) } returns Completable.complete()
@@ -183,6 +223,22 @@ class ImageDetailViewModelTest {
         // then
         verify(exactly = 1) {
             mockImageRepository.saveFavoriteImage(any())
+        }
+    }
+
+    @Test
+    fun `좋아요가 선택되어있지 않을 때 좋아요 버튼 클릭 시 좋아요가 반영되는지 테스트`() {
+        // given
+        every { mockImageRepository.saveFavoriteImage(any()) } returns Completable.complete()
+
+        // when
+        val noFavoriteImageDocument = createVirtualImageDocument(1, false)
+        imageDetailViewModel.showImageDetailInfo(noFavoriteImageDocument)
+        imageDetailViewModel.onClickFavorite()
+
+        // then
+        imageDetailViewModel.isFavorite.observeForever {
+            assertEquals(true, it)
         }
     }
 

@@ -76,8 +76,8 @@ class ImageDetailViewModel(
         imageRepository.saveFavoriteImage(target)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                updateShowMessage(R.string.success_favorite_save)
                 updateImageDocument(target)
+                updateShowMessage(R.string.success_favorite_save)
             }, { throwable ->
                 Log.d(TAG, throwable.message)
             })
