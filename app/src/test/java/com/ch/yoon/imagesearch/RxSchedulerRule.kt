@@ -10,6 +10,7 @@ import org.junit.runner.Description
 import org.junit.runners.model.Statement
 import java.io.IOException
 import java.net.SocketException
+import java.util.function.Consumer
 
 
 /**

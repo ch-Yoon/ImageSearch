@@ -38,11 +38,7 @@ class PageLoadHelper<T>(private val config: PageLoadConfiguration) {
         }
     }
 
-    fun requestStartOverFromTheBeginning() {
-        previousApproveLog.key?.let { currentKey ->
-            approveImageSearch(currentKey, config.startPageNumber, 0)
-        }
-    }
+    fun getCurrentKey(): T? = previousApproveLog.key
 
     private fun approveFirstImageSearch(key: T) {
         initApproveRequestLog()

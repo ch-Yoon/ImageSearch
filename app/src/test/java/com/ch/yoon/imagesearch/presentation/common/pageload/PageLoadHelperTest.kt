@@ -107,44 +107,6 @@ class PageLoadHelperTest {
     }
 
     @Test
-    fun `처음부터 재시작 요청 시 같은 key로 최초 요청을 발행하는지 테스트`() {
-        // given
-        val config = PageLoadConfiguration(1, 1, 10, 2)
-        pageLoadHelper = PageLoadHelper(config)
-
-        // when
-        var firstKey: String? = null
-        var firstPageNumber: Int? = null
-        var firstDataSize: Int? = null
-        var firstIsFirstPage: Boolean? = null
-        pageLoadHelper.onPageLoadApproveCallback = { key, pageNumber, dataSize, isFirstPage ->
-            firstKey = key
-            firstPageNumber = pageNumber
-            firstDataSize = dataSize
-            firstIsFirstPage = isFirstPage
-        }
-        pageLoadHelper.requestFirstLoad("테스트")
-
-        var targetKey: String? = null
-        var targetPageNumber: Int? = null
-        var targetDataSize: Int? = null
-        var targetIsFirstPage: Boolean? = null
-        pageLoadHelper.onPageLoadApproveCallback = { key, pageNumber, dataSize, isFirstPage ->
-            targetKey = key
-            targetPageNumber = pageNumber
-            targetDataSize = dataSize
-            targetIsFirstPage = isFirstPage
-        }
-        pageLoadHelper.requestStartOverFromTheBeginning()
-
-        // then
-        assertEquals(firstKey, targetKey)
-        assertEquals(firstPageNumber, targetPageNumber)
-        assertEquals(firstDataSize, targetDataSize)
-        assertEquals(firstIsFirstPage, targetIsFirstPage)
-    }
-
-    @Test
     fun `직전 값과 동일한 값 재시도 요청 시 동일한 값으로 승인하는지 테스트`() {
         // given
         val config = PageLoadConfiguration(1, 3, 10, 2)

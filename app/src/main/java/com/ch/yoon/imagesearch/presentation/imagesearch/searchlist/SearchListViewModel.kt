@@ -79,7 +79,9 @@ class SearchListViewModel(
     fun changeImageSortType(imageSortType: ImageSortType) {
         _imageDocumentList.clear()
         _imageSortType.value = imageSortType
-        pageLoadHelper.requestStartOverFromTheBeginning()
+        pageLoadHelper.getCurrentKey()?.let { currentKey ->
+            pageLoadHelper.requestFirstLoad(currentKey)
+        }
     }
 
     fun loadImageList(keyword: String) {
