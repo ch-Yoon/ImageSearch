@@ -26,9 +26,9 @@ class ImageRepositoryImpl(
             imageRemoteDataSource.requestImageList(imageSearchRequest)
                 .subscribeOn(Schedulers.io()),
             imageLocalDataSource.selectAllFavoriteImageDocumentList()
-                .flatMap { favoriteList -> Single.just(favoriteList.associateBy({ it.id }, { it })) }
+                .map { favoriteList -> favoriteList.associateBy({ it.id }, {it})}
                 .subscribeOn(Schedulers.io()),
-            BiFunction<ImageSearchResponse, Map<String, ImageDocument>, ImageSearchResponse> { response, favoriteMap ->
+            BiFunction { response: ImageSearchResponse, favoriteMap: Map<String, ImageDocument> ->
                 val newList = response.imageDocumentList.map { favoriteMap[it.id] ?: it }
                 ImageSearchResponse(response.imageSearchMeta, newList)
             }
