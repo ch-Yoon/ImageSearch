@@ -23,7 +23,7 @@ val databaseModule = module {
     }
 
     single {
-        get<AppDatabase>().ImageDAO()
+        get<AppDatabase>().imageDAO()
     }
 
     single {

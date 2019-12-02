@@ -16,6 +16,6 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract fun searchLogDao(): SearchLogDAO
 
-    abstract fun ImageDAO(): ImageDAO
+    abstract fun imageDAO(): ImageDAO
 
 }
