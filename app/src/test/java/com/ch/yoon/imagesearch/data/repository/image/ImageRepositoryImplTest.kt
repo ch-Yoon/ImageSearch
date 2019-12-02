@@ -46,16 +46,16 @@ class ImageRepositoryImplTest : BaseRxTest() {
     fun `비어있는 이미지 목록을 반환하는지 테스트`() {
         // given
         every {
-            mockImageLocalDataSource.selectAllFavoriteImageDocumentList()
+            mockImageLocalDataSource.getAllFavoriteImages()
         } returns Single.just(emptyList())
 
         every {
-            mockImageRemoteDataSource.requestImageList(any())
+            mockImageRemoteDataSource.getImages(any())
         } returns Single.just(ImageSearchResponse(mockk(), emptyList()))
 
         // when
         var result: List<ImageDocument>? = null
-        imageRepository.requestImageList(emptyImageSearchRequest())
+        imageRepository.getImages(emptyImageSearchRequest())
             .subscribe({
                 result = it.imageDocumentList
             }, {
@@ -72,16 +72,16 @@ class ImageRepositoryImplTest : BaseRxTest() {
         // given
         val favoriteList = createImageDocumentList(arrayOf("1", "3", "5"), true)
         every {
-            mockImageLocalDataSource.selectAllFavoriteImageDocumentList()
+            mockImageLocalDataSource.getAllFavoriteImages()
         } returns Single.just(favoriteList)
 
         val noFavoriteList = createImageDocumentList(arrayOf("1", "2", "3", "4", "5", "6"), false)
         val response = ImageSearchResponse(mockk(), noFavoriteList)
-        every { mockImageRemoteDataSource.requestImageList(any()) } returns Single.just(response)
+        every { mockImageRemoteDataSource.getImages(any()) } returns Single.just(response)
 
         // when
         var result: List<ImageDocument>? = null
-        imageRepository.requestImageList(emptyImageSearchRequest())
+        imageRepository.getImages(emptyImageSearchRequest())
             .subscribe({
                 result = it.imageDocumentList
             }, {
@@ -98,16 +98,16 @@ class ImageRepositoryImplTest : BaseRxTest() {
     fun `이미지 목록 요청 에러 발생시 Repository Exception 반환하는지 테스트`() {
         // given
         every {
-            mockImageLocalDataSource.selectAllFavoriteImageDocumentList()
+            mockImageLocalDataSource.getAllFavoriteImages()
         } returns Single.just(emptyList())
 
         every {
-            mockImageRemoteDataSource.requestImageList(any())
+            mockImageRemoteDataSource.getImages(any())
         } returns Single.error(RepositoryException.UnknownException(""))
 
         // when
         var exception: RepositoryException? = null
-        imageRepository.requestImageList(emptyImageSearchRequest())
+        imageRepository.getImages(emptyImageSearchRequest())
             .subscribe({
                 exception = null
             }, {
@@ -325,12 +325,12 @@ class ImageRepositoryImplTest : BaseRxTest() {
     fun `비어있는 좋아요 목록을 반환하는지 테스트`() {
         // given
         every {
-            mockImageLocalDataSource.selectAllFavoriteImageDocumentList()
+            mockImageLocalDataSource.getAllFavoriteImages()
         } returns Single.just(emptyList())
 
         // when
         var list: List<ImageDocument>? = null
-        imageRepository.requestFavoriteImageList()
+        imageRepository.getAllFavoriteImages()
             .subscribe({
                 list = it
             }, {
@@ -347,12 +347,12 @@ class ImageRepositoryImplTest : BaseRxTest() {
         // given
         val publishList = createImageDocumentList(arrayOf("1", "2", "3"), true)
         every {
-            mockImageLocalDataSource.selectAllFavoriteImageDocumentList()
+            mockImageLocalDataSource.getAllFavoriteImages()
         } returns Single.just(publishList)
 
         // when
         var actualList: List<ImageDocument>? = null
-        imageRepository.requestFavoriteImageList()
+        imageRepository.getAllFavoriteImages()
             .subscribe({
                 actualList = it
             }, {

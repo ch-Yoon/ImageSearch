@@ -120,7 +120,7 @@ class ImageLocalDataSourceImplTest : BaseRxTest() {
 
         // when
         var actualList: List<ImageDocument>? = null
-        imageLocalDataSource.selectAllFavoriteImageDocumentList()
+        imageLocalDataSource.getAllFavoriteImages()
             .subscribe({
                 actualList = it
             }, {
@@ -139,7 +139,7 @@ class ImageLocalDataSourceImplTest : BaseRxTest() {
 
         // when
         var actualList: List<ImageDocument>? = null
-        imageLocalDataSource.selectAllFavoriteImageDocumentList()
+        imageLocalDataSource.getAllFavoriteImages()
             .subscribe({
                 actualList = it
             }, {
@@ -157,7 +157,7 @@ class ImageLocalDataSourceImplTest : BaseRxTest() {
 
         // when
         var actualException: RepositoryException? = null
-        imageLocalDataSource.selectAllFavoriteImageDocumentList()
+        imageLocalDataSource.getAllFavoriteImages()
             .subscribe({
                 actualException = null
             }, {

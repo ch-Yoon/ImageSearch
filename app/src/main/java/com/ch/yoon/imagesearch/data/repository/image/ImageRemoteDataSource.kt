@@ -10,6 +10,6 @@ import io.reactivex.Single
  **/
 interface ImageRemoteDataSource {
 
-    fun requestImageList(imageSearchRequest: ImageSearchRequest): Single<ImageSearchResponse>
+    fun getImages(imageSearchRequest: ImageSearchRequest): Single<ImageSearchResponse>
 
 }

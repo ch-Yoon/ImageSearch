@@ -31,7 +31,7 @@ class FavoriteListViewModel(
     val finishEvent: LiveData<Unit> = _finishEvent
 
     fun loadFavoriteImageList() {
-        imageRepository.requestFavoriteImageList()
+        imageRepository.getAllFavoriteImages()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ favoriteList ->
                 _favoriteImageList.value = favoriteList.toMutableList()

@@ -13,9 +13,9 @@ import io.reactivex.Single
  **/
 interface ImageRepository {
 
-    fun requestImageList(imageSearchRequest: ImageSearchRequest): Single<ImageSearchResponse>
+    fun getImages(imageSearchRequest: ImageSearchRequest): Single<ImageSearchResponse>
 
-    fun requestFavoriteImageList(): Single<List<ImageDocument>>
+    fun getAllFavoriteImages(): Single<List<ImageDocument>>
 
     fun saveFavoriteImage(imageDocument: ImageDocument): Completable
 

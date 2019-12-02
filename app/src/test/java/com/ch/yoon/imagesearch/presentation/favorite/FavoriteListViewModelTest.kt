@@ -69,7 +69,7 @@ class FavoriteListViewModelTest {
     fun `좋아요 이미지 목록을 로드하는지 테스트`() {
         // given
         val publishFavoriteImageList = createFavoriteImageDocuments(3)
-        every { mockImageRepository.requestFavoriteImageList() } returns Single.just(publishFavoriteImageList)
+        every { mockImageRepository.getAllFavoriteImages() } returns Single.just(publishFavoriteImageList)
 
         // when
         favoriteListViewModel.loadFavoriteImageList()
@@ -84,7 +84,7 @@ class FavoriteListViewModelTest {
     fun `비어있는 이미지 목록을 로드하는지 테스트`() {
         // given
         val publishFavoriteImageList = createFavoriteImageDocuments(0)
-        every { mockImageRepository.requestFavoriteImageList() } returns Single.just(publishFavoriteImageList)
+        every { mockImageRepository.getAllFavoriteImages() } returns Single.just(publishFavoriteImageList)
 
         // when
         favoriteListViewModel.loadFavoriteImageList()
@@ -98,7 +98,7 @@ class FavoriteListViewModelTest {
     @Test
     fun `이미지 목록 로드 에러 발생 시 에러 메시지가 반영되는지 테스트`() {
         // given
-        every { mockImageRepository.requestFavoriteImageList() } returns Single.error(Exception())
+        every { mockImageRepository.getAllFavoriteImages() } returns Single.error(Exception())
 
         // when
         favoriteListViewModel.loadFavoriteImageList()
@@ -139,7 +139,7 @@ class FavoriteListViewModelTest {
         // given
         val favoriteImageList = createFavoriteImageDocuments(3)
         every {
-            mockImageRepository.requestFavoriteImageList()
+            mockImageRepository.getAllFavoriteImages()
         } returns Single.just(favoriteImageList)
 
         val favoritePublishSubject = PublishSubject.create<ImageDocument>()
@@ -168,7 +168,7 @@ class FavoriteListViewModelTest {
         // given
         val favoriteImageList = createFavoriteImageDocuments(3)
         every {
-            mockImageRepository.requestFavoriteImageList()
+            mockImageRepository.getAllFavoriteImages()
         } returns Single.just(favoriteImageList)
 
         val favoritePublishSubject = PublishSubject.create<ImageDocument>()

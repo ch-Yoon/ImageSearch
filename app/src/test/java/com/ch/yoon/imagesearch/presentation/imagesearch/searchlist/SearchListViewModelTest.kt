@@ -97,7 +97,7 @@ class SearchListViewModelTest {
     fun `최초 이미지 목록 요청시 수신한 이미지 목록이 반영되는지 테스트`() {
         // given
         val expect = createImageSearchResponse(3, true)
-        every { mockRepository.requestImageList(any()) } returns (Single.just(expect))
+        every { mockRepository.getImages(any()) } returns (Single.just(expect))
         every { mockPageLoadHelper.requestFirstLoad(any()) } answers { capturedPageLoadApprove?.invoke("", 1, 1, false) }
 
         // when
@@ -113,7 +113,7 @@ class SearchListViewModelTest {
     fun `최초 이미지 목록 요청시 수신한 리스트의 사이즈가 0이어도 반영되는지 테스트`() {
         // given
         val expect = createImageSearchResponse(0, true)
-        every { mockRepository.requestImageList(any()) } returns (Single.just(expect))
+        every { mockRepository.getImages(any()) } returns (Single.just(expect))
         every { mockPageLoadHelper.requestFirstLoad(any()) } answers { capturedPageLoadApprove?.invoke("", 1, 1, false) }
 
         // when
@@ -129,7 +129,7 @@ class SearchListViewModelTest {
     fun `최초 이미지 목록 요청시 수신한 리스트의 사이즈가 0이라면 검색결과가 없다는 메시지가 반영되는지 테스트`() {
         // given
         val expect = createImageSearchResponse(0, true)
-        every { mockRepository.requestImageList(any()) } returns Single.just(expect)
+        every { mockRepository.getImages(any()) } returns Single.just(expect)
         every { mockPageLoadHelper.requestFirstLoad(any()) } answers { capturedPageLoadApprove?.invoke("", 1, 1, false) }
 
         // when
@@ -144,7 +144,7 @@ class SearchListViewModelTest {
     @Test
     fun `최초 이미지 목록 요청시 네트워크 연결 에러가 수신된다면 에러 메시지가 반영되는지 테스트`() {
         // given
-        every { mockRepository.requestImageList(any()) } returns (Single.error(RepositoryException.NetworkNotConnectingException("network error")))
+        every { mockRepository.getImages(any()) } returns (Single.error(RepositoryException.NetworkNotConnectingException("network error")))
         every { mockPageLoadHelper.requestFirstLoad(any()) } answers { capturedPageLoadApprove?.invoke("", 1, 1, false) }
 
         // when
@@ -159,7 +159,7 @@ class SearchListViewModelTest {
     @Test
     fun `마지막 데이터라면 마지막을 뜻하는 메시지가 반영되는지 테스트`() {
         // given
-        every { mockRepository.requestImageList(any()) } returns (Single.just(createImageSearchResponse(1, true)))
+        every { mockRepository.getImages(any()) } returns (Single.just(createImageSearchResponse(1, true)))
 
         // when
         searchListViewModel.loadImageList("테스트");
@@ -181,7 +181,7 @@ class SearchListViewModelTest {
         }
 
         var isFirst = true
-        every { mockRepository.requestImageList(any()) } returns if(isFirst) {
+        every { mockRepository.getImages(any()) } returns if(isFirst) {
             isFirst = false
             Single.just(firstValue)
         } else {
@@ -204,7 +204,7 @@ class SearchListViewModelTest {
     @Test
     fun `추가 이미지 목록 요청시 마지막 데이터였다면 레파지토리에 요청을 안하는지 테스트`() {
         // given
-        every { mockRepository.requestImageList(any()) } returns (Single.just(createImageSearchResponse(1, true)))
+        every { mockRepository.getImages(any()) } returns (Single.just(createImageSearchResponse(1, true)))
         every { mockPageLoadHelper.requestFirstLoad(any()) } answers { capturedPageLoadApprove?.invoke("", 1, 1, true) }
         every { mockPageLoadHelper.requestPreloadIfPossible(any(), any(), any()) } answers { capturedPageLoadApprove?.invoke("", 1, 1, false) }
 
@@ -215,26 +215,26 @@ class SearchListViewModelTest {
         searchListViewModel.loadMoreImageListIfPossible(1)
 
         // then
-        verify(exactly = 1) { mockRepository.requestImageList(any()) } // 최초 1번
+        verify(exactly = 1) { mockRepository.getImages(any()) } // 최초 1번
     }
 
     @Test
     fun `재시도 요청시 레파지토리에 요청을 하는지 테스트`() {
         // given
-        every { mockRepository.requestImageList(any()) } returns (Single.just(createImageSearchResponse(1, true)))
+        every { mockRepository.getImages(any()) } returns (Single.just(createImageSearchResponse(1, true)))
         every { mockPageLoadHelper.requestRetryAsPreviousValue() } answers { capturedPageLoadApprove?.invoke("", 1, 1, false) }
 
         // when
         searchListViewModel.retryLoadMoreImageList()
 
         //then
-        verify(exactly = 1) { mockRepository.requestImageList(any()) }
+        verify(exactly = 1) { mockRepository.getImages(any()) }
     }
 
     @Test
     fun `이미지 검색 타입 변경시 반영되는지 테스트`() {
         // given
-        every { mockRepository.requestImageList(any()) } returns (Single.just(createImageSearchResponse(1, true)))
+        every { mockRepository.getImages(any()) } returns (Single.just(createImageSearchResponse(1, true)))
         every { mockPageLoadHelper.requestRetryAsPreviousValue() } answers { capturedPageLoadApprove?.invoke("", 1, 1, false) }
 
         // when
@@ -276,7 +276,7 @@ class SearchListViewModelTest {
 
         val imageResponse = createImageSearchResponse(3, true)
         imageResponse.imageDocumentList.forEach { it.isFavorite = false }
-        every { mockRepository.requestImageList(any()) } returns Single.just(imageResponse)
+        every { mockRepository.getImages(any()) } returns Single.just(imageResponse)
 
         val subject = PublishSubject.create<ImageDocument>()
         every { mockRepository.observeChangingFavoriteImage() } returns subject
@@ -308,7 +308,7 @@ class SearchListViewModelTest {
 
         val imageResponse = createImageSearchResponse(3, true)
         imageResponse.imageDocumentList.forEach { it.isFavorite = true }
-        every { mockRepository.requestImageList(any()) } returns Single.just(imageResponse)
+        every { mockRepository.getImages(any()) } returns Single.just(imageResponse)
 
         val subject = PublishSubject.create<ImageDocument>()
         every { mockRepository.observeChangingFavoriteImage() } returns subject

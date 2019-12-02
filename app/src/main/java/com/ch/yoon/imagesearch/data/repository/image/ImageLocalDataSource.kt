@@ -14,6 +14,6 @@ interface ImageLocalDataSource {
 
     fun deleteFavoriteImageDocument(imageDocument: ImageDocument): Completable
 
-    fun selectAllFavoriteImageDocumentList(): Single<List<ImageDocument>>
+    fun getAllFavoriteImages(): Single<List<ImageDocument>>
 
 }

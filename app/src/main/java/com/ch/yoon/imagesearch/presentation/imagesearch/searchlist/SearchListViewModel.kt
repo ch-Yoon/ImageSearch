@@ -109,7 +109,7 @@ class SearchListViewModel(
     private fun requestImageListToRepository(request: ImageSearchRequest) {
         _imageSearchState.value = ImageSearchState.NONE
 
-        imageRepository.requestImageList(request)
+        imageRepository.getImages(request)
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSuccess { _imageSearchState.value = ImageSearchState.SUCCESS }
             .doOnError { _imageSearchState.value = ImageSearchState.FAIL }

@@ -56,7 +56,7 @@ class ImageRemoteDataSourceImplTest : BaseRxTest() {
 
         // when
         var actualResponse: ImageSearchResponse? = null
-        imageRemoteDataSource.requestImageList(createEmptyImageSearchRequest())
+        imageRemoteDataSource.getImages(createEmptyImageSearchRequest())
             .subscribe({
                 actualResponse = it
             }, {
@@ -78,7 +78,7 @@ class ImageRemoteDataSourceImplTest : BaseRxTest() {
 
         // when && then
         var throwableCount = 0
-        imageRemoteDataSource.requestImageList(createEmptyImageSearchRequest())
+        imageRemoteDataSource.getImages(createEmptyImageSearchRequest())
             .subscribe ({ response ->
                 assertTrue(false)
             }, { throwable ->

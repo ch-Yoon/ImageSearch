@@ -28,7 +28,7 @@ class ImageLocalDataSourceImpl(
             .compose(CompletableExceptionTransformer())
     }
 
-    override fun selectAllFavoriteImageDocumentList(): Single<List<ImageDocument>> {
+    override fun getAllFavoriteImages(): Single<List<ImageDocument>> {
         return imageDAO.selectAllImageDocument()
             .map { ImageDocumentEntityMapper.fromEntityList(it) }
             .compose(SingleExceptionTransformer())

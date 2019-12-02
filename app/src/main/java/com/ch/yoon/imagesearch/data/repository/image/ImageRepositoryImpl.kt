@@ -21,11 +21,11 @@ class ImageRepositoryImpl(
 
     private val favoriteChangePublishSubject = PublishSubject.create<ImageDocument>()
 
-    override fun requestImageList(imageSearchRequest: ImageSearchRequest): Single<ImageSearchResponse> {
+    override fun getImages(imageSearchRequest: ImageSearchRequest): Single<ImageSearchResponse> {
         return Single.zip(
-            imageRemoteDataSource.requestImageList(imageSearchRequest)
+            imageRemoteDataSource.getImages(imageSearchRequest)
                 .subscribeOn(Schedulers.io()),
-            imageLocalDataSource.selectAllFavoriteImageDocumentList()
+            imageLocalDataSource.getAllFavoriteImages()
                 .map { favoriteList -> favoriteList.associateBy({ it.id }, {it}) }
                 .subscribeOn(Schedulers.io()),
             BiFunction { response: ImageSearchResponse, favoriteMap: Map<String, ImageDocument> ->
@@ -35,8 +35,8 @@ class ImageRepositoryImpl(
         ).subscribeOn(Schedulers.io())
     }
 
-    override fun requestFavoriteImageList(): Single<List<ImageDocument>> {
-        return imageLocalDataSource.selectAllFavoriteImageDocumentList()
+    override fun getAllFavoriteImages(): Single<List<ImageDocument>> {
+        return imageLocalDataSource.getAllFavoriteImages()
             .subscribeOn(Schedulers.io())
     }
 
