@@ -235,8 +235,7 @@ class SearchListViewModelTest {
     fun `이미지 검색 타입 변경시 반영되는지 테스트`() {
         // given
         every { mockRepository.getImages(any()) } returns (Single.just(createImageSearchResponse(1, true)))
-        every { mockPageLoadHelper.requestRetryAsPreviousValue() } answers { capturedPageLoadApprove?.invoke("", 1, 1, false) }
-
+        every { mockPageLoadHelper.getCurrentKey() } returns "key"
         // when
         val typeList = mutableListOf<ImageSortType>()
         searchListViewModel.imageSortType.observeForever { type ->
