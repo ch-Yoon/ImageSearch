@@ -12,7 +12,7 @@ interface SearchLogLocalDataSource {
 
     fun insertOrUpdateSearchLog(keyword: String): Single<SearchLog>
 
-    fun selectAllSearchLog(): Single<List<SearchLog>>
+    fun getAllSearchLogs(): Single<List<SearchLog>>
 
     fun deleteSearchLog(searchLog: SearchLog): Completable
 

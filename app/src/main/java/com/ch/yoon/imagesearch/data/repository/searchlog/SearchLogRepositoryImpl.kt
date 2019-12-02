@@ -13,8 +13,8 @@ class SearchLogRepositoryImpl(
     private val searchLogLocalDataSource: SearchLogLocalDataSource
 ) : SearchLogRepository {
 
-    override fun requestSearchLogList(): Single<List<SearchLog>> {
-        return searchLogLocalDataSource.selectAllSearchLog()
+    override fun getAllSearchLogs(): Single<List<SearchLog>> {
+        return searchLogLocalDataSource.getAllSearchLogs()
             .subscribeOn(Schedulers.io())
     }
 

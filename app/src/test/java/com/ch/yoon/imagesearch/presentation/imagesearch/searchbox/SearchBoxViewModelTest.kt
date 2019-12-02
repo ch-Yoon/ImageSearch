@@ -68,13 +68,13 @@ class SearchBoxViewModelTest {
     @Test
     fun `검색 기록 로드가 되는지 테스트`() {
         // given
-        every {mockSearchLogRepository.requestSearchLogList() } returns (Single.just(createVirtualSearchLogList(3)))
+        every {mockSearchLogRepository.getAllSearchLogs() } returns (Single.just(createVirtualSearchLogList(3)))
 
         // when
         searchBoxViewModel.loadSearchLogList()
 
         // then
-        searchBoxViewModel.searchLogList.observeForever { receivedList ->
+        searchBoxViewModel.searchLogs.observeForever { receivedList ->
             assertEquals(3, receivedList.size)
         }
     }
@@ -83,14 +83,14 @@ class SearchBoxViewModelTest {
     fun `검색 기록 로드시 내림차순으로 정렬되는지 테스트`() {
         // given
         val searchLogList = createVirtualSearchLogList(3)
-        every { mockSearchLogRepository.requestSearchLogList() } returns (Single.just(searchLogList))
+        every { mockSearchLogRepository.getAllSearchLogs() } returns (Single.just(searchLogList))
 
         // when
         searchBoxViewModel.loadSearchLogList()
 
         // then
         val expectedList = createVirtualSearchLogList(3).sorted().map { it.keyword }
-        searchBoxViewModel.searchLogList.observeForever { receivedList ->
+        searchBoxViewModel.searchLogs.observeForever { receivedList ->
             assertEquals(expectedList, receivedList)
         }
     }
@@ -98,7 +98,7 @@ class SearchBoxViewModelTest {
     @Test
     fun `키워드 검색 버튼 클릭시 기존에 검색했던 키워드라면 목록의 가장 앞쪽으로 이동시키는지 테스트`() {
         // given
-        every { mockSearchLogRepository.requestSearchLogList() } returns (Single.just(createVirtualSearchLogList(3)))
+        every { mockSearchLogRepository.getAllSearchLogs() } returns (Single.just(createVirtualSearchLogList(3)))
         every { mockSearchLogRepository.insertOrUpdateSearchLog("테스트0") } returns (Single.just(SearchLog("테스트0", 4)))
 
         // when
@@ -106,7 +106,7 @@ class SearchBoxViewModelTest {
         searchBoxViewModel.onClickSearchButton("테스트0")
 
         // then
-        searchBoxViewModel.searchLogList.observeForever{ searchLogs ->
+        searchBoxViewModel.searchLogs.observeForever{ searchLogs ->
             assertEquals("테스트0", searchLogs[0])
             assertEquals(3, searchLogs.size)
         }
@@ -174,7 +174,7 @@ class SearchBoxViewModelTest {
     fun `키워드 삭제 버튼 클릭시 레파지토리에 삭제 요청을 하는지 테스트`() {
         // given
         val targetList = mutableListOf(SearchLog("테스트", 0))
-        every { mockSearchLogRepository.requestSearchLogList() } returns (Single.just(targetList))
+        every { mockSearchLogRepository.getAllSearchLogs() } returns (Single.just(targetList))
         every { mockSearchLogRepository.deleteSearchLog(any()) } returns (Completable.complete())
 
         // when
@@ -191,7 +191,7 @@ class SearchBoxViewModelTest {
         val searchLogList = createVirtualSearchLogList(3)
         val expectedList = createVirtualSearchLogList(3).apply { removeAt(0) }.sorted().map { it.keyword }
 
-        every { mockSearchLogRepository.requestSearchLogList() } returns (Single.just(searchLogList))
+        every { mockSearchLogRepository.getAllSearchLogs() } returns (Single.just(searchLogList))
         every { mockSearchLogRepository.deleteSearchLog(any()) } returns(Completable.complete())
 
         // when
@@ -199,7 +199,7 @@ class SearchBoxViewModelTest {
         searchBoxViewModel.onClickSearchLogDeleteButton(searchLogList[0].keyword)
 
         // then
-        searchBoxViewModel.searchLogList.observeForever{ receivedList ->
+        searchBoxViewModel.searchLogs.observeForever{ receivedList ->
             assertEquals(expectedList, receivedList)
         }
     }
@@ -209,7 +209,7 @@ class SearchBoxViewModelTest {
         // given
         val searchLogList = createVirtualSearchLogList(3)
 
-        every { mockSearchLogRepository.requestSearchLogList() } returns (Single.just(searchLogList))
+        every { mockSearchLogRepository.getAllSearchLogs() } returns (Single.just(searchLogList))
         every { mockSearchLogRepository.deleteAllSearchLog() } returns(Completable.complete())
 
         // when
@@ -217,7 +217,7 @@ class SearchBoxViewModelTest {
         searchBoxViewModel.onClickSearchLogAllDelete()
 
         // then
-        searchBoxViewModel.searchLogList.observeForever{ receivedList ->
+        searchBoxViewModel.searchLogs.observeForever{ receivedList ->
             assertEquals(0, receivedList.size)
         }
     }

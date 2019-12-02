@@ -7,11 +7,9 @@ import com.ch.yoon.imagesearch.data.repository.searchlog.model.SearchLog
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.verify
 import io.reactivex.Completable
 import io.reactivex.Single
 import junit.framework.Assert.assertEquals
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
@@ -78,12 +76,12 @@ class SearchLogRepositoryImplTest : BaseRxTest() {
         // given
         val publishSearchLogList = createSearchLogList(3)
         every {
-            mockSearchLogLocalDataSource.selectAllSearchLog()
+            mockSearchLogLocalDataSource.getAllSearchLogs()
         } returns Single.just(publishSearchLogList)
 
         // when
         var actualList: List<SearchLog>? = null
-        imageRepository.requestSearchLogList()
+        imageRepository.getAllSearchLogs()
             .subscribe({ actualList = it }, {})
             .register()
 
@@ -95,12 +93,12 @@ class SearchLogRepositoryImplTest : BaseRxTest() {
     fun `비어있는 검색 목록 반환하는지 테스트`() {
         // given
         every {
-            mockSearchLogLocalDataSource.selectAllSearchLog()
+            mockSearchLogLocalDataSource.getAllSearchLogs()
         } returns Single.just(emptyList())
 
         // when
         var actualList: List<SearchLog>? = null
-        imageRepository.requestSearchLogList()
+        imageRepository.getAllSearchLogs()
             .subscribe({ actualList = it }, {})
             .register()
 
@@ -112,12 +110,12 @@ class SearchLogRepositoryImplTest : BaseRxTest() {
     fun `검색 목록 에러 발생시 RepositoryException 반환 테스트`() {
         // given
         every {
-            mockSearchLogLocalDataSource.selectAllSearchLog()
+            mockSearchLogLocalDataSource.getAllSearchLogs()
         } returns Single.error(RepositoryException.UnknownException(""))
 
         // when
         var actualException: RepositoryException? = null
-        imageRepository.requestSearchLogList()
+        imageRepository.getAllSearchLogs()
             .subscribe({}, { actualException = if(it is RepositoryException) it else null })
             .register()
 

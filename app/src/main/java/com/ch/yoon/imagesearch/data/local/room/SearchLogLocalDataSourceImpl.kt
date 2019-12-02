@@ -26,8 +26,8 @@ class SearchLogLocalDataSourceImpl(
             .compose(SingleExceptionTransformer())
     }
 
-    override fun selectAllSearchLog(): Single<List<SearchLog>> {
-        return searchLogDAO.selectAllSearchLog()
+    override fun getAllSearchLogs(): Single<List<SearchLog>> {
+        return searchLogDAO.selectAllSearchLogs()
             .map { SearchLogEntityMapper.fromEntityList(it) }
             .compose(SingleExceptionTransformer())
     }

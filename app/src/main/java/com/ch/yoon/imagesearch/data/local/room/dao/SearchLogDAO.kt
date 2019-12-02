@@ -19,7 +19,7 @@ interface SearchLogDAO {
     fun insertOrUpdateSearchLog(searchLogEntity: SearchLogEntity): Completable
 
     @Query("SELECT * FROM searchLogs")
-    fun selectAllSearchLog(): Single<List<SearchLogEntity>>
+    fun selectAllSearchLogs(): Single<List<SearchLogEntity>>
 
     @Query("DELETE FROM searchLogs WHERE keyword = :keyword AND time = :time")
     fun deleteSearchLog(keyword: String, time: Long): Completable

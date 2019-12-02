@@ -137,7 +137,7 @@
             android:visibility="invisible"
             app:enable="@{searchBoxViewModel.searchBoxEnableEvent}"
             app:hint="@string/suggestion_search_view_hint"
-            app:itemsWithDefaultAdapter="@{searchBoxViewModel.searchLogList}"
+            app:itemsWithDefaultAdapter="@{searchBoxViewModel.searchLogs}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

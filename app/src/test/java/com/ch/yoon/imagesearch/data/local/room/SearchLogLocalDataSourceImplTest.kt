@@ -101,11 +101,11 @@ class SearchLogLocalDataSourceImplTest : BaseRxTest() {
     @Test
     fun `비어있는 검색 기록을 반환하는지 테스트`() {
         // given
-        every { mockSearchLogDao.selectAllSearchLog() } returns Single.just(emptyList())
+        every { mockSearchLogDao.selectAllSearchLogs() } returns Single.just(emptyList())
 
         // when
         var receivedList: List<SearchLog>? = null
-        searchLogLocalDataSource.selectAllSearchLog()
+        searchLogLocalDataSource.getAllSearchLogs()
             .subscribe({
                 receivedList = it
             }, {
@@ -120,11 +120,11 @@ class SearchLogLocalDataSourceImplTest : BaseRxTest() {
     fun `저장된 검색 기록을 반환하는지 테스트`() {
         // given
         val searchLogModelList = createSearchLogModelList(3)
-        every { mockSearchLogDao.selectAllSearchLog() } returns Single.just(searchLogModelList)
+        every { mockSearchLogDao.selectAllSearchLogs() } returns Single.just(searchLogModelList)
 
         // when
         var actualList: List<SearchLog>? = null
-        searchLogLocalDataSource.selectAllSearchLog()
+        searchLogLocalDataSource.getAllSearchLogs()
             .subscribe({
                 actualList = it
             }, {

@@ -12,7 +12,7 @@ interface SearchLogRepository {
 
     fun deleteSearchLog(searchLog: SearchLog): Completable
 
-    fun requestSearchLogList(): Single<List<SearchLog>>
+    fun getAllSearchLogs(): Single<List<SearchLog>>
 
     fun insertOrUpdateSearchLog(keyword: String): Single<SearchLog>
 
