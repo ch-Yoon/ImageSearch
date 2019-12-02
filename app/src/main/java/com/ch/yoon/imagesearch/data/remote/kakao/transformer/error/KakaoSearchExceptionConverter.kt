@@ -1,4 +1,4 @@
-package com.ch.yoon.imagesearch.data.remote.kakao.error.mapper
+package com.ch.yoon.imagesearch.data.remote.kakao.transformer.error
 
 import com.ch.yoon.imagesearch.data.repository.error.RepositoryException
 import retrofit2.HttpException
@@ -8,7 +8,7 @@ import java.net.UnknownHostException
  * Creator : ch-yoon
  * Date : 2019-10-30
  **/
-object KakaoSearchExceptionMapper {
+object KakaoSearchExceptionConverter {
 
     fun toRepositoryException(originError: Throwable): RepositoryException {
         val errorMessage: String = originError.message ?: ""

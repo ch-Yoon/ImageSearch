@@ -1,6 +1,6 @@
-package com.ch.yoon.imagesearch.data.remote.kakao.error.mapper
+package com.ch.yoon.imagesearch.data.remote.kakao.transformer.error.mapper
 
-import com.ch.yoon.imagesearch.data.remote.kakao.error.mapper.KakaoSearchExceptionMapper
+import com.ch.yoon.imagesearch.data.remote.kakao.transformer.error.KakaoSearchExceptionConverter
 import com.ch.yoon.imagesearch.data.repository.error.RepositoryException
 import io.mockk.every
 import io.mockk.mockk
@@ -14,7 +14,7 @@ import java.net.UnknownHostException
  * Creator : ch-yoon
  * Date : 2019-11-02
  **/
-class KakaoSearchExceptionMapperTest {
+class KakaoSearchExceptionConverterTest {
 
     @Before
     fun init() {
@@ -29,7 +29,7 @@ class KakaoSearchExceptionMapperTest {
         every { exception.message } returns ""
 
         // when
-        val convertedException = KakaoSearchExceptionMapper.toRepositoryException(exception)
+        val convertedException = KakaoSearchExceptionConverter.toRepositoryException(exception)
 
         // then
         assertEquals(true, convertedException is RepositoryException.WrongRequestException)
@@ -43,7 +43,7 @@ class KakaoSearchExceptionMapperTest {
         every { exception.message } returns ""
 
         // when
-        val convertedException = KakaoSearchExceptionMapper.toRepositoryException(exception)
+        val convertedException = KakaoSearchExceptionConverter.toRepositoryException(exception)
 
         // then
         assertEquals(true, convertedException is RepositoryException.AuthenticationException)
@@ -57,7 +57,7 @@ class KakaoSearchExceptionMapperTest {
         every { exception.message } returns ""
 
         // when
-        val convertedException = KakaoSearchExceptionMapper.toRepositoryException(exception)
+        val convertedException = KakaoSearchExceptionConverter.toRepositoryException(exception)
 
         // then
         assertEquals(true, convertedException is RepositoryException.PermissionException)
@@ -71,7 +71,7 @@ class KakaoSearchExceptionMapperTest {
         every { exception.message } returns ""
 
         // when
-        val convertedException = KakaoSearchExceptionMapper.toRepositoryException(exception)
+        val convertedException = KakaoSearchExceptionConverter.toRepositoryException(exception)
 
         // then
         assertEquals(true, convertedException is RepositoryException.ServerSystemException)
@@ -85,7 +85,7 @@ class KakaoSearchExceptionMapperTest {
         every { exception.message } returns ""
 
         // when
-        val convertedException = KakaoSearchExceptionMapper.toRepositoryException(exception)
+        val convertedException = KakaoSearchExceptionConverter.toRepositoryException(exception)
 
         // then
         assertEquals(true, convertedException is RepositoryException.ServerSystemException)
@@ -99,7 +99,7 @@ class KakaoSearchExceptionMapperTest {
         every { exception.message } returns ""
 
         // when
-        val convertedException = KakaoSearchExceptionMapper.toRepositoryException(exception)
+        val convertedException = KakaoSearchExceptionConverter.toRepositoryException(exception)
 
         // then
         assertEquals(true, convertedException is RepositoryException.ServerSystemException)
@@ -113,7 +113,7 @@ class KakaoSearchExceptionMapperTest {
         every { exception.message } returns ""
 
         // when
-        val convertedException = KakaoSearchExceptionMapper.toRepositoryException(exception)
+        val convertedException = KakaoSearchExceptionConverter.toRepositoryException(exception)
 
         // then
         assertEquals(true, convertedException is RepositoryException.NetworkUnknownException)
@@ -126,7 +126,7 @@ class KakaoSearchExceptionMapperTest {
         every { exception.message } returns ""
 
         // when
-        val convertedException = KakaoSearchExceptionMapper.toRepositoryException(exception)
+        val convertedException = KakaoSearchExceptionConverter.toRepositoryException(exception)
 
         // then
         assertEquals(true, convertedException is RepositoryException.NetworkNotConnectingException)
@@ -139,7 +139,7 @@ class KakaoSearchExceptionMapperTest {
         every { exception.message } returns ""
 
         // when
-        val convertedException = KakaoSearchExceptionMapper.toRepositoryException(exception)
+        val convertedException = KakaoSearchExceptionConverter.toRepositoryException(exception)
 
         // then
         assertEquals(true, convertedException is RepositoryException.UnknownException)

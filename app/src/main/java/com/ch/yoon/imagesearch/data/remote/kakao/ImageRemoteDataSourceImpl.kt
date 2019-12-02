@@ -4,7 +4,7 @@ import com.ch.yoon.imagesearch.data.remote.kakao.request.ImageSearchRequest
 import com.ch.yoon.imagesearch.data.repository.image.ImageRemoteDataSource
 import com.ch.yoon.imagesearch.data.repository.image.model.ImageSearchResponse
 import com.ch.yoon.imagesearch.data.remote.kakao.response.mapper.KakaoImageSearchEntityMapper
-import com.ch.yoon.imagesearch.data.remote.kakao.error.SingleExceptionTransformer
+import com.ch.yoon.imagesearch.data.remote.kakao.transformer.error.SingleExceptionTransformer
 import io.reactivex.Single
 
 /**
