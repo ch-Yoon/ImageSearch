@@ -16,6 +16,6 @@ interface SearchLogLocalDataSource {
 
     fun deleteSearchLog(searchLog: SearchLog): Completable
 
-    fun deleteAllSearchLog(): Completable
+    fun deleteAllSearchLogs(): Completable
 
 }

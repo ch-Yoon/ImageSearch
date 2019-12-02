@@ -28,8 +28,8 @@ class SearchLogRepositoryImpl(
             .subscribeOn(Schedulers.io())
     }
 
-    override fun deleteAllSearchLog(): Completable {
-        return searchLogLocalDataSource.deleteAllSearchLog()
+    override fun deleteAllSearchLogs(): Completable {
+        return searchLogLocalDataSource.deleteAllSearchLogs()
             .subscribeOn(Schedulers.io())
     }
 

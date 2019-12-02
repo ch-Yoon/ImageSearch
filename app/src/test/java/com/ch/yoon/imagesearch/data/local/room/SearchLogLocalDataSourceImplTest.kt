@@ -183,7 +183,7 @@ class SearchLogLocalDataSourceImplTest : BaseRxTest() {
 
         // when
         var isSuccess = false
-        searchLogLocalDataSource.deleteAllSearchLog()
+        searchLogLocalDataSource.deleteAllSearchLogs()
             .subscribe({
                 isSuccess = true
             }, {
@@ -202,7 +202,7 @@ class SearchLogLocalDataSourceImplTest : BaseRxTest() {
 
         // when
         var actualException: RepositoryException? = null
-        searchLogLocalDataSource.deleteAllSearchLog()
+        searchLogLocalDataSource.deleteAllSearchLogs()
             .subscribe({
                 actualException = null
             }, {

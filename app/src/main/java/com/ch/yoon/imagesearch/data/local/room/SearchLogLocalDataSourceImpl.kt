@@ -37,7 +37,7 @@ class SearchLogLocalDataSourceImpl(
             .compose(CompletableExceptionTransformer())
     }
 
-    override fun deleteAllSearchLog(): Completable {
+    override fun deleteAllSearchLogs(): Completable {
         return searchLogDAO.deleteAllSearchLog()
             .compose(CompletableExceptionTransformer())
     }

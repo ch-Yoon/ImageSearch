@@ -16,6 +16,6 @@ interface SearchLogRepository {
 
     fun insertOrUpdateSearchLog(keyword: String): Single<SearchLog>
 
-    fun deleteAllSearchLog(): Completable
+    fun deleteAllSearchLogs(): Completable
 
 }

@@ -210,7 +210,7 @@ class SearchBoxViewModelTest {
         val searchLogList = createVirtualSearchLogList(3)
 
         every { mockSearchLogRepository.getAllSearchLogs() } returns (Single.just(searchLogList))
-        every { mockSearchLogRepository.deleteAllSearchLog() } returns(Completable.complete())
+        every { mockSearchLogRepository.deleteAllSearchLogs() } returns(Completable.complete())
 
         // when
         searchBoxViewModel.loadSearchLogList()

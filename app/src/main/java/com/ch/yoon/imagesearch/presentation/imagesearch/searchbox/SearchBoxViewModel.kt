@@ -63,7 +63,7 @@ class SearchBoxViewModel(
     }
 
     fun onClickSearchLogAllDelete() {
-        searchLogRepository.deleteAllSearchLog()
+        searchLogRepository.deleteAllSearchLogs()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 _searchLogs.clear()

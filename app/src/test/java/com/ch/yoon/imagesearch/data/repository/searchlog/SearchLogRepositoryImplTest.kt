@@ -160,12 +160,12 @@ class SearchLogRepositoryImplTest : BaseRxTest() {
     fun `검색 기록 전체 삭제 요청 성공 테스트`() {
         // given
         every {
-            mockSearchLogLocalDataSource.deleteAllSearchLog()
+            mockSearchLogLocalDataSource.deleteAllSearchLogs()
         } returns Completable.complete()
 
         // when
         var isSuccess = false
-        imageRepository.deleteAllSearchLog()
+        imageRepository.deleteAllSearchLogs()
             .subscribe({ isSuccess = true }, {})
             .register()
 
@@ -177,12 +177,12 @@ class SearchLogRepositoryImplTest : BaseRxTest() {
     fun `검색 기록 전체 삭제 실패 시 RepositoryException 반환 테스트`() {
         // given
         every {
-            mockSearchLogLocalDataSource.deleteAllSearchLog()
+            mockSearchLogLocalDataSource.deleteAllSearchLogs()
         } returns Completable.error(RepositoryException.UnknownException(""))
 
         // when
         var actualException: RepositoryException? = null
-        imageRepository.deleteAllSearchLog()
+        imageRepository.deleteAllSearchLogs()
             .subscribe({}, { actualException = if(it is RepositoryException) it else null })
             .register()
 
