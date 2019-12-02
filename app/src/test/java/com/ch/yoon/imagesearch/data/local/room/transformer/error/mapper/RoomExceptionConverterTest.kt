@@ -1,6 +1,7 @@
-package com.ch.yoon.imagesearch.data.local.room.error.mapper
+package com.ch.yoon.imagesearch.data.local.room.transformer.error.mapper
 
 import androidx.room.EmptyResultSetException
+import com.ch.yoon.imagesearch.data.local.room.transformer.error.RoomExceptionConverter
 import com.ch.yoon.imagesearch.data.repository.error.RepositoryException
 import io.mockk.every
 import io.mockk.mockk
@@ -11,7 +12,7 @@ import org.junit.Test
  * Creator : ch-yoon
  * Date : 2019-11-02
  **/
-class RoomExceptionMapperTest {
+class RoomExceptionConverterTest {
 
     @Test
     fun `EmptyResultSetException 발생 시 NotFoundException 맵핑하는지 테스트`() {
@@ -20,7 +21,7 @@ class RoomExceptionMapperTest {
         every { exception.message } returns ""
 
         // when
-        val convertedException = RoomExceptionMapper.toRepositoryException(exception)
+        val convertedException = RoomExceptionConverter.toRepositoryException(exception)
 
         // then
         assertEquals(true, convertedException is RepositoryException.NotFoundException)
@@ -33,7 +34,7 @@ class RoomExceptionMapperTest {
         every { exception.message } returns ""
 
         // when
-        val convertedException = RoomExceptionMapper.toRepositoryException(exception)
+        val convertedException = RoomExceptionConverter.toRepositoryException(exception)
 
         // then
         assertEquals(true, convertedException is RepositoryException.DatabaseUnknownException)

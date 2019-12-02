@@ -2,14 +2,12 @@ package com.ch.yoon.imagesearch.data.local.room
 
 import com.ch.yoon.imagesearch.data.local.room.dao.ImageDAO
 import com.ch.yoon.imagesearch.data.local.room.entity.mapper.ImageDocumentEntityMapper
-import com.ch.yoon.imagesearch.data.local.room.error.CompletableExceptionTransformer
-import com.ch.yoon.imagesearch.data.local.room.error.SingleExceptionTransformer
+import com.ch.yoon.imagesearch.data.local.room.transformer.error.CompletableExceptionTransformer
+import com.ch.yoon.imagesearch.data.local.room.transformer.error.SingleExceptionTransformer
 import com.ch.yoon.imagesearch.data.repository.image.ImageLocalDataSource
 import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
 import io.reactivex.Completable
 import io.reactivex.Single
-import java.util.*
-import kotlin.collections.LinkedHashMap
 
 /**
  * Creator : ch-yoon

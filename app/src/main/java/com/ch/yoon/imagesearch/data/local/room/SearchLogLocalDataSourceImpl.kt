@@ -5,8 +5,8 @@ import com.ch.yoon.imagesearch.data.local.room.entity.SearchLogEntity
 import com.ch.yoon.imagesearch.data.repository.searchlog.SearchLogLocalDataSource
 import com.ch.yoon.imagesearch.data.repository.searchlog.model.SearchLog
 import com.ch.yoon.imagesearch.data.local.room.entity.mapper.SearchLogEntityMapper
-import com.ch.yoon.imagesearch.data.local.room.error.CompletableExceptionTransformer
-import com.ch.yoon.imagesearch.data.local.room.error.SingleExceptionTransformer
+import com.ch.yoon.imagesearch.data.local.room.transformer.error.CompletableExceptionTransformer
+import com.ch.yoon.imagesearch.data.local.room.transformer.error.SingleExceptionTransformer
 import io.reactivex.Completable
 import io.reactivex.Single
 

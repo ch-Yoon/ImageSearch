@@ -1,4 +1,4 @@
-package com.ch.yoon.imagesearch.data.local.room.error.mapper
+package com.ch.yoon.imagesearch.data.local.room.transformer.error
 
 import androidx.room.EmptyResultSetException
 import com.ch.yoon.imagesearch.data.repository.error.RepositoryException
@@ -7,7 +7,7 @@ import com.ch.yoon.imagesearch.data.repository.error.RepositoryException
  * Creator : ch-yoon
  * Date : 2019-10-30
  **/
-object RoomExceptionMapper {
+object RoomExceptionConverter {
 
     fun toRepositoryException(throwable: Throwable): RepositoryException {
         val errorMessage: String = throwable.message ?: ""
