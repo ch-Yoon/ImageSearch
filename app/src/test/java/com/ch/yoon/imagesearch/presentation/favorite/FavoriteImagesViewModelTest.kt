@@ -75,7 +75,7 @@ class FavoriteImagesViewModelTest {
         favoriteImagesViewModel.loadFavoriteImageList()
 
         // then
-        favoriteImagesViewModel.favoriteImageList.observeForever {
+        favoriteImagesViewModel.favoriteImages.observeForever {
             assertEquals(publishFavoriteImageList, it)
         }
     }
@@ -90,7 +90,7 @@ class FavoriteImagesViewModelTest {
         favoriteImagesViewModel.loadFavoriteImageList()
 
         // then
-        favoriteImagesViewModel.favoriteImageList.observeForever {
+        favoriteImagesViewModel.favoriteImages.observeForever {
             assertEquals(publishFavoriteImageList, it)
         }
     }
@@ -158,7 +158,7 @@ class FavoriteImagesViewModelTest {
             addAll(favoriteImageList)
             add(newFavoriteImage)
         }
-        favoriteImagesViewModel.favoriteImageList.observeForever {
+        favoriteImagesViewModel.favoriteImages.observeForever {
             assertEquals(expected, it)
         }
     }
@@ -187,7 +187,7 @@ class FavoriteImagesViewModelTest {
             addAll(favoriteImageList)
             removeFirstIf { it.id == noFavoriteImage.id }
         }
-        favoriteImagesViewModel.favoriteImageList.observeForever {
+        favoriteImagesViewModel.favoriteImages.observeForever {
             assertEquals(expected, it)
         }
     }

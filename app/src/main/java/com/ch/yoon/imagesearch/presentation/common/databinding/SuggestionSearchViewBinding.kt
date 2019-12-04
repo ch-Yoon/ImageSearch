@@ -21,7 +21,7 @@ fun enable(suggestionSearchView: SuggestionSearchView, enable: Boolean) {
 @Suppress("UNCHECKED_CAST")
 @BindingAdapter("itemsWithDefaultAdapter")
 fun <T, VH : RecyclerView.ViewHolder> setItemsWithListAdapter(suggestionSearchView: SuggestionSearchView, items: List<T>?) {
-    (suggestionSearchView.getAdapter() as SuggestionAdapter<T, VH>?)?.let { adapter ->
+    (suggestionSearchView.getAdapter() as? SuggestionAdapter<T, VH>)?.let { adapter ->
         val newList = if(items == null || items.isEmpty()) null else ArrayList(items)
         adapter.submitList(newList)
         if(newList == null) {

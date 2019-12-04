@@ -21,8 +21,8 @@ class FavoriteImagesViewModel(
     private val imageRepository: ImageRepository
 ) : BaseViewModel(application) {
 
-    private val _favoriteImageList = MutableLiveData<MutableList<ImageDocument>>()
-    val favoriteImageList: LiveData<List<ImageDocument>> = Transformations.map(_favoriteImageList) { it?.toList() }
+    private val _favoriteImages = MutableLiveData<MutableList<ImageDocument>>()
+    val favoriteImages: LiveData<List<ImageDocument>> = Transformations.map(_favoriteImages) { it?.toList() }
 
     private val _moveToDetailScreenEvent = SingleLiveEvent<ImageDocument>()
     val moveToDetailScreenEvent: LiveData<ImageDocument> = _moveToDetailScreenEvent
@@ -33,8 +33,8 @@ class FavoriteImagesViewModel(
     fun loadFavoriteImageList() {
         imageRepository.getAllFavoriteImages()
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ favoriteList ->
-                _favoriteImageList.value = favoriteList.toMutableList()
+            .subscribe({ receivedFavoriteImages ->
+                _favoriteImages.value = receivedFavoriteImages.toMutableList()
             }, { throwable ->
                 Log.d(TAG, throwable.message)
             })
@@ -54,9 +54,9 @@ class FavoriteImagesViewModel(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ changedImageDocument ->
                 with(changedImageDocument) {
-                    _favoriteImageList.removeFirst { it.id == id }
+                    _favoriteImages.removeFirst { it.id == id }
                     if(isFavorite) {
-                        _favoriteImageList.add(this)
+                        _favoriteImages.add(this)
                     }
                 }
             }, {
