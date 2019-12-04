@@ -20,3 +20,4 @@ data class ImageDocumentEntity(
     val dateTime: String,
     val isFavorite: Boolean
 )
+

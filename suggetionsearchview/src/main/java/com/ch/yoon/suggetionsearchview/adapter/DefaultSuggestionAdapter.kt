@@ -92,7 +92,7 @@ class DefaultSuggestionAdapter : SuggestionAdapter<String, RecyclerView.ViewHold
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(holder) {
             is SuggestionViewHolder -> {
-                holder.setSearchLog(getItem(position))
+                holder.setSuggestion(getItem(position))
             }
         }
     }
@@ -133,7 +133,7 @@ class DefaultSuggestionAdapter : SuggestionAdapter<String, RecyclerView.ViewHold
         val keywordTextView: TextView = view.suggestion_text_view
         val subButton: ImageView = view.suggestion_sub_button_image_view
 
-        fun setSearchLog(keyword: String) {
+        fun setSuggestion(keyword: String) {
             keywordTextView.text = keyword
         }
 
