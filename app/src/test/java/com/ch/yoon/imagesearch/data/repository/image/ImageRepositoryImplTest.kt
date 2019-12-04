@@ -57,7 +57,7 @@ class ImageRepositoryImplTest : BaseRxTest() {
         var result: List<ImageDocument>? = null
         imageRepository.getImages(emptyImageSearchRequest())
             .subscribe({
-                result = it.imageDocumentList
+                result = it.imageDocuments
             }, {
                 result = null
             })
@@ -83,7 +83,7 @@ class ImageRepositoryImplTest : BaseRxTest() {
         var result: List<ImageDocument>? = null
         imageRepository.getImages(emptyImageSearchRequest())
             .subscribe({
-                result = it.imageDocumentList
+                result = it.imageDocuments
             }, {
                 result = null
             })

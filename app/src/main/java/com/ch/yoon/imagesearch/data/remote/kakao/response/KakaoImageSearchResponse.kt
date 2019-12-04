@@ -8,5 +8,5 @@ import com.google.gson.annotations.SerializedName
  */
 data class KakaoImageSearchResponse(
     @SerializedName("meta") val kakaoImageSearchMeta: KakaoImageSearchMetaInfo,
-    @SerializedName("documents") val kakaoImageDocumentList: List<KakaoImageDocument>
+    @SerializedName("documents") val kakaoImageDocuments: List<KakaoImageDocument>
 )

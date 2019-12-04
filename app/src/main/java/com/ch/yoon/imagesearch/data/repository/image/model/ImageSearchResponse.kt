@@ -6,5 +6,5 @@ package com.ch.yoon.imagesearch.data.repository.image.model
  **/
 data class ImageSearchResponse(
     val imageSearchMeta: ImageSearchMeta,
-    val imageDocumentList: List<ImageDocument>
+    val imageDocuments: List<ImageDocument>
 )

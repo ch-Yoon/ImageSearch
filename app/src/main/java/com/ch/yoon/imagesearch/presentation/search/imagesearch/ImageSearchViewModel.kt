@@ -118,7 +118,7 @@ class ImageSearchViewModel(
                     _imageDocuments.clear()
                 }
                 with(imageSearchResponse) {
-                    updateImageDocuments(imageDocumentList)
+                    updateImageDocuments(imageDocuments)
                     updateSearchMeta(imageSearchMeta)
                 }
             }, { throwable ->

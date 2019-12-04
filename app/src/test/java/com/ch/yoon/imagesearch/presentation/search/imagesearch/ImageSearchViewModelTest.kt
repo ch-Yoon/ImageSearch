@@ -105,7 +105,7 @@ class ImageSearchViewModelTest {
 
         // then
         imageSearchViewModel.imageDocuments.observeForever { actuallyList ->
-            assertEquals(expect.imageDocumentList, actuallyList)
+            assertEquals(expect.imageDocuments, actuallyList)
         }
     }
 
@@ -176,8 +176,8 @@ class ImageSearchViewModelTest {
         val firstValue = createImageSearchResponse(3, false)
         val secondValue = createImageSearchResponse(3, true)
         val expectedList = mutableListOf<ImageDocument>().apply {
-            addAll(firstValue.imageDocumentList)
-            addAll(secondValue.imageDocumentList)
+            addAll(firstValue.imageDocuments)
+            addAll(secondValue.imageDocuments)
         }
 
         var isFirst = true
@@ -274,7 +274,7 @@ class ImageSearchViewModelTest {
         }
 
         val imageResponse = createImageSearchResponse(3, true)
-        imageResponse.imageDocumentList.forEach { it.isFavorite = false }
+        imageResponse.imageDocuments.forEach { it.isFavorite = false }
         every { mockRepository.getImages(any()) } returns Single.just(imageResponse)
 
         val subject = PublishSubject.create<ImageDocument>()
@@ -284,11 +284,11 @@ class ImageSearchViewModelTest {
         imageSearchViewModel.loadImageList("테스트")
         imageSearchViewModel.observeChangingFavoriteImage()
 
-        val noFavoriteImage = createImageDocument(imageResponse.imageDocumentList[0].id, true)
+        val noFavoriteImage = createImageDocument(imageResponse.imageDocuments[0].id, true)
         subject.onNext(noFavoriteImage)
 
         // then
-        val expected = createImageSearchResponse(3, true).imageDocumentList.toMutableList()
+        val expected = createImageSearchResponse(3, true).imageDocuments.toMutableList()
         expected.forEach { it.isFavorite = false }
         expected[0].isFavorite = true
         imageSearchViewModel.imageDocuments.observeForever {
@@ -306,7 +306,7 @@ class ImageSearchViewModelTest {
         }
 
         val imageResponse = createImageSearchResponse(3, true)
-        imageResponse.imageDocumentList.forEach { it.isFavorite = true }
+        imageResponse.imageDocuments.forEach { it.isFavorite = true }
         every { mockRepository.getImages(any()) } returns Single.just(imageResponse)
 
         val subject = PublishSubject.create<ImageDocument>()
@@ -316,11 +316,11 @@ class ImageSearchViewModelTest {
         imageSearchViewModel.loadImageList("테스트")
         imageSearchViewModel.observeChangingFavoriteImage()
 
-        val noFavoriteImage = createImageDocument(imageResponse.imageDocumentList[0].id, false)
+        val noFavoriteImage = createImageDocument(imageResponse.imageDocuments[0].id, false)
         subject.onNext(noFavoriteImage)
 
         // then
-        val expected = createImageSearchResponse(3, true).imageDocumentList.toMutableList()
+        val expected = createImageSearchResponse(3, true).imageDocuments.toMutableList()
         expected.forEach { it.isFavorite = true }
         expected[0].isFavorite = false
         imageSearchViewModel.imageDocuments.observeForever {

@@ -17,7 +17,7 @@ object KakaoImageSearchEntityMapper {
                 ImageSearchMeta(isEnd)
             }
 
-            val imageDocumentList = kakaoImageDocumentList.map {
+            val imageDocumentList = kakaoImageDocuments.map {
                 ImageDocument(
                     "${it.imageUrl}&${it.docUrl}",
                     it.collection,

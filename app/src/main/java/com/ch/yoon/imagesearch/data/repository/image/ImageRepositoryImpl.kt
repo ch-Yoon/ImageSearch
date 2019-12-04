@@ -29,7 +29,7 @@ class ImageRepositoryImpl(
                 .map { favoriteList -> favoriteList.associateBy({ it.id }, {it}) }
                 .subscribeOn(Schedulers.io()),
             BiFunction { response: ImageSearchResponse, favoriteMap: Map<String, ImageDocument> ->
-                val newList = response.imageDocumentList.map { favoriteMap[it.id] ?: it }
+                val newList = response.imageDocuments.map { favoriteMap[it.id] ?: it }
                 ImageSearchResponse(response.imageSearchMeta, newList)
             }
         ).subscribeOn(Schedulers.io())
