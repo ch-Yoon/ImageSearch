@@ -1,4 +1,4 @@
-package com.ch.yoon.imagesearch.presentation.imagesearch.searchlist
+package com.ch.yoon.imagesearch.presentation.imagesearch.imagesearch
 
 import android.app.Application
 import android.util.Log
@@ -25,7 +25,7 @@ import org.junit.Test
  * Creator : ch-yoon
  * Date : 2019-11-01.
  */
-class SearchListViewModelTest {
+class ImageSearchViewModelTest {
 
     companion object {
         private const val SUCCESS_NO_RESULT = "검색 결과가 없습니다"
@@ -46,7 +46,7 @@ class SearchListViewModelTest {
     @MockK
     lateinit var mockPageLoadHelper: PageLoadHelper<String>
 
-    private lateinit var searchListViewModel: SearchListViewModel
+    private lateinit var imageSearchViewModel: ImageSearchViewModel
     private var capturedPageLoadApprove: ((key: String, pageNumber: Int, dataSize: Int, isFirstPage: Boolean) -> Unit)? = null
 
     @Before
@@ -73,7 +73,7 @@ class SearchListViewModelTest {
             capturedPageLoadApprove = lambdaSlot.captured
         }
 
-        searchListViewModel = SearchListViewModel(mockApplication, mockRepository, mockPageLoadHelper)
+        imageSearchViewModel = ImageSearchViewModel(mockApplication, mockRepository, mockPageLoadHelper)
     }
 
     private fun initUtils() {
@@ -84,11 +84,11 @@ class SearchListViewModelTest {
     @Test
     fun `한줄에 표현되는 아이템의 갯수를 변경하면 반영되는지_테스트`() {
         // when
-        searchListViewModel.changeCountOfItemInLine(2)
-        searchListViewModel.changeCountOfItemInLine(4)
+        imageSearchViewModel.changeCountOfItemInLine(2)
+        imageSearchViewModel.changeCountOfItemInLine(4)
 
         // then
-        searchListViewModel.countOfItemInLine.observeForever { count ->
+        imageSearchViewModel.countOfItemInLine.observeForever { count ->
             assertEquals(4, count)
         }
     }
@@ -101,10 +101,10 @@ class SearchListViewModelTest {
         every { mockPageLoadHelper.requestFirstLoad(any()) } answers { capturedPageLoadApprove?.invoke("", 1, 1, false) }
 
         // when
-        searchListViewModel.loadImageList("테스트")
+        imageSearchViewModel.loadImageList("테스트")
 
         // then
-        searchListViewModel.imageDocumentList.observeForever { actuallyList ->
+        imageSearchViewModel.imageDocuments.observeForever { actuallyList ->
             assertEquals(expect.imageDocumentList, actuallyList)
         }
     }
@@ -117,10 +117,10 @@ class SearchListViewModelTest {
         every { mockPageLoadHelper.requestFirstLoad(any()) } answers { capturedPageLoadApprove?.invoke("", 1, 1, false) }
 
         // when
-        searchListViewModel.loadImageList("테스트")
+        imageSearchViewModel.loadImageList("테스트")
 
         // then
-        searchListViewModel.imageDocumentList.observeForever { actuallyList ->
+        imageSearchViewModel.imageDocuments.observeForever { actuallyList ->
             assertEquals(0, actuallyList.size)
         }
     }
@@ -133,10 +133,10 @@ class SearchListViewModelTest {
         every { mockPageLoadHelper.requestFirstLoad(any()) } answers { capturedPageLoadApprove?.invoke("", 1, 1, false) }
 
         // when
-        searchListViewModel.loadImageList("테스트")
+        imageSearchViewModel.loadImageList("테스트")
 
         // then
-        searchListViewModel.showMessageEvent.observeForever { message ->
+        imageSearchViewModel.showMessageEvent.observeForever { message ->
             assertEquals(SUCCESS_NO_RESULT, message)
         }
     }
@@ -148,10 +148,10 @@ class SearchListViewModelTest {
         every { mockPageLoadHelper.requestFirstLoad(any()) } answers { capturedPageLoadApprove?.invoke("", 1, 1, false) }
 
         // when
-        searchListViewModel.loadImageList("테스트")
+        imageSearchViewModel.loadImageList("테스트")
 
         // then
-        searchListViewModel.showMessageEvent.observeForever { message ->
+        imageSearchViewModel.showMessageEvent.observeForever { message ->
             assertEquals(message, ERROR_NETWORK)
         }
     }
@@ -162,10 +162,10 @@ class SearchListViewModelTest {
         every { mockRepository.getImages(any()) } returns (Single.just(createImageSearchResponse(1, true)))
 
         // when
-        searchListViewModel.loadImageList("테스트");
+        imageSearchViewModel.loadImageList("테스트");
 
         // then
-        searchListViewModel.showMessageEvent.observeForever { message ->
+        imageSearchViewModel.showMessageEvent.observeForever { message ->
             assertEquals(message, SUCCESS_LAST_DATA)
         }
     }
@@ -192,11 +192,11 @@ class SearchListViewModelTest {
 
 
         // when
-        searchListViewModel.loadImageList("테스트")
-        searchListViewModel.loadMoreImageListIfPossible(3)
+        imageSearchViewModel.loadImageList("테스트")
+        imageSearchViewModel.loadMoreImageListIfPossible(3)
 
         // then
-        searchListViewModel.imageDocumentList.observeForever { actuallyList ->
+        imageSearchViewModel.imageDocuments.observeForever { actuallyList ->
             assertEquals(expectedList, actuallyList)
         }
     }
@@ -209,10 +209,10 @@ class SearchListViewModelTest {
         every { mockPageLoadHelper.requestPreloadIfPossible(any(), any(), any()) } answers { capturedPageLoadApprove?.invoke("", 1, 1, false) }
 
         // when
-        searchListViewModel.loadImageList("테스트")
-        searchListViewModel.loadMoreImageListIfPossible(1)
-        searchListViewModel.loadMoreImageListIfPossible(1)
-        searchListViewModel.loadMoreImageListIfPossible(1)
+        imageSearchViewModel.loadImageList("테스트")
+        imageSearchViewModel.loadMoreImageListIfPossible(1)
+        imageSearchViewModel.loadMoreImageListIfPossible(1)
+        imageSearchViewModel.loadMoreImageListIfPossible(1)
 
         // then
         verify(exactly = 1) { mockRepository.getImages(any()) } // 최초 1번
@@ -225,7 +225,7 @@ class SearchListViewModelTest {
         every { mockPageLoadHelper.requestRetryAsPreviousValue() } answers { capturedPageLoadApprove?.invoke("", 1, 1, false) }
 
         // when
-        searchListViewModel.retryLoadMoreImageList()
+        imageSearchViewModel.retryLoadMoreImageList()
 
         //then
         verify(exactly = 1) { mockRepository.getImages(any()) }
@@ -238,11 +238,11 @@ class SearchListViewModelTest {
         every { mockPageLoadHelper.getCurrentKey() } returns "key"
         // when
         val typeList = mutableListOf<ImageSortType>()
-        searchListViewModel.imageSortType.observeForever { type ->
+        imageSearchViewModel.imageSortType.observeForever { type ->
             typeList.add(type)
         }
-        searchListViewModel.changeImageSortType(ImageSortType.ACCURACY)
-        searchListViewModel.changeImageSortType(ImageSortType.RECENCY)
+        imageSearchViewModel.changeImageSortType(ImageSortType.ACCURACY)
+        imageSearchViewModel.changeImageSortType(ImageSortType.RECENCY)
 
         // then
         assertEquals(ImageSortType.ACCURACY, typeList[0]) // 최초 default 로 설정되어 있는 값
@@ -256,10 +256,10 @@ class SearchListViewModelTest {
         val imageDocument = createImageDocument("0")
 
         // when
-        searchListViewModel.onClickImage(imageDocument)
+        imageSearchViewModel.onClickImage(imageDocument)
 
         // then
-        searchListViewModel.moveToDetailScreenEvent.observeForever { receivedImageDocument ->
+        imageSearchViewModel.moveToDetailScreenEvent.observeForever { receivedImageDocument ->
             assertEquals(imageDocument, receivedImageDocument)
         }
     }
@@ -281,8 +281,8 @@ class SearchListViewModelTest {
         every { mockRepository.observeChangingFavoriteImage() } returns subject
 
         // when
-        searchListViewModel.loadImageList("테스트")
-        searchListViewModel.observeChangingFavoriteImage()
+        imageSearchViewModel.loadImageList("테스트")
+        imageSearchViewModel.observeChangingFavoriteImage()
 
         val noFavoriteImage = createImageDocument(imageResponse.imageDocumentList[0].id, true)
         subject.onNext(noFavoriteImage)
@@ -291,7 +291,7 @@ class SearchListViewModelTest {
         val expected = createImageSearchResponse(3, true).imageDocumentList.toMutableList()
         expected.forEach { it.isFavorite = false }
         expected[0].isFavorite = true
-        searchListViewModel.imageDocumentList.observeForever {
+        imageSearchViewModel.imageDocuments.observeForever {
             assertEquals(expected.toList(), it)
         }
     }
@@ -313,8 +313,8 @@ class SearchListViewModelTest {
         every { mockRepository.observeChangingFavoriteImage() } returns subject
 
         // when
-        searchListViewModel.loadImageList("테스트")
-        searchListViewModel.observeChangingFavoriteImage()
+        imageSearchViewModel.loadImageList("테스트")
+        imageSearchViewModel.observeChangingFavoriteImage()
 
         val noFavoriteImage = createImageDocument(imageResponse.imageDocumentList[0].id, false)
         subject.onNext(noFavoriteImage)
@@ -323,7 +323,7 @@ class SearchListViewModelTest {
         val expected = createImageSearchResponse(3, true).imageDocumentList.toMutableList()
         expected.forEach { it.isFavorite = true }
         expected[0].isFavorite = false
-        searchListViewModel.imageDocumentList.observeForever {
+        imageSearchViewModel.imageDocuments.observeForever {
             assertEquals(expected.toList(), it)
         }
     }

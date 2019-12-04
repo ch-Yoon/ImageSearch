@@ -1,4 +1,4 @@
-package com.ch.yoon.imagesearch.presentation.imagesearch.searchlist
+package com.ch.yoon.imagesearch.presentation.imagesearch.imagesearch
 
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
@@ -16,8 +16,8 @@ import com.ch.yoon.imagesearch.extension.cancelImageLoad
  * Creator : ch-yoon
  * Date : 2019-10-29
  **/
-class SearchListAdapter(
-    private val viewModel: SearchListViewModel
+class ImageSearchResultsAdapter(
+    private val viewModel: ImageSearchViewModel
 ) : ListAdapter<ImageDocument, RecyclerView.ViewHolder>(DiffCallback()) {
 
     companion object {
@@ -86,7 +86,7 @@ class SearchListAdapter(
     }
 
     class ImageListViewHolder(
-        viewModel: SearchListViewModel,
+        viewModel: ImageSearchViewModel,
         @LayoutRes layoutResId: Int,
         parent: ViewGroup
     ) : BaseViewHolder<ItemImageListBinding>(layoutResId, parent) {
@@ -106,7 +106,7 @@ class SearchListAdapter(
     }
 
     class RetryFooterViewHolder(
-        viewModel: SearchListViewModel,
+        viewModel: ImageSearchViewModel,
         @LayoutRes layoutResId: Int,
         parent: ViewGroup
     ) : BaseViewHolder<ItemRetryFooterBinding>(layoutResId, parent) {

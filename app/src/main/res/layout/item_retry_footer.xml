@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.ch.yoon.imagesearch.presentation.imagesearch.searchlist.SearchListViewModel" />
+            type="com.ch.yoon.imagesearch.presentation.imagesearch.imagesearch.ImageSearchViewModel" />
 
         <variable
             name="retryButtonVisibility"

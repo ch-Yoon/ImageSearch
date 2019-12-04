@@ -16,7 +16,7 @@
 
         <variable
             name="searchListViewModel"
-            type="com.ch.yoon.imagesearch.presentation.imagesearch.searchlist.SearchListViewModel" />
+            type="com.ch.yoon.imagesearch.presentation.imagesearch.imagesearch.ImageSearchViewModel" />
 
     </data>
 
@@ -108,10 +108,10 @@
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/count_in_line_icon_side_margin"
             android:scrollbars="vertical"
-            android:visibility="@{(searchListViewModel.imageDocumentList == null || searchListViewModel.imageDocumentList.size() == 0) ? View.INVISIBLE : View.VISIBLE}"
+            android:visibility="@{(searchListViewModel.imageDocuments == null || searchListViewModel.imageDocuments.size() == 0) ? View.INVISIBLE : View.VISIBLE}"
             app:spanCount="@{searchListViewModel.countOfItemInLine}"
             app:imageSearchState="@{searchListViewModel.imageSearchState}"
-            app:itemsWithListAdapter="@{searchListViewModel.imageDocumentList}"
+            app:itemsWithListAdapter="@{searchListViewModel.imageDocuments}"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -124,7 +124,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:text="@string/image_search_empty_view_text"
-            android:visibility="@{(searchListViewModel.imageDocumentList == null || searchListViewModel.imageDocumentList.size() == 0) ? View.VISIBLE : View.INVISIBLE}"
+            android:visibility="@{(searchListViewModel.imageDocuments == null || searchListViewModel.imageDocuments.size() == 0) ? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

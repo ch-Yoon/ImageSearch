@@ -1,4 +1,4 @@
-package com.ch.yoon.imagesearch.presentation.imagesearch.searchlist
+package com.ch.yoon.imagesearch.presentation.imagesearch.imagesearch
 
 import android.app.Application
 import android.util.Log
@@ -23,7 +23,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
  * Creator : ch-yoon
  * Date : 2019-10-28
  **/
-class SearchListViewModel(
+class ImageSearchViewModel(
     application: Application,
     private val imageRepository: ImageRepository,
     private val pageLoadHelper: PageLoadHelper<String>
@@ -43,8 +43,8 @@ class SearchListViewModel(
     private val _countOfItemInLine = NonNullMutableLiveData(2)
     val countOfItemInLine: LiveData<Int> = _countOfItemInLine
 
-    private val _imageDocumentList = MutableLiveData<MutableList<ImageDocument>>()
-    val imageDocumentList: LiveData<List<ImageDocument>> = Transformations.map(_imageDocumentList) { it?.toList() }
+    private val _imageDocuments = MutableLiveData<MutableList<ImageDocument>>()
+    val imageDocuments: LiveData<List<ImageDocument>> = Transformations.map(_imageDocuments) { it?.toList() }
 
     private val _imageSearchState = MutableLiveData<ImageSearchState>(ImageSearchState.NONE)
     val imageSearchState: LiveData<ImageSearchState> = _imageSearchState
@@ -69,7 +69,7 @@ class SearchListViewModel(
         imageRepository.observeChangingFavoriteImage()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ changedImageDocument ->
-                _imageDocumentList.replace(changedImageDocument) { it.id == changedImageDocument.id }
+                _imageDocuments.replace(changedImageDocument) { it.id == changedImageDocument.id }
             }, {
                 Log.d(TAG, it.message)
             })
@@ -77,7 +77,7 @@ class SearchListViewModel(
     }
 
     fun changeImageSortType(imageSortType: ImageSortType) {
-        _imageDocumentList.clear()
+        _imageDocuments.clear()
         _imageSortType.value = imageSortType
         pageLoadHelper.getCurrentKey()?.let { currentKey ->
             pageLoadHelper.requestFirstLoad(currentKey)
@@ -85,7 +85,7 @@ class SearchListViewModel(
     }
 
     fun loadImageList(keyword: String) {
-        _imageDocumentList.clear()
+        _imageDocuments.clear()
         pageLoadHelper.requestFirstLoad(keyword)
     }
 
@@ -95,18 +95,18 @@ class SearchListViewModel(
 
     fun loadMoreImageListIfPossible(position: Int) {
         if (isRemainingMoreData) {
-            pageLoadHelper.requestPreloadIfPossible(position, _imageDocumentList.size(), _countOfItemInLine.value)
+            pageLoadHelper.requestPreloadIfPossible(position, _imageDocuments.size(), _countOfItemInLine.value)
         }
     }
 
     private fun observePageLoadInspector() {
         pageLoadHelper.onPageLoadApproveCallback = { key, pageNumber, dataSize, isFirstPage ->
             val request = ImageSearchRequest(key, _imageSortType.value, pageNumber, dataSize, isFirstPage)
-            requestImageListToRepository(request)
+            requestImagesToRepository(request)
         }
     }
 
-    private fun requestImageListToRepository(request: ImageSearchRequest) {
+    private fun requestImagesToRepository(request: ImageSearchRequest) {
         _imageSearchState.value = ImageSearchState.NONE
 
         imageRepository.getImages(request)
@@ -115,10 +115,10 @@ class SearchListViewModel(
             .doOnError { _imageSearchState.value = ImageSearchState.FAIL }
             .subscribe({ imageSearchResponse ->
                 if (request.isFirstRequest) {
-                    _imageDocumentList.clear()
+                    _imageDocuments.clear()
                 }
                 with(imageSearchResponse) {
-                    updateImageDocumentList(imageDocumentList)
+                    updateImageDocuments(imageDocumentList)
                     updateSearchMeta(imageSearchMeta)
                 }
             }, { throwable ->
@@ -127,16 +127,16 @@ class SearchListViewModel(
             .register()
     }
 
-    private fun updateImageDocumentList(receivedImageDocumentList: List<ImageDocument>) {
-        _imageDocumentList.addAll(receivedImageDocumentList)
-        if(_imageDocumentList.isEmpty()) {
+    private fun updateImageDocuments(receivedImageDocuments: List<ImageDocument>) {
+        _imageDocuments.addAll(receivedImageDocuments)
+        if(_imageDocuments.isEmpty()) {
             updateShowMessage(R.string.success_image_search_no_result)
         }
     }
 
     private fun updateSearchMeta(searchMeta: ImageSearchMeta) {
         this.searchMeta = searchMeta
-        if(_imageDocumentList.isNotEmpty() && searchMeta.isEnd) {
+        if(_imageDocuments.isNotEmpty() && searchMeta.isEnd) {
             updateShowMessage(R.string.success_image_search_last_data)
         }
     }
