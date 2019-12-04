@@ -12,11 +12,11 @@
 
         <variable
             name="searchBoxViewModel"
-            type="com.ch.yoon.imagesearch.presentation.imagesearch.searchbox.SearchBoxViewModel" />
+            type="com.ch.yoon.imagesearch.presentation.search.searchbox.SearchBoxViewModel" />
 
         <variable
             name="searchListViewModel"
-            type="com.ch.yoon.imagesearch.presentation.imagesearch.imagesearch.ImageSearchViewModel" />
+            type="com.ch.yoon.imagesearch.presentation.search.imagesearch.ImageSearchViewModel" />
 
     </data>
 
@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorWhite"
-        tools:context=".presentation.imagesearch.ImageSearchActivity">
+        tools:context=".presentation.search.ImageSearchActivity">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/mainToolbar"

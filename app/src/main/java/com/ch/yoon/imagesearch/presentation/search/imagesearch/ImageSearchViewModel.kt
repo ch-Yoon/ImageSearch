@@ -1,4 +1,4 @@
-package com.ch.yoon.imagesearch.presentation.imagesearch.imagesearch
+package com.ch.yoon.imagesearch.presentation.search.imagesearch
 
 import android.app.Application
 import android.util.Log

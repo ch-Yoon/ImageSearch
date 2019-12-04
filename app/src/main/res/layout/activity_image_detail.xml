@@ -8,7 +8,7 @@
 
         <variable
             name="imageDetailViewModel"
-            type="com.ch.yoon.imagesearch.presentation.imagedetail.ImageDetailViewModel" />
+            type="com.ch.yoon.imagesearch.presentation.detail.ImageDetailViewModel" />
 
     </data>
 
@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorWhite"
-        tools:context=".presentation.imagedetail.ImageDetailActivity">
+        tools:context=".presentation.detail.ImageDetailActivity">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/mainToolbar"

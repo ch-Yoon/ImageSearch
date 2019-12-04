@@ -1,4 +1,4 @@
-package com.ch.yoon.imagesearch.presentation.imagedetail
+package com.ch.yoon.imagesearch.presentation.detail
 
 import android.content.Context
 import android.content.Intent

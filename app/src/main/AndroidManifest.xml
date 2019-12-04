@@ -18,7 +18,7 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".presentation.imagesearch.ImageSearchActivity"
+            android:name=".presentation.search.ImageSearchActivity"
             android:theme="@style/ImageSearchAppTheme"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
@@ -31,7 +31,7 @@
             android:name=".presentation.favorite.FavoriteActivity"
             android:theme="@style/ImageSearchAppTheme" />
         <activity
-            android:name=".presentation.imagedetail.ImageDetailActivity"
+            android:name=".presentation.detail.ImageDetailActivity"
             android:theme="@style/ImageSearchAppTheme" />
     </application>
 

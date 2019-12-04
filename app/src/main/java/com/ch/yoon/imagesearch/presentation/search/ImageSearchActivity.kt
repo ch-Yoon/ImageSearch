@@ -1,4 +1,4 @@
-package com.ch.yoon.imagesearch.presentation.imagesearch
+package com.ch.yoon.imagesearch.presentation.search
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,10 +10,10 @@ import com.ch.yoon.imagesearch.R
 import com.ch.yoon.imagesearch.databinding.ActivityImageSearchBinding
 import com.ch.yoon.imagesearch.presentation.base.BaseActivity
 import com.ch.yoon.imagesearch.presentation.favorite.FavoriteActivity
-import com.ch.yoon.imagesearch.presentation.imagedetail.ImageDetailActivity
-import com.ch.yoon.imagesearch.presentation.imagesearch.imagesearch.ImageSearchViewModel
-import com.ch.yoon.imagesearch.presentation.imagesearch.imagesearch.ImageSearchResultsAdapter
-import com.ch.yoon.imagesearch.presentation.imagesearch.searchbox.SearchBoxViewModel
+import com.ch.yoon.imagesearch.presentation.detail.ImageDetailActivity
+import com.ch.yoon.imagesearch.presentation.search.imagesearch.ImageSearchViewModel
+import com.ch.yoon.imagesearch.presentation.search.imagesearch.ImageSearchResultsAdapter
+import com.ch.yoon.imagesearch.presentation.search.searchbox.SearchBoxViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**

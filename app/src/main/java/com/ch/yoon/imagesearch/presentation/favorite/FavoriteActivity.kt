@@ -6,7 +6,7 @@ import androidx.lifecycle.Observer
 import com.ch.yoon.imagesearch.R
 import com.ch.yoon.imagesearch.databinding.ActivityFavoriteBinding
 import com.ch.yoon.imagesearch.presentation.base.BaseActivity
-import com.ch.yoon.imagesearch.presentation.imagedetail.ImageDetailActivity
+import com.ch.yoon.imagesearch.presentation.detail.ImageDetailActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavoriteActivity : BaseActivity<ActivityFavoriteBinding>() {

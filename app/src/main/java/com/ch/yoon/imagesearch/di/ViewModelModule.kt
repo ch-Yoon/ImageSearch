@@ -1,9 +1,9 @@
 package com.ch.yoon.imagesearch.di
 
 import com.ch.yoon.imagesearch.presentation.favorite.FavoriteListViewModel
-import com.ch.yoon.imagesearch.presentation.imagedetail.ImageDetailViewModel
-import com.ch.yoon.imagesearch.presentation.imagesearch.imagesearch.ImageSearchViewModel
-import com.ch.yoon.imagesearch.presentation.imagesearch.searchbox.SearchBoxViewModel
+import com.ch.yoon.imagesearch.presentation.detail.ImageDetailViewModel
+import com.ch.yoon.imagesearch.presentation.search.imagesearch.ImageSearchViewModel
+import com.ch.yoon.imagesearch.presentation.search.searchbox.SearchBoxViewModel
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 
