@@ -31,7 +31,7 @@ class ImageSearchResultsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == TYPE_ITEM) {
-            ImageListViewHolder(viewModel, R.layout.item_image_list, parent)
+            ImageSearchResultsViewHolder(viewModel, R.layout.item_image_list, parent)
         } else {
             RetryFooterViewHolder(viewModel, R.layout.item_retry_footer, parent)
         }
@@ -39,7 +39,7 @@ class ImageSearchResultsAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(holder) {
-            is ImageListViewHolder -> {
+            is ImageSearchResultsViewHolder -> {
                 holder.setItem(getItem(position))
                 onBindPosition?.invoke(position)
             }
@@ -59,7 +59,7 @@ class ImageSearchResultsAdapter(
 
     override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
         when(holder) {
-            is ImageListViewHolder -> {
+            is ImageSearchResultsViewHolder -> {
                 holder.clear()
             }
         }
@@ -85,7 +85,7 @@ class ImageSearchResultsAdapter(
         notifyItemChanged(super.getItemCount())
     }
 
-    class ImageListViewHolder(
+    class ImageSearchResultsViewHolder(
         viewModel: ImageSearchViewModel,
         @LayoutRes layoutResId: Int,
         parent: ViewGroup

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.ch.yoon.imagesearch.R
 import com.ch.yoon.imagesearch.databinding.ActivityImageSearchBinding
 import com.ch.yoon.imagesearch.presentation.base.BaseActivity
-import com.ch.yoon.imagesearch.presentation.favorite.FavoriteActivity
+import com.ch.yoon.imagesearch.presentation.favorite.FavoriteImagesActivity
 import com.ch.yoon.imagesearch.presentation.detail.ImageDetailActivity
 import com.ch.yoon.imagesearch.presentation.search.imagesearch.ImageSearchViewModel
 import com.ch.yoon.imagesearch.presentation.search.imagesearch.ImageSearchResultsAdapter
@@ -128,7 +128,7 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
                     searchBoxViewModel.onClickShowButton()
                 }
                 R.id.action_favorite -> {
-                    startActivity(Intent(this, FavoriteActivity::class.java))
+                    startActivity(Intent(this, FavoriteImagesActivity::class.java))
                 }
             }
         }

@@ -9,9 +9,9 @@ import com.ch.yoon.imagesearch.presentation.base.BaseActivity
 import com.ch.yoon.imagesearch.presentation.detail.ImageDetailActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class FavoriteActivity : BaseActivity<ActivityFavoriteBinding>() {
+class FavoriteImagesActivity : BaseActivity<ActivityFavoriteBinding>() {
 
-    private val favoriteListViewModel: FavoriteListViewModel by viewModel()
+    private val favoriteImagesViewModel: FavoriteImagesViewModel by viewModel()
 
     override fun getLayoutId(): Int {
         return R.layout.activity_favorite
@@ -33,17 +33,17 @@ class FavoriteActivity : BaseActivity<ActivityFavoriteBinding>() {
     }
 
     private fun initFavoriteListViewModel() {
-        binding.favoriteListViewModel = favoriteListViewModel
+        binding.favoriteListViewModel = favoriteImagesViewModel
 
         if(isActivityFirstCreate) {
-            favoriteListViewModel.loadFavoriteImageList()
-            favoriteListViewModel.observeChangingFavoriteImage()
+            favoriteImagesViewModel.loadFavoriteImageList()
+            favoriteImagesViewModel.observeChangingFavoriteImage()
         }
     }
 
     private fun observeFavoriteListViewModel() {
         val owner = this
-        with(favoriteListViewModel) {
+        with(favoriteImagesViewModel) {
             showMessageEvent.observe(owner, Observer { message ->
                 showToast(message)
             })
@@ -60,7 +60,7 @@ class FavoriteActivity : BaseActivity<ActivityFavoriteBinding>() {
     }
 
     private fun initFavoriteRecyclerView() {
-        binding.favoriteRecyclerView.adapter = FavoriteListAdapter(favoriteListViewModel)
+        binding.favoriteRecyclerView.adapter = FavoriteImagesAdapter(favoriteImagesViewModel)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -74,6 +74,6 @@ class FavoriteActivity : BaseActivity<ActivityFavoriteBinding>() {
     }
 
     override fun onBackPressed() {
-        favoriteListViewModel.onClickBackPress()
+        favoriteImagesViewModel.onClickBackPress()
     }
 }

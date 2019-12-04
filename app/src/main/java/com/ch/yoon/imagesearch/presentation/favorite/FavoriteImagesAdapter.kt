@@ -14,9 +14,9 @@ import com.ch.yoon.imagesearch.extension.cancelImageLoad
  * Creator : ch-yoon
  * Date : 2019-11-13
  **/
-class FavoriteListAdapter(
-    private val viewModel: FavoriteListViewModel
-) : ListAdapter<ImageDocument, FavoriteListAdapter.FavoriteListViewHolder>(DiffCallback()) {
+class FavoriteImagesAdapter(
+    private val viewModel: FavoriteImagesViewModel
+) : ListAdapter<ImageDocument, FavoriteImagesAdapter.FavoriteListViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteListViewHolder {
         return FavoriteListViewHolder(viewModel, R.layout.item_favorite_image_list, parent)
@@ -32,7 +32,7 @@ class FavoriteListAdapter(
     }
 
     class FavoriteListViewHolder(
-        viewModel: FavoriteListViewModel,
+        viewModel: FavoriteImagesViewModel,
         @LayoutRes layoutResId: Int,
         parent: ViewGroup
     ) : BaseViewHolder<ItemFavoriteImageListBinding>(layoutResId, parent) {

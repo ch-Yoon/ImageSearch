@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.favorite.FavoriteActivity"
+            android:name=".presentation.favorite.FavoriteImagesActivity"
             android:theme="@style/ImageSearchAppTheme" />
         <activity
             android:name=".presentation.detail.ImageDetailActivity"

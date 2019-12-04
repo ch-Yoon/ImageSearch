@@ -10,14 +10,14 @@
 
         <variable
             name="favoriteListViewModel"
-            type="com.ch.yoon.imagesearch.presentation.favorite.FavoriteListViewModel" />
+            type="com.ch.yoon.imagesearch.presentation.favorite.FavoriteImagesViewModel" />
 
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.favorite.FavoriteActivity">
+        tools:context=".presentation.favorite.FavoriteImagesActivity">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/mainToolbar"

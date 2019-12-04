@@ -16,7 +16,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
  * Creator : ch-yoon
  * Date : 2019-11-13
  **/
-class FavoriteListViewModel(
+class FavoriteImagesViewModel(
     application: Application,
     private val imageRepository: ImageRepository
 ) : BaseViewModel(application) {

@@ -10,7 +10,7 @@ import com.ch.yoon.imagesearch.presentation.search.imagesearch.ImageSearchViewMo
  **/
 @BindingAdapter("imageSearchState")
 fun setImageSearchState(recyclerView: RecyclerView, imageSearchState: ImageSearchState) {
-    (recyclerView.adapter as ImageSearchResultsAdapter?)?.let { adapter ->
+    (recyclerView.adapter as? ImageSearchResultsAdapter)?.let { adapter ->
         with(adapter) {
             when (imageSearchState) {
                 ImageSearchState.NONE, ImageSearchState.SUCCESS -> {

@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.ch.yoon.imagesearch.presentation.favorite.FavoriteListViewModel" />
+            type="com.ch.yoon.imagesearch.presentation.favorite.FavoriteImagesViewModel" />
 
         <variable
             name="imageDocument"
