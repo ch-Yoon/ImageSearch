@@ -32,10 +32,8 @@ class SearchBoxViewModel(
     private val _searchBoxEnableEvent = SingleLiveEvent<Boolean>()
     val searchBoxEnableEvent: LiveData<Boolean> = _searchBoxEnableEvent
 
-    private val _searchBoxFinishEvent = SingleLiveEvent<Unit>()
-    val searchBoxFinishEvent: LiveData<Unit> = _searchBoxFinishEvent
-
-    private var isOpen = false
+    var isOpen = false
+        private set
 
     fun loadSearchLogList() {
         searchLogRepository.getAllSearchLogs()
@@ -82,8 +80,6 @@ class SearchBoxViewModel(
     fun onClickBackPressButton() {
         if(isOpen) {
             _searchBoxEnableEvent.value = false
-        } else {
-            _searchBoxFinishEvent.call()
         }
     }
 

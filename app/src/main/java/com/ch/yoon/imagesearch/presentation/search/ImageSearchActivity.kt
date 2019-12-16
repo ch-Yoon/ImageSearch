@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.ch.yoon.imagesearch.R
@@ -11,6 +12,7 @@ import com.ch.yoon.imagesearch.databinding.ActivityImageSearchBinding
 import com.ch.yoon.imagesearch.presentation.base.BaseActivity
 import com.ch.yoon.imagesearch.presentation.favorite.FavoriteImagesActivity
 import com.ch.yoon.imagesearch.presentation.detail.ImageDetailActivity
+import com.ch.yoon.imagesearch.presentation.search.backpress.BackPressViewModel
 import com.ch.yoon.imagesearch.presentation.search.imagesearch.ImageSearchViewModel
 import com.ch.yoon.imagesearch.presentation.search.imagesearch.ImageSearchResultsAdapter
 import com.ch.yoon.imagesearch.presentation.search.searchbox.SearchBoxViewModel
@@ -24,6 +26,7 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
 
     private val searchBoxViewModel: SearchBoxViewModel by viewModel()
     private val imageSearchViewModel: ImageSearchViewModel by viewModel()
+    private val backPressViewModel: BackPressViewModel by viewModel()
 
     override fun getLayoutId(): Int {
         return R.layout.activity_image_search
@@ -34,6 +37,7 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
 
         initActionBar()
 
+        observeBackPressViewModel()
         initSearchBoxViewModel()
         observeSearchBoxViewModel()
 
@@ -47,10 +51,23 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
     }
 
+    private fun observeBackPressViewModel() {
+        val owner = this
+        with(backPressViewModel) {
+            showMessageEvent.observe(owner, Observer { message ->
+                showToast(message)
+            })
+
+            finishEvent.observe(owner, Observer {
+                finish()
+            })
+        }
+    }
+
     private fun initSearchBoxViewModel() {
         binding.searchBoxViewModel = searchBoxViewModel
 
-        if (isActivityFirstCreate) {
+        if(isActivityFirstCreate) {
             searchBoxViewModel.loadSearchLogList()
         }
     }
@@ -60,10 +77,6 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
         with(searchBoxViewModel) {
             searchEvent.observe(owner, Observer { keyword ->
                 imageSearchViewModel.loadImageList(keyword)
-            })
-
-            searchBoxFinishEvent.observe(owner, Observer {
-                finish()
             })
 
             showMessageEvent.observe(owner, Observer { message ->
@@ -136,6 +149,10 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
     }
 
     override fun onBackPressed() {
-        searchBoxViewModel.onClickBackPressButton()
+        if(searchBoxViewModel.isOpen) {
+            searchBoxViewModel.onClickBackPressButton()
+        } else {
+            backPressViewModel.onBackPress()
+        }
     }
 }
