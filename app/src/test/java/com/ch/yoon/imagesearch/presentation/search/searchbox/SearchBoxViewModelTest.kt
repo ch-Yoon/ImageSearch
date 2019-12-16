@@ -141,7 +141,7 @@ class SearchBoxViewModelTest {
         var finishEventCount = 0
         searchBoxViewModel.searchBoxFinishEvent.observeForever { finishEventCount++ }
         searchBoxViewModel.onStateChange(true)
-        searchBoxViewModel.onClickBackPressButton()
+        searchBoxViewModel.onClickHideButton()
 
         // then
         assertEquals(0, finishEventCount)
@@ -153,7 +153,7 @@ class SearchBoxViewModelTest {
         var closeEventCount = 0
         searchBoxViewModel.searchBoxEnableEvent.observeForever { closeEventCount++ }
         searchBoxViewModel.onStateChange(true)
-        searchBoxViewModel.onClickBackPressButton()
+        searchBoxViewModel.onClickHideButton()
 
         // then
         assertEquals(1, closeEventCount)
@@ -164,7 +164,7 @@ class SearchBoxViewModelTest {
         // when
         var finishEventCount = 0
         searchBoxViewModel.searchBoxFinishEvent.observeForever { finishEventCount++ }
-        searchBoxViewModel.onClickBackPressButton()
+        searchBoxViewModel.onClickHideButton()
 
         // then
         assertEquals(1, finishEventCount)

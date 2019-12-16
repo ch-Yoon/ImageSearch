@@ -77,7 +77,7 @@ class SearchBoxViewModel(
         }
     }
 
-    fun onClickBackPressButton() {
+    fun onClickHideButton() {
         if(isOpen) {
             _searchBoxEnableEvent.value = false
         }

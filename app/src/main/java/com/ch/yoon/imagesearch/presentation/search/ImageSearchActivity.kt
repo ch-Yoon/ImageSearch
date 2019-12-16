@@ -149,7 +149,7 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
 
     override fun onBackPressed() {
         if(searchBoxViewModel.isOpen) {
-            searchBoxViewModel.onClickBackPressButton()
+            searchBoxViewModel.onClickHideButton()
         } else {
             backPressViewModel.onBackPress()
         }
