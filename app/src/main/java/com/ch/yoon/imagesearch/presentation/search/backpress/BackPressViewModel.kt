@@ -20,7 +20,7 @@ class BackPressViewModel(
 ) : BaseViewModel(application) {
 
     companion object {
-        private const val TOAST_DURATION = 2000
+        private const val FINISH_TIME_LIMIT = 2000
     }
 
     private val backPressBehaviorSubject = BehaviorSubject.createDefault(0L)
@@ -41,7 +41,7 @@ class BackPressViewModel(
             .observeOn(AndroidSchedulers.mainThread())
             .buffer(2, 1)
             .subscribe({ time ->
-                if (time[1] - time[0] < TOAST_DURATION) {
+                if (time[1] - time[0] < FINISH_TIME_LIMIT) {
                     _finishEvent.call()
                 } else {
                     updateShowMessage(R.string.back_press_guide_message)
