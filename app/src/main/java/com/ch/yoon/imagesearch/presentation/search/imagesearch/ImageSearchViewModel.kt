@@ -52,10 +52,10 @@ class ImageSearchViewModel(
     private val _moveToDetailScreenEvent = SingleLiveEvent<ImageDocument>()
     val moveToDetailScreenEvent: LiveData<ImageDocument> = _moveToDetailScreenEvent
 
-    private val isRemainingMoreData
-        get() = searchMeta?.isEnd?.not() ?: true
+    private var imageSearchMeta: ImageSearchMeta? = null
 
-    private var searchMeta: ImageSearchMeta? = null
+    private val isRemainingMoreData
+        get() = imageSearchMeta?.isEnd?.not() ?: true
 
     fun changeCountOfItemInLine(countOfItemInLine: Int) {
         _countOfItemInLine.value = countOfItemInLine
@@ -113,29 +113,31 @@ class ImageSearchViewModel(
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSuccess { _imageSearchState.value = ImageSearchState.SUCCESS }
             .doOnError { _imageSearchState.value = ImageSearchState.FAIL }
-            .subscribe({ imageSearchResponse ->
-                if (request.isFirstRequest) {
-                    _imageDocuments.clear()
-                }
-                with(imageSearchResponse) {
-                    updateImageDocuments(imageDocuments)
-                    updateSearchMeta(imageSearchMeta)
-                }
+            .subscribe({ response ->
+                updateImageDocuments(request, response.imageDocuments)
+                updateSearchMeta(response.imageSearchMeta)
             }, { throwable ->
                 handlingImageSearchError(throwable)
             })
             .register()
     }
 
-    private fun updateImageDocuments(receivedImageDocuments: List<ImageDocument>) {
+    private fun updateImageDocuments(
+        previousRequest: ImageSearchRequest,
+        receivedImageDocuments: List<ImageDocument>
+    ) {
+        if (previousRequest.isFirstRequest) {
+            _imageDocuments.clear()
+        }
         _imageDocuments.addAll(receivedImageDocuments)
+
         if(_imageDocuments.isEmpty()) {
             updateShowMessage(R.string.success_image_search_no_result)
         }
     }
 
     private fun updateSearchMeta(searchMeta: ImageSearchMeta) {
-        this.searchMeta = searchMeta
+        this.imageSearchMeta = searchMeta
         if(_imageDocuments.isNotEmpty() && searchMeta.isEnd) {
             updateShowMessage(R.string.success_image_search_last_data)
         }
