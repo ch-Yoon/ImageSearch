@@ -74,6 +74,6 @@ class FavoriteImagesActivity : BaseActivity<ActivityFavoriteBinding>() {
     }
 
     override fun onBackPressed() {
-        favoriteImagesViewModel.onClickBackPress()
+        favoriteImagesViewModel.onBackPress()
     }
 }

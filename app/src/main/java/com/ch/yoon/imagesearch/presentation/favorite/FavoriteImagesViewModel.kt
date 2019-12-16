@@ -45,7 +45,7 @@ class FavoriteImagesViewModel(
         _moveToDetailScreenEvent.value = imageDocument
     }
 
-    fun onClickBackPress() {
+    fun onBackPress() {
         _finishEvent.call()
     }
 

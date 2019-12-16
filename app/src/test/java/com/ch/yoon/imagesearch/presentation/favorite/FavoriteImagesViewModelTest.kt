@@ -124,7 +124,7 @@ class FavoriteImagesViewModelTest {
     @Test
     fun `뒤로가기 버튼 클릭 시 종료 이벤트가 발생하는지 테스트`() {
         // when
-        favoriteImagesViewModel.onClickBackPress()
+        favoriteImagesViewModel.onBackPress()
 
         // then
         var finishCount = 0
