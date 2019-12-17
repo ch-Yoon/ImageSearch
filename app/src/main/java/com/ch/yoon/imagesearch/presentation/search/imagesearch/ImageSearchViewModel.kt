@@ -123,13 +123,15 @@ class ImageSearchViewModel(
         previousRequest: ImageSearchRequest,
         receivedImageDocuments: List<ImageDocument>
     ) {
-        if (previousRequest.isFirstRequest) {
-            _imageDocuments.clear()
-        }
-        _imageDocuments.addAll(receivedImageDocuments)
-
-        if(_imageDocuments.isEmpty()) {
-            updateShowMessage(R.string.success_image_search_no_result)
+        _imageDocuments.apply {
+            if (previousRequest.isFirstRequest) {
+                clear()
+            }
+            addAll(receivedImageDocuments)
+        }.also {
+            if(it.isEmpty()) {
+                updateShowMessage(R.string.success_image_search_no_result)
+            }
         }
     }
 
