@@ -86,10 +86,6 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
 
     private fun initImageListViewModel() {
         binding.searchListViewModel = imageSearchViewModel
-
-        if(isActivityFirstCreate) {
-            imageSearchViewModel.observeChangingFavoriteImage()
-        }
     }
 
     private fun observeImageListViewModel() {

@@ -31,10 +31,7 @@ class ImageSearchViewModel(
 
     init {
         observePageLoadInspector()
-    }
-
-    enum class ImageSearchState {
-        SUCCESS, FAIL, NONE
+        observeChangingFavoriteImage()
     }
 
     private val _imageSortType = NonNullMutableLiveData(ImageSortType.ACCURACY)
@@ -65,17 +62,6 @@ class ImageSearchViewModel(
         _moveToDetailScreenEvent.value = imageDocument
     }
 
-    fun observeChangingFavoriteImage() {
-        imageRepository.observeChangingFavoriteImage()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ changedImageDocument ->
-                _imageDocuments.replace(changedImageDocument) { it.id == changedImageDocument.id }
-            }, {
-                Log.d(TAG, it.message)
-            })
-            .register()
-    }
-
     fun changeImageSortType(imageSortType: ImageSortType) {
         _imageDocuments.clear()
         _imageSortType.value = imageSortType
@@ -104,6 +90,17 @@ class ImageSearchViewModel(
             val request = ImageSearchRequest(key, _imageSortType.value, pageNumber, dataSize, isFirstPage)
             requestImagesToRepository(request)
         }
+    }
+
+    private fun observeChangingFavoriteImage() {
+        imageRepository.observeChangingFavoriteImage()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ changedImageDocument ->
+                _imageDocuments.replace(changedImageDocument) { it.id == changedImageDocument.id }
+            }, {
+                Log.d(TAG, it.message)
+            })
+            .register()
     }
 
     private fun requestImagesToRepository(request: ImageSearchRequest) {
@@ -137,7 +134,7 @@ class ImageSearchViewModel(
     }
 
     private fun updateSearchMeta(searchMeta: ImageSearchMeta) {
-        this.imageSearchMeta = searchMeta
+        imageSearchMeta = searchMeta
         if(_imageDocuments.isNotEmpty() && searchMeta.isEnd) {
             updateShowMessage(R.string.success_image_search_last_data)
         }
