@@ -43,7 +43,7 @@ class SearchBoxViewModel(
             }, { throwable ->
                 Log.d(TAG, throwable.message)
             })
-            .register()
+            .disposeByOnCleared()
     }
 
     fun onClickSearchLogDeleteButton(keyword: String) {
@@ -56,7 +56,7 @@ class SearchBoxViewModel(
                 }, { throwable ->
                     Log.d(TAG, throwable.message)
                 })
-                .register()
+                .disposeByOnCleared()
         }
     }
 
@@ -68,7 +68,7 @@ class SearchBoxViewModel(
             }, { throwable ->
                 Log.d(TAG, throwable.message)
             })
-            .register()
+            .disposeByOnCleared()
     }
 
     fun onClickShowButton() {
@@ -104,6 +104,6 @@ class SearchBoxViewModel(
             }, { throwable ->
                 Log.d(TAG, throwable.message)
             })
-            .register()
+            .disposeByOnCleared()
     }
 }

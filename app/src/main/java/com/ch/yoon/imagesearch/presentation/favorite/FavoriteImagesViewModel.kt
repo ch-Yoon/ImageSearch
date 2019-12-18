@@ -38,7 +38,7 @@ class FavoriteImagesViewModel(
             }, { throwable ->
                 Log.d(TAG, throwable.message)
             })
-            .register()
+            .disposeByOnCleared()
     }
 
     fun onClickImage(imageDocument: ImageDocument) {
@@ -62,6 +62,6 @@ class FavoriteImagesViewModel(
             }, {
                 Log.d(TAG, it.message)
             })
-            .register()
+            .disposeByOnCleared()
     }
 }

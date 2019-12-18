@@ -81,7 +81,7 @@ class ImageDetailViewModel(
             }, { throwable ->
                 Log.d(TAG, throwable.message)
             })
-            .register()
+            .disposeByOnCleared()
     }
 
     private fun deleteFavoriteFromRepository(target: ImageDocument) {
@@ -93,7 +93,7 @@ class ImageDetailViewModel(
             }, { throwable ->
                 Log.d(TAG, throwable.message)
             })
-            .register()
+            .disposeByOnCleared()
     }
 
     private fun updateImageDocument(target: ImageDocument) {

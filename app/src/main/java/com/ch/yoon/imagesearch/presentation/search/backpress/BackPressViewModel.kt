@@ -49,6 +49,6 @@ class BackPressViewModel(
             }, { throwable ->
                 Log.d(TAG, throwable.message ?: "unknown error")
             })
-            .register()
+            .disposeByOnCleared()
     }
 }

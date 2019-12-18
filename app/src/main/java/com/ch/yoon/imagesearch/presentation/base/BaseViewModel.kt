@@ -25,7 +25,7 @@ open class BaseViewModel(application: Application) : AndroidViewModel(applicatio
         super.onCleared()
     }
 
-    protected fun Disposable.register() {
+    protected fun Disposable.disposeByOnCleared() {
         compositeDisposable.add(this)
     }
 

@@ -100,7 +100,7 @@ class ImageSearchViewModel(
             }, {
                 Log.d(TAG, it.message)
             })
-            .register()
+            .disposeByOnCleared()
     }
 
     private fun requestImagesToRepository(request: ImageSearchRequest) {
@@ -116,7 +116,7 @@ class ImageSearchViewModel(
             }, { throwable ->
                 handlingImageSearchError(throwable)
             })
-            .register()
+            .disposeByOnCleared()
     }
 
     private fun updateImageDocuments(
