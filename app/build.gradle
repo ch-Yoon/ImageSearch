@@ -61,6 +61,9 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
     implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
 
+    // rxBinding
+    implementation "com.jakewharton.rxbinding3:rxbinding:$rxbinding_version"
+
     // glide
     implementation "com.github.bumptech.glide:glide:$glide_version"
     annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
