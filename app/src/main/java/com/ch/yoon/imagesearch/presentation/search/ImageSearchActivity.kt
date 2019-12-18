@@ -4,11 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.AbsListView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.ch.yoon.imagesearch.R
+import com.ch.yoon.imagesearch.data.remote.kakao.request.ImageSortType
 import com.ch.yoon.imagesearch.databinding.ActivityImageSearchBinding
 import com.ch.yoon.imagesearch.extension.throttleFirstWithOneSecond
 import com.ch.yoon.imagesearch.presentation.base.BaseActivity
@@ -19,10 +18,7 @@ import com.ch.yoon.imagesearch.presentation.search.imagesearch.ImageSearchViewMo
 import com.ch.yoon.imagesearch.presentation.search.imagesearch.ImageSearchResultsAdapter
 import com.ch.yoon.imagesearch.presentation.search.searchbox.SearchBoxViewModel
 import com.jakewharton.rxbinding2.view.clicks
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.subjects.PublishSubject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.concurrent.TimeUnit
 
 /**
  * Creator : ch-yoon
@@ -30,9 +26,9 @@ import java.util.concurrent.TimeUnit
  */
 class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
 
+    private val backPressViewModel: BackPressViewModel by viewModel()
     private val searchBoxViewModel: SearchBoxViewModel by viewModel()
     private val imageSearchViewModel: ImageSearchViewModel by viewModel()
-    private val backPressViewModel: BackPressViewModel by viewModel()
 
     override fun getLayoutId(): Int {
         return R.layout.activity_image_search
@@ -43,13 +39,12 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
 
         initActionBar()
 
-        observeBackPressViewModel()
+        initBackPressViewModel()
         initSearchBoxViewModel()
-        observeSearchBoxViewModel()
-
         initImageListViewModel()
-        observeImageListViewModel()
+
         initImageRecyclerView()
+        initSortOptionView()
     }
 
     private fun initActionBar() {
@@ -57,7 +52,7 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
     }
 
-    private fun observeBackPressViewModel() {
+    private fun initBackPressViewModel() {
         val owner = this
         with(backPressViewModel) {
             showMessageEvent.observe(owner, Observer { message ->
@@ -71,16 +66,12 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
     }
 
     private fun initSearchBoxViewModel() {
-        binding.searchBoxViewModel = searchBoxViewModel
-
-        if(isActivityFirstCreate) {
-            searchBoxViewModel.loadSearchLogList()
-        }
-    }
-
-    private fun observeSearchBoxViewModel() {
         val owner = this
         with(searchBoxViewModel) {
+            if(isActivityFirstCreate) {
+                searchBoxViewModel.loadSearchLogList()
+            }
+
             searchEvent.observe(owner, Observer { keyword ->
                 imageSearchViewModel.loadImageList(keyword)
             })
@@ -89,13 +80,11 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
                 showToast(message)
             })
         }
+
+        binding.searchBoxViewModel = searchBoxViewModel
     }
 
     private fun initImageListViewModel() {
-        binding.searchListViewModel = imageSearchViewModel
-    }
-
-    private fun observeImageListViewModel() {
         val owner = this
         with(imageSearchViewModel) {
             showMessageEvent.observe(owner, Observer { message ->
@@ -107,6 +96,8 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
                 startActivity(imageDetailIntent)
             })
         }
+
+        binding.searchListViewModel = imageSearchViewModel
     }
 
     private fun initImageRecyclerView() {
@@ -118,7 +109,7 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
                 }
 
                 itemClickSubject.throttleFirstWithOneSecond()
-                    .subscribe { imageSearchViewModel.onClickImage(it) }
+                    .subscribe { document -> imageSearchViewModel.onClickImage(document) }
                     .disposeByOnDestroy()
 
                 footerClickSubject.throttleFirstWithOneSecond()
@@ -140,11 +131,22 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
         }
     }
 
+    private fun initSortOptionView() {
+        binding.accuracySortTextView.clicks()
+            .throttleFirstWithOneSecond()
+            .subscribe { imageSearchViewModel.changeImageSortType(ImageSortType.ACCURACY) }
+            .disposeByOnDestroy()
+
+        binding.recencySortTextView.clicks()
+            .throttleFirstWithOneSecond()
+            .subscribe { imageSearchViewModel.changeImageSortType(ImageSortType.RECENCY) }
+            .disposeByOnDestroy()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.image_search_menu, menu)
         menu?.let {
             it.findItem(R.id.action_search).clicks()
-                .throttleFirstWithOneSecond()
                 .subscribe { searchBoxViewModel.onClickShowButton() }
                 .disposeByOnDestroy()
 

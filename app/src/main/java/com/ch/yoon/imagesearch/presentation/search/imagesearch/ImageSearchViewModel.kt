@@ -29,11 +29,6 @@ class ImageSearchViewModel(
     private val pageLoadHelper: PageLoadHelper<String>
 ) : BaseViewModel(application) {
 
-    init {
-        observePageLoadInspector()
-        observeChangingFavoriteImage()
-    }
-
     private val _imageSortType = NonNullMutableLiveData(ImageSortType.ACCURACY)
     val imageSortType: LiveData<ImageSortType> = _imageSortType
 
@@ -53,6 +48,11 @@ class ImageSearchViewModel(
 
     private val isRemainingMoreData
         get() = imageSearchMeta?.isEnd?.not() ?: true
+
+    init {
+        observeChangingFavoriteImage()
+        observePageLoadInspector()
+    }
 
     fun changeCountOfItemInLine(countOfItemInLine: Int) {
         _countOfItemInLine.value = countOfItemInLine
@@ -97,8 +97,8 @@ class ImageSearchViewModel(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ changedImageDocument ->
                 _imageDocuments.replace(changedImageDocument) { it.id == changedImageDocument.id }
-            }, {
-                Log.d(TAG, it.message)
+            }, { throwable ->
+                Log.d(TAG, throwable.message)
             })
             .disposeByOnCleared()
     }

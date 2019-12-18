@@ -37,9 +37,8 @@ class BackPressViewModel(
     }
 
     private fun observeBackPressBehaviorSubject() {
-        backPressBehaviorSubject.toFlowable(BackpressureStrategy.BUFFER)
+        backPressBehaviorSubject.buffer(2, 1)
             .observeOn(AndroidSchedulers.mainThread())
-            .buffer(2, 1)
             .subscribe({ time ->
                 if (time[1] - time[0] < FINISH_TIME_LIMIT) {
                     _finishEvent.call()
