@@ -1,24 +1,21 @@
 package com.ch.yoon.imagesearch.presentation.search.imagesearch
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.ch.yoon.imagesearch.R
 import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
 import com.ch.yoon.imagesearch.databinding.ItemImageListBinding
 import com.ch.yoon.imagesearch.databinding.ItemRetryFooterBinding
-import com.ch.yoon.imagesearch.presentation.base.BaseViewHolder
 import com.ch.yoon.imagesearch.extension.cancelImageLoad
+import io.reactivex.subjects.PublishSubject
 
 /**
  * Creator : ch-yoon
  * Date : 2019-10-29
  **/
-class ImageSearchResultsAdapter(
-    private val viewModel: ImageSearchViewModel
-) : ListAdapter<ImageDocument, RecyclerView.ViewHolder>(DiffCallback()) {
+class ImageSearchResultsAdapter : ListAdapter<ImageDocument, RecyclerView.ViewHolder>(DiffCallback()) {
 
     companion object {
         private const val TYPE_ITEM = 1
@@ -27,13 +24,25 @@ class ImageSearchResultsAdapter(
 
     private var retryFooterViewVisibility = false
 
+    val itemClickSubject = PublishSubject.create<ImageDocument>()
+    val footerClickSubject = PublishSubject.create<Unit>()
+
     var onBindPosition: ((position: Int) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
         return if (viewType == TYPE_ITEM) {
-            ImageSearchResultsViewHolder(viewModel, R.layout.item_image_list, parent)
+            ImageSearchResultsViewHolder(ItemImageListBinding.inflate(inflater)).apply {
+                binding.imageView.setOnClickListener {
+                    itemClickSubject.onNext(getItem(adapterPosition))
+                }
+            }
         } else {
-            RetryFooterViewHolder(viewModel, R.layout.item_retry_footer, parent)
+            RetryFooterViewHolder(ItemRetryFooterBinding.inflate(inflater)).apply {
+                binding.retryButton.setOnClickListener {
+                    footerClickSubject.onNext(Unit)
+                }
+            }
         }
     }
 
@@ -80,20 +89,14 @@ class ImageSearchResultsAdapter(
         return position == super.getItemCount()
     }
 
-    fun changeFooterViewVisibility(retryFooterViewVisibility: Boolean) {
-        this.retryFooterViewVisibility = retryFooterViewVisibility
+    fun changeFooterViewVisibility(visibility: Boolean) {
+        retryFooterViewVisibility = visibility
         notifyItemChanged(super.getItemCount())
     }
 
     class ImageSearchResultsViewHolder(
-        viewModel: ImageSearchViewModel,
-        @LayoutRes layoutResId: Int,
-        parent: ViewGroup
-    ) : BaseViewHolder<ItemImageListBinding>(layoutResId, parent) {
-
-        init {
-            binding.viewModel = viewModel
-        }
+        val binding: ItemImageListBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun setItem(imageDocument: ImageDocument) {
             binding.imageDocument = imageDocument
@@ -106,14 +109,8 @@ class ImageSearchResultsAdapter(
     }
 
     class RetryFooterViewHolder(
-        viewModel: ImageSearchViewModel,
-        @LayoutRes layoutResId: Int,
-        parent: ViewGroup
-    ) : BaseViewHolder<ItemRetryFooterBinding>(layoutResId, parent) {
-
-        init {
-            binding.viewModel = viewModel
-        }
+        val binding: ItemRetryFooterBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun setRetryVisibility(visible: Boolean) {
             binding.retryButtonVisibility = visible

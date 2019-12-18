@@ -9,7 +9,7 @@ buildscript {
         espresso_core_version = '3.2.0'
         recycler_view_version = '1.1.0'
         rxjava_version = '2.2.8'
-        rxbinding_version = '3.1.0'
+        rxbinding_version = '2.2.0'
         rxandroid_version = '2.1.1'
         retrofit_version = '2.4.0'
         okhttp_version = '3.11.0'

@@ -2,7 +2,6 @@ package com.ch.yoon.imagesearch.presentation.search.imagesearch
 
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.ch.yoon.imagesearch.presentation.search.imagesearch.ImageSearchViewModel.ImageSearchState
 
 /**
  * Creator : ch-yoon
