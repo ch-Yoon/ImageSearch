@@ -36,16 +36,6 @@ abstract class BaseActivity<B : ViewDataBinding> : AppCompatActivity() {
         checkActivityFirstCreate(savedInstanceState)
     }
 
-    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
-        super.onSaveInstanceState(outState, outPersistentState)
-        outState?.putBoolean(ARGUMENT_ACTIVITY_IS_CREATED, true)
-    }
-
-    override fun onDestroy() {
-        compositeDisposable.clear()
-        super.onDestroy()
-    }
-
     private fun initBinding() {
         binding = DataBindingUtil.setContentView<B>(this, getLayoutId()).apply {
             lifecycleOwner = this@BaseActivity
@@ -54,6 +44,16 @@ abstract class BaseActivity<B : ViewDataBinding> : AppCompatActivity() {
 
     private fun checkActivityFirstCreate(savedInstanceState: Bundle?) {
         isActivityFirstCreate = savedInstanceState?.getBoolean(ARGUMENT_ACTIVITY_IS_CREATED)?.not() ?: true
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
+        super.onSaveInstanceState(outState, outPersistentState)
+        outState?.putBoolean(ARGUMENT_ACTIVITY_IS_CREATED, true)
+    }
+
+    override fun onDestroy() {
+        compositeDisposable.clear()
+        super.onDestroy()
     }
 
     protected fun showToast(message: String?) {
