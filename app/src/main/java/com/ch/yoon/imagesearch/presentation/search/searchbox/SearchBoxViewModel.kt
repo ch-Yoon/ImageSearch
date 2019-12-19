@@ -35,7 +35,7 @@ class SearchBoxViewModel(
     var isOpen = false
         private set
 
-    fun loadSearchLogList() {
+    fun loadSearchLogs() {
         searchLogRepository.getAllSearchLogs()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ receivedSearchLogList ->

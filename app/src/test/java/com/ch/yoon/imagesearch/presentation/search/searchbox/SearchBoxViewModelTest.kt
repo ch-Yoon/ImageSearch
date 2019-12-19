@@ -71,7 +71,7 @@ class SearchBoxViewModelTest {
         every {mockSearchLogRepository.getAllSearchLogs() } returns (Single.just(createVirtualSearchLogList(3)))
 
         // when
-        searchBoxViewModel.loadSearchLogList()
+        searchBoxViewModel.loadSearchLogs()
 
         // then
         searchBoxViewModel.searchLogs.observeForever { receivedList ->
@@ -86,7 +86,7 @@ class SearchBoxViewModelTest {
         every { mockSearchLogRepository.getAllSearchLogs() } returns (Single.just(searchLogList))
 
         // when
-        searchBoxViewModel.loadSearchLogList()
+        searchBoxViewModel.loadSearchLogs()
 
         // then
         val expectedList = createVirtualSearchLogList(3).sorted().map { it.keyword }
@@ -102,7 +102,7 @@ class SearchBoxViewModelTest {
         every { mockSearchLogRepository.insertOrUpdateSearchLog("테스트0") } returns (Single.just(SearchLog("테스트0", 4)))
 
         // when
-        searchBoxViewModel.loadSearchLogList()
+        searchBoxViewModel.loadSearchLogs()
         searchBoxViewModel.onClickSearchButton("테스트0")
 
         // then
@@ -178,7 +178,7 @@ class SearchBoxViewModelTest {
         every { mockSearchLogRepository.deleteSearchLog(any()) } returns (Completable.complete())
 
         // when
-        searchBoxViewModel.loadSearchLogList()
+        searchBoxViewModel.loadSearchLogs()
         searchBoxViewModel.onClickSearchLogDeleteButton(targetList[0].keyword)
 
         // then
@@ -195,7 +195,7 @@ class SearchBoxViewModelTest {
         every { mockSearchLogRepository.deleteSearchLog(any()) } returns(Completable.complete())
 
         // when
-        searchBoxViewModel.loadSearchLogList()
+        searchBoxViewModel.loadSearchLogs()
         searchBoxViewModel.onClickSearchLogDeleteButton(searchLogList[0].keyword)
 
         // then
@@ -213,7 +213,7 @@ class SearchBoxViewModelTest {
         every { mockSearchLogRepository.deleteAllSearchLogs() } returns(Completable.complete())
 
         // when
-        searchBoxViewModel.loadSearchLogList()
+        searchBoxViewModel.loadSearchLogs()
         searchBoxViewModel.onClickSearchLogAllDelete()
 
         // then

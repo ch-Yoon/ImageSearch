@@ -21,8 +21,6 @@ abstract class BaseActivity<B : ViewDataBinding> : AppCompatActivity() {
         private const val ARGUMENT_ACTIVITY_IS_CREATED = "ARGUMENT_ACTIVITY_IS_CREATED"
     }
 
-    private val compositeDisposable = CompositeDisposable()
-
     protected lateinit var binding: B
         private set
 
@@ -51,17 +49,10 @@ abstract class BaseActivity<B : ViewDataBinding> : AppCompatActivity() {
         outState?.putBoolean(ARGUMENT_ACTIVITY_IS_CREATED, true)
     }
 
-    override fun onDestroy() {
-        compositeDisposable.clear()
-        super.onDestroy()
-    }
+
 
     protected fun showToast(message: String?) {
         message?.let { Toast.makeText(applicationContext, it, Toast.LENGTH_SHORT).show() }
-    }
-
-    protected fun Disposable.disposeByOnDestroy() {
-        compositeDisposable.add(this)
     }
 
     @LayoutRes

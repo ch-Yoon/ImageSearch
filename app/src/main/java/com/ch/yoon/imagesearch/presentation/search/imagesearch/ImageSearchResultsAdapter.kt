@@ -9,6 +9,7 @@ import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
 import com.ch.yoon.imagesearch.databinding.ItemImageListBinding
 import com.ch.yoon.imagesearch.databinding.ItemRetryFooterBinding
 import com.ch.yoon.imagesearch.extension.cancelImageLoad
+import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
 /**
@@ -24,23 +25,27 @@ class ImageSearchResultsAdapter : ListAdapter<ImageDocument, RecyclerView.ViewHo
 
     private var retryFooterViewVisibility = false
 
-    val itemClickSubject = PublishSubject.create<ImageDocument>()
-    val footerClickSubject = PublishSubject.create<Unit>()
+    private val _itemClicks = PublishSubject.create<ImageDocument>()
+    val itemClicks: Observable<ImageDocument> = _itemClicks
 
-    var onBindPosition: ((position: Int) -> Unit)? = null
+    private val _footerClicks = PublishSubject.create<Unit>()
+    val footerClicks: Observable<Unit> = _footerClicks
+
+    private val _bindPositions = PublishSubject.create<Int>()
+    val bindPositions: Observable<Int> = _bindPositions
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return if (viewType == TYPE_ITEM) {
             ImageSearchResultsViewHolder(ItemImageListBinding.inflate(inflater)).apply {
                 binding.imageView.setOnClickListener {
-                    itemClickSubject.onNext(getItem(adapterPosition))
+                    _itemClicks.onNext(getItem(adapterPosition))
                 }
             }
         } else {
             RetryFooterViewHolder(ItemRetryFooterBinding.inflate(inflater)).apply {
                 binding.retryButton.setOnClickListener {
-                    footerClickSubject.onNext(Unit)
+                    _footerClicks.onNext(Unit)
                 }
             }
         }
@@ -50,7 +55,7 @@ class ImageSearchResultsAdapter : ListAdapter<ImageDocument, RecyclerView.ViewHo
         when(holder) {
             is ImageSearchResultsViewHolder -> {
                 holder.setItem(getItem(position))
-                onBindPosition?.invoke(position)
+                _bindPositions.onNext(position)
             }
             is RetryFooterViewHolder -> {
                 holder.setRetryVisibility(retryFooterViewVisibility)

@@ -10,7 +10,7 @@ import com.ch.yoon.imagesearch.R
 import com.ch.yoon.imagesearch.data.remote.kakao.request.ImageSortType
 import com.ch.yoon.imagesearch.databinding.ActivityImageSearchBinding
 import com.ch.yoon.imagesearch.extension.throttleFirstWithOneSecond
-import com.ch.yoon.imagesearch.presentation.base.BaseActivity
+import com.ch.yoon.imagesearch.presentation.base.RxBaseActivity
 import com.ch.yoon.imagesearch.presentation.favorite.FavoriteImagesActivity
 import com.ch.yoon.imagesearch.presentation.detail.ImageDetailActivity
 import com.ch.yoon.imagesearch.presentation.search.backpress.BackPressViewModel
@@ -24,7 +24,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
  * Creator : ch-yoon
  * Date : 2019-10-27.
  */
-class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
+class ImageSearchActivity : RxBaseActivity<ActivityImageSearchBinding>() {
 
     private val backPressViewModel: BackPressViewModel by viewModel()
     private val searchBoxViewModel: SearchBoxViewModel by viewModel()
@@ -69,11 +69,11 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
         val owner = this
         with(searchBoxViewModel) {
             if(isActivityFirstCreate) {
-                searchBoxViewModel.loadSearchLogList()
+                searchBoxViewModel.loadSearchLogs()
             }
 
             searchEvent.observe(owner, Observer { keyword ->
-                imageSearchViewModel.loadImageList(keyword)
+                imageSearchViewModel.loadImages(keyword)
             })
 
             showMessageEvent.observe(owner, Observer { message ->
@@ -104,15 +104,15 @@ class ImageSearchActivity : BaseActivity<ActivityImageSearchBinding>() {
         binding.imageRecyclerView.apply {
 
             adapter = ImageSearchResultsAdapter().apply {
-                onBindPosition = { position ->
-                    imageSearchViewModel.loadMoreImageListIfPossible(position)
-                }
+                bindPositions
+                    .subscribe { position -> imageSearchViewModel.loadMoreImagesIfPossible(position) }
+                    .disposeByOnDestroy()
 
-                itemClickSubject.throttleFirstWithOneSecond()
+                itemClicks.throttleFirstWithOneSecond()
                     .subscribe { document -> imageSearchViewModel.onClickImage(document) }
                     .disposeByOnDestroy()
 
-                footerClickSubject.throttleFirstWithOneSecond()
+                footerClicks.throttleFirstWithOneSecond()
                     .subscribe { imageSearchViewModel.retryLoadMoreImageList() }
                     .disposeByOnDestroy()
             }

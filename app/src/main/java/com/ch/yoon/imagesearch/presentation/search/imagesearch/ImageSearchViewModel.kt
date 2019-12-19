@@ -70,7 +70,7 @@ class ImageSearchViewModel(
         }
     }
 
-    fun loadImageList(keyword: String) {
+    fun loadImages(keyword: String) {
         _imageDocuments.clear()
         pageLoadHelper.requestFirstLoad(keyword)
     }
@@ -79,7 +79,7 @@ class ImageSearchViewModel(
         pageLoadHelper.requestRetryAsPreviousValue()
     }
 
-    fun loadMoreImageListIfPossible(position: Int) {
+    fun loadMoreImagesIfPossible(position: Int) {
         if (isRemainingMoreData) {
             pageLoadHelper.requestPreloadIfPossible(position, _imageDocuments.size(), _countOfItemInLine.value)
         }
