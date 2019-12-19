@@ -8,7 +8,8 @@ import java.util.concurrent.TimeUnit
  * Creator : ch-yoon
  * Date : 2019-12-19.
  */
-fun <T> Observable<T>.throttleFirstWithOneSecond(): Observable<T> {
-    return throttleFirst(1L, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+fun <T> Observable<T>.throttleFirstWith(second: Double): Observable<T> {
+    val time = (second * 1000L).toLong()
+    return throttleFirst(time, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
         .observeOn(AndroidSchedulers.mainThread())
 }

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="searchLog"
+            type="com.ch.yoon.imagesearch.data.repository.searchlog.model.SearchLog" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorLightGray"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/search_log_accessory_image_view"
+            android:layout_width="@dimen/suggestion_search_view_item_icon_size"
+            android:layout_height="@dimen/suggestion_search_view_item_icon_size"
+            android:padding="@dimen/suggestion_search_view_item_icon_padding"
+            app:srcCompat="@drawable/ic_action_time" />
+
+        <TextView
+            android:id="@+id/search_log_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="15dp"
+            android:text="@{searchLog.keyword}"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/suggestion_search_view_item_text_size" />
+
+        <ImageView
+            android:id="@+id/search_log_delete_button"
+            android:layout_width="@dimen/suggestion_search_view_item_icon_size"
+            android:layout_height="@dimen/suggestion_search_view_item_icon_size"
+            android:padding="@dimen/suggestion_search_view_item_icon_padding"
+            app:srcCompat="@drawable/ic_action_delete" />
+
+    </LinearLayout>
+
+</layout>

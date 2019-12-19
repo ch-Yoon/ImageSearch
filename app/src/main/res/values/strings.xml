@@ -8,7 +8,7 @@
     <string name="image_search_empty_view_text">이미지 검색을 시작하세요</string>
 
     <!-- search box view model -->
-    <string name="success_all_image_info_delete_by_keyword">삭제 완료</string>
+    <string name="success_delete_search_log">삭제 완료</string>
     <string name="success_delete_all_search_log">전체 삭제 완료</string>
 
     <!-- image list view model -->

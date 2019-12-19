@@ -24,13 +24,16 @@ class SearchBoxViewModel(
 ) : BaseViewModel (application) {
 
     private val _searchLogs = MutableLiveData<MutableList<SearchLog>>(mutableListOf())
-    val searchLogs: LiveData<List<String>> = Transformations.map(_searchLogs) { list -> list?.map { it.keyword }?.toList() }
+    val searchLogs: LiveData<List<SearchLog>> = Transformations.map(_searchLogs) { it?.toList() }
 
     private val _searchEvent = SingleLiveEvent<String>()
     val searchEvent: LiveData<String> = _searchEvent
 
     private val _searchBoxEnableEvent = SingleLiveEvent<Boolean>()
     val searchBoxEnableEvent: LiveData<Boolean> = _searchBoxEnableEvent
+
+    private val _searchLogsEnableEvent = SingleLiveEvent<Boolean>()
+    val searchLogsEnableEvent: LiveData<Boolean> = _searchLogsEnableEvent
 
     var isOpen = false
         private set
@@ -46,13 +49,14 @@ class SearchBoxViewModel(
             .disposeByOnCleared()
     }
 
-    fun onClickSearchLogDeleteButton(keyword: String) {
-        val targetLog = _searchLogs.find { it.keyword == keyword }
+    fun onClickSearchLogDeleteButton(searchLog: SearchLog) {
+        val targetLog = _searchLogs.find { it == searchLog }
         if(targetLog != null) {
+            _searchLogs.removeFirst { it == searchLog }
             searchLogRepository.deleteSearchLog(targetLog)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    _searchLogs.removeFirst { it.keyword == keyword }
+                    updateShowMessage(R.string.success_delete_search_log)
                 }, { throwable ->
                     Log.d(TAG, throwable.message)
                 })
@@ -72,15 +76,11 @@ class SearchBoxViewModel(
     }
 
     fun onClickShowButton() {
-        if(!isOpen) {
-            _searchBoxEnableEvent.value = true
-        }
+        _searchBoxEnableEvent.value = true
     }
 
     fun onClickHideButton() {
-        if(isOpen) {
-            _searchBoxEnableEvent.value = false
-        }
+        _searchBoxEnableEvent.value = false
     }
 
     fun onStateChange(isOpen: Boolean) {
@@ -88,6 +88,8 @@ class SearchBoxViewModel(
     }
 
     fun onClickSearchButton(keyword: String) {
+        _searchLogsEnableEvent.value = false
+
         if (keyword.isEmpty()) {
             updateShowMessage(R.string.empty_keyword_guide)
         } else {

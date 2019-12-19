@@ -14,19 +14,7 @@
         <attr name="closeButtonIcon" format="reference"/>
         <attr name="clearButtonIcon" format="reference"/>
         <attr name="searchViewDivisionLineColor" format="reference|color"/>
-
-        <!-- default suggestion view option -->
         <attr name="suggestionBackgroundColor" format="reference|color"/>
-        <attr name="suggestionAccessoryIconEnable" format="boolean"/>
-        <attr name="suggestionAccessoryIcon" format="reference"/>
-        <attr name="suggestionTextSize" format="reference|dimension"/>
-        <attr name="suggestionTextColor" format="reference|color"/>
-        <attr name="suggestionSubButtonIconEnable" format="boolean"/>
-        <attr name="suggestionSubButtonIcon" format="reference"/>
-        <attr name="suggestionFooterText" format="reference|string"/>
-        <attr name="suggestionFooterEnable" format="boolean"/>
-        <attr name="suggestionFooterTextSize" format="reference|dimension"/>
-        <attr name="suggestionFooterTextColor" format="reference|color"/>
     </declare-styleable>
 
 </resources>

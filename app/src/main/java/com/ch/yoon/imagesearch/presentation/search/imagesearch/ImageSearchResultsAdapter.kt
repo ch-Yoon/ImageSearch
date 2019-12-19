@@ -37,13 +37,13 @@ class ImageSearchResultsAdapter : ListAdapter<ImageDocument, RecyclerView.ViewHo
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return if (viewType == TYPE_ITEM) {
-            ImageSearchResultsViewHolder(ItemImageListBinding.inflate(inflater)).apply {
+            ImageSearchResultsViewHolder(ItemImageListBinding.inflate(inflater, parent, false)).apply {
                 binding.imageView.setOnClickListener {
                     _itemClicks.onNext(getItem(adapterPosition))
                 }
             }
         } else {
-            RetryFooterViewHolder(ItemRetryFooterBinding.inflate(inflater)).apply {
+            RetryFooterViewHolder(ItemRetryFooterBinding.inflate(inflater, parent, false)).apply {
                 binding.retryButton.setOnClickListener {
                     _footerClicks.onNext(Unit)
                 }

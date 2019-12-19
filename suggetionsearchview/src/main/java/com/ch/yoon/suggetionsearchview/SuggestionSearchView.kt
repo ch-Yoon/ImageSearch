@@ -15,10 +15,11 @@ import android.widget.ImageView
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.ch.yoon.suggetionsearchview.adapter.DefaultSuggestionAdapter
-import com.ch.yoon.suggetionsearchview.adapter.SuggestionAdapter
 import com.ch.yoon.suggetionsearchview.extention.*
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.suggestion_search_view.view.*
 
 /**
@@ -58,23 +59,19 @@ class SuggestionSearchView @JvmOverloads constructor(
     private var closeButtonResId: Int = -1
     private var searchViewDivisionLineColor: Int = -1
     private var suggestionBackgroundColor: Int = -1
-    private var suggestionAccessoryIconEnable = true
-    private var suggestionAccessoryIconResId: Int = -1
-    private var suggestionTextSize: Float = -1f
-    private var suggestionTextColor: Int = -1
-    private var suggestionSubButtonIconEnable = true
-    private var suggestionSubButtonIconResId: Int = -1
-    private var suggestionFooterEnable: Boolean = false
-    private var suggestionFooterText: String = ""
-    private var suggestionFooterTextSize: Float = -1f
-    private var suggestionFooterTextColor: Int = -1
+
+    private val _textChanges = PublishSubject.create<String>()
+    val textChanges: Observable<String> = _textChanges
+
+    private val _searchButtonClicks = PublishSubject.create<String>()
+    val searchButtonClicks: Observable<String> = _searchButtonClicks
+
+    private val _stateChanges = PublishSubject.create<State>()
+    val stateChanges: Observable<State> = _stateChanges
 
     var onTextChangeListener: OnTextChangeListener? = null
     var onSearchButtonClickListener: OnSearchButtonClickListener? = null
     var onStateChangeListener: OnStateChangeListener? = null
-    var onSuggestionItemClickListener: OnSuggestionItemClickListener? = null
-    var onSuggestionSubButtonClickListener: OnSuggestionSubButtonClickListener? = null
-    var onSuggestionFooterClickListener: OnSuggestionFooterClickListener? = null
 
     init {
         inflate(context, R.layout.suggestion_search_view, this)
@@ -94,7 +91,6 @@ class SuggestionSearchView @JvmOverloads constructor(
         initInputEditText()
         initClearButton()
         initBackgroundView()
-        initDefaultAdapter()
         initAttrs(attrs, defStyle)
     }
 
@@ -116,7 +112,7 @@ class SuggestionSearchView @JvmOverloads constructor(
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     (s?.toString())?.let { changedText ->
                         refreshClearButtonVisibility(changedText.length)
-                        onTextChangeListener?.onTextChange(changedText)
+                        _textChanges.onNext(changedText)
                     }
                 }
             })
@@ -160,10 +156,6 @@ class SuggestionSearchView @JvmOverloads constructor(
         }
     }
 
-    private fun initDefaultAdapter() {
-        setAdapter(DefaultSuggestionAdapter())
-    }
-
     private fun initAttrs(attrs: AttributeSet?, defStyle: Int) {
         attrs?.let { attributeSet ->
             val typedArray = context.obtainStyledAttributes(attributeSet, R.styleable.SuggestionSearchView, defStyle, 0)
@@ -201,36 +193,6 @@ class SuggestionSearchView @JvmOverloads constructor(
 
                 val suggestionBackgroundColor = getColor(R.styleable.SuggestionSearchView_suggestionBackgroundColor, -1)
                 setSuggestionBackgroundColor(suggestionBackgroundColor)
-
-                val suggestionAccessoryIconEnable = getBoolean(R.styleable.SuggestionSearchView_suggestionAccessoryIconEnable, true)
-                setSuggestionAccessoryIconEnable(suggestionAccessoryIconEnable)
-
-                val suggestionAccessoryIconResId = getResourceId(R.styleable.SuggestionSearchView_suggestionAccessoryIcon, -1)
-                setSuggesionAccessoryIconResource(suggestionAccessoryIconResId)
-
-                val suggestionTextSize = getDimension(R.styleable.SuggestionSearchView_suggestionTextSize, -1f)
-                setSuggestionTextSize(suggestionTextSize)
-
-                val suggestionTextColor = getColor(R.styleable.SuggestionSearchView_suggestionTextColor, -1)
-                setSuggestionTextColor(suggestionTextColor)
-
-                val suggestionSubButtonIconEnable = getBoolean(R.styleable.SuggestionSearchView_suggestionSubButtonIconEnable, true)
-                setSuggestionSubButtonIconEnable(suggestionSubButtonIconEnable)
-
-                val suggestionSubButtonIconResId = getResourceId(R.styleable.SuggestionSearchView_suggestionSubButtonIcon, -1)
-                setSuggestionSubButtonIconResource(suggestionSubButtonIconResId)
-
-                val suggestionFooterEnable = getBoolean(R.styleable.SuggestionSearchView_suggestionFooterEnable, false)
-                setSuggestionFooterEnable(suggestionFooterEnable)
-
-                val suggestionFooterText = getString(R.styleable.SuggestionSearchView_suggestionFooterText) ?: ""
-                setSuggestionFooterText(suggestionFooterText)
-
-                val suggestionFooterTextSize = getDimension(R.styleable.SuggestionSearchView_suggestionFooterTextSize, -1f)
-                setSuggestionFooterTextSize(suggestionFooterTextSize)
-
-                val suggestionFooterTextColor = getColor(R.styleable.SuggestionSearchView_suggestionFooterTextColor, -1)
-                setSuggestionFooterTextColor(suggestionFooterTextColor)
             }
 
             typedArray.recycle()
@@ -241,14 +203,14 @@ class SuggestionSearchView @JvmOverloads constructor(
         backgroundView.visible()
         root.visible()
         showSuggestions()
-        onStateChangeListener?.onChange(State.OPEN)
+        _stateChanges.onNext(State.OPEN)
     }
 
     fun hide() {
         backgroundView.gone()
         root.gone()
         hideSuggestions()
-        onStateChangeListener?.onChange(State.CLOSE)
+        _stateChanges.onNext(State.CLOSE)
     }
 
     fun showSuggestions() {
@@ -265,11 +227,9 @@ class SuggestionSearchView @JvmOverloads constructor(
 
     fun setText(text: String?) {
         searchViewText = text
-        searchViewText?.let { inputtedText ->
-            val beforeText = inputEditText.text.toString()
-            if(inputtedText != beforeText) {
-                inputEditText.setText(text)
-            }
+        val beforeText = inputEditText.text.toString()
+        if(text != beforeText) {
+            inputEditText.setText(text)
         }
     }
 
@@ -355,128 +315,12 @@ class SuggestionSearchView @JvmOverloads constructor(
         suggestionRecyclerView.setBackgroundColor(suggestionBackgroundColor)
     }
 
-    fun setSuggestionAccessoryIconEnable(enable: Boolean) {
-        suggestionAccessoryIconEnable = enable
-        val adapter = suggestionRecyclerView.adapter
-        if(adapter is DefaultSuggestionAdapter) {
-            adapter.accessoryIconEnable = suggestionAccessoryIconEnable
-        }
+    fun setAdapter(adapter: ListAdapter<*, *>) {
+        suggestionRecyclerView.adapter = adapter
     }
 
-    fun setSuggesionAccessoryIconResource(drawableResId: Int) {
-        suggestionAccessoryIconResId = if(drawableResId == -1) {
-            R.drawable.ic_action_time
-        } else {
-            drawableResId
-        }
-        val adapter = suggestionRecyclerView.adapter
-        if(adapter is DefaultSuggestionAdapter) {
-            adapter.accessoryIconResId = suggestionAccessoryIconResId
-        }
-    }
-
-    fun setSuggestionTextSize(pixel: Float) {
-        suggestionTextSize = if(pixel == -1f) {
-            resources.getDimension(R.dimen.default_suggestion_item_text_size)
-        } else {
-            pixel
-        }
-        val adapter = suggestionRecyclerView.adapter
-        if(adapter is DefaultSuggestionAdapter) {
-            adapter.itemTextSize = suggestionTextSize.toDP()
-        }
-    }
-
-    fun setSuggestionTextColor(color: Int) {
-        suggestionTextColor = if(color == -1) {
-            ContextCompat.getColor(context, R.color.colorBlack)
-        } else {
-            color
-        }
-        val adapter = suggestionRecyclerView.adapter
-        if(adapter is DefaultSuggestionAdapter) {
-            adapter.itemTextColor = suggestionTextColor
-        }
-    }
-
-    fun setSuggestionSubButtonIconEnable(enable: Boolean) {
-        suggestionSubButtonIconEnable = enable
-        val adapter = suggestionRecyclerView.adapter
-        if(adapter is DefaultSuggestionAdapter) {
-            adapter.subButtonIconEnable = suggestionSubButtonIconEnable
-        }
-    }
-
-    fun setSuggestionSubButtonIconResource(drawableResId: Int) {
-        suggestionSubButtonIconResId = if(drawableResId == -1) {
-            R.drawable.ic_action_delete
-        } else {
-            drawableResId
-        }
-        val adapter = suggestionRecyclerView.adapter
-        if(adapter is DefaultSuggestionAdapter) {
-            adapter.subButtonIconResId = suggestionSubButtonIconResId
-        }
-    }
-
-    fun setSuggestionFooterEnable(enable: Boolean) {
-        suggestionFooterEnable = enable
-        val adapter = suggestionRecyclerView.adapter
-        if(adapter is DefaultSuggestionAdapter) {
-            adapter.hasFooterView = enable
-        }
-    }
-
-    fun setSuggestionFooterText(text: String) {
-        suggestionFooterText = text
-        val adapter = suggestionRecyclerView.adapter
-        if(adapter is DefaultSuggestionAdapter) {
-            adapter.footerText = text
-        }
-    }
-
-    fun setSuggestionFooterTextSize(pixel: Float) {
-        suggestionFooterTextSize = if(pixel == -1f) {
-            resources.getDimension(R.dimen.default_suggestion_item_text_size)
-        } else {
-            pixel
-        }
-        val adapter = suggestionRecyclerView.adapter
-        if(adapter is DefaultSuggestionAdapter) {
-            adapter.footerTextSize = suggestionFooterTextSize.toDP()
-        }
-    }
-
-    fun setSuggestionFooterTextColor(color: Int) {
-        suggestionFooterTextColor = if(color == -1) {
-            ContextCompat.getColor(context, R.color.colorBlack)
-        } else {
-            color
-        }
-        val adapter = suggestionRecyclerView.adapter
-        if(adapter is DefaultSuggestionAdapter) {
-            adapter.footerTextColor = suggestionFooterTextColor
-        }
-    }
-
-    fun setAdapter(adapter: SuggestionAdapter<*, *>) {
-        suggestionRecyclerView.adapter = adapter.apply {
-            onSuggestionItemClick = { text, position ->
-                onSuggestionItemClickListener?.onClick(text, position)
-                inputEditText.setText(text)
-                hideSuggestions()
-            }
-            onSuggestionSubButtonClick = { text, position ->
-                onSuggestionSubButtonClickListener?.onClick(text, position)
-            }
-            onSuggestionFooterClick = {
-                onSuggestionFooterClickListener?.onClick()
-            }
-        }
-    }
-
-    fun getAdapter(): SuggestionAdapter<*, *>? {
-        return suggestionRecyclerView.adapter as SuggestionAdapter<*, *>
+    fun getAdapter(): ListAdapter<*, *>? {
+        return suggestionRecyclerView.adapter as? ListAdapter<*, *>
     }
 
     private fun refreshClearButtonVisibility(textLength: Int) {
@@ -489,7 +333,7 @@ class SuggestionSearchView @JvmOverloads constructor(
 
     private fun confirmSearch() {
         hideSuggestions()
-        onSearchButtonClickListener?.onClick(inputEditText.text.toString())
+        _searchButtonClicks.onNext(inputEditText.text.toString())
     }
 
     override fun onSaveInstanceState(): Parcelable? {
@@ -507,16 +351,6 @@ class SuggestionSearchView @JvmOverloads constructor(
         state.closeButtonResId = closeButtonResId
         state.searchViewDivisionLineColor = searchViewDivisionLineColor
         state.suggestionBackgroundColor = suggestionBackgroundColor
-        state.suggestionAccessoryIconEnable = suggestionAccessoryIconEnable
-        state.suggestionAccessoryIconResId = suggestionAccessoryIconResId
-        state.suggestionTextSize = suggestionTextSize
-        state.suggestionTextColor = suggestionTextColor
-        state.suggestionSubButtonIconEnable = suggestionSubButtonIconEnable
-        state.suggestionSubButtonIconResId = suggestionSubButtonIconResId
-        state.suggestionFooterEnable = suggestionFooterEnable
-        state.suggestionFooterText = suggestionFooterText
-        state.suggestionFooterTextSize = suggestionFooterTextSize
-        state.suggestionFooterTextColor = suggestionFooterTextColor
         return state
     }
 
@@ -545,14 +379,6 @@ class SuggestionSearchView @JvmOverloads constructor(
             setCloseButtonIconResource(state.closeButtonResId)
             setSearchViewDivisionLineColor(state.searchViewDivisionLineColor)
             setSuggestionBackgroundColor(state.suggestionBackgroundColor)
-            setSuggesionAccessoryIconResource(state.suggestionAccessoryIconResId)
-            setSuggestionTextSize(state.suggestionTextSize)
-            setSuggestionTextColor(state.suggestionTextColor)
-            setSuggestionSubButtonIconResource(state.suggestionSubButtonIconResId)
-            setSuggestionFooterEnable(state.suggestionFooterEnable)
-            setSuggestionFooterText(state.suggestionFooterText)
-            setSuggestionTextSize(state.suggestionFooterTextSize)
-            setSuggestionFooterTextColor(state.suggestionFooterTextColor)
         }
     }
 
@@ -571,16 +397,6 @@ class SuggestionSearchView @JvmOverloads constructor(
         var closeButtonResId: Int = -1
         var searchViewDivisionLineColor: Int = -1
         var suggestionBackgroundColor: Int = -1
-        var suggestionAccessoryIconEnable: Boolean = true
-        var suggestionAccessoryIconResId: Int = -1
-        var suggestionTextSize: Float = -1f
-        var suggestionTextColor: Int = -1
-        var suggestionSubButtonIconEnable: Boolean = true
-        var suggestionSubButtonIconResId: Int = -1
-        var suggestionFooterEnable: Boolean = false
-        var suggestionFooterText: String = ""
-        var suggestionFooterTextSize: Float = -1f
-        var suggestionFooterTextColor: Int = -1
 
         constructor(parcelable: Parcelable?) : super(parcelable)
 
@@ -599,16 +415,6 @@ class SuggestionSearchView @JvmOverloads constructor(
                 closeButtonResId = readInt()
                 searchViewDivisionLineColor = readInt()
                 suggestionBackgroundColor = readInt()
-                suggestionAccessoryIconEnable = readInt() == 1
-                suggestionAccessoryIconResId = readInt()
-                suggestionTextSize = readFloat()
-                suggestionTextColor = readInt()
-                suggestionSubButtonIconEnable = readInt() == 1
-                suggestionSubButtonIconResId = readInt()
-                suggestionFooterEnable = readInt() == 1
-                suggestionFooterText = readString() ?: ""
-                suggestionFooterTextSize = readFloat()
-                suggestionFooterTextColor = readInt()
             }
         }
 
@@ -630,16 +436,6 @@ class SuggestionSearchView @JvmOverloads constructor(
                 writeInt(closeButtonResId)
                 writeInt(searchViewDivisionLineColor)
                 writeInt(suggestionBackgroundColor)
-                writeInt(if(suggestionAccessoryIconEnable) 1 else 0)
-                writeInt(suggestionAccessoryIconResId)
-                writeFloat(suggestionTextSize)
-                writeInt(suggestionTextColor)
-                writeInt(if(suggestionSubButtonIconEnable) 1 else 0)
-                writeInt(suggestionSubButtonIconResId)
-                writeInt(if(suggestionFooterEnable) 1 else 0)
-                writeString(suggestionFooterText)
-                writeFloat(suggestionFooterTextSize)
-                writeInt(suggestionFooterTextColor)
             }
         }
 

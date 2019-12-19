@@ -8,20 +8,20 @@ import android.view.inputmethod.InputMethodManager
  * Creator : ch-yoon
  * Date : 2019-11-12.
  */
-fun View.visible() {
+internal fun View.visible() {
     visibility = View.VISIBLE
 }
 
-fun View.gone() {
+internal fun View.gone() {
     visibility = View.GONE
 }
 
-fun View.showKeyboard() {
+internal fun View.showKeyboard() {
     val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.showSoftInput(this, 0)
 }
 
-fun View.hideKeyboard() {
+internal fun View.hideKeyboard() {
     val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
 }
