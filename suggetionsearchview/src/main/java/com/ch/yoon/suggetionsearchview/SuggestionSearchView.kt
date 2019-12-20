@@ -18,8 +18,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ch.yoon.suggetionsearchview.extention.*
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.suggestion_search_view.view.*
 
 /**
@@ -59,15 +57,6 @@ class SuggestionSearchView @JvmOverloads constructor(
     private var closeButtonResId: Int = -1
     private var searchViewDivisionLineColor: Int = -1
     private var suggestionBackgroundColor: Int = -1
-
-    private val _textChanges = PublishSubject.create<String>()
-    val textChanges: Observable<String> = _textChanges
-
-    private val _searchButtonClicks = PublishSubject.create<String>()
-    val searchButtonClicks: Observable<String> = _searchButtonClicks
-
-    private val _stateChanges = PublishSubject.create<State>()
-    val stateChanges: Observable<State> = _stateChanges
 
     var onTextChangeListener: OnTextChangeListener? = null
     var onSearchButtonClickListener: OnSearchButtonClickListener? = null
@@ -112,7 +101,7 @@ class SuggestionSearchView @JvmOverloads constructor(
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     (s?.toString())?.let { changedText ->
                         refreshClearButtonVisibility(changedText.length)
-                        _textChanges.onNext(changedText)
+                        onTextChangeListener?.onTextChange(changedText)
                     }
                 }
             })
@@ -203,14 +192,14 @@ class SuggestionSearchView @JvmOverloads constructor(
         backgroundView.visible()
         root.visible()
         showSuggestions()
-        _stateChanges.onNext(State.OPEN)
+        onStateChangeListener?.onChange(State.OPEN)
     }
 
     fun hide() {
         backgroundView.gone()
         root.gone()
         hideSuggestions()
-        _stateChanges.onNext(State.CLOSE)
+        onStateChangeListener?.onChange(State.CLOSE)
     }
 
     fun showSuggestions() {
@@ -333,7 +322,7 @@ class SuggestionSearchView @JvmOverloads constructor(
 
     private fun confirmSearch() {
         hideSuggestions()
-        _searchButtonClicks.onNext(inputEditText.text.toString())
+        onSearchButtonClickListener?.onClick(inputEditText.text.toString())
     }
 
     override fun onSaveInstanceState(): Parcelable? {
