@@ -8,10 +8,6 @@
         <import type="android.view.View" />
 
         <variable
-            name="viewModel"
-            type="com.ch.yoon.imagesearch.presentation.search.imagesearch.ImageSearchViewModel" />
-
-        <variable
             name="retryButtonVisibility"
             type="Boolean" />
 
@@ -28,7 +24,6 @@
             android:layout_height="40dp"
             android:background="@color/colorBasicGray"
             android:padding="@dimen/image_search_retry_button_padding"
-            android:onClick="@{() -> viewModel.retryLoadMoreImageList()}"
             android:visibility="@{retryButtonVisibility ? View.VISIBLE : View.GONE}"
             app:srcCompat="@drawable/ic_action_retry" />
 
