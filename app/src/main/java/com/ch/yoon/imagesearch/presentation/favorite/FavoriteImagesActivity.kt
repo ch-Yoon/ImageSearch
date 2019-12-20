@@ -39,7 +39,6 @@ class FavoriteImagesActivity : RxBaseActivity<ActivityFavoriteBinding>() {
         with(favoriteImagesViewModel) {
             if(isActivityFirstCreate) {
                 favoriteImagesViewModel.loadFavoriteImageList()
-                favoriteImagesViewModel.observeChangingFavoriteImage()
             }
 
             showMessageEvent.observe(owner, Observer { message ->

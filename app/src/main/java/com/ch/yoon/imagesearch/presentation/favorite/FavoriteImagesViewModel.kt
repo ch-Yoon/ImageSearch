@@ -27,6 +27,10 @@ class FavoriteImagesViewModel(
     private val _moveToDetailScreenEvent = SingleLiveEvent<ImageDocument>()
     val moveToDetailScreenEvent: LiveData<ImageDocument> = _moveToDetailScreenEvent
 
+    init {
+        observeChangingFavoriteImage()
+    }
+
     fun loadFavoriteImageList() {
         imageRepository.getAllFavoriteImages()
             .observeOn(AndroidSchedulers.mainThread())
@@ -42,7 +46,7 @@ class FavoriteImagesViewModel(
         _moveToDetailScreenEvent.value = imageDocument
     }
 
-    fun observeChangingFavoriteImage() {
+    private fun observeChangingFavoriteImage() {
         imageRepository.observeChangingFavoriteImage()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ changedImageDocument ->
