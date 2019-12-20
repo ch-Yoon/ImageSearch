@@ -27,9 +27,6 @@ class FavoriteImagesViewModel(
     private val _moveToDetailScreenEvent = SingleLiveEvent<ImageDocument>()
     val moveToDetailScreenEvent: LiveData<ImageDocument> = _moveToDetailScreenEvent
 
-    private val _finishEvent = SingleLiveEvent<Unit>()
-    val finishEvent: LiveData<Unit> = _finishEvent
-
     fun loadFavoriteImageList() {
         imageRepository.getAllFavoriteImages()
             .observeOn(AndroidSchedulers.mainThread())
@@ -43,10 +40,6 @@ class FavoriteImagesViewModel(
 
     fun onClickImage(imageDocument: ImageDocument) {
         _moveToDetailScreenEvent.value = imageDocument
-    }
-
-    fun onBackPress() {
-        _finishEvent.call()
     }
 
     fun observeChangingFavoriteImage() {

@@ -5,11 +5,12 @@ import android.view.MenuItem
 import androidx.lifecycle.Observer
 import com.ch.yoon.imagesearch.R
 import com.ch.yoon.imagesearch.databinding.ActivityFavoriteBinding
-import com.ch.yoon.imagesearch.presentation.base.BaseActivity
+import com.ch.yoon.imagesearch.extension.throttleFirstWithHalfSecond
+import com.ch.yoon.imagesearch.presentation.base.RxBaseActivity
 import com.ch.yoon.imagesearch.presentation.detail.ImageDetailActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class FavoriteImagesActivity : BaseActivity<ActivityFavoriteBinding>() {
+class FavoriteImagesActivity : RxBaseActivity<ActivityFavoriteBinding>() {
 
     private val favoriteImagesViewModel: FavoriteImagesViewModel by viewModel()
 
@@ -49,28 +50,28 @@ class FavoriteImagesActivity : BaseActivity<ActivityFavoriteBinding>() {
                 val imageDetailIntent = ImageDetailActivity.getImageDetailActivityIntent(owner, imageDocument)
                 startActivity(imageDetailIntent)
             })
-
-            finishEvent.observe(owner, Observer {
-                finish()
-            })
         }
     }
 
     private fun initFavoriteRecyclerView() {
-        binding.favoriteRecyclerView.adapter = FavoriteImagesAdapter(favoriteImagesViewModel)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val itemId = item.itemId
-        return if (itemId == android.R.id.home) {
-            onBackPressed()
-            true
-        } else {
-            super.onOptionsItemSelected(item)
+        binding.favoriteRecyclerView.apply {
+            adapter = FavoriteImagesAdapter().apply {
+                itemClicks.throttleFirstWithHalfSecond()
+                    .subscribe { imageDocument -> favoriteImagesViewModel.onClickImage(imageDocument) }
+                    .disposeByOnDestroy()
+            }
         }
     }
 
-    override fun onBackPressed() {
-        favoriteImagesViewModel.onBackPress()
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
+            else -> {
+                false
+            }
+        }
     }
 }

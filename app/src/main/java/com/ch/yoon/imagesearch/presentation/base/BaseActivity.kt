@@ -49,8 +49,6 @@ abstract class BaseActivity<B : ViewDataBinding> : AppCompatActivity() {
         outState?.putBoolean(ARGUMENT_ACTIVITY_IS_CREATED, true)
     }
 
-
-
     protected fun showToast(message: String?) {
         message?.let { Toast.makeText(applicationContext, it, Toast.LENGTH_SHORT).show() }
     }

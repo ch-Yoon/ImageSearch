@@ -1,25 +1,32 @@
 package com.ch.yoon.imagesearch.presentation.favorite
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.ch.yoon.imagesearch.R
+import androidx.recyclerview.widget.RecyclerView
 import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
 import com.ch.yoon.imagesearch.databinding.ItemFavoriteImageListBinding
-import com.ch.yoon.imagesearch.presentation.base.BaseViewHolder
 import com.ch.yoon.imagesearch.extension.cancelImageLoad
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 
 /**
  * Creator : ch-yoon
  * Date : 2019-11-13
  **/
-class FavoriteImagesAdapter(
-    private val viewModel: FavoriteImagesViewModel
-) : ListAdapter<ImageDocument, FavoriteImagesAdapter.FavoriteListViewHolder>(DiffCallback()) {
+class FavoriteImagesAdapter : ListAdapter<ImageDocument, FavoriteImagesAdapter.FavoriteListViewHolder>(DiffCallback()) {
+
+    private val _itemClicks = PublishSubject.create<ImageDocument>()
+    val itemClicks: Observable<ImageDocument> = _itemClicks
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteListViewHolder {
-        return FavoriteListViewHolder(viewModel, R.layout.item_favorite_image_list, parent)
+        val inflater = LayoutInflater.from(parent.context)
+        return FavoriteListViewHolder(ItemFavoriteImageListBinding.inflate(inflater, parent, false)).apply {
+            binding.imageView.setOnClickListener {
+                _itemClicks.onNext(getItem(adapterPosition))
+            }
+        }
     }
 
     override fun onBindViewHolder(holder: FavoriteListViewHolder, position: Int) {
@@ -32,14 +39,8 @@ class FavoriteImagesAdapter(
     }
 
     class FavoriteListViewHolder(
-        viewModel: FavoriteImagesViewModel,
-        @LayoutRes layoutResId: Int,
-        parent: ViewGroup
-    ) : BaseViewHolder<ItemFavoriteImageListBinding>(layoutResId, parent) {
-
-        init {
-            binding.viewModel = viewModel
-        }
+        val binding: ItemFavoriteImageListBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun setItem(imageDocument: ImageDocument) {
             binding.imageDocument = imageDocument
