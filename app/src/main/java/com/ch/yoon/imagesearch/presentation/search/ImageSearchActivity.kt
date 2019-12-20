@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.ch.yoon.imagesearch.R
 import com.ch.yoon.imagesearch.data.remote.kakao.request.ImageSortType
 import com.ch.yoon.imagesearch.databinding.ActivityImageSearchBinding
-import com.ch.yoon.imagesearch.extension.throttleFirstWith
+import com.ch.yoon.imagesearch.extension.throttleFirstWithHalfSecond
 import com.ch.yoon.imagesearch.presentation.base.RxBaseActivity
 import com.ch.yoon.imagesearch.presentation.favorite.FavoriteImagesActivity
 import com.ch.yoon.imagesearch.presentation.detail.ImageDetailActivity
@@ -27,10 +27,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
  * Date : 2019-10-27.
  */
 class ImageSearchActivity : RxBaseActivity<ActivityImageSearchBinding>() {
-
-    companion object {
-        private const val CLICK_LIMIT_SECOND = 0.5
-    }
 
     private val backPressViewModel: BackPressViewModel by viewModel()
     private val searchBoxViewModel: SearchBoxViewModel by viewModel()
@@ -111,15 +107,15 @@ class ImageSearchActivity : RxBaseActivity<ActivityImageSearchBinding>() {
         binding.imageRecyclerView.apply {
 
             adapter = ImageSearchResultsAdapter().apply {
-                bindPositions
-                    .subscribe { position -> imageSearchViewModel.loadMoreImagesIfPossible(position) }
-                    .disposeByOnDestroy()
+                onBindPosition = { position ->
+                    imageSearchViewModel.loadMoreImagesIfPossible(position)
+                }
 
-                itemClicks.throttleFirstWith(CLICK_LIMIT_SECOND)
+                itemClicks.throttleFirstWithHalfSecond()
                     .subscribe { document -> imageSearchViewModel.onClickImage(document) }
                     .disposeByOnDestroy()
 
-                footerClicks.throttleFirstWith(CLICK_LIMIT_SECOND)
+                footerClicks.throttleFirstWithHalfSecond()
                     .subscribe { imageSearchViewModel.retryLoadMoreImageList() }
                     .disposeByOnDestroy()
             }
@@ -140,21 +136,21 @@ class ImageSearchActivity : RxBaseActivity<ActivityImageSearchBinding>() {
 
     private fun initSuggestionSearchView() {
         val searchLogsAdapter = SearchLogsAdapter().apply {
-            itemClicks.throttleFirstWith(CLICK_LIMIT_SECOND)
+            itemClicks.throttleFirstWithHalfSecond()
                 .subscribe { searchLog -> searchBoxViewModel.onClickSearchButton(searchLog.keyword) }
                 .disposeByOnDestroy()
 
-            itemDeleteClicks.throttleFirstWith(CLICK_LIMIT_SECOND)
+            itemDeleteClicks.throttleFirstWithHalfSecond()
                 .subscribe { searchLog -> searchBoxViewModel.onClickSearchLogDeleteButton(searchLog) }
                 .disposeByOnDestroy()
 
-            footerClicks.throttleFirstWith(CLICK_LIMIT_SECOND)
+            footerClicks.throttleFirstWithHalfSecond()
                 .subscribe { searchBoxViewModel.onClickSearchLogAllDelete() }
                 .disposeByOnDestroy()
         }
 
         binding.suggestionSearchView.apply {
-            searchButtonClicks().throttleFirstWith(CLICK_LIMIT_SECOND)
+            searchButtonClicks().throttleFirstWithHalfSecond()
                 .subscribe { keyword -> searchBoxViewModel.onClickSearchButton(keyword) }
                 .disposeByOnDestroy()
 
@@ -164,12 +160,12 @@ class ImageSearchActivity : RxBaseActivity<ActivityImageSearchBinding>() {
 
     private fun initSortOptionView() {
         binding.accuracySortTextView.clicks()
-            .throttleFirstWith(CLICK_LIMIT_SECOND)
+            .throttleFirstWithHalfSecond()
             .subscribe { imageSearchViewModel.changeImageSortType(ImageSortType.ACCURACY) }
             .disposeByOnDestroy()
 
         binding.recencySortTextView.clicks()
-            .throttleFirstWith(CLICK_LIMIT_SECOND)
+            .throttleFirstWithHalfSecond()
             .subscribe { imageSearchViewModel.changeImageSortType(ImageSortType.RECENCY) }
             .disposeByOnDestroy()
     }
@@ -182,7 +178,7 @@ class ImageSearchActivity : RxBaseActivity<ActivityImageSearchBinding>() {
                 .disposeByOnDestroy()
 
             it.findItem(R.id.action_favorite).clicks()
-                .throttleFirstWith(CLICK_LIMIT_SECOND)
+                .throttleFirstWithHalfSecond()
                 .subscribe { startActivity(Intent(this, FavoriteImagesActivity::class.java)) }
                 .disposeByOnDestroy()
         }

@@ -31,8 +31,7 @@ class ImageSearchResultsAdapter : ListAdapter<ImageDocument, RecyclerView.ViewHo
     private val _footerClicks = PublishSubject.create<Unit>()
     val footerClicks: Observable<Unit> = _footerClicks
 
-    private val _bindPositions = PublishSubject.create<Int>()
-    val bindPositions: Observable<Int> = _bindPositions
+    var onBindPosition: ((position: Int) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -55,7 +54,7 @@ class ImageSearchResultsAdapter : ListAdapter<ImageDocument, RecyclerView.ViewHo
         when(holder) {
             is ImageSearchResultsViewHolder -> {
                 holder.setItem(getItem(position))
-                _bindPositions.onNext(position)
+                onBindPosition?.invoke(position)
             }
             is RetryFooterViewHolder -> {
                 holder.setRetryVisibility(retryFooterViewVisibility)
