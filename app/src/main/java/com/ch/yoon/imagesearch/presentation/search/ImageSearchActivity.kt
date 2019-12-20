@@ -40,14 +40,13 @@ class ImageSearchActivity : RxBaseActivity<ActivityImageSearchBinding>() {
         super.onCreate(savedInstanceState)
 
         initActionBar()
+        initImageRecyclerView()
+        initSuggestionSearchView()
+        initSortOptionView()
 
         initBackPressViewModel()
         initSearchBoxViewModel()
         initImageListViewModel()
-
-        initImageRecyclerView()
-        initSuggestionSearchView()
-        initSortOptionView()
     }
 
     private fun initActionBar() {
