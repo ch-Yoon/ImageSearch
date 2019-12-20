@@ -23,7 +23,6 @@ class FavoriteImagesActivity : BaseActivity<ActivityFavoriteBinding>() {
         initActionBar()
 
         initFavoriteListViewModel()
-        observeFavoriteListViewModel()
         initFavoriteRecyclerView()
     }
 
@@ -35,15 +34,13 @@ class FavoriteImagesActivity : BaseActivity<ActivityFavoriteBinding>() {
     private fun initFavoriteListViewModel() {
         binding.favoriteListViewModel = favoriteImagesViewModel
 
-        if(isActivityFirstCreate) {
-            favoriteImagesViewModel.loadFavoriteImageList()
-            favoriteImagesViewModel.observeChangingFavoriteImage()
-        }
-    }
-
-    private fun observeFavoriteListViewModel() {
         val owner = this
         with(favoriteImagesViewModel) {
+            if(isActivityFirstCreate) {
+                favoriteImagesViewModel.loadFavoriteImageList()
+                favoriteImagesViewModel.observeChangingFavoriteImage()
+            }
+
             showMessageEvent.observe(owner, Observer { message ->
                 showToast(message)
             })
