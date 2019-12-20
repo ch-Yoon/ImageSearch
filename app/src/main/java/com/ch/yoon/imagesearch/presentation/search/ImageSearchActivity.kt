@@ -18,6 +18,7 @@ import com.ch.yoon.imagesearch.presentation.search.imagesearch.ImageSearchViewMo
 import com.ch.yoon.imagesearch.presentation.search.imagesearch.ImageSearchResultsAdapter
 import com.ch.yoon.imagesearch.presentation.search.searchbox.SearchBoxViewModel
 import com.ch.yoon.imagesearch.presentation.search.searchbox.SearchLogsAdapter
+import com.ch.yoon.suggetionsearchview.extention.searchButtonClicks
 import com.jakewharton.rxbinding2.view.clicks
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -153,7 +154,7 @@ class ImageSearchActivity : RxBaseActivity<ActivityImageSearchBinding>() {
         }
 
         binding.suggestionSearchView.apply {
-            searchButtonClicks.throttleFirstWith(CLICK_LIMIT_SECOND)
+            searchButtonClicks().throttleFirstWith(CLICK_LIMIT_SECOND)
                 .subscribe { keyword -> searchBoxViewModel.onClickSearchButton(keyword) }
                 .disposeByOnDestroy()
 
