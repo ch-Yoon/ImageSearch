@@ -40,7 +40,6 @@ class ImageDetailActivity : BaseActivity<ActivityImageDetailBinding>() {
         initActionBar()
 
         initImageDetailViewModel()
-        observeImageDetailViewModel()
     }
 
     private fun initActionBar() {
@@ -50,15 +49,14 @@ class ImageDetailActivity : BaseActivity<ActivityImageDetailBinding>() {
 
     private fun initImageDetailViewModel() {
         binding.imageDetailViewModel = imageDetailViewModel
-        if(isActivityFirstCreate) {
-            val passedImageDocument = intent.getParcelableExtra<ImageDocument>(EXTRA_IMAGE_DOCUMENT_KEY)
-            imageDetailViewModel.showImageDetailInfo(passedImageDocument)
-        }
-    }
 
-    private fun observeImageDetailViewModel() {
         val owner = this
         with(imageDetailViewModel) {
+            if(isActivityFirstCreate) {
+                val passedImageDocument = intent.getParcelableExtra<ImageDocument>(EXTRA_IMAGE_DOCUMENT_KEY)
+                imageDetailViewModel.showImageDetailInfo(passedImageDocument)
+            }
+
             showMessageEvent.observe(owner, Observer { message ->
                 showToast(message)
             })
@@ -75,16 +73,14 @@ class ImageDetailActivity : BaseActivity<ActivityImageDetailBinding>() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val itemId = item.itemId
-        return if (itemId == android.R.id.home) {
-            onBackPressed()
-            true
-        } else {
-            super.onOptionsItemSelected(item)
+        return when(item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
+            else -> {
+                false
+            }
         }
-    }
-
-    override fun onBackPressed() {
-        imageDetailViewModel.onClickBackPress()
     }
 }

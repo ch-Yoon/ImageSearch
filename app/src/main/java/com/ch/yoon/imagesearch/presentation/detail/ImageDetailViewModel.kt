@@ -57,10 +57,6 @@ class ImageDetailViewModel(
         }
     }
 
-    fun onClickBackPress() {
-        _finishEvent.call()
-    }
-
     fun onClickFavorite() {
         imageDocument?.let { document ->
             document.isFavorite = document.isFavorite.not()
