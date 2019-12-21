@@ -81,7 +81,7 @@ class ImageSearchViewModel(
 
     fun loadMoreImagesIfPossible(position: Int) {
         if (isRemainingMoreData) {
-            pageLoadHelper.requestPreloadIfPossible(position, _imageDocuments.size(), _countOfItemInLine.value)
+            pageLoadHelper.requestPreloadIfPossible(position, _imageDocuments.size())
         }
     }
 
