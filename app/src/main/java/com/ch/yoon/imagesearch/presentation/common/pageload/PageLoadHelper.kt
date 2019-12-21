@@ -16,10 +16,14 @@ class PageLoadHelper<T>(private val config: PageLoadConfiguration) {
         approveFirstImageSearch(key)
     }
 
-    fun requestPreloadIfPossible(currentPosition: Int, dataTotalSize: Int) {
+    fun requestPreloadIfPossible(
+        currentPosition: Int,
+        dataTotalSize: Int,
+        countOfItemInLine: Int = 1
+    ) {
         previousApproveLog.run {
             safeLet(key, pageNumber) { previousKey, previousPageNumber ->
-                if (isPreloadPossible(currentPosition, dataTotalSize)) {
+                if (isPreloadPossible(currentPosition, dataTotalSize, countOfItemInLine)) {
                     approveImageSearch(previousKey, previousPageNumber+1, dataTotalSize)
                 }
             }
@@ -49,8 +53,12 @@ class PageLoadHelper<T>(private val config: PageLoadConfiguration) {
         }
     }
 
-    private fun isPreloadPossible(displayPosition: Int, dataTotalSize: Int): Boolean {
-        return isNotMaxPage() && isAllowPreloadRange(displayPosition, dataTotalSize)
+    private fun isPreloadPossible(
+        displayPosition: Int,
+        dataTotalSize: Int,
+        countOfItemInLine: Int
+    ): Boolean {
+        return isNotMaxPage() && isAllowPreloadRange(displayPosition, dataTotalSize, countOfItemInLine)
     }
 
     private fun isNotMaxPage(): Boolean {
@@ -59,9 +67,13 @@ class PageLoadHelper<T>(private val config: PageLoadConfiguration) {
         } ?: false
     }
 
-    private fun isAllowPreloadRange(displayPosition: Int, dataTotalSize: Int): Boolean {
+    private fun isAllowPreloadRange(
+        displayPosition: Int,
+        dataTotalSize: Int,
+        countOfItemInLine: Int
+    ): Boolean {
         return previousApproveLog.dataTotalSize?.let { previousDataTotalSize ->
-            val preloadAllowLimit = dataTotalSize - config.preloadAllowCount
+            val preloadAllowLimit = dataTotalSize - (countOfItemInLine * config.preloadAllowLineMultiple)
             (dataTotalSize > previousDataTotalSize) && (displayPosition > preloadAllowLimit)
         } ?: false
     }
@@ -78,4 +90,5 @@ class PageLoadHelper<T>(private val config: PageLoadConfiguration) {
             this.pageNumber = pageNumber
         }
     }
+
 }

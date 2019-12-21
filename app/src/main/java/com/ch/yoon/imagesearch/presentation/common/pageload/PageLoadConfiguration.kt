@@ -4,5 +4,5 @@ data class PageLoadConfiguration(
     val startPageNumber: Int,
     val maxPageNumber: Int,
     val requiredDataSize: Int,
-    val preloadAllowCount: Int
+    val preloadAllowLineMultiple: Int = 1
 )
