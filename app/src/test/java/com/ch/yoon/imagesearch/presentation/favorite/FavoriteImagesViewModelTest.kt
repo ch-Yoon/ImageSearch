@@ -12,6 +12,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockkStatic
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import org.junit.Test
@@ -30,7 +31,6 @@ class FavoriteImagesViewModelTest {
         private const val UNKNOWN_ERROR_MESSAGE = "알 수 없는 에러가 발생했습니다"
     }
 
-
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
     @get:Rule
@@ -42,6 +42,8 @@ class FavoriteImagesViewModelTest {
     private lateinit var mockImageRepository: ImageRepository
 
     private lateinit var favoriteImagesViewModel: FavoriteImagesViewModel
+
+    private val changedFavoriteImagesSubject = PublishSubject.create<ImageDocument>()
 
     @Before
     fun init() {
@@ -62,6 +64,10 @@ class FavoriteImagesViewModelTest {
     }
 
     private fun initFavoriteListViewModel() {
+        every {
+            mockImageRepository.observeChangingFavoriteImage()
+        } returns changedFavoriteImagesSubject
+
         favoriteImagesViewModel = FavoriteImagesViewModel(mockApplication, mockImageRepository)
     }
 
@@ -122,19 +128,6 @@ class FavoriteImagesViewModelTest {
     }
 
     @Test
-    fun `뒤로가기 버튼 클릭 시 종료 이벤트가 발생하는지 테스트`() {
-        // when
-        favoriteImagesViewModel.onBackPress()
-
-        // then
-        var finishCount = 0
-        favoriteImagesViewModel.finishEvent.observeForever {
-            finishCount ++
-        }
-        assertEquals(1, finishCount)
-    }
-
-    @Test
     fun `새로운 좋아요 이미지 이벤트 수신시 기존 목록에 추가되는지 테스트`() {
         // given
         val favoriteImageList = createFavoriteImageDocuments(3)
@@ -142,16 +135,10 @@ class FavoriteImagesViewModelTest {
             mockImageRepository.getAllFavoriteImages()
         } returns Single.just(favoriteImageList)
 
-        val favoritePublishSubject = PublishSubject.create<ImageDocument>()
-        every {
-            mockImageRepository.observeChangingFavoriteImage()
-        } returns favoritePublishSubject
-
         // when
         val newFavoriteImage = createFavoriteImageDocument(4)
         favoriteImagesViewModel.loadFavoriteImageList()
-        favoriteImagesViewModel.observeChangingFavoriteImage()
-        favoritePublishSubject.onNext(newFavoriteImage)
+        changedFavoriteImagesSubject.onNext(newFavoriteImage)
 
         // then
         val expected = mutableListOf<ImageDocument>().apply {
@@ -171,16 +158,10 @@ class FavoriteImagesViewModelTest {
             mockImageRepository.getAllFavoriteImages()
         } returns Single.just(favoriteImageList)
 
-        val favoritePublishSubject = PublishSubject.create<ImageDocument>()
-        every {
-            mockImageRepository.observeChangingFavoriteImage()
-        } returns favoritePublishSubject
-
         // when
         val noFavoriteImage = createNoFavoriteImageDocument(0)
         favoriteImagesViewModel.loadFavoriteImageList()
-        favoriteImagesViewModel.observeChangingFavoriteImage()
-        favoritePublishSubject.onNext(noFavoriteImage)
+        changedFavoriteImagesSubject.onNext(noFavoriteImage)
 
         // then
         val expected = mutableListOf<ImageDocument>().apply {

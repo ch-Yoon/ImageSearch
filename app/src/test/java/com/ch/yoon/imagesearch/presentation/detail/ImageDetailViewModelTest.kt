@@ -114,17 +114,6 @@ class ImageDetailViewModelTest {
     }
 
     @Test
-    fun `뒤로가기 버튼 클릭시 종료 이벤트가 호출되는지 테스트`() {
-        // when
-        var finishEventCount = 0
-        imageDetailViewModel.finishEvent.observeForever { finishEventCount++ }
-        imageDetailViewModel.onClickBackPress()
-
-        // then
-        assertEquals(1, finishEventCount)
-    }
-
-    @Test
     fun `웹 이동 버튼 클릭시 웹 이동 이벤트가 발생되는지 테스트`() {
         // given
         val imageDocument = createVirtualImageDocument(1)

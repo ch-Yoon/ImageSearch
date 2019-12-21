@@ -52,7 +52,7 @@ class SearchBoxViewModelTest {
     }
 
     private fun initApplication() {
-        every { mockApplication.getString(R.string.success_all_image_info_delete_by_keyword) } returns DELETE_SUCCESS_MESSAGE
+        every { mockApplication.getString(R.string.success_delete_all_search_log) } returns DELETE_SUCCESS_MESSAGE
         every { mockApplication.getString(R.string.empty_keyword_guide) } returns EMPTY_KEYWORD_MESSAGE
     }
 
@@ -89,7 +89,7 @@ class SearchBoxViewModelTest {
         searchBoxViewModel.loadSearchLogs()
 
         // then
-        val expectedList = createVirtualSearchLogList(3).sorted().map { it.keyword }
+        val expectedList = createVirtualSearchLogList(3).sorted()
         searchBoxViewModel.searchLogs.observeForever { receivedList ->
             assertEquals(expectedList, receivedList)
         }
@@ -98,7 +98,7 @@ class SearchBoxViewModelTest {
     @Test
     fun `키워드 검색 버튼 클릭시 기존에 검색했던 키워드라면 목록의 가장 앞쪽으로 이동시키는지 테스트`() {
         // given
-        every { mockSearchLogRepository.getAllSearchLogs() } returns (Single.just(createVirtualSearchLogList(3)))
+        every { mockSearchLogRepository.getAllSearchLogs() } returns Single.just(createVirtualSearchLogList(3))
         every { mockSearchLogRepository.insertOrUpdateSearchLog("테스트0") } returns (Single.just(SearchLog("테스트0", 4)))
 
         // when
@@ -107,7 +107,7 @@ class SearchBoxViewModelTest {
 
         // then
         searchBoxViewModel.searchLogs.observeForever{ searchLogs ->
-            assertEquals("테스트0", searchLogs[0])
+            assertEquals(SearchLog("테스트0", 4), searchLogs[0])
             assertEquals(3, searchLogs.size)
         }
     }
@@ -136,18 +136,6 @@ class SearchBoxViewModelTest {
     }
 
     @Test
-    fun `검색상자가 열려있을 때 뒤로가기 클릭시 종료 이벤트가 호출되는지 않는지 테스트`() {
-        // when
-        var finishEventCount = 0
-        searchBoxViewModel.searchBoxFinishEvent.observeForever { finishEventCount++ }
-        searchBoxViewModel.onStateChange(true)
-        searchBoxViewModel.onClickHideButton()
-
-        // then
-        assertEquals(0, finishEventCount)
-    }
-
-    @Test
     fun `검색상자가 열려있을 때 뒤로가기 클릭 시 검색상자 닫기 이벤트가 호출되는지 테스트`() {
         // when
         var closeEventCount = 0
@@ -160,14 +148,21 @@ class SearchBoxViewModelTest {
     }
 
     @Test
-    fun `검색상자가 닫혀 있을 때 뒤로가기 클릭시 종료 이벤트가 호출되는지 테스트`() {
+    fun `검색상자의 상태를 닫는 함수 호출 시 닫힌 상태가 되는지 테스트`() {
         // when
-        var finishEventCount = 0
-        searchBoxViewModel.searchBoxFinishEvent.observeForever { finishEventCount++ }
-        searchBoxViewModel.onClickHideButton()
+        searchBoxViewModel.onStateChange(false)
 
         // then
-        assertEquals(1, finishEventCount)
+        assertEquals(false, searchBoxViewModel.isOpen)
+    }
+
+    @Test
+    fun `검색상자의 상태를 여는 함수 호출 시 열린 상태가 되는지 테스트`() {
+        // when
+        searchBoxViewModel.onStateChange(true)
+
+        // then
+        assertEquals(true, searchBoxViewModel.isOpen)
     }
 
     @Test
@@ -179,7 +174,7 @@ class SearchBoxViewModelTest {
 
         // when
         searchBoxViewModel.loadSearchLogs()
-        searchBoxViewModel.onClickSearchLogDeleteButton(targetList[0].keyword)
+        searchBoxViewModel.onClickSearchLogDeleteButton(targetList[0])
 
         // then
         verify(exactly = 1) { mockSearchLogRepository.deleteSearchLog(targetList[0]) }
@@ -189,14 +184,14 @@ class SearchBoxViewModelTest {
     fun `키워드 삭제 버튼 클릭시 보유하던 검색 기록 목록에서 제거하는지 테스트`() {
         // given
         val searchLogList = createVirtualSearchLogList(3)
-        val expectedList = createVirtualSearchLogList(3).apply { removeAt(0) }.sorted().map { it.keyword }
+        val expectedList = createVirtualSearchLogList(3).apply { removeAt(0) }.sorted()
 
         every { mockSearchLogRepository.getAllSearchLogs() } returns (Single.just(searchLogList))
         every { mockSearchLogRepository.deleteSearchLog(any()) } returns(Completable.complete())
 
         // when
         searchBoxViewModel.loadSearchLogs()
-        searchBoxViewModel.onClickSearchLogDeleteButton(searchLogList[0].keyword)
+        searchBoxViewModel.onClickSearchLogDeleteButton(searchLogList[0])
 
         // then
         searchBoxViewModel.searchLogs.observeForever{ receivedList ->

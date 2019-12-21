@@ -49,7 +49,7 @@ class ImageDetailViewModel(
 
     fun onClickWebButton() {
         imageDocument?.let { document ->
-            if(TextUtils.isEmpty(document.docUrl)) {
+            if (TextUtils.isEmpty(document.docUrl)) {
                 updateShowMessage(R.string.non_existent_url_error)
             } else {
                 _moveToWebEvent.value = document.docUrl
@@ -60,7 +60,7 @@ class ImageDetailViewModel(
     fun onClickFavorite() {
         imageDocument?.let { document ->
             document.isFavorite = document.isFavorite.not()
-            if(document.isFavorite) {
+            if (document.isFavorite) {
                 saveFavoriteToRepository(document)
             } else {
                 deleteFavoriteFromRepository(document)

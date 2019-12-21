@@ -48,6 +48,7 @@ class ImageSearchViewModelTest {
 
     private lateinit var imageSearchViewModel: ImageSearchViewModel
     private var capturedPageLoadApprove: ((key: String, pageNumber: Int, dataSize: Int, isFirstPage: Boolean) -> Unit)? = null
+    private val changedFavoriteImagesSubject = PublishSubject.create<ImageDocument>()
 
     @Before
     fun init() {
@@ -72,6 +73,10 @@ class ImageSearchViewModelTest {
         } answers {
             capturedPageLoadApprove = lambdaSlot.captured
         }
+
+        every {
+            mockRepository.observeChangingFavoriteImage()
+        } returns changedFavoriteImagesSubject
 
         imageSearchViewModel = ImageSearchViewModel(mockApplication, mockRepository, mockPageLoadHelper)
     }
@@ -277,15 +282,11 @@ class ImageSearchViewModelTest {
         imageResponse.imageDocuments.forEach { it.isFavorite = false }
         every { mockRepository.getImages(any()) } returns Single.just(imageResponse)
 
-        val subject = PublishSubject.create<ImageDocument>()
-        every { mockRepository.observeChangingFavoriteImage() } returns subject
-
         // when
         imageSearchViewModel.loadImages("테스트")
-        imageSearchViewModel.observeChangingFavoriteImage()
 
         val noFavoriteImage = createImageDocument(imageResponse.imageDocuments[0].id, true)
-        subject.onNext(noFavoriteImage)
+        changedFavoriteImagesSubject.onNext(noFavoriteImage)
 
         // then
         val expected = createImageSearchResponse(3, true).imageDocuments.toMutableList()
@@ -309,15 +310,11 @@ class ImageSearchViewModelTest {
         imageResponse.imageDocuments.forEach { it.isFavorite = true }
         every { mockRepository.getImages(any()) } returns Single.just(imageResponse)
 
-        val subject = PublishSubject.create<ImageDocument>()
-        every { mockRepository.observeChangingFavoriteImage() } returns subject
-
         // when
         imageSearchViewModel.loadImages("테스트")
-        imageSearchViewModel.observeChangingFavoriteImage()
 
         val noFavoriteImage = createImageDocument(imageResponse.imageDocuments[0].id, false)
-        subject.onNext(noFavoriteImage)
+        changedFavoriteImagesSubject.onNext(noFavoriteImage)
 
         // then
         val expected = createImageSearchResponse(3, true).imageDocuments.toMutableList()
