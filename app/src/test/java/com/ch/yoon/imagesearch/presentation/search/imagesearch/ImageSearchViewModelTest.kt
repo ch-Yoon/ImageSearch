@@ -5,12 +5,12 @@ import android.util.Log
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.belongings.bag.belongingsbag.RxSchedulerRule
 import com.ch.yoon.imagesearch.R
-import com.ch.yoon.imagesearch.data.remote.kakao.request.ImageSortType
+import com.ch.yoon.remote.kakao.request.ImageSortType
 import com.ch.yoon.imagesearch.data.repository.image.ImageRepository
-import com.ch.yoon.imagesearch.data.repository.error.RepositoryException
-import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
-import com.ch.yoon.imagesearch.data.repository.image.model.ImageSearchMeta
-import com.ch.yoon.imagesearch.data.repository.image.model.ImageSearchResponse
+import com.ch.yoon.data.model.error.RepositoryException
+import com.ch.yoon.data.model.image.ImageDocument
+import com.ch.yoon.data.model.image.ImageSearchMeta
+import com.ch.yoon.data.model.image.ImageSearchResponse
 import com.ch.yoon.imagesearch.presentation.common.pageload.PageLoadHelper
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
@@ -48,7 +48,7 @@ class ImageSearchViewModelTest {
 
     private lateinit var imageSearchViewModel: ImageSearchViewModel
     private var capturedPageLoadApprove: ((key: String, pageNumber: Int, dataSize: Int, isFirstPage: Boolean) -> Unit)? = null
-    private val changedFavoriteImagesSubject = PublishSubject.create<ImageDocument>()
+    private val changedFavoriteImagesSubject = PublishSubject.create<com.ch.yoon.data.model.image.ImageDocument>()
 
     @Before
     fun init() {
@@ -180,7 +180,7 @@ class ImageSearchViewModelTest {
         // given
         val firstValue = createImageSearchResponse(3, false)
         val secondValue = createImageSearchResponse(3, true)
-        val expectedList = mutableListOf<ImageDocument>().apply {
+        val expectedList = mutableListOf<com.ch.yoon.data.model.image.ImageDocument>().apply {
             addAll(firstValue.imageDocuments)
             addAll(secondValue.imageDocuments)
         }
@@ -242,17 +242,17 @@ class ImageSearchViewModelTest {
         every { mockRepository.getImages(any()) } returns (Single.just(createImageSearchResponse(1, true)))
         every { mockPageLoadHelper.getCurrentKey() } returns "key"
         // when
-        val typeList = mutableListOf<ImageSortType>()
+        val typeList = mutableListOf<com.ch.yoon.remote.kakao.request.ImageSortType>()
         imageSearchViewModel.imageSortType.observeForever { type ->
             typeList.add(type)
         }
-        imageSearchViewModel.changeImageSortType(ImageSortType.ACCURACY)
-        imageSearchViewModel.changeImageSortType(ImageSortType.RECENCY)
+        imageSearchViewModel.changeImageSortType(com.ch.yoon.remote.kakao.request.ImageSortType.ACCURACY)
+        imageSearchViewModel.changeImageSortType(com.ch.yoon.remote.kakao.request.ImageSortType.RECENCY)
 
         // then
-        assertEquals(ImageSortType.ACCURACY, typeList[0]) // 최초 default 로 설정되어 있는 값
-        assertEquals(ImageSortType.ACCURACY, typeList[1])
-        assertEquals(ImageSortType.RECENCY, typeList[2])
+        assertEquals(com.ch.yoon.remote.kakao.request.ImageSortType.ACCURACY, typeList[0]) // 최초 default 로 설정되어 있는 값
+        assertEquals(com.ch.yoon.remote.kakao.request.ImageSortType.ACCURACY, typeList[1])
+        assertEquals(com.ch.yoon.remote.kakao.request.ImageSortType.RECENCY, typeList[2])
     }
 
     @Test
@@ -328,22 +328,22 @@ class ImageSearchViewModelTest {
     private fun createImageSearchResponse(
         documentListSize: Int,
         isLastData: Boolean
-    ): ImageSearchResponse {
-        val searchMeta = ImageSearchMeta(isLastData)
+    ): com.ch.yoon.data.model.image.ImageSearchResponse {
+        val searchMeta = com.ch.yoon.data.model.image.ImageSearchMeta(isLastData)
         val imageDocumentList = createImageDocumentList(documentListSize)
-        return ImageSearchResponse(searchMeta, imageDocumentList)
+        return com.ch.yoon.data.model.image.ImageSearchResponse(searchMeta, imageDocumentList)
     }
 
-    private fun createImageDocumentList(size: Int): MutableList<ImageDocument> {
-        val list = mutableListOf<ImageDocument>()
+    private fun createImageDocumentList(size: Int): MutableList<com.ch.yoon.data.model.image.ImageDocument> {
+        val list = mutableListOf<com.ch.yoon.data.model.image.ImageDocument>()
         for(i in 0 until size) {
             list.add(createImageDocument(i.toString()))
         }
         return list
     }
 
-    private fun createImageDocument(id: String, isFavorite: Boolean = false): ImageDocument {
-        return ImageDocument(
+    private fun createImageDocument(id: String, isFavorite: Boolean = false): com.ch.yoon.data.model.image.ImageDocument {
+        return com.ch.yoon.data.model.image.ImageDocument(
             id,
             "collection$id",
             "thumbnailUrl$id",

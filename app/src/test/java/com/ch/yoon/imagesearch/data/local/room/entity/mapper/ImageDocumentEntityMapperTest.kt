@@ -1,7 +1,7 @@
 package com.ch.yoon.imagesearch.data.local.room.entity.mapper
 
-import com.ch.yoon.imagesearch.data.local.room.entity.ImageDocumentEntity
-import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
+import com.ch.yoon.local.entity.ImageDocumentEntity
+import com.ch.yoon.data.model.image.ImageDocument
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -18,7 +18,7 @@ class ImageDocumentEntityMapperTest {
         val imageDocument = createImageDocument("1")
 
         // when
-        val imageDocumentEntity = ImageDocumentEntityMapper.toEntity(imageDocument)
+        val imageDocumentEntity = com.ch.yoon.local.entity.mapper.ImageDocumentEntityMapper.toEntity(imageDocument)
 
         // then
         val expected = toEntity(imageDocument)
@@ -31,7 +31,7 @@ class ImageDocumentEntityMapperTest {
         val imageDocumentEntity = createImageDocumentEntity("1")
 
         // when
-        val imageDocument = ImageDocumentEntityMapper.fromEntity(imageDocumentEntity)
+        val imageDocument = com.ch.yoon.local.entity.mapper.ImageDocumentEntityMapper.fromEntity(imageDocumentEntity)
 
         // then
         val expected = fromEntity(imageDocumentEntity)
@@ -49,15 +49,15 @@ class ImageDocumentEntityMapperTest {
         )
 
         // when
-        val imageDocumentList = ImageDocumentEntityMapper.fromEntityList(imageDocumentEntityList)
+        val imageDocumentList = com.ch.yoon.local.entity.mapper.ImageDocumentEntityMapper.fromEntityList(imageDocumentEntityList)
 
         // then
         val expected = imageDocumentEntityList.map { fromEntity(it) }
         assertEquals(expected, imageDocumentList)
     }
 
-    private fun createImageDocument(id: String): ImageDocument {
-        return ImageDocument(
+    private fun createImageDocument(id: String): com.ch.yoon.data.model.image.ImageDocument {
+        return com.ch.yoon.data.model.image.ImageDocument(
             id,
             "collection$id",
             "thumbnailUrl$id",
@@ -71,8 +71,8 @@ class ImageDocumentEntityMapperTest {
         )
     }
 
-    private fun createImageDocumentEntity(id: String): ImageDocumentEntity {
-        return ImageDocumentEntity(
+    private fun createImageDocumentEntity(id: String): com.ch.yoon.local.entity.ImageDocumentEntity {
+        return com.ch.yoon.local.entity.ImageDocumentEntity(
             id,
             "collection$id",
             "thumbnailUrl$id",
@@ -86,9 +86,9 @@ class ImageDocumentEntityMapperTest {
         )
     }
 
-    private fun toEntity(imageDocument: ImageDocument): ImageDocumentEntity {
+    private fun toEntity(imageDocument: com.ch.yoon.data.model.image.ImageDocument): com.ch.yoon.local.entity.ImageDocumentEntity {
         return imageDocument.run {
-            ImageDocumentEntity(
+            com.ch.yoon.local.entity.ImageDocumentEntity(
                 id,
                 collection,
                 thumbnailUrl,
@@ -103,9 +103,9 @@ class ImageDocumentEntityMapperTest {
         }
     }
 
-    private fun fromEntity(imageDocumentEntity: ImageDocumentEntity): ImageDocument {
+    private fun fromEntity(imageDocumentEntity: com.ch.yoon.local.entity.ImageDocumentEntity): com.ch.yoon.data.model.image.ImageDocument {
         return imageDocumentEntity.run {
-            ImageDocument(
+            com.ch.yoon.data.model.image.ImageDocument(
                 id,
                 collection,
                 thumbnailUrl,

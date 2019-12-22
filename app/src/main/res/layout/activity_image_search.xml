@@ -7,7 +7,7 @@
     <data>
 
         <import type="android.view.View" />
-        <import type="com.ch.yoon.imagesearch.data.remote.kakao.request.ImageSortType" />
+        <import type="com.ch.yoon.remote.kakao.model.request.ImageSortType" />
         <import type="com.ch.yoon.suggetionsearchview.SuggestionSearchView.State" />
 
         <variable

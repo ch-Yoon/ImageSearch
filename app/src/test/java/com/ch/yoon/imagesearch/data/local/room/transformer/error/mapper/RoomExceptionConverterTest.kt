@@ -1,8 +1,8 @@
 package com.ch.yoon.imagesearch.data.local.room.transformer.error.mapper
 
 import androidx.room.EmptyResultSetException
-import com.ch.yoon.imagesearch.data.local.room.transformer.error.RoomExceptionConverter
-import com.ch.yoon.imagesearch.data.repository.error.RepositoryException
+import com.ch.yoon.local.transformer.error.RoomExceptionConverter
+import com.ch.yoon.data.model.error.RepositoryException
 import io.mockk.every
 import io.mockk.mockk
 import junit.framework.Assert.assertEquals
@@ -21,7 +21,7 @@ class RoomExceptionConverterTest {
         every { exception.message } returns ""
 
         // when
-        val convertedException = RoomExceptionConverter.toRepositoryException(exception)
+        val convertedException = com.ch.yoon.local.transformer.error.RoomExceptionConverter.toRepositoryException(exception)
 
         // then
         assertEquals(true, convertedException is RepositoryException.NotFoundException)
@@ -34,7 +34,7 @@ class RoomExceptionConverterTest {
         every { exception.message } returns ""
 
         // when
-        val convertedException = RoomExceptionConverter.toRepositoryException(exception)
+        val convertedException = com.ch.yoon.local.transformer.error.RoomExceptionConverter.toRepositoryException(exception)
 
         // then
         assertEquals(true, convertedException is RepositoryException.DatabaseUnknownException)

@@ -1,9 +1,9 @@
 package com.ch.yoon.imagesearch.di
 
 import com.ch.yoon.imagesearch.BuildConfig
-import com.ch.yoon.imagesearch.data.remote.kakao.KakaoSearchApi
+import com.ch.yoon.remote.kakao.KakaoSearchApi
 import com.ch.yoon.imagesearch.data.repository.image.ImageRemoteDataSource
-import com.ch.yoon.imagesearch.data.remote.kakao.ImageRemoteDataSourceImpl
+import com.ch.yoon.remote.kakao.ImageRemoteDataSourceImpl
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -19,11 +19,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 val networkModule = module {
 
     single<ImageRemoteDataSource> {
-        ImageRemoteDataSourceImpl(get())
+        com.ch.yoon.remote.kakao.ImageRemoteDataSourceImpl(get())
     }
 
     single {
-        get<Retrofit>().create(KakaoSearchApi::class.java)
+        get<Retrofit>().create(com.ch.yoon.remote.kakao.KakaoSearchApi::class.java)
     }
 
     single {

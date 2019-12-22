@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
+import com.ch.yoon.data.model.image.ImageDocument
 import com.ch.yoon.imagesearch.databinding.ItemImageListBinding
 import com.ch.yoon.imagesearch.databinding.ItemRetryFooterBinding
 import com.ch.yoon.imagesearch.extension.cancelImageLoad
@@ -16,7 +16,7 @@ import io.reactivex.subjects.PublishSubject
  * Creator : ch-yoon
  * Date : 2019-10-29
  **/
-class ImageSearchResultsAdapter : ListAdapter<ImageDocument, RecyclerView.ViewHolder>(DiffCallback()) {
+class ImageSearchResultsAdapter : ListAdapter<com.ch.yoon.data.model.image.ImageDocument, RecyclerView.ViewHolder>(DiffCallback()) {
 
     companion object {
         private const val TYPE_ITEM = 1
@@ -25,8 +25,8 @@ class ImageSearchResultsAdapter : ListAdapter<ImageDocument, RecyclerView.ViewHo
 
     private var retryFooterViewVisibility = false
 
-    private val _itemClicks = PublishSubject.create<ImageDocument>()
-    val itemClicks: Observable<ImageDocument> = _itemClicks
+    private val _itemClicks = PublishSubject.create<com.ch.yoon.data.model.image.ImageDocument>()
+    val itemClicks: Observable<com.ch.yoon.data.model.image.ImageDocument> = _itemClicks
 
     private val _footerClicks = PublishSubject.create<Unit>()
     val footerClicks: Observable<Unit> = _footerClicks
@@ -102,7 +102,7 @@ class ImageSearchResultsAdapter : ListAdapter<ImageDocument, RecyclerView.ViewHo
         val binding: ItemImageListBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun setItem(imageDocument: ImageDocument) {
+        fun setItem(imageDocument: com.ch.yoon.data.model.image.ImageDocument) {
             binding.imageDocument = imageDocument
             binding.executePendingBindings()
         }
@@ -122,12 +122,12 @@ class ImageSearchResultsAdapter : ListAdapter<ImageDocument, RecyclerView.ViewHo
         }
     }
 
-    class DiffCallback : DiffUtil.ItemCallback<ImageDocument>() {
-        override fun areItemsTheSame(oldItem: ImageDocument, newItem: ImageDocument): Boolean {
+    class DiffCallback : DiffUtil.ItemCallback<com.ch.yoon.data.model.image.ImageDocument>() {
+        override fun areItemsTheSame(oldItem: com.ch.yoon.data.model.image.ImageDocument, newItem: com.ch.yoon.data.model.image.ImageDocument): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: ImageDocument, newItem: ImageDocument): Boolean {
+        override fun areContentsTheSame(oldItem: com.ch.yoon.data.model.image.ImageDocument, newItem: com.ch.yoon.data.model.image.ImageDocument): Boolean {
             return oldItem == newItem
         }
     }

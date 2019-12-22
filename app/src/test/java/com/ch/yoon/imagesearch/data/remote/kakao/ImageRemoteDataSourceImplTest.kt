@@ -3,16 +3,16 @@ package com.ch.yoon.imagesearch.data.remote.kakao
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.belongings.bag.belongingsbag.RxSchedulerRule
 import com.ch.yoon.imagesearch.BaseRxTest
-import com.ch.yoon.imagesearch.data.remote.kakao.request.ImageSearchRequest
-import com.ch.yoon.imagesearch.data.remote.kakao.request.ImageSortType
-import com.ch.yoon.imagesearch.data.remote.kakao.response.KakaoImageDocument
-import com.ch.yoon.imagesearch.data.remote.kakao.response.KakaoImageSearchMetaInfo
-import com.ch.yoon.imagesearch.data.remote.kakao.response.KakaoImageSearchResponse
+import com.ch.yoon.remote.kakao.request.ImageSearchRequest
+import com.ch.yoon.remote.kakao.request.ImageSortType
+import com.ch.yoon.remote.kakao.response.KakaoImageDocument
+import com.ch.yoon.remote.kakao.response.KakaoImageSearchMetaInfo
+import com.ch.yoon.remote.kakao.response.KakaoImageSearchResponse
 import com.ch.yoon.imagesearch.data.repository.image.ImageRemoteDataSource
-import com.ch.yoon.imagesearch.data.repository.error.RepositoryException
-import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
-import com.ch.yoon.imagesearch.data.repository.image.model.ImageSearchMeta
-import com.ch.yoon.imagesearch.data.repository.image.model.ImageSearchResponse
+import com.ch.yoon.data.model.error.RepositoryException
+import com.ch.yoon.data.model.image.ImageDocument
+import com.ch.yoon.data.model.image.ImageSearchMeta
+import com.ch.yoon.data.model.image.ImageSearchResponse
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -34,13 +34,13 @@ class ImageRemoteDataSourceImplTest : BaseRxTest() {
     val rxSchedulerRule = RxSchedulerRule()
 
     @MockK
-    lateinit var mockKakaoSearchApi: KakaoSearchApi
+    lateinit var mockKakaoSearchApi: com.ch.yoon.remote.kakao.KakaoSearchApi
 
     private lateinit var imageRemoteDataSource: ImageRemoteDataSource
 
     override fun before() {
         MockKAnnotations.init(this, relaxUnitFun = true)
-        imageRemoteDataSource = ImageRemoteDataSourceImpl(mockKakaoSearchApi)
+        imageRemoteDataSource = com.ch.yoon.remote.kakao.ImageRemoteDataSourceImpl(mockKakaoSearchApi)
     }
 
     override fun after() {
@@ -55,7 +55,7 @@ class ImageRemoteDataSourceImplTest : BaseRxTest() {
         } returns Single.just(response)
 
         // when
-        var actualResponse: ImageSearchResponse? = null
+        var actualResponse: com.ch.yoon.data.model.image.ImageSearchResponse? = null
         imageRemoteDataSource.getImages(createEmptyImageSearchRequest())
             .subscribe({
                 actualResponse = it
@@ -96,18 +96,18 @@ class ImageRemoteDataSourceImplTest : BaseRxTest() {
         assertEquals(1, throwableCount)
     }
 
-    private fun createKakaoImageSearchResponse(imageDocumentSize: Int): KakaoImageSearchResponse {
-        val meta = KakaoImageSearchMetaInfo(0, 0, false)
-        val list = mutableListOf<KakaoImageDocument>().apply {
+    private fun createKakaoImageSearchResponse(imageDocumentSize: Int): com.ch.yoon.remote.kakao.response.KakaoImageSearchResponse {
+        val meta = com.ch.yoon.remote.kakao.response.KakaoImageSearchMetaInfo(0, 0, false)
+        val list = mutableListOf<com.ch.yoon.remote.kakao.response.KakaoImageDocument>().apply {
             for(i in 0 until imageDocumentSize) {
                 add(createKakaoImageDocument(i.toString()))
             }
         }
-        return KakaoImageSearchResponse(meta, list)
+        return com.ch.yoon.remote.kakao.response.KakaoImageSearchResponse(meta, list)
     }
 
-    private fun createKakaoImageDocument(id: String): KakaoImageDocument {
-        return KakaoImageDocument(
+    private fun createKakaoImageDocument(id: String): com.ch.yoon.remote.kakao.response.KakaoImageDocument {
+        return com.ch.yoon.remote.kakao.response.KakaoImageDocument(
             "collection$id",
             "thumbnailUrl$id",
             "imageUrl$id",
@@ -119,18 +119,18 @@ class ImageRemoteDataSourceImplTest : BaseRxTest() {
         )
     }
 
-    private fun createEmptyImageSearchRequest(): ImageSearchRequest {
-        return ImageSearchRequest("", ImageSortType.ACCURACY, 1, 1, false)
+    private fun createEmptyImageSearchRequest(): com.ch.yoon.remote.kakao.request.ImageSearchRequest {
+        return com.ch.yoon.remote.kakao.request.ImageSearchRequest("", com.ch.yoon.remote.kakao.request.ImageSortType.ACCURACY, 1, 1, false)
     }
 
-    private fun fromKakaiImageSearchResponse(response: KakaoImageSearchResponse): ImageSearchResponse {
+    private fun fromKakaiImageSearchResponse(response: com.ch.yoon.remote.kakao.response.KakaoImageSearchResponse): com.ch.yoon.data.model.image.ImageSearchResponse {
         return response.run {
             val imageSearchMeta = kakaoImageSearchMeta.run {
-                ImageSearchMeta(isEnd)
+                com.ch.yoon.data.model.image.ImageSearchMeta(isEnd)
             }
 
             val imageDocumentList = kakaoImageDocuments.map {
-                ImageDocument(
+                com.ch.yoon.data.model.image.ImageDocument(
                     "${it.imageUrl}&${it.docUrl}",
                     it.collection,
                     it.thumbnailUrl,
@@ -144,7 +144,7 @@ class ImageRemoteDataSourceImplTest : BaseRxTest() {
                 )
             }
 
-            ImageSearchResponse(imageSearchMeta, imageDocumentList)
+            com.ch.yoon.data.model.image.ImageSearchResponse(imageSearchMeta, imageDocumentList)
         }
     }
 }

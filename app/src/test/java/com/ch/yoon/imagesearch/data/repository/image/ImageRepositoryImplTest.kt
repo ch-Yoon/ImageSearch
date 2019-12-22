@@ -2,11 +2,11 @@ package com.ch.yoon.imagesearch.data.repository.image
 
 import com.belongings.bag.belongingsbag.RxSchedulerRule
 import com.ch.yoon.imagesearch.BaseRxTest
-import com.ch.yoon.imagesearch.data.remote.kakao.request.ImageSearchRequest
-import com.ch.yoon.imagesearch.data.remote.kakao.request.ImageSortType
-import com.ch.yoon.imagesearch.data.repository.error.RepositoryException
-import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
-import com.ch.yoon.imagesearch.data.repository.image.model.ImageSearchResponse
+import com.ch.yoon.remote.kakao.request.ImageSearchRequest
+import com.ch.yoon.remote.kakao.request.ImageSortType
+import com.ch.yoon.data.model.error.RepositoryException
+import com.ch.yoon.data.model.image.ImageDocument
+import com.ch.yoon.data.model.image.ImageSearchResponse
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -36,7 +36,7 @@ class ImageRepositoryImplTest : BaseRxTest() {
     override fun before() {
         MockKAnnotations.init(this, relaxUnitFun = true)
 
-        imageRepository = ImageRepositoryImpl(mockImageLocalDataSource, mockImageRemoteDataSource)
+        imageRepository = com.ch.yoon.data.repository.ImageRepositoryImpl(mockImageLocalDataSource, mockImageRemoteDataSource)
     }
 
     override fun after() {
@@ -51,10 +51,10 @@ class ImageRepositoryImplTest : BaseRxTest() {
 
         every {
             mockImageRemoteDataSource.getImages(any())
-        } returns Single.just(ImageSearchResponse(mockk(), emptyList()))
+        } returns Single.just(com.ch.yoon.data.model.image.ImageSearchResponse(mockk(), emptyList()))
 
         // when
-        var result: List<ImageDocument>? = null
+        var result: List<com.ch.yoon.data.model.image.ImageDocument>? = null
         imageRepository.getImages(emptyImageSearchRequest())
             .subscribe({
                 result = it.imageDocuments
@@ -76,11 +76,11 @@ class ImageRepositoryImplTest : BaseRxTest() {
         } returns Single.just(favoriteList)
 
         val noFavoriteList = createImageDocumentList(arrayOf("1", "2", "3", "4", "5", "6"), false)
-        val response = ImageSearchResponse(mockk(), noFavoriteList)
+        val response = com.ch.yoon.data.model.image.ImageSearchResponse(mockk(), noFavoriteList)
         every { mockImageRemoteDataSource.getImages(any()) } returns Single.just(response)
 
         // when
-        var result: List<ImageDocument>? = null
+        var result: List<com.ch.yoon.data.model.image.ImageDocument>? = null
         imageRepository.getImages(emptyImageSearchRequest())
             .subscribe({
                 result = it.imageDocuments
@@ -213,7 +213,7 @@ class ImageRepositoryImplTest : BaseRxTest() {
         } returns Completable.complete()
 
         // when
-        val actualList = mutableListOf<ImageDocument>()
+        val actualList = mutableListOf<com.ch.yoon.data.model.image.ImageDocument>()
         imageRepository.observeChangingFavoriteImage()
             .subscribe({ actualList.add(it) }, {})
             .register()
@@ -242,7 +242,7 @@ class ImageRepositoryImplTest : BaseRxTest() {
         } returns Completable.error(RepositoryException.UnknownException(""))
 
         // when
-        val actualList = mutableListOf<ImageDocument>()
+        val actualList = mutableListOf<com.ch.yoon.data.model.image.ImageDocument>()
         imageRepository.observeChangingFavoriteImage()
             .subscribe({ actualList.add(it) }, {})
             .register()
@@ -270,7 +270,7 @@ class ImageRepositoryImplTest : BaseRxTest() {
         } returns Completable.complete()
 
         // when
-        val actualList = mutableListOf<ImageDocument>()
+        val actualList = mutableListOf<com.ch.yoon.data.model.image.ImageDocument>()
         imageRepository.observeChangingFavoriteImage()
             .subscribe({ actualList.add(it) }, {})
             .register()
@@ -300,7 +300,7 @@ class ImageRepositoryImplTest : BaseRxTest() {
         } returns Completable.error(RepositoryException.UnknownException(""))
 
         // when
-        val actualList = mutableListOf<ImageDocument>()
+        val actualList = mutableListOf<com.ch.yoon.data.model.image.ImageDocument>()
         imageRepository.observeChangingFavoriteImage()
             .subscribe({ actualList.add(it) }, {})
             .register()
@@ -329,7 +329,7 @@ class ImageRepositoryImplTest : BaseRxTest() {
         } returns Single.just(emptyList())
 
         // when
-        var list: List<ImageDocument>? = null
+        var list: List<com.ch.yoon.data.model.image.ImageDocument>? = null
         imageRepository.getAllFavoriteImages()
             .subscribe({
                 list = it
@@ -351,7 +351,7 @@ class ImageRepositoryImplTest : BaseRxTest() {
         } returns Single.just(publishList)
 
         // when
-        var actualList: List<ImageDocument>? = null
+        var actualList: List<com.ch.yoon.data.model.image.ImageDocument>? = null
         imageRepository.getAllFavoriteImages()
             .subscribe({
                 actualList = it
@@ -364,15 +364,15 @@ class ImageRepositoryImplTest : BaseRxTest() {
         assertEquals(publishList, actualList)
     }
 
-    private fun emptyImageSearchRequest(): ImageSearchRequest {
-        return ImageSearchRequest("", ImageSortType.ACCURACY, 1, 1, true)
+    private fun emptyImageSearchRequest(): com.ch.yoon.remote.kakao.request.ImageSearchRequest {
+        return com.ch.yoon.remote.kakao.request.ImageSearchRequest("", com.ch.yoon.remote.kakao.request.ImageSortType.ACCURACY, 1, 1, true)
     }
 
     private fun createImageDocumentList(
         idArray: Array<String>,
         favoriteArray: Array<String>
-    ): List<ImageDocument> {
-        return mutableListOf<ImageDocument>().apply {
+    ): List<com.ch.yoon.data.model.image.ImageDocument> {
+        return mutableListOf<com.ch.yoon.data.model.image.ImageDocument>().apply {
             val favoriteSet = favoriteArray.toSet()
             for(id in idArray) {
                 if(favoriteSet.contains(id)) {
@@ -387,16 +387,16 @@ class ImageRepositoryImplTest : BaseRxTest() {
     private fun createImageDocumentList(
         idArray: Array<String>,
         isFavorite: Boolean
-    ): List<ImageDocument> {
-        return mutableListOf<ImageDocument>().apply {
+    ): List<com.ch.yoon.data.model.image.ImageDocument> {
+        return mutableListOf<com.ch.yoon.data.model.image.ImageDocument>().apply {
             for(id in idArray) {
                 add(createImageDocument(id, isFavorite))
             }
         }
     }
 
-    private fun createImageDocument(id: String, isFavorite: Boolean): ImageDocument {
-        return ImageDocument(
+    private fun createImageDocument(id: String, isFavorite: Boolean): com.ch.yoon.data.model.image.ImageDocument {
+        return com.ch.yoon.data.model.image.ImageDocument(
             id,
             "collection",
             "thumbnailUrl",

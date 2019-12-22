@@ -2,8 +2,8 @@ package com.ch.yoon.imagesearch.data.repository.searchlog
 
 import com.belongings.bag.belongingsbag.RxSchedulerRule
 import com.ch.yoon.imagesearch.BaseRxTest
-import com.ch.yoon.imagesearch.data.repository.error.RepositoryException
-import com.ch.yoon.imagesearch.data.repository.searchlog.model.SearchLog
+import com.ch.yoon.data.model.error.RepositoryException
+import com.ch.yoon.data.model.searchlog.SearchLog
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -30,7 +30,7 @@ class SearchLogRepositoryImplTest : BaseRxTest() {
     override fun before() {
         MockKAnnotations.init(this, relaxUnitFun = true)
 
-        imageRepository = SearchLogRepositoryImpl(mockSearchLogLocalDataSource)
+        imageRepository = com.ch.yoon.data.repository.SearchLogRepositoryImpl(mockSearchLogLocalDataSource)
     }
 
     override fun after() {
@@ -39,13 +39,13 @@ class SearchLogRepositoryImplTest : BaseRxTest() {
     @Test
     fun `업데이트 요청 성공 테스트`() {
         // given
-        val updatedLog = SearchLog("테스트", 1)
+        val updatedLog = com.ch.yoon.data.model.searchlog.SearchLog("테스트", 1)
         every {
             mockSearchLogLocalDataSource.insertOrUpdateSearchLog(any())
         } returns Single.just(updatedLog)
 
         // when
-        var actualLog: SearchLog? = null
+        var actualLog: com.ch.yoon.data.model.searchlog.SearchLog? = null
         imageRepository.insertOrUpdateSearchLog("테스트")
             .subscribe({ actualLog = it }, {})
             .register()
@@ -80,7 +80,7 @@ class SearchLogRepositoryImplTest : BaseRxTest() {
         } returns Single.just(publishSearchLogList)
 
         // when
-        var actualList: List<SearchLog>? = null
+        var actualList: List<com.ch.yoon.data.model.searchlog.SearchLog>? = null
         imageRepository.getAllSearchLogs()
             .subscribe({ actualList = it }, {})
             .register()
@@ -97,7 +97,7 @@ class SearchLogRepositoryImplTest : BaseRxTest() {
         } returns Single.just(emptyList())
 
         // when
-        var actualList: List<SearchLog>? = null
+        var actualList: List<com.ch.yoon.data.model.searchlog.SearchLog>? = null
         imageRepository.getAllSearchLogs()
             .subscribe({ actualList = it }, {})
             .register()
@@ -148,7 +148,7 @@ class SearchLogRepositoryImplTest : BaseRxTest() {
 
         // when
         var actualException: RepositoryException? = null
-        imageRepository.deleteSearchLog(SearchLog("테스트", 0))
+        imageRepository.deleteSearchLog(com.ch.yoon.data.model.searchlog.SearchLog("테스트", 0))
             .subscribe({}, { actualException = if(it is RepositoryException) it else null })
             .register()
 
@@ -190,14 +190,14 @@ class SearchLogRepositoryImplTest : BaseRxTest() {
         assertEquals(true, actualException is RepositoryException)
     }
 
-    private fun emptySearchLog(): SearchLog {
-        return SearchLog("", 0)
+    private fun emptySearchLog(): com.ch.yoon.data.model.searchlog.SearchLog {
+        return com.ch.yoon.data.model.searchlog.SearchLog("", 0)
     }
 
-    private fun createSearchLogList(size: Int): List<SearchLog> {
-        val list = mutableListOf<SearchLog>()
+    private fun createSearchLogList(size: Int): List<com.ch.yoon.data.model.searchlog.SearchLog> {
+        val list = mutableListOf<com.ch.yoon.data.model.searchlog.SearchLog>()
         for(i in 0 until size) {
-            list.add(SearchLog(i.toString(), i.toLong()))
+            list.add(com.ch.yoon.data.model.searchlog.SearchLog(i.toString(), i.toLong()))
         }
         return list
     }

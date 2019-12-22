@@ -2,11 +2,11 @@ package com.ch.yoon.imagesearch.data.local.room
 
 import com.belongings.bag.belongingsbag.RxSchedulerRule
 import com.ch.yoon.imagesearch.BaseRxTest
-import com.ch.yoon.imagesearch.data.local.room.dao.SearchLogDAO
-import com.ch.yoon.imagesearch.data.local.room.entity.SearchLogEntity
+import com.ch.yoon.local.dao.SearchLogDAO
+import com.ch.yoon.local.entity.SearchLogEntity
 import com.ch.yoon.imagesearch.data.repository.searchlog.SearchLogLocalDataSource
-import com.ch.yoon.imagesearch.data.repository.error.RepositoryException
-import com.ch.yoon.imagesearch.data.repository.searchlog.model.SearchLog
+import com.ch.yoon.data.model.error.RepositoryException
+import com.ch.yoon.data.model.searchlog.SearchLog
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -26,13 +26,13 @@ class SearchLogLocalDataSourceImplTest : BaseRxTest() {
     val rxSchedulerRule = RxSchedulerRule()
 
     @MockK
-    lateinit var mockSearchLogDao: SearchLogDAO
+    lateinit var mockSearchLogDao: com.ch.yoon.local.dao.SearchLogDAO
 
     private lateinit var searchLogLocalDataSource: SearchLogLocalDataSource
 
     override fun before() {
         MockKAnnotations.init(this, relaxUnitFun = true)
-        searchLogLocalDataSource = SearchLogLocalDataSourceImpl(mockSearchLogDao)
+        searchLogLocalDataSource = com.ch.yoon.local.SearchLogLocalDataSourceImpl(mockSearchLogDao)
     }
 
     override fun after() {
@@ -85,7 +85,7 @@ class SearchLogLocalDataSourceImplTest : BaseRxTest() {
         } returns Completable.complete()
 
         // when
-        var receivedSearchLog: SearchLog? = null
+        var receivedSearchLog: com.ch.yoon.data.model.searchlog.SearchLog? = null
         searchLogLocalDataSource.insertOrUpdateSearchLog("테스트")
             .subscribe({
                 receivedSearchLog = it
@@ -104,7 +104,7 @@ class SearchLogLocalDataSourceImplTest : BaseRxTest() {
         every { mockSearchLogDao.selectAllSearchLogs() } returns Single.just(emptyList())
 
         // when
-        var receivedList: List<SearchLog>? = null
+        var receivedList: List<com.ch.yoon.data.model.searchlog.SearchLog>? = null
         searchLogLocalDataSource.getAllSearchLogs()
             .subscribe({
                 receivedList = it
@@ -123,7 +123,7 @@ class SearchLogLocalDataSourceImplTest : BaseRxTest() {
         every { mockSearchLogDao.selectAllSearchLogs() } returns Single.just(searchLogModelList)
 
         // when
-        var actualList: List<SearchLog>? = null
+        var actualList: List<com.ch.yoon.data.model.searchlog.SearchLog>? = null
         searchLogLocalDataSource.getAllSearchLogs()
             .subscribe({
                 actualList = it
@@ -132,7 +132,7 @@ class SearchLogLocalDataSourceImplTest : BaseRxTest() {
             })
 
         // then
-        val expectedList = searchLogModelList.map { SearchLog(it.keyword, it.time) }
+        val expectedList = searchLogModelList.map { com.ch.yoon.data.model.searchlog.SearchLog(it.keyword, it.time) }
         assertEquals(expectedList, actualList)
     }
 
@@ -143,7 +143,7 @@ class SearchLogLocalDataSourceImplTest : BaseRxTest() {
 
         // when
         var isSuccess = false
-        searchLogLocalDataSource.deleteSearchLog(SearchLog("테스트", 1))
+        searchLogLocalDataSource.deleteSearchLog(com.ch.yoon.data.model.searchlog.SearchLog("테스트", 1))
             .subscribe({
                 isSuccess = true
             }, {
@@ -163,7 +163,7 @@ class SearchLogLocalDataSourceImplTest : BaseRxTest() {
 
         // when
         var actualException: RepositoryException? = null
-        val searchLog = SearchLog("테스트", 1)
+        val searchLog = com.ch.yoon.data.model.searchlog.SearchLog("테스트", 1)
         searchLogLocalDataSource.deleteSearchLog(searchLog)
             .subscribe({
                 actualException = null
@@ -214,10 +214,10 @@ class SearchLogLocalDataSourceImplTest : BaseRxTest() {
         assertEquals(true, actualException is RepositoryException)
     }
 
-    private fun createSearchLogModelList(size: Int): List<SearchLogEntity> {
-        val list = mutableListOf<SearchLogEntity>()
+    private fun createSearchLogModelList(size: Int): List<com.ch.yoon.local.entity.SearchLogEntity> {
+        val list = mutableListOf<com.ch.yoon.local.entity.SearchLogEntity>()
         for(i in 0 until size) {
-            list.add(SearchLogEntity("테스트$i", i.toLong()))
+            list.add(com.ch.yoon.local.entity.SearchLogEntity("테스트$i", i.toLong()))
         }
         return list
     }

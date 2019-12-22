@@ -1,9 +1,9 @@
 package com.ch.yoon.imagesearch.di
 
 import com.ch.yoon.imagesearch.data.repository.image.ImageRepository
-import com.ch.yoon.imagesearch.data.repository.image.ImageRepositoryImpl
+import com.ch.yoon.data.repository.ImageRepositoryImpl
 import com.ch.yoon.imagesearch.data.repository.searchlog.SearchLogRepository
-import com.ch.yoon.imagesearch.data.repository.searchlog.SearchLogRepositoryImpl
+import com.ch.yoon.data.repository.SearchLogRepositoryImpl
 import org.koin.dsl.module.module
 
 /**
@@ -13,10 +13,10 @@ import org.koin.dsl.module.module
 val repositoryModule = module {
 
     single<ImageRepository> {
-        ImageRepositoryImpl(get(), get())
+        com.ch.yoon.data.repository.ImageRepositoryImpl(get(), get())
     }
 
     single<SearchLogRepository> {
-        SearchLogRepositoryImpl(get())
+        com.ch.yoon.data.repository.SearchLogRepositoryImpl(get())
     }
 }

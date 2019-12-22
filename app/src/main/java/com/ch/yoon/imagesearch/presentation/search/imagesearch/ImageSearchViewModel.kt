@@ -6,12 +6,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.ch.yoon.imagesearch.R
-import com.ch.yoon.imagesearch.data.repository.error.RepositoryException
-import com.ch.yoon.imagesearch.data.remote.kakao.request.ImageSearchRequest
-import com.ch.yoon.imagesearch.data.remote.kakao.request.ImageSortType
+import com.ch.yoon.data.model.error.RepositoryException
+import com.ch.yoon.remote.kakao.request.ImageSearchRequest
+import com.ch.yoon.remote.kakao.request.ImageSortType
 import com.ch.yoon.imagesearch.data.repository.image.ImageRepository
-import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
-import com.ch.yoon.imagesearch.data.repository.image.model.ImageSearchMeta
+import com.ch.yoon.data.model.image.ImageDocument
+import com.ch.yoon.data.model.image.ImageSearchMeta
 import com.ch.yoon.imagesearch.presentation.base.BaseViewModel
 import com.ch.yoon.imagesearch.presentation.common.livedata.NonNullMutableLiveData
 import com.ch.yoon.imagesearch.presentation.common.livedata.SingleLiveEvent
@@ -29,22 +29,22 @@ class ImageSearchViewModel(
     private val pageLoadHelper: PageLoadHelper<String>
 ) : BaseViewModel(application) {
 
-    private val _imageSortType = NonNullMutableLiveData(ImageSortType.ACCURACY)
-    val imageSortType: LiveData<ImageSortType> = _imageSortType
+    private val _imageSortType = NonNullMutableLiveData(com.ch.yoon.remote.kakao.request.ImageSortType.ACCURACY)
+    val imageSortType: LiveData<com.ch.yoon.remote.kakao.request.ImageSortType> = _imageSortType
 
     private val _countOfItemInLine = NonNullMutableLiveData(2)
     val countOfItemInLine: LiveData<Int> = _countOfItemInLine
 
-    private val _imageDocuments = MutableLiveData<MutableList<ImageDocument>>()
-    val imageDocuments: LiveData<List<ImageDocument>> = Transformations.map(_imageDocuments) { it?.toList() }
+    private val _imageDocuments = MutableLiveData<MutableList<com.ch.yoon.data.model.image.ImageDocument>>()
+    val imageDocuments: LiveData<List<com.ch.yoon.data.model.image.ImageDocument>> = Transformations.map(_imageDocuments) { it?.toList() }
 
     private val _imageSearchState = MutableLiveData<ImageSearchState>(ImageSearchState.NONE)
     val imageSearchState: LiveData<ImageSearchState> = _imageSearchState
 
-    private val _moveToDetailScreenEvent = SingleLiveEvent<ImageDocument>()
-    val moveToDetailScreenEvent: LiveData<ImageDocument> = _moveToDetailScreenEvent
+    private val _moveToDetailScreenEvent = SingleLiveEvent<com.ch.yoon.data.model.image.ImageDocument>()
+    val moveToDetailScreenEvent: LiveData<com.ch.yoon.data.model.image.ImageDocument> = _moveToDetailScreenEvent
 
-    private var imageSearchMeta: ImageSearchMeta? = null
+    private var imageSearchMeta: com.ch.yoon.data.model.image.ImageSearchMeta? = null
 
     private val isRemainingMoreData
         get() = imageSearchMeta?.isEnd?.not() ?: true
@@ -58,11 +58,11 @@ class ImageSearchViewModel(
         _countOfItemInLine.value = countOfItemInLine
     }
 
-    fun onClickImage(imageDocument: ImageDocument) {
+    fun onClickImage(imageDocument: com.ch.yoon.data.model.image.ImageDocument) {
         _moveToDetailScreenEvent.value = imageDocument
     }
 
-    fun changeImageSortType(imageSortType: ImageSortType) {
+    fun changeImageSortType(imageSortType: com.ch.yoon.remote.kakao.request.ImageSortType) {
         _imageDocuments.clear()
         _imageSortType.value = imageSortType
         pageLoadHelper.getCurrentKey()?.let { currentKey ->
@@ -87,7 +87,7 @@ class ImageSearchViewModel(
 
     private fun observePageLoadInspector() {
         pageLoadHelper.onPageLoadApproveCallback = { key, pageNumber, dataSize, isFirstPage ->
-            val request = ImageSearchRequest(key, _imageSortType.value, pageNumber, dataSize, isFirstPage)
+            val request = com.ch.yoon.remote.kakao.request.ImageSearchRequest(key, _imageSortType.value, pageNumber, dataSize, isFirstPage)
             requestImagesToRepository(request)
         }
     }
@@ -103,7 +103,7 @@ class ImageSearchViewModel(
             .disposeByOnCleared()
     }
 
-    private fun requestImagesToRepository(request: ImageSearchRequest) {
+    private fun requestImagesToRepository(request: com.ch.yoon.remote.kakao.request.ImageSearchRequest) {
         _imageSearchState.value = ImageSearchState.NONE
 
         imageRepository.getImages(request)
@@ -120,8 +120,8 @@ class ImageSearchViewModel(
     }
 
     private fun updateImageDocuments(
-        previousRequest: ImageSearchRequest,
-        receivedImageDocuments: List<ImageDocument>
+        previousRequest: com.ch.yoon.remote.kakao.request.ImageSearchRequest,
+        receivedImageDocuments: List<com.ch.yoon.data.model.image.ImageDocument>
     ) {
         _imageDocuments.apply {
             if (previousRequest.isFirstRequest) {
@@ -135,7 +135,7 @@ class ImageSearchViewModel(
         }
     }
 
-    private fun updateSearchMeta(searchMeta: ImageSearchMeta) {
+    private fun updateSearchMeta(searchMeta: com.ch.yoon.data.model.image.ImageSearchMeta) {
         imageSearchMeta = searchMeta
         if(_imageDocuments.isNotEmpty() && searchMeta.isEnd) {
             updateShowMessage(R.string.success_image_search_last_data)

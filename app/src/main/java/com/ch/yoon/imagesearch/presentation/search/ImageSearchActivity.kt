@@ -7,7 +7,7 @@ import android.view.MenuItem
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.ch.yoon.imagesearch.R
-import com.ch.yoon.imagesearch.data.remote.kakao.request.ImageSortType
+import com.ch.yoon.remote.kakao.request.ImageSortType
 import com.ch.yoon.imagesearch.databinding.ActivityImageSearchBinding
 import com.ch.yoon.imagesearch.extension.throttleFirstWithHalfSecond
 import com.ch.yoon.imagesearch.presentation.base.RxBaseActivity
@@ -160,12 +160,12 @@ class ImageSearchActivity : RxBaseActivity<ActivityImageSearchBinding>() {
     private fun initSortOptionView() {
         binding.accuracySortTextView.clicks()
             .throttleFirstWithHalfSecond()
-            .subscribe { imageSearchViewModel.changeImageSortType(ImageSortType.ACCURACY) }
+            .subscribe { imageSearchViewModel.changeImageSortType(com.ch.yoon.remote.kakao.request.ImageSortType.ACCURACY) }
             .disposeByOnDestroy()
 
         binding.recencySortTextView.clicks()
             .throttleFirstWithHalfSecond()
-            .subscribe { imageSearchViewModel.changeImageSortType(ImageSortType.RECENCY) }
+            .subscribe { imageSearchViewModel.changeImageSortType(com.ch.yoon.remote.kakao.request.ImageSortType.RECENCY) }
             .disposeByOnDestroy()
     }
 

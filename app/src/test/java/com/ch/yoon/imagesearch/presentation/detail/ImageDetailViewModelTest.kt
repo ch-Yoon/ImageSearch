@@ -13,7 +13,7 @@ import org.junit.Rule
 import android.text.TextUtils
 import com.ch.yoon.imagesearch.R
 import com.ch.yoon.imagesearch.data.repository.image.ImageRepository
-import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
+import com.ch.yoon.data.model.image.ImageDocument
 import io.mockk.verify
 import io.reactivex.Completable
 import junit.framework.Assert.assertEquals
@@ -231,8 +231,8 @@ class ImageDetailViewModelTest {
         }
     }
 
-    private fun createVirtualImageDocument(id: Int, isFavorite: Boolean = false): ImageDocument {
-        return ImageDocument(
+    private fun createVirtualImageDocument(id: Int, isFavorite: Boolean = false): com.ch.yoon.data.model.image.ImageDocument {
+        return com.ch.yoon.data.model.image.ImageDocument(
             "id$id",
             "collection$id",
             "thumbnailUrl$id",
@@ -246,8 +246,8 @@ class ImageDetailViewModelTest {
         )
     }
 
-    private fun createVirtualImageDocumentWithEmptyDocUrl(id: Int): ImageDocument {
-        return ImageDocument(
+    private fun createVirtualImageDocumentWithEmptyDocUrl(id: Int): com.ch.yoon.data.model.image.ImageDocument {
+        return com.ch.yoon.data.model.image.ImageDocument(
             "id$id",
             "collection$id",
             "thumbnailUrl$id",

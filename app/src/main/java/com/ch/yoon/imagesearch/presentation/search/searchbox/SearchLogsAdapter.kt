@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.ch.yoon.imagesearch.data.repository.searchlog.model.SearchLog
+import com.ch.yoon.data.model.searchlog.SearchLog
 import com.ch.yoon.imagesearch.databinding.ItemAllDeleteFooterBinding
 import com.ch.yoon.imagesearch.databinding.ItemSearchLogBinding
 import io.reactivex.Observable
@@ -15,18 +15,18 @@ import io.reactivex.subjects.PublishSubject
  * Creator : ch-yoon
  * Date : 2019-12-19.
  */
-class SearchLogsAdapter : ListAdapter<SearchLog, RecyclerView.ViewHolder>(DiffCallback()) {
+class SearchLogsAdapter : ListAdapter<com.ch.yoon.data.model.searchlog.SearchLog, RecyclerView.ViewHolder>(DiffCallback()) {
 
     companion object {
         private const val TYPE_ITEM = 1
         private const val TYPE_FOOTER = 2
     }
 
-    private val _itemClicks = PublishSubject.create<SearchLog>()
-    val itemClicks: Observable<SearchLog> = _itemClicks
+    private val _itemClicks = PublishSubject.create<com.ch.yoon.data.model.searchlog.SearchLog>()
+    val itemClicks: Observable<com.ch.yoon.data.model.searchlog.SearchLog> = _itemClicks
 
-    private val _itemDeleteClicks = PublishSubject.create<SearchLog>()
-    val itemDeleteClicks: Observable<SearchLog> = _itemDeleteClicks
+    private val _itemDeleteClicks = PublishSubject.create<com.ch.yoon.data.model.searchlog.SearchLog>()
+    val itemDeleteClicks: Observable<com.ch.yoon.data.model.searchlog.SearchLog> = _itemDeleteClicks
 
     private val _footerClicks = PublishSubject.create<Unit>()
     val footerClicks: Observable<Unit> = _footerClicks
@@ -84,7 +84,7 @@ class SearchLogsAdapter : ListAdapter<SearchLog, RecyclerView.ViewHolder>(DiffCa
         val binding: ItemSearchLogBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun setItem(searchLog: SearchLog) {
+        fun setItem(searchLog: com.ch.yoon.data.model.searchlog.SearchLog) {
             binding.searchLog = searchLog
         }
     }
@@ -95,12 +95,12 @@ class SearchLogsAdapter : ListAdapter<SearchLog, RecyclerView.ViewHolder>(DiffCa
 
     }
 
-    class DiffCallback : DiffUtil.ItemCallback<SearchLog>() {
-        override fun areItemsTheSame(oldItem: SearchLog, newItem: SearchLog): Boolean {
+    class DiffCallback : DiffUtil.ItemCallback<com.ch.yoon.data.model.searchlog.SearchLog>() {
+        override fun areItemsTheSame(oldItem: com.ch.yoon.data.model.searchlog.SearchLog, newItem: com.ch.yoon.data.model.searchlog.SearchLog): Boolean {
             return oldItem.keyword == newItem.keyword
         }
 
-        override fun areContentsTheSame(oldItem: SearchLog, newItem: SearchLog): Boolean {
+        override fun areContentsTheSame(oldItem: com.ch.yoon.data.model.searchlog.SearchLog, newItem: com.ch.yoon.data.model.searchlog.SearchLog): Boolean {
             return oldItem == newItem
         }
     }

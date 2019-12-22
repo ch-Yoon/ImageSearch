@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.ch.yoon.imagesearch.data.repository.image.ImageRepository
-import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
+import com.ch.yoon.data.model.image.ImageDocument
 import com.ch.yoon.imagesearch.extension.*
 import com.ch.yoon.imagesearch.presentation.base.BaseViewModel
 import com.ch.yoon.imagesearch.presentation.common.livedata.SingleLiveEvent
@@ -21,11 +21,11 @@ class FavoriteImagesViewModel(
     private val imageRepository: ImageRepository
 ) : BaseViewModel(application) {
 
-    private val _favoriteImages = MutableLiveData<MutableList<ImageDocument>>()
-    val favoriteImages: LiveData<List<ImageDocument>> = Transformations.map(_favoriteImages) { it?.toList() }
+    private val _favoriteImages = MutableLiveData<MutableList<com.ch.yoon.data.model.image.ImageDocument>>()
+    val favoriteImages: LiveData<List<com.ch.yoon.data.model.image.ImageDocument>> = Transformations.map(_favoriteImages) { it?.toList() }
 
-    private val _moveToDetailScreenEvent = SingleLiveEvent<ImageDocument>()
-    val moveToDetailScreenEvent: LiveData<ImageDocument> = _moveToDetailScreenEvent
+    private val _moveToDetailScreenEvent = SingleLiveEvent<com.ch.yoon.data.model.image.ImageDocument>()
+    val moveToDetailScreenEvent: LiveData<com.ch.yoon.data.model.image.ImageDocument> = _moveToDetailScreenEvent
 
     init {
         observeChangingFavoriteImage()
@@ -42,7 +42,7 @@ class FavoriteImagesViewModel(
             .disposeByOnCleared()
     }
 
-    fun onClickImage(imageDocument: ImageDocument) {
+    fun onClickImage(imageDocument: com.ch.yoon.data.model.image.ImageDocument) {
         _moveToDetailScreenEvent.value = imageDocument
     }
 

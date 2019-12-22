@@ -1,11 +1,11 @@
 package com.ch.yoon.imagesearch.data.local.room
 
 import com.ch.yoon.imagesearch.BaseRxTest
-import com.ch.yoon.imagesearch.data.local.room.dao.ImageDAO
-import com.ch.yoon.imagesearch.data.local.room.entity.ImageDocumentEntity
-import com.ch.yoon.imagesearch.data.repository.error.RepositoryException
+import com.ch.yoon.local.dao.ImageDAO
+import com.ch.yoon.local.entity.ImageDocumentEntity
+import com.ch.yoon.data.model.error.RepositoryException
 import com.ch.yoon.imagesearch.data.repository.image.ImageLocalDataSource
-import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
+import com.ch.yoon.data.model.image.ImageDocument
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -22,13 +22,13 @@ import java.lang.Exception
 class ImageLocalDataSourceImplTest : BaseRxTest() {
 
     @MockK
-    lateinit var mockImageDAO: ImageDAO
+    lateinit var mockImageDAO: com.ch.yoon.local.dao.ImageDAO
 
     private lateinit var imageLocalDataSource: ImageLocalDataSource
 
     override fun before() {
         MockKAnnotations.init(this, relaxUnitFun = true)
-        imageLocalDataSource = ImageLocalDataSourceImpl(mockImageDAO)
+        imageLocalDataSource = com.ch.yoon.local.ImageLocalDataSourceImpl(mockImageDAO)
     }
 
     override fun after() {
@@ -119,7 +119,7 @@ class ImageLocalDataSourceImplTest : BaseRxTest() {
         every { mockImageDAO.selectAllImageDocument() } returns Single.just(entityList)
 
         // when
-        var actualList: List<ImageDocument>? = null
+        var actualList: List<com.ch.yoon.data.model.image.ImageDocument>? = null
         imageLocalDataSource.getAllFavoriteImages()
             .subscribe({
                 actualList = it
@@ -138,7 +138,7 @@ class ImageLocalDataSourceImplTest : BaseRxTest() {
         every { mockImageDAO.selectAllImageDocument() } returns Single.just(listOf())
 
         // when
-        var actualList: List<ImageDocument>? = null
+        var actualList: List<com.ch.yoon.data.model.image.ImageDocument>? = null
         imageLocalDataSource.getAllFavoriteImages()
             .subscribe({
                 actualList = it
@@ -168,13 +168,13 @@ class ImageLocalDataSourceImplTest : BaseRxTest() {
         assertEquals(true, actualException is RepositoryException)
     }
 
-    private fun fromEntityList(list: List<ImageDocumentEntity>): List<ImageDocument> {
+    private fun fromEntityList(list: List<com.ch.yoon.local.entity.ImageDocumentEntity>): List<com.ch.yoon.data.model.image.ImageDocument> {
         return list.map { fromEntity(it) }
     }
 
-    private fun fromEntity(imageDocumentEntity: ImageDocumentEntity): ImageDocument {
+    private fun fromEntity(imageDocumentEntity: com.ch.yoon.local.entity.ImageDocumentEntity): com.ch.yoon.data.model.image.ImageDocument {
         return imageDocumentEntity.run {
-            ImageDocument(
+            com.ch.yoon.data.model.image.ImageDocument(
                 id,
                 collection,
                 thumbnailUrl,
@@ -189,8 +189,8 @@ class ImageLocalDataSourceImplTest : BaseRxTest() {
         }
     }
 
-    private fun createImageDocument(id: String): ImageDocument {
-        return ImageDocument(
+    private fun createImageDocument(id: String): com.ch.yoon.data.model.image.ImageDocument {
+        return com.ch.yoon.data.model.image.ImageDocument(
             id,
             "collection$id",
             "thumbnailUrl$id",
@@ -204,16 +204,16 @@ class ImageLocalDataSourceImplTest : BaseRxTest() {
         )
     }
 
-    private fun createImageDocumentEntityList(idArray: Array<String>): List<ImageDocumentEntity> {
-        return mutableListOf<ImageDocumentEntity>().apply {
+    private fun createImageDocumentEntityList(idArray: Array<String>): List<com.ch.yoon.local.entity.ImageDocumentEntity> {
+        return mutableListOf<com.ch.yoon.local.entity.ImageDocumentEntity>().apply {
             for(id in idArray) {
                 add(createImageDocumentEntity(id))
             }
         }
     }
 
-    private fun createImageDocumentEntity(id: String): ImageDocumentEntity {
-        return ImageDocumentEntity(
+    private fun createImageDocumentEntity(id: String): com.ch.yoon.local.entity.ImageDocumentEntity {
+        return com.ch.yoon.local.entity.ImageDocumentEntity(
             id,
             "collection$id",
             "thumbnailUrl$id",

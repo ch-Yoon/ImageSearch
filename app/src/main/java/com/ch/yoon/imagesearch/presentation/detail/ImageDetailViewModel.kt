@@ -7,7 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ch.yoon.imagesearch.R
 import com.ch.yoon.imagesearch.data.repository.image.ImageRepository
-import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
+import com.ch.yoon.data.model.image.ImageDocument
 import com.ch.yoon.imagesearch.presentation.base.BaseViewModel
 import com.ch.yoon.imagesearch.presentation.common.livedata.SingleLiveEvent
 import com.ch.yoon.imagesearch.extension.TAG
@@ -34,9 +34,9 @@ class ImageDetailViewModel(
     private val _finishEvent = SingleLiveEvent<Unit>()
     val finishEvent: LiveData<Unit> = _finishEvent
 
-    private var imageDocument: ImageDocument? = null
+    private var imageDocument: com.ch.yoon.data.model.image.ImageDocument? = null
 
-    fun showImageDetailInfo(receivedImageDocument: ImageDocument?) {
+    fun showImageDetailInfo(receivedImageDocument: com.ch.yoon.data.model.image.ImageDocument?) {
         receivedImageDocument?.let { document ->
             imageDocument = document
             _imageUrlInfo.value = document.imageUrl
@@ -68,7 +68,7 @@ class ImageDetailViewModel(
         }
     }
 
-    private fun saveFavoriteToRepository(target: ImageDocument) {
+    private fun saveFavoriteToRepository(target: com.ch.yoon.data.model.image.ImageDocument) {
         imageRepository.saveFavoriteImage(target)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
@@ -80,7 +80,7 @@ class ImageDetailViewModel(
             .disposeByOnCleared()
     }
 
-    private fun deleteFavoriteFromRepository(target: ImageDocument) {
+    private fun deleteFavoriteFromRepository(target: com.ch.yoon.data.model.image.ImageDocument) {
         imageRepository.deleteFavoriteImage(target)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
@@ -92,7 +92,7 @@ class ImageDetailViewModel(
             .disposeByOnCleared()
     }
 
-    private fun updateImageDocument(target: ImageDocument) {
+    private fun updateImageDocument(target: com.ch.yoon.data.model.image.ImageDocument) {
         imageDocument = target
         _isFavorite.value = target.isFavorite
     }

@@ -6,13 +6,12 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.belongings.bag.belongingsbag.RxSchedulerRule
 import com.ch.yoon.imagesearch.R
 import com.ch.yoon.imagesearch.data.repository.image.ImageRepository
-import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
+import com.ch.yoon.data.model.image.ImageDocument
 import com.ch.yoon.imagesearch.extension.removeFirstIf
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockkStatic
-import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import org.junit.Test
@@ -43,7 +42,7 @@ class FavoriteImagesViewModelTest {
 
     private lateinit var favoriteImagesViewModel: FavoriteImagesViewModel
 
-    private val changedFavoriteImagesSubject = PublishSubject.create<ImageDocument>()
+    private val changedFavoriteImagesSubject = PublishSubject.create<com.ch.yoon.data.model.image.ImageDocument>()
 
     @Before
     fun init() {
@@ -141,7 +140,7 @@ class FavoriteImagesViewModelTest {
         changedFavoriteImagesSubject.onNext(newFavoriteImage)
 
         // then
-        val expected = mutableListOf<ImageDocument>().apply {
+        val expected = mutableListOf<com.ch.yoon.data.model.image.ImageDocument>().apply {
             addAll(favoriteImageList)
             add(newFavoriteImage)
         }
@@ -164,7 +163,7 @@ class FavoriteImagesViewModelTest {
         changedFavoriteImagesSubject.onNext(noFavoriteImage)
 
         // then
-        val expected = mutableListOf<ImageDocument>().apply {
+        val expected = mutableListOf<com.ch.yoon.data.model.image.ImageDocument>().apply {
             addAll(favoriteImageList)
             removeFirstIf { it.id == noFavoriteImage.id }
         }
@@ -173,24 +172,24 @@ class FavoriteImagesViewModelTest {
         }
     }
 
-    private fun createFavoriteImageDocuments(size: Int): List<ImageDocument> {
-        val list = mutableListOf<ImageDocument>()
+    private fun createFavoriteImageDocuments(size: Int): List<com.ch.yoon.data.model.image.ImageDocument> {
+        val list = mutableListOf<com.ch.yoon.data.model.image.ImageDocument>()
         for(i in 0 until size) {
             list.add(createFavoriteImageDocument(i))
         }
         return list
     }
 
-    private fun createFavoriteImageDocument(id: Int): ImageDocument {
+    private fun createFavoriteImageDocument(id: Int): com.ch.yoon.data.model.image.ImageDocument {
         return createImageDocument(id, true)
     }
 
-    private fun createNoFavoriteImageDocument(id: Int): ImageDocument {
+    private fun createNoFavoriteImageDocument(id: Int): com.ch.yoon.data.model.image.ImageDocument {
         return createImageDocument(id, false)
     }
 
-    private fun createImageDocument(id: Int, isFavorite: Boolean): ImageDocument {
-        return ImageDocument(
+    private fun createImageDocument(id: Int, isFavorite: Boolean): com.ch.yoon.data.model.image.ImageDocument {
+        return com.ch.yoon.data.model.image.ImageDocument(
             "id$id",
             "collection$id",
             "thumbnailUrl$id",

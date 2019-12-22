@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.ch.yoon.imagesearch.R
 import com.ch.yoon.imagesearch.data.repository.searchlog.SearchLogRepository
-import com.ch.yoon.imagesearch.data.repository.searchlog.model.SearchLog
+import com.ch.yoon.data.model.searchlog.SearchLog
 
 import com.ch.yoon.imagesearch.extension.*
 import com.ch.yoon.imagesearch.presentation.base.BaseViewModel
@@ -23,8 +23,8 @@ class SearchBoxViewModel(
     private val searchLogRepository: SearchLogRepository
 ) : BaseViewModel (application) {
 
-    private val _searchLogs = MutableLiveData<MutableList<SearchLog>>(mutableListOf())
-    val searchLogs: LiveData<List<SearchLog>> = Transformations.map(_searchLogs) { it?.toList() }
+    private val _searchLogs = MutableLiveData<MutableList<com.ch.yoon.data.model.searchlog.SearchLog>>(mutableListOf())
+    val searchLogs: LiveData<List<com.ch.yoon.data.model.searchlog.SearchLog>> = Transformations.map(_searchLogs) { it?.toList() }
 
     private val _searchEvent = SingleLiveEvent<String>()
     val searchEvent: LiveData<String> = _searchEvent
@@ -49,7 +49,7 @@ class SearchBoxViewModel(
             .disposeByOnCleared()
     }
 
-    fun onClickSearchLogDeleteButton(searchLog: SearchLog) {
+    fun onClickSearchLogDeleteButton(searchLog: com.ch.yoon.data.model.searchlog.SearchLog) {
         val targetLog = _searchLogs.find { it == searchLog }
         if(targetLog != null) {
             _searchLogs.removeFirst { it == searchLog }
