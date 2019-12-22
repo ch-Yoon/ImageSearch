@@ -1,1 +1,1 @@
-include ':app', ':suggetionsearchview'
+include ':app', ':suggetionsearchview', ':remote', ':domain', ':local', ':data'

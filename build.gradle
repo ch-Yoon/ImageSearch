@@ -23,11 +23,10 @@ buildscript {
         mockk_version = '1.9.3'
         material_version = '1.0.0'
     }
-
     repositories {
         google()
         jcenter()
-        
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.2'
