@@ -1,4 +1,4 @@
-package com.ch.yoon.remote.kakao.model.response.mapper
+package com.ch.yoon.remote.kakao.model.image.mapper
 
 /**
  * Creator : ch-yoon
@@ -11,4 +11,5 @@ package com.ch.yoon.remote.kakao.model.response.mapper
 interface EntityMapper<R, E> {
 
     fun toEntity(remoteModel: R): E
+
 }

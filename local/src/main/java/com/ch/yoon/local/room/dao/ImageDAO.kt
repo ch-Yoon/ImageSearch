@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.ch.yoon.local.room.model.ImageDocumentEntity
+import com.ch.yoon.local.room.model.LocalImageDocument
 import io.reactivex.Completable
 import io.reactivex.Single
 
@@ -16,12 +16,12 @@ import io.reactivex.Single
 interface ImageDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertOrUpdateImageDocument(imageDocumentEntity: ImageDocumentEntity): Completable
+    fun insertOrUpdateImageDocument(localImageDocument: LocalImageDocument): Completable
 
     @Query("DELETE FROM imageDocumentEntities WHERE id = :id")
     fun deleteImageDocument(id: String): Completable
 
     @Query("SELECT * FROM imageDocumentEntities")
-    fun selectAllImageDocument(): Single<List<ImageDocumentEntity>>
+    fun selectAllImageDocument(): Single<List<LocalImageDocument>>
 
 }

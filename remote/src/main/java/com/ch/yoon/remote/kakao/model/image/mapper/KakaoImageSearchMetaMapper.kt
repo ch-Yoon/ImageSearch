@@ -1,7 +1,7 @@
-package com.ch.yoon.remote.kakao.model.response.mapper
+package com.ch.yoon.remote.kakao.model.image.mapper
 
 import com.ch.yoon.data.model.image.response.ImageSearchMetaEntity
-import com.ch.yoon.remote.kakao.model.response.KakaoImageSearchMetaInfo
+import com.ch.yoon.remote.kakao.model.image.response.KakaoImageSearchMetaInfo
 
 /**
  * Creator : ch-yoon

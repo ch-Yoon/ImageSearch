@@ -10,4 +10,3 @@ class SingleExceptionTransformer<T> : SingleTransformer<T, T> {
         }
     }
 }
-

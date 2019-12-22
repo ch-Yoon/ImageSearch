@@ -4,8 +4,8 @@ import com.ch.yoon.local.room.dao.ImageDAO
 import com.ch.yoon.local.room.model.mapper.ImageDocumentEntityMapper
 import com.ch.yoon.local.room.transformer.error.CompletableExceptionTransformer
 import com.ch.yoon.local.room.transformer.error.SingleExceptionTransformer
-import com.ch.yoon.imagesearch.data.repository.image.ImageLocalDataSource
 import com.ch.yoon.data.model.image.response.ImageDocumentEntity
+import com.ch.yoon.data.source.image.ImageLocalDataSource
 import io.reactivex.Completable
 import io.reactivex.Single
 

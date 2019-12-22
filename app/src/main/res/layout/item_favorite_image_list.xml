@@ -6,7 +6,7 @@
     <data>
 
         <variable
-            name="imageDocumentEntity"
+            name="localImageDocument"
             type="com.ch.yoon.data.model.image.response.ImageDocumentEntity" />
 
     </data>
@@ -27,7 +27,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:loadImageWithCenterCrop="@{imageDocumentEntity.thumbnailUrl}"/>
+            app:loadImageWithCenterCrop="@{localImageDocument.thumbnailUrl}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

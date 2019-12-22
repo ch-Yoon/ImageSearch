@@ -1,4 +1,4 @@
-package com.ch.yoon.remote.kakao.model.response
+package com.ch.yoon.remote.kakao.model.image.response
 
 import com.google.gson.annotations.SerializedName
 

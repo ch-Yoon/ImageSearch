@@ -1,6 +1,6 @@
 package com.ch.yoon.remote.kakao
 
-import com.ch.yoon.remote.kakao.model.response.KakaoImageSearchResponse
+import com.ch.yoon.remote.kakao.model.image.response.KakaoImageSearchResponse
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -18,5 +18,4 @@ interface KakaoSearchApi {
         @Query(value = "page") pageNumber: Int,
         @Query(value = "size") requiredSize: Int
     ): Single<KakaoImageSearchResponse>
-
 }

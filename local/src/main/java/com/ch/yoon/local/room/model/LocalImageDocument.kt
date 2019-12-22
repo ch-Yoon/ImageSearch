@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
  * Date : 2019-11-12
  **/
 @Entity(tableName = "imageDocumentEntities")
-data class ImageDocumentEntity(
+data class LocalImageDocument(
     @PrimaryKey val id: String,
     val collection: String,
     val thumbnailUrl: String,

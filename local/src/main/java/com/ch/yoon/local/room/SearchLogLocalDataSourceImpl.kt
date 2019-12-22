@@ -2,7 +2,7 @@ package com.ch.yoon.local.room
 
 import com.ch.yoon.data.source.searchlog.SearchLogLocalDataSource
 import com.ch.yoon.local.room.dao.SearchLogDAO
-import com.ch.yoon.local.room.model.SearchLogEntity
+import com.ch.yoon.local.room.model.LocalSearchLog
 import com.ch.yoon.local.room.model.mapper.SearchLogEntityMapper
 import com.ch.yoon.local.room.transformer.error.CompletableExceptionTransformer
 import com.ch.yoon.local.room.transformer.error.SingleExceptionTransformer
@@ -18,7 +18,7 @@ class SearchLogLocalDataSourceImpl(
 ) : SearchLogLocalDataSource {
 
     override fun insertOrUpdateSearchLog(keyword: String): Single<com.ch.yoon.data.model.searchlog.SearchLog> {
-        val newSearchLogEntity = SearchLogEntity(keyword, System.currentTimeMillis())
+        val newSearchLogEntity = LocalSearchLog(keyword, System.currentTimeMillis())
         return searchLogDAO.insertOrUpdateSearchLog(newSearchLogEntity)
             .toSingle { newSearchLogEntity }
             .map { SearchLogEntityMapper.fromEntity(it) }

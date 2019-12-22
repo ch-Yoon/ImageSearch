@@ -1,7 +1,7 @@
-package com.ch.yoon.remote.kakao.model.response.mapper
+package com.ch.yoon.remote.kakao.model.image.mapper
 
 import com.ch.yoon.data.model.image.response.ImageDocumentEntity
-import com.ch.yoon.remote.kakao.model.response.KakaoImageDocument
+import com.ch.yoon.remote.kakao.model.image.response.KakaoImageDocument
 
 /**
  * Creator : ch-yoon

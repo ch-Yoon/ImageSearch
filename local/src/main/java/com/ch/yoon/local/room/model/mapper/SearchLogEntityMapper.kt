@@ -1,7 +1,6 @@
 package com.ch.yoon.local.room.model.mapper
 
-import com.ch.yoon.local.room.model.SearchLogEntity
-import com.ch.yoon.data.model.searchlog.SearchLog
+import com.ch.yoon.local.room.model.LocalSearchLog
 
 /**
  * Creator : ch-yoon
@@ -9,8 +8,8 @@ import com.ch.yoon.data.model.searchlog.SearchLog
  **/
 object SearchLogEntityMapper {
 
-    fun fromEntity(searchLogEntity: SearchLogEntity): com.ch.yoon.data.model.searchlog.SearchLog = searchLogEntity.run { com.ch.yoon.data.model.searchlog.SearchLog(keyword, time) }
+    fun fromEntity(localSearchLog: LocalSearchLog): com.ch.yoon.data.model.searchlog.SearchLog = localSearchLog.run { com.ch.yoon.data.model.searchlog.SearchLog(keyword, time) }
 
-    fun fromEntityList(searchLogEntityList: List<SearchLogEntity>) = searchLogEntityList.map { com.ch.yoon.data.model.searchlog.SearchLog(it.keyword, it.time) }
+    fun fromEntityList(localSearchLogList: List<LocalSearchLog>) = localSearchLogList.map { com.ch.yoon.data.model.searchlog.SearchLog(it.keyword, it.time) }
 
 }
