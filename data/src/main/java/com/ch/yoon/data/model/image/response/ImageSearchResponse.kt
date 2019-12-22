@@ -1,4 +1,4 @@
-package com.ch.yoon.data.model.image
+package com.ch.yoon.data.model.image.response
 
 /**
  * Creator : ch-yoon

@@ -1,6 +1,6 @@
-package com.ch.yoon.imagesearch.data.repository.image
+package com.ch.yoon.data.source.image
 
-import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
+import com.ch.yoon.data.model.image.response.ImageDocument
 import io.reactivex.Completable
 import io.reactivex.Single
 

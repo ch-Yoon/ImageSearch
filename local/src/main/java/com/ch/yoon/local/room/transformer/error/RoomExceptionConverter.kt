@@ -1,7 +1,7 @@
 package com.ch.yoon.local.room.transformer.error
 
 import androidx.room.EmptyResultSetException
-import com.ch.yoon.data.model.error.RepositoryException
+import com.ch.yoon.data.error.RepositoryException
 
 /**
  * Creator : ch-yoon

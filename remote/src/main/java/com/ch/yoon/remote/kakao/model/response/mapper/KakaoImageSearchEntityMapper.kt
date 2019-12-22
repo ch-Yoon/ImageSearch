@@ -1,9 +1,9 @@
 package com.ch.yoon.remote.kakao.model.response.mapper
 
+import com.ch.yoon.data.model.image.response.ImageDocument
+import com.ch.yoon.data.model.image.response.ImageSearchMeta
+import com.ch.yoon.data.model.image.response.ImageSearchResponse
 import com.ch.yoon.remote.kakao.model.response.KakaoImageSearchResponse
-import com.ch.yoon.data.model.image.ImageDocument
-import com.ch.yoon.data.model.image.ImageSearchMeta
-import com.ch.yoon.data.model.image.ImageSearchResponse
 
 /**
  * Creator : ch-yoon
@@ -11,14 +11,14 @@ import com.ch.yoon.data.model.image.ImageSearchResponse
  **/
 object KakaoImageSearchEntityMapper {
 
-    fun fromEntity(remoteEntity: KakaoImageSearchResponse): com.ch.yoon.data.model.image.ImageSearchResponse {
+    fun fromEntity(remoteEntity: KakaoImageSearchResponse): ImageSearchResponse {
         return remoteEntity.run {
             val imageSearchMeta = kakaoImageSearchMeta.run {
-                com.ch.yoon.data.model.image.ImageSearchMeta(isEnd)
+                ImageSearchMeta(isEnd)
             }
 
             val imageDocumentList = kakaoImageDocuments.map {
-                com.ch.yoon.data.model.image.ImageDocument(
+                ImageDocument(
                     "${it.imageUrl}&${it.docUrl}",
                     it.collection,
                     it.thumbnailUrl,
@@ -32,7 +32,7 @@ object KakaoImageSearchEntityMapper {
                 )
             }
 
-            com.ch.yoon.data.model.image.ImageSearchResponse(imageSearchMeta, imageDocumentList)
+            ImageSearchResponse(imageSearchMeta, imageDocumentList)
         }
     }
 

@@ -1,8 +1,8 @@
 package com.ch.yoon.domain.repository
 
-import com.ch.yoon.imagesearch.data.remote.kakao.request.ImageSearchRequest
-import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
-import com.ch.yoon.imagesearch.data.repository.image.model.ImageSearchResponse
+import com.ch.yoon.data.model.image.response.ImageDocument
+import com.ch.yoon.data.model.image.response.ImageSearchResponse
+import com.ch.yoon.domain.model.image.request.ImageSearchRequest
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single

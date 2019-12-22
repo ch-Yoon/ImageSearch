@@ -1,7 +1,7 @@
 package com.ch.yoon.local.room.model.mapper
 
 import com.ch.yoon.local.room.model.ImageDocumentEntity
-import com.ch.yoon.data.model.image.ImageDocument
+import com.ch.yoon.data.model.image.response.ImageDocument
 
 /**
  * Creator : ch-yoon
@@ -9,7 +9,7 @@ import com.ch.yoon.data.model.image.ImageDocument
  **/
 object ImageDocumentEntityMapper {
 
-    fun toEntity(imageDocument: com.ch.yoon.data.model.image.ImageDocument): ImageDocumentEntity {
+    fun toEntity(imageDocument: ImageDocument): ImageDocumentEntity {
         return imageDocument.run {
             ImageDocumentEntity(
                 id,
@@ -26,13 +26,13 @@ object ImageDocumentEntityMapper {
         }
     }
 
-    fun fromEntityList(imageDocumentEntityList: List<ImageDocumentEntity>): List<com.ch.yoon.data.model.image.ImageDocument> {
+    fun fromEntityList(imageDocumentEntityList: List<ImageDocumentEntity>): List<ImageDocument> {
         return imageDocumentEntityList.map { fromEntity(it) }
     }
 
-    fun fromEntity(imageDocumentEntity: ImageDocumentEntity): com.ch.yoon.data.model.image.ImageDocument {
+    fun fromEntity(imageDocumentEntity: ImageDocumentEntity): ImageDocument {
         return imageDocumentEntity.run {
-            com.ch.yoon.data.model.image.ImageDocument(
+            ImageDocument(
                 id,
                 collection,
                 thumbnailUrl,

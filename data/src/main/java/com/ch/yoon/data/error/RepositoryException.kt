@@ -1,4 +1,4 @@
-package com.ch.yoon.data.model.error
+package com.ch.yoon.data.error
 
 import java.lang.Exception
 

@@ -1,14 +1,18 @@
 package com.ch.yoon.data.repository
 
-import com.ch.yoon.imagesearch.data.remote.kakao.request.ImageSearchRequest
-import com.ch.yoon.imagesearch.data.repository.image.model.ImageDocument
-import com.ch.yoon.imagesearch.data.repository.image.model.ImageSearchResponse
+import com.ch.yoon.data.model.image.response.ImageDocument
+import com.ch.yoon.data.model.image.response.ImageSearchResponse
+import com.ch.yoon.data.source.image.ImageLocalDataSource
+import com.ch.yoon.data.source.image.ImageRemoteDataSource
+import com.ch.yoon.domain.model.image.request.ImageSearchRequest
+import com.ch.yoon.domain.repository.ImageRepository
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+
 
 /**
  * Creator : ch-yoon

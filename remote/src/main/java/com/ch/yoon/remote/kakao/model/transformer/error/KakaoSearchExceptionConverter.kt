@@ -1,6 +1,6 @@
 package com.ch.yoon.remote.kakao.model.transformer.error
 
-import com.ch.yoon.data.model.error.RepositoryException
+import com.ch.yoon.data.error.RepositoryException
 import retrofit2.HttpException
 import java.net.UnknownHostException
 

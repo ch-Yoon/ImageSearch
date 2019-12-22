@@ -1,6 +1,6 @@
 package com.ch.yoon.domain.repository
 
-import com.ch.yoon.imagesearch.data.repository.searchlog.model.SearchLog
+import com.ch.yoon.domain.model.searchlog.SearchLog
 import io.reactivex.Completable
 import io.reactivex.Single
 

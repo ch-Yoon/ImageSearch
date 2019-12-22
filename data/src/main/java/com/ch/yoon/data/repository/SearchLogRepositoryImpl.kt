@@ -1,6 +1,8 @@
 package com.ch.yoon.data.repository
 
-import com.ch.yoon.imagesearch.data.repository.searchlog.model.SearchLog
+import com.ch.yoon.data.source.searchlog.SearchLogLocalDataSource
+import com.ch.yoon.domain.model.searchlog.SearchLog
+import com.ch.yoon.domain.repository.SearchLogRepository
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
