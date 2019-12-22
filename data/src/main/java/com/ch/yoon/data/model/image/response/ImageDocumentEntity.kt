@@ -7,7 +7,7 @@ import android.os.Parcelable
  * Creator : ch-yoon
  * Date : 2019-10-30
  **/
-data class ImageDocument(
+data class ImageDocumentEntity(
     val id: String,
     val collection: String,
     val thumbnailUrl: String,

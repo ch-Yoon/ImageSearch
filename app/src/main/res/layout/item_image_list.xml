@@ -5,8 +5,8 @@
     <data>
 
         <variable
-            name="imageDocument"
-            type="com.ch.yoon.data.model.image.response.ImageDocument" />
+            name="imageDocumentEntity"
+            type="com.ch.yoon.data.model.image.response.ImageDocumentEntity" />
 
     </data>
 
@@ -20,7 +20,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="1dp"
-            app:loadImageWithCenterCrop="@{imageDocument.thumbnailUrl}"
+            app:loadImageWithCenterCrop="@{imageDocumentEntity.thumbnailUrl}"
             app:roundedCorners="@{30}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1:1"
@@ -37,7 +37,7 @@
             app:srcAlpha="@{150}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:isSelected="@{imageDocument.favorite}"
+            app:isSelected="@{imageDocumentEntity.favorite}"
             app:srcCompat="@drawable/ic_favorite_selector" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

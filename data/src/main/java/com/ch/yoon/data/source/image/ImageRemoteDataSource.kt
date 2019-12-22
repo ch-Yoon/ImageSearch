@@ -1,7 +1,7 @@
 package com.ch.yoon.data.source.image
 
-import com.ch.yoon.data.model.image.response.ImageSearchResponse
-import com.ch.yoon.remote.kakao.model.request.ImageSearchRequest
+import com.ch.yoon.data.model.image.request.ImageSearchRequestEntity
+import com.ch.yoon.data.model.image.response.ImageSearchResponseEntity
 import io.reactivex.Single
 
 /**
@@ -10,6 +10,6 @@ import io.reactivex.Single
  **/
 interface ImageRemoteDataSource {
 
-    fun getImages(imageSearchRequest: ImageSearchRequest): Single<ImageSearchResponse>
+    fun getImages(imageSearchRequestEntity: ImageSearchRequestEntity): Single<ImageSearchResponseEntity>
 
 }

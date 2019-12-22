@@ -1,16 +1,13 @@
 package com.ch.yoon.local.room.model.mapper
 
-import com.ch.yoon.local.room.model.ImageDocumentEntity
-import com.ch.yoon.data.model.image.response.ImageDocument
-
 /**
  * Creator : ch-yoon
  * Date : 2019-10-30
  **/
 object ImageDocumentEntityMapper {
 
-    fun toEntity(imageDocument: ImageDocument): ImageDocumentEntity {
-        return imageDocument.run {
+    fun toEntity(imageDocumentEntity: com.ch.yoon.data.model.image.response.ImageDocumentEntity): ImageDocumentEntity {
+        return imageDocumentEntity.run {
             ImageDocumentEntity(
                 id,
                 collection,
@@ -26,13 +23,13 @@ object ImageDocumentEntityMapper {
         }
     }
 
-    fun fromEntityList(imageDocumentEntityList: List<ImageDocumentEntity>): List<ImageDocument> {
+    fun fromEntityList(imageDocumentEntityList: List<ImageDocumentEntity>): List<com.ch.yoon.data.model.image.response.ImageDocumentEntity> {
         return imageDocumentEntityList.map { fromEntity(it) }
     }
 
-    fun fromEntity(imageDocumentEntity: ImageDocumentEntity): ImageDocument {
+    fun fromEntity(imageDocumentEntity: ImageDocumentEntity): com.ch.yoon.data.model.image.response.ImageDocumentEntity {
         return imageDocumentEntity.run {
-            ImageDocument(
+            com.ch.yoon.data.model.image.response.ImageDocumentEntity(
                 id,
                 collection,
                 thumbnailUrl,

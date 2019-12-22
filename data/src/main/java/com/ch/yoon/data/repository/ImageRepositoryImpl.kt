@@ -1,7 +1,7 @@
 package com.ch.yoon.data.repository
 
-import com.ch.yoon.data.model.image.response.ImageDocument
-import com.ch.yoon.data.model.image.response.ImageSearchResponse
+import com.ch.yoon.data.model.image.response.ImageDocumentEntity
+import com.ch.yoon.data.model.image.response.ImageSearchResponseEntity
 import com.ch.yoon.data.source.image.ImageLocalDataSource
 import com.ch.yoon.data.source.image.ImageRemoteDataSource
 import com.ch.yoon.domain.model.image.request.ImageSearchRequest
@@ -23,40 +23,40 @@ class ImageRepositoryImpl(
     private val imageRemoteDataSource: ImageRemoteDataSource
 ) : ImageRepository {
 
-    private val favoriteChangePublishSubject = PublishSubject.create<ImageDocument>()
+    private val favoriteChangePublishSubject = PublishSubject.create<ImageDocumentEntity>()
 
-    override fun getImages(imageSearchRequest: ImageSearchRequest): Single<ImageSearchResponse> {
+    override fun getImages(imageSearchRequest: ImageSearchRequest): Single<ImageSearchResponseEntity> {
         return Single.zip(
             imageRemoteDataSource.getImages(imageSearchRequest)
                 .subscribeOn(Schedulers.io()),
             imageLocalDataSource.getAllFavoriteImages()
                 .map { favoriteList -> favoriteList.associateBy({ it.id }, {it}) }
                 .subscribeOn(Schedulers.io()),
-            BiFunction { response: ImageSearchResponse, favoriteMap: Map<String, ImageDocument> ->
-                val newList = response.imageDocuments.map { favoriteMap[it.id] ?: it }
-                ImageSearchResponse(response.imageSearchMeta, newList)
+            BiFunction { responseEntity: ImageSearchResponseEntity, favoriteMap: Map<String, ImageDocumentEntity> ->
+                val newList = responseEntity.imageDocumentEntities.map { favoriteMap[it.id] ?: it }
+                ImageSearchResponseEntity(responseEntity.imageSearchMetaEntity, newList)
             }
         ).subscribeOn(Schedulers.io())
     }
 
-    override fun getAllFavoriteImages(): Single<List<ImageDocument>> {
+    override fun getAllFavoriteImages(): Single<List<ImageDocumentEntity>> {
         return imageLocalDataSource.getAllFavoriteImages()
             .subscribeOn(Schedulers.io())
     }
 
-    override fun saveFavoriteImage(imageDocument: ImageDocument): Completable {
-        return imageLocalDataSource.saveFavoriteImageDocument(imageDocument)
-            .doOnComplete { favoriteChangePublishSubject.onNext(imageDocument) }
+    override fun saveFavoriteImage(imageDocumentEntity: ImageDocumentEntity): Completable {
+        return imageLocalDataSource.saveFavoriteImageDocument(imageDocumentEntity)
+            .doOnComplete { favoriteChangePublishSubject.onNext(imageDocumentEntity) }
             .subscribeOn(Schedulers.io())
     }
 
-    override fun deleteFavoriteImage(imageDocument: ImageDocument): Completable {
-        return imageLocalDataSource.deleteFavoriteImageDocument(imageDocument)
-            .doOnComplete { favoriteChangePublishSubject.onNext(imageDocument) }
+    override fun deleteFavoriteImage(imageDocumentEntity: ImageDocumentEntity): Completable {
+        return imageLocalDataSource.deleteFavoriteImageDocument(imageDocumentEntity)
+            .doOnComplete { favoriteChangePublishSubject.onNext(imageDocumentEntity) }
             .subscribeOn(Schedulers.io())
     }
 
-    override fun observeChangingFavoriteImage(): Observable<ImageDocument> {
+    override fun observeChangingFavoriteImage(): Observable<ImageDocumentEntity> {
         return favoriteChangePublishSubject.subscribeOn(Schedulers.io())
     }
 }

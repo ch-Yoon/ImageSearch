@@ -1,6 +1,6 @@
 package com.ch.yoon.data.source.image
 
-import com.ch.yoon.data.model.image.response.ImageDocument
+import com.ch.yoon.data.model.image.response.ImageDocumentEntity
 import io.reactivex.Completable
 import io.reactivex.Single
 
@@ -10,10 +10,10 @@ import io.reactivex.Single
  */
 interface ImageLocalDataSource {
 
-    fun saveFavoriteImageDocument(imageDocument: ImageDocument): Completable
+    fun saveFavoriteImageDocument(imageDocumentEntity: ImageDocumentEntity): Completable
 
-    fun deleteFavoriteImageDocument(imageDocument: ImageDocument): Completable
+    fun deleteFavoriteImageDocument(imageDocumentEntity: ImageDocumentEntity): Completable
 
-    fun getAllFavoriteImages(): Single<List<ImageDocument>>
+    fun getAllFavoriteImages(): Single<List<ImageDocumentEntity>>
 
 }

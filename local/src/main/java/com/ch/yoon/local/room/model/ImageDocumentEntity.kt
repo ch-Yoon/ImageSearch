@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
  * Creator : ch-yoon
  * Date : 2019-11-12
  **/
-@Entity(tableName = "imageDocuments")
+@Entity(tableName = "imageDocumentEntities")
 data class ImageDocumentEntity(
     @PrimaryKey val id: String,
     val collection: String,
