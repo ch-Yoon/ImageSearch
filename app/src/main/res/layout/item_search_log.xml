@@ -4,8 +4,8 @@
 
     <data>
         <variable
-            name="searchLog"
-            type="com.ch.yoon.data.model.searchlog.SearchLog" />
+            name="searchLogEntity"
+            type="com.ch.yoon.data.model.searchlog.SearchLogEntity" />
     </data>
 
     <LinearLayout
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="15dp"
-            android:text="@{searchLog.keyword}"
+            android:text="@{searchLogEntity.keyword}"
             android:textColor="@color/colorBlack"
             android:textSize="@dimen/suggestion_search_view_item_text_size" />
 

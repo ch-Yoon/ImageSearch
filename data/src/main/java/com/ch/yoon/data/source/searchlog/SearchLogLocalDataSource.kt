@@ -1,6 +1,6 @@
 package com.ch.yoon.data.source.searchlog
 
-import com.ch.yoon.data.model.searchlog.SearchLog
+import com.ch.yoon.data.model.searchlog.SearchLogEntity
 import io.reactivex.Completable
 import io.reactivex.Single
 
@@ -10,11 +10,11 @@ import io.reactivex.Single
  **/
 interface SearchLogLocalDataSource {
 
-    fun insertOrUpdateSearchLog(keyword: String): Single<SearchLog>
+    fun insertOrUpdateSearchLog(keyword: String): Single<SearchLogEntity>
 
-    fun getAllSearchLogs(): Single<List<SearchLog>>
+    fun getAllSearchLogs(): Single<List<SearchLogEntity>>
 
-    fun deleteSearchLog(searchLog: SearchLog): Completable
+    fun deleteSearchLog(searchLogEntity: SearchLogEntity): Completable
 
     fun deleteAllSearchLogs(): Completable
 
